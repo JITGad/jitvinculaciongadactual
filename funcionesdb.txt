@@ -1,0 +1,28 @@
+----------------------Actividades------------------------------
+----------------INSERT----------------
+
+CREATE OR REPLACE FUNCTION public.insertactividades(
+	message_xml xml)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE root_xpath TEXT = '/actividades/';
+  resul integer = 0;
+  BEGIN
+    INSERT INTO public.actividades(act_nombre,act_interacciones,act_icono)values
+			((xpath(root_xpath|| 'act_nombre/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'act_interacciones/text()', message_xml))[1]::text::integer,
+			 (xpath(root_xpath|| 'act_icono/text()', message_xml))[1]);
+	return resul;																			 
+  END;
+$BODY$;
+
+ALTER FUNCTION public.insertactividades(xml)
+    OWNER TO pieirafiwmfeym;
+
+----------------DELETE----------------
+----------------UPDATE----------------
+
+------------------------------------------------------------------------------
