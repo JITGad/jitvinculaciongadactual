@@ -38,7 +38,6 @@ public class Actividadesresource {
     public Actividadesresource() {
         ad = new ActividadesDAO();
     }
-
     /**
      * Retrieves representation of an instance of ini.CRUD
      *

@@ -25,7 +25,7 @@ public class ActividadesDAO {
     public ActividadesDAO() {
         con = new Conection();
     }
-
+    
     public String selectActividadesDAO() {
         sentence = "select * from actividades";
         Conection con = new Conection();
@@ -40,7 +40,7 @@ public class ActividadesDAO {
                 + "<act_interacciones>"+actividadesModel.getAct_interacciones()+"</act_interacciones>"
                 + "<act_icono>"+actividadesModel.getAct_icono()+"</act_icono>"
                + "</actividades>");
-        
+
         String sentency = "Select * from insertactividades('"+structure+"')";
         System.out.println(structure);
         return con.modifyBD(sentency);
