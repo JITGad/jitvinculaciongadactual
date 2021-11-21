@@ -14,7 +14,10 @@ public class ActividadesModel {
     public ActividadesModel() {
     }
 
-    public ActividadesModel(String Id_actividad, String Act_nombre, String Act_interacciones, String Act_icono) {
+    public ActividadesModel(String Id_actividad,
+            String Act_nombre,
+            String Act_interacciones,
+            String Act_icono) {
         this.id_actividad = Id_actividad;
         this.act_nombre = Act_nombre;
         this.act_interacciones = Act_interacciones;

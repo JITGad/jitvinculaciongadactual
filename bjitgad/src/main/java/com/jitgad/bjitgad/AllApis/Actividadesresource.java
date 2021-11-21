@@ -3,7 +3,6 @@ package com.jitgad.bjitgad.AllApis;
 import com.jitgad.bjitgad.DataStaticBD.DataBd;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ActividadesModel;
-import com.jitgad.bjitgad.DAO.ActividadesDAO;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -47,9 +46,9 @@ public class Actividadesresource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllActividades() {
 
-        String nameusuarios = ad.selectActividadesDAO();
+        String actividades = ad.selectActividadesDAO();
         //TODO return proper representation object
-        return Response.ok(nameusuarios)
+        return Response.ok(actividades)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
