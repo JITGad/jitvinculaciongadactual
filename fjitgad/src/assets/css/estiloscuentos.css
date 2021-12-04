@@ -1,0 +1,206 @@
+/*CSS PARA LA EL ARCHIVO HTML DE LA LISTA DE CUENTOS - cuentos.html*/
+.cuerpo{	
+	font-family: Times New Roman, Times, Verdana, sans-serif;
+    text-align: center;
+}
+
+#link{
+    color: black;
+    text-decoration: none;
+}
+
+.tituloPagina{
+    margin-top: 5px;
+	font-weight: bold;
+	font-size: 50px;
+	color: #23559F;
+    /*color: white;*/
+	text-align: center;	
+}
+
+#link{
+  color: black;
+  text-decoration: none;
+}
+
+.temas{
+    margin-left: 52px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#titulostemas{
+	color: black;
+}
+
+.ctrcategoria{
+    display: flex;
+    vertical-align: middle;        
+    justify-content: start;
+    align-items: center;
+    margin-left: 18px;
+    border-radius: 10px;    
+    width: 1220px;
+    height: 60px;    
+}
+
+.categoria1{    
+    background:#58D68D;  
+}
+
+.categoria2{    
+    background:#FFCE31;
+}
+
+.categoria3{    
+    background:#3498DB;
+}
+
+.ctrcuento1, .ctrcuento2, .ctrcuento3, .ctrcuento4{
+    display: inline-flex;	
+	align-items: center;
+	margin-right: 3%;
+	margin-top: 2%;
+	border-radius: 10px;
+	border: 3px solid black;
+	width: 230px;
+	height: 200px;	
+	font-weight: bold;
+	font-size: 24px;
+	line-height: 22px;
+	/*color: rgba(255, 255, 255, 0.9);*/
+	color: black;
+	text-align: center;
+	vertical-align: middle;	
+}
+
+.imgmenu{
+	position: absolute;
+	width: 65px;
+	height: 65px;
+	left: 10px;
+	top: 10px;
+}
+
+.imgCategorias{
+    width: 48px;
+	height: 48px;
+}
+
+.imgCuentos{
+    width: 120px;
+	height: 120px;
+}
+
+.imgCuentos2{
+    width: 170px;
+	height: 120px;
+}
+
+#cuento{    
+    text-align: center;
+}
+
+/*CSS PARA EL ARCHIVO HTML QUE MUESTRA EL CUENTO - nombreCuento.html*/
+
+.imgCuentoPortada
+{
+    width: 500;    
+    text-align: center;
+}
+
+p{    
+    font-size: 30px;
+    text-align: justify;
+    color: #2c3e50;
+}
+
+.contenedor{
+    width: 100%;
+    overflow: auto;
+}
+
+.slide-contenedor{    
+    width: 100%;
+    display: flex;    
+}
+
+.contenido-slider{
+    width: 100%;
+    height: 450px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-shrink: 0;    
+}
+
+.contenido-slider > div{
+    width: 40%;
+}
+
+.contenido-slider > img{
+    width: 400px;
+}
+
+@media screen and (max-width:1000px){
+    .contenido-slider{
+       flex-direction: column-reverse;
+    }
+    .contenido-slider > img{
+        width: 270px;
+    }
+    .contenido-slider > div{
+        width: 95%;
+        font-size: 24px;
+    }
+    .contenido-slider h2{
+        font-size: 23px;
+    }
+}
+
+@media screen and (max-width:900px){
+    .contenido-slider{
+       flex-direction: column-reverse;
+    }
+    .contenido-slider > img{
+        width: 250px;
+    }
+    .contenido-slider > div{
+        width: 95%;
+        font-size: 18px;
+    }
+    .contenido-slider h2{
+        font-size: 23px;
+    }
+}
+
+@media screen and (max-width:600px){
+    .contenido-slider{
+       flex-direction: column-reverse;
+    }
+     .contenido-slider > div > p{
+        font-size: calc(1em + 1vw);
+    }
+    .contenido-slider > div{
+        width: 80%;
+        font-size: 14px;
+    }
+}
+
+.faden{
+    animation-name: faden;
+    animation-duration: 1.5s;    
+}
+
+@keyframes faden {
+    from {opacity: .4;}
+    to{opacity:1;}
+}
+
+.play-btn, .pause-btn, .back-btn, .next-btn{
+    cursor: pointer;
+}
+
+.hide{
+    display: none;
+}

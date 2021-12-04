@@ -1,0 +1,14 @@
+{
+    "encabezado": {
+        "urlapi": "url de api",
+        "usuario": "anonimo"
+    },
+    "respuesta": [
+        {
+            "id": "id de actividad",
+            "tema": " tema actividad",
+            "urlimagen": "ruta de imagen de actividad"
+        }
+    ]
+}
+

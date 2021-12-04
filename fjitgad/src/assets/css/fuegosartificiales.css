@@ -1,0 +1,12 @@
+.particula {
+    width: 8px;
+    height: 8px;
+    background: black;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.particula[data-padre="false"] {
+    width: 5px;
+    height: 5px;
+}

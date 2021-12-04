@@ -1,0 +1,34 @@
+#entorno {
+	display: block;
+        text-align: center;
+	margin: 0 auto;
+}
+
+#linea{
+	stroke: #313635;
+        opacity: 0.8;
+}
+
+#fondo image {
+	opacity: 0.3;
+        text-align: center;
+        
+}
+
+
+
+#ti{
+    font-size: 60px;
+    text-align: center;
+}
+
+.loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('/images/cargando.gif') 50% 50% no-repeat rgb(249,249,249);
+    opacity: .8;
+}

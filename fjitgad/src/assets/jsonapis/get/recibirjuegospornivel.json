@@ -1,0 +1,13 @@
+{
+    "encabezado": {
+        "urlapi": "url de api",
+        "id-juego": "id del juego",
+        "usuario": "anonimo"
+    },
+    "respuesta": [
+        {
+            "niveles": "cantidad de niveles del juego",
+            "imagen": "imagen del juego"
+        }
+    ]
+}

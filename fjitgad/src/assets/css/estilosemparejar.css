@@ -1,0 +1,157 @@
+
+.tituloActividades{	
+    margin-top: 8px;
+	font-weight: bold;
+	font-size: 45px;
+	color: #23559F;		
+	text-align: center;
+}
+
+.juego{    
+    text-align: center;
+}
+
+#informacion{  
+    color: white;
+    text-align: center;    
+}
+
+#botonesJuego{
+    color: white;
+    text-align: center;    
+}
+
+#ctrbarra{
+    display: flex;    
+    justify-content: center;
+    align-items: center;    
+}
+
+#ctrtiempo, #ctrmovimiento, #ctrpuntaje{
+    display: inline-block;
+    line-height: 1px;
+    font-size: 24px;
+    background: #1e8ca5;
+    width: 200px;    
+}
+
+#ctrinstruccion, #ctrnuevojuego{
+    display: inline-block;
+    line-height: 1px;
+    font-size: 24px;
+    width: 200px;
+    border-radius: 5px;
+}
+
+#ctrnuevojuego{
+    background:#E74C3C;    
+}
+
+#ctrinstruccion{
+    background:#28B463;
+    cursor: pointer;  
+}
+
+#dospuntos, #minutos, #segundos{
+    display: inline-block;    
+}
+
+#mensaje, #soundFelicidades #soundAplausos {    
+    text-align: center;
+    display: none;
+}
+
+.imgmenu{
+    width:65px;
+	height:65px;    
+}
+
+.imgfigurasemp{
+    /*width: 165px;*/
+    height: 165px;
+}
+
+.imgfigurasp{
+    width:40px;	
+    pointer-events: none
+}
+
+.ctrimagen{    
+    margin-right: 0.6%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 175px;
+    height: 175px;
+    border: 3px solid #000000;
+    border-radius: 10px;
+    /*margin-top: 2.5%;*/
+}
+
+#recuadro{
+    display: inline-flex;
+    margin-right: 0.4%;
+    justify-content: center;
+    align-items: center;
+    width: 179px;
+    height: 49px;		
+    border-radius: 5px;
+    border: 3.5px solid #1e8ca5;
+    background: #ffffff;    
+}
+
+#recuadro.hover{
+    background: #dfe6e9;    
+}
+
+.botones{    
+    text-align: center;    
+}
+
+.eboton{
+    display: inline-flex;
+    margin-right: 0.8%;
+    width: 175px;
+    height: 45px;    
+    justify-content: center;
+    align-items: center;
+    font-size: 27px;
+    border-radius: 5px;
+    border: 2px solid #000000;
+    background: #f1eeee;
+	color: #000000;    
+}
+
+.ganaste {
+    color: #CB4335;
+    font-size: 22px;
+    text-align: center;
+}
+
+.ganaste .ctrmensaje {    
+    display: flex;
+    vertical-align: middle;        
+    justify-content: center;
+    align-items: center;    
+    margin: 0 auto;
+    border-radius: 5px;
+    /*background: #CB4335;*/
+    width: 675px;
+    height: 60px;    
+}
+
+.ganaste #mensaje {
+    display: block;
+    margin-bottom: 20px;
+    animation: flash;
+    animation-duration: 8s;    
+}
+
+.ganaste #botonesJuego{
+    margin-top: -50px;
+}
+
+#linkBotones{    
+    color: white;
+    text-decoration: none;
+}

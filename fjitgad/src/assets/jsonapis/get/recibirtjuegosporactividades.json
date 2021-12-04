@@ -1,0 +1,20 @@
+{
+    "encabezado": {
+        "urlapi": "url de api",
+        "id-actividad": "id de la actividad",
+        "usuario": "anonimo"
+    },
+    "respuesta": [
+        {
+            "id": "id del tipo del juego",
+            "nombre": "nombre tipo juego",
+            "juegos": [
+                {
+                    "id": "id del juego",
+                    "nombre": "nombre del juego",
+                    "image": "url de imagen ramdon del juego"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jul 17, 2021, 5:04:00 PM
+    Author     : Randy
+*/
+
+
+ footer#site-footer {
+              padding: 18px 0;
+              background: #222222;
+              color: white;
+              text-align: center;
+            }
+footer#site-footer span.divider {
+  float: none;
+}
+footer#site-footer h4, footer#site-footer h3 {
+  text-transform: uppercase;
+}
+footer#site-footer a img.top {
+  margin: 10px 0;
+}
