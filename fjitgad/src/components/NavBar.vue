@@ -11,9 +11,9 @@
     <div class="container">
       <div class="navbar-header"></div>
       <ul class="nav navbar-nav navbar-right">
-        <router-link to="/acercade"
-          >A<span style="text-transform: lowercase">cerca de</span></router-link
-        >
+        <router-link to="/">Inicio</router-link> |
+        <router-link to="/about">A<span style="text-transform: lowercase">cerca de</span></router-link>
+        <router-link to="/login">Iniciar<span style="text-transform: lowercase">session</span></router-link>
       </ul>
     </div>
     <!--/.container -->
