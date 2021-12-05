@@ -87,3 +87,39 @@ ALTER FUNCTION public.insertgametype(xml)
 
 ----------------DELETE----------------
 ----------------UPDATE----------------
+
+*************------------------------------------------------------------------------------*************
+
+---------------------------USER-------------------------------------
+
+--------------INSERT-----------------------------
+CREATE OR REPLACE FUNCTION public.insertuser(
+	message_xml xml)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE root_xpath TEXT = '/user/';
+  resul integer = 0;
+  BEGIN
+    INSERT INTO public.tbluser(names,last_name,email,password,image,birthdate,rol,creationdate,updatedate,state)values
+			((xpath(root_xpath|| 'names/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'last_name/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'email/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'password/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'image/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'birthdate/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'rol/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'creationdate/text()', message_xml))[1]::text::date,
+			(xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
+			(xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean);
+	return resul;																			 
+  END;
+$BODY$;
+
+ALTER FUNCTION public.insertuser(xml)
+    OWNER TO fjdmwraxdzfdqi;
+
+----------------DELETE----------------
+----------------UPDATE----------------
