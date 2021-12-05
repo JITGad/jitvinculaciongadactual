@@ -1,6 +1,6 @@
 {
     "encabezado": {
-        "urlapi": "url de api",
+        "urlapi": "https://bjitgad.herokuapp.com/webresources/activitiestype/gamesbyactivities?activityid=1",
         "id-actividad": "id de la actividad",
         "usuario": "anonimo"
     },

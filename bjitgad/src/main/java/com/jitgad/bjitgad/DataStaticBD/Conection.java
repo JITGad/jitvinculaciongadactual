@@ -18,8 +18,8 @@ import javax.swing.table.DefaultTableModel;
  * In this class, the necessary methods for connecting, obtaining and sending data to the database are carried out.
  */
 public class Conection {
-    String user = "pieirafiwmfeym";
-    String password = "b80e4cae7f86cbce58156638599643ddb16b57c14c8f19054b5aa3ded005f145";
+    String user = "fjdmwraxdzfdqi";
+    String password = "e2519d7aa881ecf70a6228c203e777fd403925bac01379cb5a95a1ee44883f78";
     java.sql.Connection conex;
     DefaultTableModel dataModel;
     ResultSet result;
@@ -36,7 +36,7 @@ public class Conection {
     public boolean openConecction() {
         try {
             Class.forName("org.postgresql.Driver");
-            conex = DriverManager.getConnection("jdbc:postgresql://ec2-35-168-80-116.compute-1.amazonaws.com:5432/dcdfudud64csh1", user, password);
+            conex = DriverManager.getConnection("jdbc:postgresql://ec2-34-195-69-118.compute-1.amazonaws.com:5432/dfc5nss9nj0c2e", user, password);
         } catch (Exception exc) {
             System.out.println("No connection");
             return false;

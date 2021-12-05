@@ -1,28 +1,89 @@
 ----------------------Actividades------------------------------
 ----------------INSERT----------------
 
-CREATE OR REPLACE FUNCTION public.insertactividades(
+CREATE OR REPLACE FUNCTION public.insertActividadestype(
 	message_xml xml)
     RETURNS text
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
-DECLARE root_xpath TEXT = '/actividades/';
+DECLARE root_xpath TEXT = '/actividadestype/';
   resul integer = 0;
   BEGIN
-    INSERT INTO public.actividades(act_nombre,act_interacciones,act_icono)values
-			((xpath(root_xpath|| 'act_nombre/text()', message_xml))[1],
-			 (xpath(root_xpath|| 'act_interacciones/text()', message_xml))[1]::text::integer,
-			 (xpath(root_xpath|| 'act_icono/text()', message_xml))[1]);
+    INSERT INTO public.tblactivitiestype(name,image,creationdate,updatedate,state)values
+			((xpath(root_xpath|| 'name/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'image/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'creationdate/text()', message_xml))[1]::text::date,
+			(xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
+			(xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean);
 	return resul;																			 
   END;
 $BODY$;
 
-ALTER FUNCTION public.insertactividades(xml)
-    OWNER TO pieirafiwmfeym;
+ALTER FUNCTION public.insertActividadestype(xml)
+    OWNER TO fjdmwraxdzfdqi;
 
 ----------------DELETE----------------
 ----------------UPDATE----------------
 
 ------------------------------------------------------------------------------
+---------------------------JUEGO-------------------------------------
+--------------INSERT-----------------------------
+CREATE OR REPLACE FUNCTION public.insertGame(
+	message_xml xml)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE root_xpath TEXT = '/game/';
+  resul integer = 0;
+  BEGIN
+    INSERT INTO public.tblgame(idactivitiestype,idgametype,name,creationdate,updatedate,state)values
+			((xpath(root_xpath|| 'idactivitiestype/text()', message_xml))[1]::text::integer,
+			 (xpath(root_xpath|| 'idgametype/text()', message_xml))[1]::text::integer,
+			 (xpath(root_xpath|| 'name/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'creationdate/text()', message_xml))[1]::text::date,
+			(xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
+			(xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean);
+	return resul;																			 
+  END;
+$BODY$;
+
+ALTER FUNCTION public.insertGame(xml)
+    OWNER TO fjdmwraxdzfdqi;
+----------------DELETE----------------
+----------------UPDATE----------------
+
+------------------------------------------------------------------------------
+
+---------------------------TIPO DE JUEGO-------------------------------------
+--------------INSERT-----------------------------
+
+CREATE OR REPLACE FUNCTION public.insertgametype(
+	message_xml xml)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE root_xpath TEXT = '/gametype/';
+  resul integer = 0;
+  BEGIN
+    INSERT INTO public.tblgametype(name,image,audio_instructions,creationdate,updatedate,state)values
+			((xpath(root_xpath|| 'name/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'image/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'audio_instructions/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'creationdate/text()', message_xml))[1]::text::date,
+			(xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
+			(xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean);
+	return resul;																			 
+  END;
+$BODY$;
+
+ALTER FUNCTION public.insertgametype(xml)
+    OWNER TO fjdmwraxdzfdqi;
+
+----------------DELETE----------------
+----------------UPDATE----------------

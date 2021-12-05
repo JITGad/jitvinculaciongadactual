@@ -1,6 +1,6 @@
 {
     "encabezado": {
-        "urlapi": "url de api",
+        "urlapi": "https://bjitgad.herokuapp.com/webresources/activitiestype",
         "usuario": "anonimo"
     },
     "respuesta": [

@@ -24,8 +24,10 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(com.jitgad.bjitgad.AllApis.Actividadesresource.class);
-       // resources.add(com.jitgad.bjitgad.ApisClient.Userresource.class);
-        resources.add(com.jitgad.bjitgad.AllApis.Historialjugadoresresource.class);
+        resources.add(com.jitgad.bjitgad.AllApis.Activitiestyperesource.class);
+        resources.add(com.jitgad.bjitgad.AllApis.Gameresource.class);
+        resources.add(com.jitgad.bjitgad.AllApis.Gametyperesource.class);
+        resources.add(com.jitgad.bjitgad.AllApis.Itemsquestionsresource.class);
+        resources.add(com.jitgad.bjitgad.AllApis.Questionsresource.class);
     } 
 }
