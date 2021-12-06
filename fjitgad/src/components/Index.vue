@@ -30,6 +30,7 @@
 
 <script>
 import Actividad from "./Actividad.vue";
+import { getActividades } from "../api/Actividades";
 
 export default {
   name: "Index",
@@ -39,20 +40,11 @@ export default {
   data() {
     return {
       actividades: [],
-      error: ""
+      error: "",
     };
   },
-  mounted() {
-    fetch("https://api.openbrewerydb.org/breweries/", {
-      headers: { "Content-type": "application/json" },
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        this.actividades = response;
-      })
-      .catch((error) => {
-        this.error = error;
-      });
+  async mounted() {
+    this.actividades = await getActividades(); 
   },
 };
 </script>
