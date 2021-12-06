@@ -1,0 +1,59 @@
+USUARIO
+
+REGISTRAR USUARIO - POST
+
+API - RECIBE JSON y ENVIA JSON
+
+http://localhost:8080/bjitgad/webresources/users/UserRegistration
+
+JSON
+
+{
+    "name":"Jorge",
+    "last_name":"Molina",
+    "email":"jorge-molina12@hotmail.com",
+    "password":"12345",
+    "image":"ruta",
+    "birthdate":"NOW()",
+    "rol":"Administrador",
+    "creationdate":"NOW()",
+    "updatedate":"NOW()",
+    "state":"true"
+}
+
+INICIO DE SESIÓN - POST
+
+API - RECIBE JSON Y ENVIA JSON
+
+https://bjitgad.herokuapp.com/webresources/users/logIn
+
+JSON
+
+{
+    "email":"jorge-molina12@hotmail.com",
+    "password":"12345"
+}
+
+RESPUESTA
+
+{
+    "message": "Acceso consedido.",
+    "flag": true,
+    "data": {
+        "iduser": "1",
+        "names": "Jorge",
+        "last_name": "Molina",
+        "email": "jorge-molina12@hotmail.com",
+        "password": "5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5",
+        "image": "ruta",
+        "birthdate": "2021-12-05",
+        "rol": "Administrador",
+        "creationdate": "2021-12-05",
+        "updatedate": "2021-12-05",
+        "state": "t",
+        "user_token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM4NzQ3OTk1LCJleHAiOjE2Mzg3NDg4OTV9.fDnIV2NnFUcA-TvooVymuAXScEExHUzIBBE0iIHPu-A"
+    }
+}
+
+/*==============================================================*/
+/*==============================================================*/

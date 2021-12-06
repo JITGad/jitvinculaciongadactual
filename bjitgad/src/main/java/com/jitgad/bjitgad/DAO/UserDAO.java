@@ -58,13 +58,13 @@ public class UserDAO {
         jsoB.add("names", usr.getNames());
         jsoB.add("last_name", usr.getLast_name());
         jsoB.add("email", usr.getEmail());
-        jsoB.add("password", usr.getPassword());
+      //  jsoB.add("password", usr.getPassword());
         jsoB.add("image", usr.getImage());
-        jsoB.add("birthdate", usr.getBirthdate());
+      //  jsoB.add("birthdate", usr.getBirthdate());
         jsoB.add("rol", usr.getRol());
-        jsoB.add("creationdate", usr.getCreationdate());
-        jsoB.add("updatedate", usr.getUpdatedate());
-        jsoB.add("state", usr.getState());
+     //   jsoB.add("creationdate", usr.getCreationdate());
+     //   jsoB.add("updatedate", usr.getUpdatedate());
+     //   jsoB.add("state", usr.getState());
         jsoB.add("user_token", jwt);
         javax.json.JsonObject jsonObj = jsoB.build();
         return jsonObj.toString();

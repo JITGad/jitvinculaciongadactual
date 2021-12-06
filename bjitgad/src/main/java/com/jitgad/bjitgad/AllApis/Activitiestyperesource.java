@@ -47,7 +47,7 @@ public class Activitiestyperesource {
         return Response.ok(responseJson)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with, Access-Control-Allow-Origin")
                 .build();
     }
     
@@ -55,6 +55,7 @@ public class Activitiestyperesource {
     @GET
     @Path("/gamesbyactivities")
     @Consumes(MediaType.APPLICATION_JSON)
+   // @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response getgamesbyactivities(@QueryParam("activityid") String activityid){
         //TODO return proper representation object
         String responseJson = activitiestypeDAO.selectgamesbyactivities(activityid);

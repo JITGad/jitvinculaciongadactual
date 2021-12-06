@@ -93,6 +93,8 @@ ALTER FUNCTION public.insertgametype(xml)
 ---------------------------USER-------------------------------------
 
 --------------INSERT-----------------------------
+
+
 CREATE OR REPLACE FUNCTION public.insertuser(
 	message_xml xml)
     RETURNS text
@@ -109,7 +111,7 @@ DECLARE root_xpath TEXT = '/user/';
 			 (xpath(root_xpath|| 'email/text()', message_xml))[1],
 			 (xpath(root_xpath|| 'password/text()', message_xml))[1],
 			 (xpath(root_xpath|| 'image/text()', message_xml))[1],
-			 (xpath(root_xpath|| 'birthdate/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'birthdate/text()', message_xml))[1]::text::date,
 			 (xpath(root_xpath|| 'rol/text()', message_xml))[1],
 			 (xpath(root_xpath|| 'creationdate/text()', message_xml))[1]::text::date,
 			(xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
@@ -117,7 +119,6 @@ DECLARE root_xpath TEXT = '/user/';
 	return resul;																			 
   END;
 $BODY$;
-
 ALTER FUNCTION public.insertuser(xml)
     OWNER TO fjdmwraxdzfdqi;
 

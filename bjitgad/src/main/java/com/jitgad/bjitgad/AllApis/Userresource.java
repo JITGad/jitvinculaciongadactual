@@ -79,6 +79,48 @@ public class Userresource {
                 .build();
     }
     
+    @Produces(MediaType.APPLICATION_JSON)
+    @POST
+    @Path("/UserRegistration")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response UserRegistration(String data) {
+        System.out.println(data);
+        String responseJson = "{\"status\":\"poken:" + data + "\"}";
+        JsonObject Jso = Methods.stringToJSON(data);
+        if (Jso.size() > 0) {
+            
+            UserController userCon = new UserController();
+            Object[] responseUserRegistration;
+            responseUserRegistration = 
+                userCon.UserRegistration(
+                    Methods.JsonToString(Jso.getAsJsonObject(), "name", ""),
+                    Methods.JsonToString(Jso.getAsJsonObject(), "last_name", ""),
+                    Methods.JsonToString(Jso.getAsJsonObject(), "email", ""),
+                    Methods.JsonToString(Jso.getAsJsonObject(), "password", ""),
+                    Methods.JsonToString(Jso.getAsJsonObject(), "image", ""),
+                    Methods.JsonToString(Jso.getAsJsonObject(), "birthday", ""),
+                    Methods.JsonToString(Jso.getAsJsonObject(), "rol", ""),
+                    Methods.JsonToString(Jso.getAsJsonObject(), "creationdate", ""),
+                    Methods.JsonToString(Jso.getAsJsonObject(), "updatedate", ""),
+                    Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
+
+            if (responseUserRegistration[0].equals(true)) {
+                responseJson = "{\"message\":\"" + responseUserRegistration[1] + "\",\"flag\":" + responseUserRegistration[0] + "}";
+            } else {
+                responseJson = "{\"message\":\"" + responseUserRegistration[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + responseUserRegistration[0] + "}";
+            }
+        } else {
+            responseJson = "{\"message\":\"Missing data.\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + false + "}";
+        }
+//        System.out.println(responseJson);
+        return Response.ok(responseJson)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
+                .build();
+    }
+    
+    
     
     
 }
