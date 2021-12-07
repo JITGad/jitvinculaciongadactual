@@ -1,6 +1,7 @@
 package com.jitgad.bjitgad.DAO;
 
 import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.DataBd;
 import com.jitgad.bjitgad.Models.UserModel;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -44,7 +45,7 @@ public class UserDAO {
         return usr;
     }  
     public String userDataJson(UserModel usr) {
-        String key = "digiclave";
+        String key = DataBd.dbprivatekey;
         long tiempo = System.currentTimeMillis();
 //        System.out.println(new Date(tiempo) +"-" + new Date(tiempo+900000));
         String jwt = Jwts.builder()

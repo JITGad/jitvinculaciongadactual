@@ -21,19 +21,25 @@ import javax.swing.table.DefaultTableModel;
  */
 public final class Methods {
 
-    public static String getDataToJwt(String jwt) {
-        String response;
+    public static String[] getDataToJwt(String jwt) {
+        String[] response;
         try {
             Claims claims = Jwts.parser()
-                    .setSigningKey("digiclave")
+                    .setSigningKey(DataBd.dbprivatekey)
                     .parseClaimsJws(jwt).getBody();
-            response = claims.getSubject();
+            response = new String[]{claims.get("iduser").toString(),
+            claims.get("permit").toString()};
         } catch (Exception e) {
             System.out.println("error JWT: " + e.getMessage());
-            response = "";
+            response = new String[]{"",""};
         }
         return response;
     }
+    
+//    public String getJsonResponse(Object val1, Object val2){
+//        
+//    }
+    
     /** This method is for the security application.
      * @param request Processes HTTP type requests
      * @param param String type variable, contains the information obtained to the method.
