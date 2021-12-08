@@ -124,3 +124,71 @@ ALTER FUNCTION public.insertuser(xml)
 
 ----------------DELETE----------------
 ----------------UPDATE----------------
+
+
+*************------------------------------------------------------------------------------*************
+
+---------------------------Colortype-------------------------------------
+
+--------------INSERT-----------------------------
+
+CREATE OR REPLACE FUNCTION public.insertcolortype(
+	message_xml xml)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE root_xpath TEXT = '/colortype/';
+  resul integer = 0;
+  BEGIN
+    INSERT INTO public.tblcolortype(color,creationdate,updatedate,state)values
+			((xpath(root_xpath|| 'color/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'creationdate/text()', message_xml))[1]::text::date,
+			(xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
+			(xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean);
+	return resul;																			 
+  END;
+$BODY$;
+ALTER FUNCTION public.insertcolortype(xml)
+    OWNER TO fjdmwraxdzfdqi;
+
+----------------DELETE----------------
+----------------UPDATE----------------
+
+
+*************------------------------------------------------------------------------------*************
+
+---------------------------Detailsimage-------------------------------------
+
+--------------INSERT-----------------------------
+
+CREATE OR REPLACE FUNCTION public.insertdetailsimag(
+	message_xml xml)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE root_xpath TEXT = '/detailsimag/';
+  resul integer = 0;
+  BEGIN
+    INSERT INTO public.tbldetailsimage(idgameimage,clipping_type_,
+									   image,creationdate,updatedate,state)values
+			((xpath(root_xpath|| 'idgameimage/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'clipping_type_/text()', message_xml))[1]::text::Integer,
+			 (xpath(root_xpath|| 'image/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'creationdate/text()', message_xml))[1]::text::date,
+			(xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
+			(xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean);
+	return resul;																			 
+  END;
+$BODY$;
+ALTER FUNCTION public.insertdetailsimag(xml)
+    OWNER TO fjdmwraxdzfdqi;
+
+
+----------------DELETE----------------
+----------------UPDATE----------------
+
+

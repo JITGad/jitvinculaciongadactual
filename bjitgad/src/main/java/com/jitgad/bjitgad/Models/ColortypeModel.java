@@ -11,6 +11,9 @@ public class ColortypeModel {
     private String updatedate = "-2";
     private String state = "-2";
 
+    public ColortypeModel() {
+    }
+    
     public ColortypeModel(String _color,
             String _creationdate,
             String _updatedate,

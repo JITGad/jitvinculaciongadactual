@@ -40,5 +40,12 @@ public class ActivitiestypeController {
 
         return new Object[]{status, message};
     }
+    
+    public String selectActivitiestype(){
+        return atDAO.selectActivitiestype();
+    }
+    public String selectgamesbyactivities(String activityid){
+        return atDAO.selectgamesbyactivities(activityid);
+    }
 
 }

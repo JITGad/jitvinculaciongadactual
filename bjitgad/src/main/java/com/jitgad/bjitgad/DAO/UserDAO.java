@@ -52,20 +52,17 @@ public class UserDAO {
                 .signWith(SignatureAlgorithm.HS256, key)
                 .setSubject(usr.getIduser())
                 .setIssuedAt(new Date(tiempo))
+                //900000 que equivale a 15 minutos
                 .setExpiration(new Date(tiempo + 900000))
+                .claim("email", usr.getEmail())
                 .compact();
         JsonObjectBuilder jsoB = Json.createObjectBuilder();
         jsoB.add("iduser", usr.getIduser());
         jsoB.add("names", usr.getNames());
         jsoB.add("last_name", usr.getLast_name());
         jsoB.add("email", usr.getEmail());
-      //  jsoB.add("password", usr.getPassword());
         jsoB.add("image", usr.getImage());
-      //  jsoB.add("birthdate", usr.getBirthdate());
         jsoB.add("rol", usr.getRol());
-     //   jsoB.add("creationdate", usr.getCreationdate());
-     //   jsoB.add("updatedate", usr.getUpdatedate());
-     //   jsoB.add("state", usr.getState());
         jsoB.add("user_token", jwt);
         javax.json.JsonObject jsonObj = jsoB.build();
         return jsonObj.toString();
@@ -73,6 +70,11 @@ public class UserDAO {
     
     public boolean comprobeUniqueEmail(UserModel usr) {
         String sentency = String.format("select * from tbluser where email='%s';", usr.getEmail());
+        return (((con.returnRecord(sentency)).getRowCount() <= 0));
+    }
+    
+    public boolean validatetoken(String iduser, String email){  
+    String sentency = String.format("select * from tbluser where email='%s' and iduser='%s';",email,iduser);
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
     

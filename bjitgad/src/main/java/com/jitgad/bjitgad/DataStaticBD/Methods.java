@@ -27,11 +27,11 @@ public final class Methods {
             Claims claims = Jwts.parser()
                     .setSigningKey(DataBd.dbprivatekey)
                     .parseClaimsJws(jwt).getBody();
-            response = new String[]{claims.get("iduser").toString(),
-            claims.get("permit").toString()};
+            response = new String[]{claims.get("sub").toString(),
+            claims.get("email").toString(),"Válidate"};
         } catch (Exception e) {
             System.out.println("error JWT: " + e.getMessage());
-            response = new String[]{"",""};
+            response = new String[]{"","",e.getMessage()};
         }
         return response;
     }

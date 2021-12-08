@@ -39,7 +39,6 @@ public class UserController {
      * @param pwd It is a String variable, this variable will contain the
      * encrypted password of the user
      */
-    
     public Object[] LogIn(String email, String pwd) {
         DefaultTableModel table = conex.returnRecord("select * from tbluser where email='" + email + "'");
         String message = "Usuario no encontrado";
@@ -89,6 +88,26 @@ public class UserController {
             message = "El correo ya se encuentra registrado";
             status = false;
         }
+        return new Object[]{status, message};
+    }
+
+    public Object[] ValidateToken(String user_id, String email, String msg) {
+        String message = "Correo inválido";
+        boolean status = false;
+
+        if (!user_id.equals("")) {
+            if (!udao.validatetoken(user_id, email)) {
+                status = true;
+                message = "Token válido";
+            } else {
+                status = false;
+                message = "Token inválido";
+            }
+        }else{
+            status = false;
+            message = msg;
+        }
+
         return new Object[]{status, message};
     }
 

@@ -2,6 +2,7 @@ package com.jitgad.bjitgad.AllApis;
 
 import com.google.gson.JsonObject;
 import com.jitgad.bjitgad.Controller.ActivitiestypeController;
+import com.jitgad.bjitgad.Controller.UserController;
 import com.jitgad.bjitgad.DAO.ActivitiestypeDAO;
 import com.jitgad.bjitgad.DataStaticBD.DataBd;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
@@ -27,14 +28,14 @@ public class Activitiestyperesource {
 
     @Context
     private UriInfo context;
-    private ActivitiestypeDAO activitiestypeDAO;
     private ActivitiestypeModel atM;
     private ActivitiestypeController atC;
+    private UserController uc;
 
     public Activitiestyperesource() {
-        activitiestypeDAO = new ActivitiestypeDAO();
         atC = new ActivitiestypeController();
         atM = new ActivitiestypeModel();
+        uc = new UserController();
     }
 
     /**
@@ -46,15 +47,19 @@ public class Activitiestyperesource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getActivitiestype(@Context HttpHeaders headers) {
 
+        String responseJson = "";
+        //TOKENS
         String user_token = headers.getHeaderString("user_token");
         user_token = user_token == null ? "" : user_token;
         System.out.println("user token: " + user_token);
-
         String[] clains = Methods.getDataToJwt(user_token);
-        System.out.println("CLAINS 0" + clains[0]);
-        System.out.println("CLAINS 1" + clains[1]);
-        
-        String responseJson = activitiestypeDAO.selectActivitiestype();
+        Object[] Permt = uc.ValidateToken(clains[0], clains[1], clains[2]);
+
+        if (Permt[0].equals(true)) {
+            responseJson = atC.selectActivitiestype();
+        } else {
+            responseJson = "{\"message\":\"" + Permt[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + Permt[0] + "}";
+        }
         return Response.ok(responseJson)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
@@ -67,10 +72,22 @@ public class Activitiestyperesource {
     @Path("/gamesbyactivities")
     @Consumes(MediaType.APPLICATION_JSON)
     // @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response getgamesbyactivities(@QueryParam("activityid") String activityid) {
-        //TODO return proper representation object
-        String responseJson = activitiestypeDAO.selectgamesbyactivities(activityid);
-        System.out.println(activityid);
+    public Response getgamesbyactivities(@Context HttpHeaders headers, @QueryParam("activityid") String activityid) {
+
+        String responseJson = "";
+        //TOKENS
+        String user_token = headers.getHeaderString("user_token");
+        user_token = user_token == null ? "" : user_token;
+        System.out.println("user token: " + user_token);
+        String[] clains = Methods.getDataToJwt(user_token);
+        Object[] Permt = uc.ValidateToken(clains[0], clains[1], clains[2]);
+
+        if (Permt[0].equals(true)) {
+            responseJson = atC.selectgamesbyactivities(activityid);;
+        } else {
+            responseJson = "{\"message\":\"" + Permt[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + Permt[0] + "}";
+        }
+
         return Response.ok(responseJson)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
@@ -88,26 +105,29 @@ public class Activitiestyperesource {
         JsonObject Jso = Methods.stringToJSON(data);
         if (Jso.size() > 0) {
             Object[] responseatC;
-
+            //TOKENS
             String user_token = headers.getHeaderString("user_token");
             user_token = user_token == null ? "" : user_token;
             System.out.println("user token: " + user_token);
-
             String[] clains = Methods.getDataToJwt(user_token);
+            Object[] Permt = uc.ValidateToken(clains[0], clains[1], clains[2]);
+            if (Permt[0].equals(true)) {
+                responseatC = atC.InsertActivitiesTypeC(
+                        Methods.JsonToString(Jso.getAsJsonObject(), "name", ""),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "image", ""),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "creationdate", ""),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "updatedate", ""),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
 
-            //   String[] permit = Methods.validatePermit(clains[0],clains[1],4);
-            responseatC = atC.InsertActivitiesTypeC(
-                    Methods.JsonToString(Jso.getAsJsonObject(), "name", ""),
-                    Methods.JsonToString(Jso.getAsJsonObject(), "image", ""),
-                    Methods.JsonToString(Jso.getAsJsonObject(), "creationdate", ""),
-                    Methods.JsonToString(Jso.getAsJsonObject(), "updatedate", ""),
-                    Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
-
-            if (responseatC[0].equals(true)) {
-                responseJson = "{\"message\":\"" + responseatC[1] + "\",\"flag\":" + responseatC[0] + "}";
+                if (responseatC[0].equals(true)) {
+                    responseJson = "{\"message\":\"" + responseatC[1] + "\",\"flag\":" + responseatC[0] + "}";
+                } else {
+                    responseJson = "{\"message\":\"" + responseatC[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + responseatC[0] + "}";
+                }
             } else {
-                responseJson = "{\"message\":\"" + responseatC[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + responseatC[0] + "}";
+                responseJson = "{\"message\":\"" + Permt[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + Permt[0] + "}";
             }
+
         } else {
             responseJson = "{\"message\":\"Missing data.\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + false + "}";
         }

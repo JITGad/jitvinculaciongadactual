@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 9.x                               */
-/* Created on:     5/12/2021 0:36:57                            */
+/* Created on:     7/12/2021 23:22:28                           */
 /*==============================================================*/
 
 
@@ -107,6 +107,9 @@ create table TBLDETAILSIMAGE (
    IDGAMEIMAGE          INT4                 not null,
    CLIPPING_TYPE_       INT4                 not null,
    IMAGE                TEXT                 not null,
+   CREATIONDATE         DATE                 not null,
+   UPDATEDATE           DATE                 not null,
+   STATE                BOOL                 not null,
    constraint PK_TBLDETAILSIMAGE primary key (IDDETAILSGAME)
 );
 
