@@ -10,25 +10,34 @@ class FetchMaster {
     DELETE = "DELETE";
 
     constructor() {
-        this.baseUrl = process.env.VUE_APP_BASE_URL_API
-        this.mode = process.env.VUE_APP_MODE_API_FETCH,
-            this.credentials = process.env.VUE_APP_CREDENTIALS_API_FETCH
+        this.baseUrl = process.env.VUE_APP_BASE_URL_API;
     }
 
-    get(url = '', callback, error) {
-        this._ajaxJSON(url, 
-            null, 
-            (response) => callback(response), 
+    get(url = '', callback, error, authorize = false) {
+        this._ajaxJSON(url,
+            undefined,
+            (response) => callback(response),
             (errorThrown) => error(errorThrown),
-            this.GET,
-            null
+            undefined,
+            undefined,
+            authorize
         );
     }
 
-    _ajaxJSON(url = '', parameters = {}, callback, error,
-        type = this.GET,
-        encode = FetchMaster.JSONENCODE) {
+    _get_token() {
+        let user = JSON.parse(localStorage.getItem('user'));
 
+        if (user && user.accessToken) {
+            return 'Bearer ' + user.accessToken;
+        } else {
+            return '';
+        }
+    }
+
+    _ajaxJSON(url = '', parameters = {}, callback, error,
+        type = this.GET, encode = FetchMaster.JSONENCODE, authorize = false) {
+
+        var headers = {};
         var options = {
             'url': this.baseUrl + url,
             'datatype': 'json',
@@ -43,59 +52,63 @@ class FetchMaster {
         }
         if (type == this.POST || type == this.PUT) {
             if (encode == FetchMaster.JSONENCODE) {
+                headers['Content-Type'] = "application/json; charset=utf-8";
                 options['data'] = JSON.stringify(parameters);
             } else if (encode == FetchMaster.FORMDATAENCODE) {
-                console.log("dd")
+                headers['Content-Type'] = "application/x-www-form-urlencoded";
                 options['data'] = parameters;
                 options['processData'] = false;
                 options['contentType'] = false;
-            }    
+            }
         }
+
+        if(authorize){
+            var token = this._get_token();
+
+            if(token){
+                headers['Authorization'] = token;
+            }
+        }
+
+        options['headers'] = headers;
+        
         console.log(options);
+        
         $.ajax(options);
     }
 
-    post(url = '', parameters = {}, callback, error, encode = FetchMaster.JSONENCODE) {
-        var credenciales = JSON.stringify(parameters);
-        $.ajax({
-            method: "POST",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            url: this.baseUrl + "users/logIn",
-            data: credenciales,
-            success: function (data) {
-                var json = JSON.stringify(data);
-                console.log(data);
-                console.log(data.flag);
-                if(data.flag == true)
-                {
-                    navegationpageprincipal();
-                }
-//                console.log(json);
-            },
-            error: function (data) {
-                alert("Error");
-            }
-        });
+    post(url = '', parameters = {}, callback, error, 
+        encode = FetchMaster.JSONENCODE, authorize = false) {
+        this._ajaxJSON(url,
+            parameters,
+            (response) => callback(response),
+            (errorThrown) => error(errorThrown),
+            this.POST,
+            encode,
+            authorize
+        ); 
     }
 
-    put(url = '', parameters = {}, callback, error, encode = FetchMaster.JSONENCODE) {
-        this._ajaxJSON(url, 
-            parameters, 
-            (response) => callback(response), 
+    put(url = '', parameters = {}, callback, error, 
+        encode = FetchMaster.JSONENCODE, authorize = false) {
+        this._ajaxJSON(url,
+            parameters,
+            (response) => callback(response),
             (errorThrown) => error(errorThrown),
             this.PUT,
-            encode
+            encode,
+            authorize
         );
     }
 
-    delete(url = '', callback, error) {
-        this._ajaxJSON(url, 
-            null, 
-            (response) => callback(response), 
+    delete(url = '', callback, error, authorize = false) {
+        this._ajaxJSON(url,
+            undefined,
+            (response) => callback(response),
             (errorThrown) => error(errorThrown),
             this.DELETE,
-            null
+            undefined,
+            authorize
         );
     }
 }
