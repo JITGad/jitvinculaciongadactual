@@ -1,6 +1,7 @@
 package com.jitgad.bjitgad.AllApis;
 
 import com.google.gson.JsonObject;
+import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.DetailsimageController;
 import com.jitgad.bjitgad.Controller.UserController;
 import com.jitgad.bjitgad.DataStaticBD.DataBd;
@@ -28,11 +29,11 @@ public class Detailsimageresource {
     private UriInfo context;
     private DetailsimageModel diM;
     private DetailsimageController diC;
-    private UserController uc;
+    private AuthorizationController AuC;
     
 
     public Detailsimageresource() {
-        uc = new UserController();
+        AuC = new AuthorizationController();
         diM = new DetailsimageModel();
         diC = new DetailsimageController();
     }
@@ -45,23 +46,9 @@ public class Detailsimageresource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDetailsimage(@Context HttpHeaders headers) {
-
-        String responseJson = "";
-        //TOKENS
-        String user_token = headers.getHeaderString("user_token");
-        user_token = user_token == null ? "" : user_token;
-        System.out.println("user token: " + user_token);
-        String[] clains = Methods.getDataToJwt(user_token);
-        Object[] Permt = uc.ValidateToken(clains[0], clains[1], clains[2]);
-
-        if (Permt[0].equals(true)) {
-            responseJson = diC.selectDetailsimage();
-        } else {
-            responseJson = "{\"message\":\"" + Permt[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + Permt[0] + "}";
-        }
+    public Response getDetailsimage() {
+        String responseJson = diC.selectDetailsimage();
         return Response.ok(responseJson)
-                .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with, Access-Control-Allow-Origin")
                 .build();
@@ -78,11 +65,10 @@ public class Detailsimageresource {
         if (Jso.size() > 0) {
             Object[] responseDiC;
             //TOKENS
-            String user_token = headers.getHeaderString("user_token");
-            user_token = user_token == null ? "" : user_token;
-            System.out.println("user token: " + user_token);
-            String[] clains = Methods.getDataToJwt(user_token);
-            Object[] Permt = uc.ValidateToken(clains[0], clains[1], clains[2]);
+            String Authorization = headers.getHeaderString("Authorization");
+            Authorization = Authorization == null ? "" : Authorization;
+            System.out.println("Authorization: " + Authorization);
+            Object[] Permt = AuC.VToken(Authorization);
             if (Permt[0].equals(true)) {
                 responseDiC = diC.InsertDetailsimageC(
                         Methods.JsonToString(Jso.getAsJsonObject(), "idgameimage", ""),

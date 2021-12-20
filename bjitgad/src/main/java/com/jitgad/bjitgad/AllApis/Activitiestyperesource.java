@@ -2,6 +2,7 @@ package com.jitgad.bjitgad.AllApis;
 
 import com.google.gson.JsonObject;
 import com.jitgad.bjitgad.Controller.ActivitiestypeController;
+import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.UserController;
 import com.jitgad.bjitgad.DAO.ActivitiestypeDAO;
 import com.jitgad.bjitgad.DataStaticBD.DataBd;
@@ -30,12 +31,12 @@ public class Activitiestyperesource {
     private UriInfo context;
     private ActivitiestypeModel atM;
     private ActivitiestypeController atC;
-    private UserController uc;
+    private AuthorizationController AuC;
 
     public Activitiestyperesource() {
         atC = new ActivitiestypeController();
         atM = new ActivitiestypeModel();
-        uc = new UserController();
+        AuC = new AuthorizationController();
     }
 
     /**
@@ -45,23 +46,11 @@ public class Activitiestyperesource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getActivitiestype(@Context HttpHeaders headers) {
+    public Response getActivitiestype() {
 
-        String responseJson = "";
-        //TOKENS
-        String user_token = headers.getHeaderString("user_token");
-        user_token = user_token == null ? "" : user_token;
-        System.out.println("user token: " + user_token);
-        String[] clains = Methods.getDataToJwt(user_token);
-        Object[] Permt = uc.ValidateToken(clains[0], clains[1], clains[2]);
-
-        if (Permt[0].equals(true)) {
-            responseJson = atC.selectActivitiestype();
-        } else {
-            responseJson = "{\"message\":\"" + Permt[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + Permt[0] + "}";
-        }
+        String responseJson = atC.selectActivitiestype();
+       
         return Response.ok(responseJson)
-                .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with, Access-Control-Allow-Origin")
                 .build();
@@ -72,24 +61,9 @@ public class Activitiestyperesource {
     @Path("/gamesbyactivities")
     @Consumes(MediaType.APPLICATION_JSON)
     // @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response getgamesbyactivities(@Context HttpHeaders headers, @QueryParam("activityid") String activityid) {
-
-        String responseJson = "";
-        //TOKENS
-        String user_token = headers.getHeaderString("user_token");
-        user_token = user_token == null ? "" : user_token;
-        System.out.println("user token: " + user_token);
-        String[] clains = Methods.getDataToJwt(user_token);
-        Object[] Permt = uc.ValidateToken(clains[0], clains[1], clains[2]);
-
-        if (Permt[0].equals(true)) {
-            responseJson = atC.selectgamesbyactivities(activityid);;
-        } else {
-            responseJson = "{\"message\":\"" + Permt[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + Permt[0] + "}";
-        }
-
+    public Response getgamesbyactivities(@QueryParam("activityid") String activityid) {
+        String responseJson = atC.selectgamesbyactivities(activityid);;
         return Response.ok(responseJson)
-                .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();
@@ -106,11 +80,10 @@ public class Activitiestyperesource {
         if (Jso.size() > 0) {
             Object[] responseatC;
             //TOKENS
-            String user_token = headers.getHeaderString("user_token");
-            user_token = user_token == null ? "" : user_token;
-            System.out.println("user token: " + user_token);
-            String[] clains = Methods.getDataToJwt(user_token);
-            Object[] Permt = uc.ValidateToken(clains[0], clains[1], clains[2]);
+            String Authorization = headers.getHeaderString("Authorization");
+            Authorization = Authorization == null ? "" : Authorization;
+            System.out.println("Authorization: " + Authorization);
+            Object[] Permt = AuC.VToken(Authorization);
             if (Permt[0].equals(true)) {
                 responseatC = atC.InsertActivitiesTypeC(
                         Methods.JsonToString(Jso.getAsJsonObject(), "name", ""),
@@ -118,7 +91,6 @@ public class Activitiestyperesource {
                         Methods.JsonToString(Jso.getAsJsonObject(), "creationdate", ""),
                         Methods.JsonToString(Jso.getAsJsonObject(), "updatedate", ""),
                         Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
-
                 if (responseatC[0].equals(true)) {
                     responseJson = "{\"message\":\"" + responseatC[1] + "\",\"flag\":" + responseatC[0] + "}";
                 } else {
@@ -132,7 +104,6 @@ public class Activitiestyperesource {
             responseJson = "{\"message\":\"Missing data.\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + false + "}";
         }
         return Response.ok(responseJson)
-                .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();

@@ -1,7 +1,8 @@
-
 package com.jitgad.bjitgad.AllApis;
 
 import com.google.gson.JsonObject;
+import com.jitgad.bjitgad.Controller.AuthorizationController;
+import com.jitgad.bjitgad.Controller.GameController;
 import com.jitgad.bjitgad.DAO.GameDAO;
 import com.jitgad.bjitgad.DataStaticBD.DataBd;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
@@ -13,6 +14,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -21,20 +23,23 @@ import javax.ws.rs.core.UriInfo;
  *
  * @author jorge
  */
-
 @Path("game")
 
 public class Gameresource {
-    
+
     @Context
     private UriInfo context;
     private GameDAO gameDAO;
     private GameModel gameModel;
+    private GameController gC;
+    private AuthorizationController AuC;
 
     public Gameresource() {
         gameDAO = new GameDAO();
+        gC = new GameController();
+        AuC = new AuthorizationController();
     }
-    
+
     /**
      * Retrieves representation of an instance of ini.CRUD
      *
@@ -44,50 +49,54 @@ public class Gameresource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getGame() {
         //TODO return proper representation object
-        String gameD = gameDAO.selectGame();
+        String gameD = gC.selectGame();
         return Response.ok(gameD)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();
     }
-    
+
     @Produces(MediaType.APPLICATION_JSON)
     @POST
-    @Path("/insertgame")
+    @Path("/postGame")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response insertgame(String data) {
-        System.out.println(data);
+    public Response PostGame(@Context HttpHeaders headers, String data) {
         String responseJson = "{\"status\":\"poken:" + data + "\"}";
-        boolean insertgame = false;
+        System.out.println("Ingresando PostActivitiesType...");
         JsonObject Jso = Methods.stringToJSON(data);
         if (Jso.size() > 0) {
-            gameModel = new GameModel();
-            gameModel.setIdactivitiestype(Methods.JsonToString(Jso.getAsJsonObject(), "idactivitiestype", ""));
-            gameModel.setIdgametype(Methods.JsonToString(Jso.getAsJsonObject(), "idgametype", ""));
-            gameModel.setName(Methods.JsonToString(Jso.getAsJsonObject(), "name", ""));
-            gameModel.setCreationdate(Methods.JsonToString(Jso.getAsJsonObject(), "creationdate", ""));
-            gameModel.setUpdatedate(Methods.JsonToString(Jso.getAsJsonObject(), "updatedate", ""));
-            gameModel.setState(Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
-           
-            insertgame = gameDAO.insertGame(gameModel);
-            
-            if(insertgame){
-               responseJson = "{ \"status\":" +  insertgame + ",\"information\": \" The Game was inserted.\"}"; 
+            Object[] responsegC;
+            //TOKENS
+            String Authorization = headers.getHeaderString("Authorization");
+            Authorization = Authorization == null ? "" : Authorization;
+            System.out.println("Authorization: " + Authorization);
+            Object[] Permt = AuC.VToken(Authorization);
+            if (Permt[0].equals(true)) {
+                responsegC = gC.InsertGameC(
+                        Methods.JsonToString(Jso.getAsJsonObject(), "idactivitiestype", ""),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "idgametype", ""),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "name", ""),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "creationdate", ""),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "updatedate", ""),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
+                if (responsegC[0].equals(true)) {
+                    responseJson = "{\"message\":\"" + responsegC[1] + "\",\"flag\":" + responsegC[0] + "}";
+                } else {
+                    responseJson = "{\"message\":\"" + responsegC[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + responsegC[0] + "}";
+                }
+            } else {
+                responseJson = "{\"message\":\"" + Permt[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + Permt[0] + "}";
             }
-            else{
-                responseJson = "{ \"status\":" +  insertgame + ",\"information\": \" The Game was not inserted.\"}"; 
-            }
-            
-        }else {
+
+        } else {
             responseJson = "{\"message\":\"Missing data.\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + false + "}";
         }
+
         return Response.ok(responseJson)
-                .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();
     }
-    
-    
+
 }

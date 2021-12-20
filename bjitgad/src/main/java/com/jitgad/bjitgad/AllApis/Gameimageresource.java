@@ -2,6 +2,7 @@
 package com.jitgad.bjitgad.AllApis;
 
 import com.google.gson.JsonObject;
+import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.GameimageController;
 import com.jitgad.bjitgad.Controller.UserController;
 import com.jitgad.bjitgad.DAO.GameimageDAO;
@@ -31,10 +32,10 @@ public class Gameimageresource {
    private UriInfo context;
    private GameimageModel GiM;
    private GameimageController giC;
-   private UserController uc;
+   private AuthorizationController AuC;
 
     public Gameimageresource() {
-      uc = new UserController();
+      AuC = new AuthorizationController();
       GiM = new GameimageModel();
       giC = new GameimageController();
     }
@@ -46,22 +47,9 @@ public class Gameimageresource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getGameimage(@Context HttpHeaders headers) {
-        String responseJson = "";
-        //TOKENS
-        String user_token = headers.getHeaderString("user_token");
-        user_token = user_token == null ? "" : user_token;
-        System.out.println("user token: " + user_token);
-        String[] clains = Methods.getDataToJwt(user_token);
-        Object[] Permt = uc.ValidateToken(clains[0], clains[1], clains[2]);
-
-        if (Permt[0].equals(true)) {
-            responseJson = giC.selectGameimage();
-        } else {
-            responseJson = "{\"message\":\"" + Permt[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + Permt[0] + "}";
-        }
+    public Response getGameimage() {
+        String responseJson = giC.selectGameimage();
         return Response.ok(responseJson)
-                .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with, Access-Control-Allow-Origin")
                 .build();
@@ -78,11 +66,10 @@ public class Gameimageresource {
         if (Jso.size() > 0) {
             Object[] responsegiC;
             //TOKENS
-            String user_token = headers.getHeaderString("user_token");
-            user_token = user_token == null ? "" : user_token;
-            System.out.println("user token: " + user_token);
-            String[] clains = Methods.getDataToJwt(user_token);
-            Object[] Permt = uc.ValidateToken(clains[0], clains[1], clains[2]);
+            String Authorization = headers.getHeaderString("Authorization");
+            Authorization = Authorization == null ? "" : Authorization;
+            System.out.println("Authorization: " + Authorization);
+            Object[] Permt = AuC.VToken(Authorization);
             if (Permt[0].equals(true)) {
                 responsegiC = giC.InsertGameimageC(
                         Methods.JsonToString(Jso.getAsJsonObject(), "idgame", ""),
@@ -108,7 +95,6 @@ public class Gameimageresource {
             responseJson = "{\"message\":\"Missing data.\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + false + "}";
         }
         return Response.ok(responseJson)
-                .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();

@@ -2,6 +2,7 @@
 package com.jitgad.bjitgad.AllApis;
 
 import com.google.gson.JsonObject;
+import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.ColortypeController;
 import com.jitgad.bjitgad.Controller.UserController;
 import com.jitgad.bjitgad.DAO.ColortypeDAO;
@@ -31,12 +32,12 @@ public class Colortyperesource {
    private UriInfo context;
    private ColortypeModel ctypeModel;
    private ColortypeController ctypeC;
-   private UserController uc;
+   private AuthorizationController AuC;
            
 
     public Colortyperesource() {
        ctypeC = new ColortypeController();
-       uc = new UserController();
+       AuC = new AuthorizationController();
        ctypeModel = new ColortypeModel();
     }
     /**
@@ -46,22 +47,10 @@ public class Colortyperesource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getColortype(@Context HttpHeaders headers) {
+    public Response getColortype() {
         //TODO return proper representation object
-        String responseJson = "";
-        String user_token = headers.getHeaderString("user_token");
-        user_token = user_token == null ? "" : user_token;
-        System.out.println("user token: " + user_token);
-        String[] clains = Methods.getDataToJwt(user_token);
-        Object[] Permt = uc.ValidateToken(clains[0], clains[1], clains[2]);
-
-        if (Permt[0].equals(true)) {
-            responseJson = ctypeC.selectColortype();
-        } else {
-            responseJson = "{\"message\":\"" + Permt[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + Permt[0] + "}";
-        }
+        String responseJson = ctypeC.selectColortype();
         return Response.ok(responseJson)
-                .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();
@@ -78,11 +67,10 @@ public class Colortyperesource {
         if (Jso.size() > 0) {
             Object[] responsectype;
             //TOKENS
-            String user_token = headers.getHeaderString("user_token");
-            user_token = user_token == null ? "" : user_token;
-            System.out.println("user token: " + user_token);
-            String[] clains = Methods.getDataToJwt(user_token);
-            Object[] Permt = uc.ValidateToken(clains[0], clains[1], clains[2]);
+            String Authorization = headers.getHeaderString("Authorization");
+            Authorization = Authorization == null ? "" : Authorization;
+            System.out.println("Authorization: " + Authorization);
+            Object[] Permt = AuC.VToken(Authorization);
             if (Permt[0].equals(true)) {
                 responsectype = ctypeC.InsertColortype(
                         Methods.JsonToString(Jso.getAsJsonObject(), "color", ""),
@@ -103,7 +91,6 @@ public class Colortyperesource {
             responseJson = "{\"message\":\"Missing data.\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + false + "}";
         }
         return Response.ok(responseJson)
-                .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();
