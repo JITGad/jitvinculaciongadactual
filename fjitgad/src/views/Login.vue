@@ -2,7 +2,7 @@
   <div class="text-center">
     <NavBar></NavBar>
     <div class="form-signin">
-      <form v-on:submit.prevent="login">
+      <Form @submit="handleLogin" :validation-schema="schema">
         <img
           class="mb-4"
           src="../assets/escudouteq.png"
@@ -13,24 +13,24 @@
         <h1 class="h3 mb-3 fw-normal">Iniciar session</h1>
 
         <div class="form-floating">
-          <input
+          <Field
             type="email"
+            name="email"
             class="form-control"
-            id="floatingInput"
             placeholder="name@example.com"
-            v-model="email"
           />
-          <label for="floatingInput">Correo electronico</label>
+          <label for="email">Correo electronico</label>
+          <ErrorMessage name="email" class="error-feedback" />
         </div>
         <div class="form-floating">
-          <input
+          <Field
             type="password"
             class="form-control"
-            id="floatingPassword"
+            name="password"
             placeholder="Password"
-            v-model="password"
           />
-          <label for="floatingPassword">Contraseña</label>
+          <label for="password">Contraseña</label>
+          <ErrorMessage name="password" class="error-feedback" />
         </div>
 
         <div class="checkbox mb-3">
@@ -38,9 +38,16 @@
             <input type="checkbox" value="remember-me" /> Recuerdame
           </label>
         </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit">
-          Sign in
+        <button class="w-100 btn btn-lg btn-primary" type="submit" :disabled="loading">
+            <span
+              v-show="loading"
+              class="spinner-border spinner-border-sm"
+            ></span>
+            <span>Iniciar session</span>
         </button>
+        <div class="alert alert-danger" role="alert" v-if="error">
+          {{messagge}}
+        </div>
       </form>
     </div>
   </div>
@@ -51,13 +58,24 @@
 import Index from "@/components/Index.vue";
 import NavBar from "@/components/NavBar.vue";
 import {Login} from '../api/Usuarios';
+import { Form, Field, ErrorMessage } from "vee-validate";
+import * as yup from "yup";
 
 export default {
   name: "Login",
   data(){
+    const schema = yup.object().shape({
+      username: yup.string().required("Username is required!"),
+      password: yup.string().required("Password is required!"),
+    });
+    
     return{
       email: "",
-      password: ""
+      password: "",
+      error: false,
+      messagge: "",
+      loading: false,
+      schema
     }
   },
   components: {
@@ -66,9 +84,25 @@ export default {
   },
   methods: {
     async login(){
-      console.log(this.email);
-      console.log(this.password);
-      console.log(await Login(this.email, this.password))
+      var user = {
+                'email': email,
+                'password': password
+            };
+
+      var response = await Login(this.email, this.password);
+      if(response){
+          var responseJSON = JSON.parse(response);
+          console.log(responseJSON);
+          if (responseJSON.flag){
+            localStorage.setItem('user', JSON.stringify(responseJSON.data));
+          } else {
+            this.error_msg = responseJSON.message;
+            this.error = true;    
+          }
+      } else{
+        this.error_msg = "Usuario o clave incorrectos";
+        this.error = true;
+      }
     }
   }
 };
