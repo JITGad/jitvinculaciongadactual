@@ -12,11 +12,10 @@
     "core-js": "^3.6.5",
     "jquery": "^3.6.0",
     "jquery-confirm": "^3.3.4",
-    "vee-validate": "^4.5.7",
+    "jwt-decode": "^3.1.2",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.2",
-    "yup": "^0.32.11"
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

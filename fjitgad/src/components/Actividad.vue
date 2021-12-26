@@ -11,7 +11,7 @@
         class="img-fluid"
         width="100"
         height="100"
-      />════════<br /><span id="titulostemas">{{tema}}</span>
+      />════════<br /><span>{{tema}}</span>
     </div>
   </div>
 </template>
