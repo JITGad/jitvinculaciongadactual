@@ -1,16 +1,18 @@
 <template>
-  <div class="text-center">
+  <div>
     <NavBar></NavBar>
     <div class="form-signin">
       <my-form @submit="handleLogin">
-        <img
-          class="mb-4"
-          src="../assets/escudouteq.png"
-          alt=""
-          width="72"
-          height="57"
-        />
-        <h1 class="h3 mb-3 fw-normal">Iniciar session</h1>
+        <div class="text-center">
+          <img
+            class="mb-4"
+            src="../assets/image/escudouteq.png"
+            alt=""
+            width="72"
+            height="57"
+          />
+          <h1 class="h3 mb-3 fw-normal">Iniciar session</h1>
+        </div>
 
         <my-input
           v-model="user.email"
@@ -28,23 +30,14 @@
           validations="requerido"
         />
 
-        <div class="checkbox mb-3">
-          <label>
-            <input type="checkbox" value="remember-me" /> Recuerdame
-          </label>
-        </div>
+        <my-input
+          v-model="user.recuerdame"
+          type="checkbox"
+          label="Recuerdame"
+        />
 
-        <button
-          class="w-100 btn btn-lg btn-primary"
-          type="submit"
-          :disabled="loading"
-        >
-          <span
-            v-show="loading"
-            class="spinner-border spinner-border-sm"
-          ></span>
-          <span>Iniciar session</span>
-        </button>
+        <my-button label="Iniciar session" :loading="loading"/>
+        
         <div class="alert alert-danger" role="alert" v-if="responseError.error">
           {{ responseError.message }}
         </div>
@@ -56,34 +49,29 @@
 <script>
 // @ is an alias to /src
 import NavBar from "@/components/NavBar.vue";
-import { reactive, ref, computed, onMounted } from "vue";
+import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 export default {
   name: "Login",
   components: {
-    NavBar,
+    NavBar
   },
   setup(props, context) {
     const store = useStore();
-    const loggedIn = computed(() => store.state.auth.status.loggedIn);
-    const tokenValid = computed(() => store.getters["auth/isTokenValid"]);
     const router = useRouter();
-
-    if (loggedIn.value && tokenValid.value) {
-      router.push("/dashboard");
-    }
-
     const user = reactive({
       email: "",
       password: "",
+      recuerdame: false,
     });
     const responseError = reactive({
       message: "",
       error: false,
     });
     const loading = ref(false);
+    const rememberMe = ref(false);
     const handleLogin = function () {
       responseError.error = false;
       responseError.message = "";
@@ -106,8 +94,7 @@ export default {
       responseError,
       loading,
       handleLogin,
-      loggedIn,
-      tokenValid,
+      rememberMe,
     };
   },
 };

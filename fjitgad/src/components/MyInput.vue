@@ -1,21 +1,28 @@
 <template>
-  <div class="mb-3">
-    <label class="form-label">{{ label }}</label>
+  <div :class="classContainer">
+    <label class="form-label" v-show="type != 'checkbox'">{{ label }}</label>
     <input
       :type="type"
-      :modelValue="modelValue"
+      :value="modelValue"
       :placeholder="placeholder"
       :class="classInput"
-      @input="onInput"
+      v-model="model"
       @blur="blurEventHandler($event)"
     />
-    <div v-if="help.length > 0" class="form-text">{{ help }}</div>
-    <div v-if="error.state" class="validation-message">{{ error.message }}</div>
+    <label class="form-check-label" v-if="type == 'checkbox'">{{
+      label
+    }}</label>
+    <div v-show="help.length > 0" class="form-text">{{ help }}</div>
+    <div v-show="error.state" class="validation-message">{{ error.message }}</div>
   </div>
 </template>
 
 <script>
 import * as Validate from "../util/ValidationTypes.js";
+import {
+  myClassContainerInputType,
+  myClassInputType,
+} from "../util/Utilities.js";
 import {
   onBeforeUnmount,
   onMounted,
@@ -27,19 +34,24 @@ import {
 } from "vue";
 
 export default {
+  name: "MyInput",
   inheritAttrs: false,
+  emits: ["update:modelValue"],
   props: {
     modelValue: {
-      type: String,
+      type: [String, Boolean],
       default: "",
+      required: true,
     },
     type: {
       type: String,
       default: "text",
+      required: true,
     },
     label: {
       type: String,
       default: "",
+      required: true,
     },
     help: {
       type: String,
@@ -62,14 +74,19 @@ export default {
 
     const error = reactive({
       message: "",
-      state: false
+      state: false,
     });
     const modified = ref(false);
 
     const iserror = computed(() => (error.value ? "invalid" : "valid"));
     const ismodified = computed(() => (modified.value ? "modified" : ""));
-    const classInput = computed(() => `form-control ${ismodified} ${iserror}`);
-
+    const classInput = computed(
+      () =>
+        `${myClassInputType(props.type)} ${ismodified.value} ${iserror.value}`
+    );
+    const classContainer = computed(() =>
+      myClassContainerInputType(props.type)
+    );
     const validationsArray = reactive(_arrValidations);
 
     const executevalidation = function (_value) {
@@ -93,9 +110,14 @@ export default {
       executevalidation(e.target.value);
     };
 
-    const onInput = function (event) {
-      context.emit("update:modelValue", event.target.value);
-    };
+    const model = computed({
+      get() {
+        return this.modelValue;
+      },
+      set(value) {
+        context.emit("update:modelValue", value);
+      },
+    });
 
     const form = inject("my-form");
     const uid = getCurrentInstance().uid;
@@ -115,9 +137,10 @@ export default {
     return {
       blurEventHandler,
       validate,
-      onInput,
       error,
-      classInput
+      classInput,
+      classContainer,
+      model,
     };
   },
 };

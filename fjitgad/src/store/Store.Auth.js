@@ -12,14 +12,14 @@ export const auth = {
   actions: {
     login({ commit }, user) {
       return AuthService.login(user)
-      .then(user => {
-        commit('loginSuccess', user);
-        return Promise.resolve(user);
-      },
-      reason => {
-        commit('loginFailure');
-        return Promise.reject(reason);
-      });
+        .then(user => {
+          commit('loginSuccess', user);
+          return Promise.resolve(user);
+        },
+          reason => {
+            commit('loginFailure');
+            return Promise.reject(reason);
+          });
     },
     logout({ commit }) {
       AuthService.logout();
@@ -44,13 +44,16 @@ export const auth = {
     }
   },
   getters: {
-    isTokenValid: state => {
-      if (state.payload.hasOwnProperty("exp")) {
+    isLoginValid: state => {
+      if (state.payload != null && state.payload.hasOwnProperty("exp")) {
         if (state.payload.exp > new Date() / 1000) {
           return true;
         }
       }
       return false;
+    },
+    isLoged: state => {
+      return state.status.loggedIn
     }
   }
 };

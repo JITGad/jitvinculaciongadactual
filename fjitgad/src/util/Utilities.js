@@ -4,13 +4,13 @@
  * @param {Object} params Corresponde a los parametros que va a formatear
  * @return {string} Retorna un string con la informacion formateada
  */
- export const encodeQueryString = (params = {}) => {
+export const encodeQueryString = (params = {}) => {
     const keys = Object.keys(params);
     return keys.length
         ? "?" + keys
-        .map(key => encodeURIComponent(key)
-            + "=" + encodeURIComponent(params[key]))
-        .join("&")
+            .map(key => encodeURIComponent(key)
+                + "=" + encodeURIComponent(params[key]))
+            .join("&")
         : "";
 };
 
@@ -45,4 +45,35 @@ export function getCookie(name) {
         }
     }
     return cookieValue;
+}
+
+export function myClassContainerInputType(type = "") {
+    let myClass = "";
+    switch (type) {
+        case "checkbox":
+            myClass = "mb-3 form-check";
+            break;
+        default:
+            myClass = "mb-3";
+            break;
+    }
+    return myClass;
+}
+
+export function myClassInputType(type = "") {
+    let myClass = "";
+    switch (type) {
+        case "checkbox":
+            myClass = "form-check-input";
+            break;
+        default:
+            myClass = "form-control";
+            break;
+    }
+    return myClass;
+}
+
+export const Role = {
+    Admin: 'Administrador',
+    Docente: 'Docente'
 }

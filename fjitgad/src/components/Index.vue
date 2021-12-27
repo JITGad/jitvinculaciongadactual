@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="temas">
-      <Loading v-if="actividades.length == 0"/>
+      <Loading v-if="loading"/>
       <div v-else>
           <Actividad
             v-for="value in actividades"
@@ -18,7 +18,7 @@
 import Actividad from "./Actividad.vue";
 import Loading from "./Loading.vue";
 import ActividadesService from "../api/Actividades";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 export default {
   name: "Index",
@@ -26,12 +26,17 @@ export default {
     Actividad,
     Loading
   },
-  async setup(props,context){
+  setup(props,context){
     const actividades = ref([]);
-    actividades.value = await ActividadesService.getActividades();  
+    const loading = ref(true);
 
+    onMounted(async() => {
+        actividades.value = await ActividadesService.getActividades();
+        loading.value = false;
+    });
     return {
-      actividades
+      actividades,
+      loading
     }
   }
 };

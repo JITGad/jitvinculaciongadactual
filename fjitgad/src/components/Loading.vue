@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col">
         <div class="mx-auto w-75 px-5 text-white text-center">
-          <img src="../assets/spinner.gif" width="400" class="img-fluid" />
+          <img src="../assets/image/spinner.gif" width="400" class="img-fluid" />
           <br />
         </div>
       </div>

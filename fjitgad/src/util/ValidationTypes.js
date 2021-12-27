@@ -84,7 +84,7 @@ function extractValidations(validation = "") {
 }
 
 function initvalidate(_validatiosArr = [], _value = "") {
-    var _res = [false, ""];
+    var _res = [true, ""];
     _validatiosArr.forEach(element => {
         _res[0] = (element['item']).validate(_value, element['value']);
         if (!_res[0]) {
