@@ -1,11 +1,15 @@
-import FetchMaster  from "./FetchMaster";
-
-export async function getActividades() {
+import FetchMaster from "./FetchMaster";
+class ActividadesService {
+  
+  async getActividades() {
     return new Promise(async (resolve) => {
-        await FetchMaster.get('activitiestype', (data) => resolve(data), (error) => resolve([]));
-      });
+      await FetchMaster.get('activitiestype', (data) => resolve(data), (error) => resolve([]));
+    });
+  }
+  postActividades(formadata) {
+
+  }
 }
 
-export function postActividades(formadata) {
-    
-}
+
+export default new ActividadesService(); 

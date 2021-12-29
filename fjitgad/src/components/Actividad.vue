@@ -1,7 +1,7 @@
 <template>
   <div
     class="ctrtemas"
-    onclick="location.href='Actividades.jsp?id=21';"
+    @click="verActividad"
     onmouseover="this.style.background='#f2f0f0'"
     onmouseout="this.style.background=''"
   >
@@ -11,17 +11,40 @@
         class="img-fluid"
         width="100"
         height="100"
-      />════════<br /><span id="titulostemas">{{tema}}</span>
+      />════════<br /><span>{{ tema }}</span>
     </div>
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
 export default {
   name: "Actividad",
   props: {
-    tema: String,
-    urlimagen: String
-  }
+    tema: {
+      type: String,
+      default: ""
+    },
+    urlimagen: {
+      type: String,
+      default: ""
+    },
+    key: {
+      type: Number,
+      default: 0
+    }
+  },
+  setup(props, context) {
+    const router = useRouter();
+    const verActividad = function () {
+      router.push("/dashboard");
+    };
+
+    return {
+      verActividad,
+    };
+  },
 };
 </script>

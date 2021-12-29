@@ -1,21 +1,7 @@
 <template>
   <div>
-    <div class="temas" id="divtemas">
-      <div
-        class="row"
-        id="divcargando"
-        name="divcargando"
-        v-if="actividades.length == 0"
-      >
-        <div class="row">
-          <div class="col">
-            <div class="mx-auto w-75 px-5 text-white text-center">
-              <img src="../assets/spinner.gif" width="400" class="img-fluid" />
-              <br />
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="temas">
+      <Loading v-if="loading"/>
       <div v-else>
           <Actividad
             v-for="value in actividades"
@@ -30,21 +16,28 @@
 
 <script>
 import Actividad from "./Actividad.vue";
-import { getActividades } from "../api/Actividades";
+import Loading from "./Loading.vue";
+import ActividadesService from "../api/Actividades";
+import { ref, onMounted } from "vue";
 
 export default {
   name: "Index",
   components: {
     Actividad,
+    Loading
   },
-  data() {
+  setup(props,context){
+    const actividades = ref([]);
+    const loading = ref(true);
+
+    onMounted(async() => {
+        actividades.value = await ActividadesService.getActividades();
+        loading.value = false;
+    });
     return {
-      actividades: [],
-      error: "",
-    };
-  },
-  async mounted() {
-    this.actividades = await getActividades(); 
-  },
+      actividades,
+      loading
+    }
+  }
 };
 </script>

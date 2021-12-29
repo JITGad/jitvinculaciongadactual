@@ -43,6 +43,7 @@ class FetchMaster {
             'datatype': 'json',
             'type': type,
             success: function (data) {
+                console.log(data);
                 callback(JSON.stringify(data));
             },
             error: function (data) {
