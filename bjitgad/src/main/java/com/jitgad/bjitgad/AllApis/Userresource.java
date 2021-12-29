@@ -57,6 +57,7 @@ public class Userresource {
         if (Jso.size() > 0) {
             String email = Methods.JsonToString(Jso.getAsJsonObject(), "email", "");
             String password = Methods.JsonToString(Jso.getAsJsonObject(), "password", "");
+            String rec = Methods.JsonToString(Jso.getAsJsonObject(), "recuerdame", "");
             System.out.println(email);
             System.out.println(password);
             UserController userCon = new UserController();
@@ -64,7 +65,7 @@ public class Userresource {
             responseLogIn = userCon.LogIn(email, password);
 
             if (responseLogIn[0].equals(true)) {
-                responseJson = "{\"message\":\"" + responseLogIn[1] + "\",\"flag\":" + responseLogIn[0] + ",\"data\":" + (new UserDAO().userDataJson((UserModel) responseLogIn[2])) + "}";
+                responseJson = "{\"message\":\"" + responseLogIn[1] + "\",\"flag\":" + responseLogIn[0] + ",\"data\":" + (new UserDAO().userDataJson((UserModel) responseLogIn[2],rec)) + "}";
             } else {
                 responseJson = "{\"message\":\"" + responseLogIn[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + responseLogIn[0] + "}";
             }

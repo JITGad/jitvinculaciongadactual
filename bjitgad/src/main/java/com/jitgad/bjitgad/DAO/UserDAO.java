@@ -15,14 +15,14 @@ import javax.swing.table.DefaultTableModel;
  * @author jorge
  */
 public class UserDAO {
-    
+
     Conection con;
     String sentence;
 
     public UserDAO() {
         con = new Conection();
     }
-    
+
     public String selectUserAll() {
         sentence = "select * from tbluser";
         String json = con.getRecordsInJson(sentence);
@@ -43,17 +43,32 @@ public class UserDAO {
         usr.setUpdatedate(table.getValueAt(index, 9).toString());
         usr.setState(table.getValueAt(index, 10).toString());
         return usr;
-    }  
-    public String userDataJson(UserModel usr) {
+    }
+
+    public String userDataJson(UserModel usr, String rec) {
         String key = DataBd.dbprivatekey;
         long tiempo = System.currentTimeMillis();
+        long tiempoext = 0;
+        if (!rec.isEmpty()) {
+            if (rec.equals(true)) {
+                // 10 días
+                tiempoext = 864000000;
+            } else {
+                // 1 día
+                tiempoext = 86400000;
+            }
+        }else{
+            // 1 día
+            tiempoext = 86400000;
+        } 
 //        System.out.println(new Date(tiempo) +"-" + new Date(tiempo+900000));
         String jwt = Jwts.builder()
                 .signWith(SignatureAlgorithm.HS256, key)
                 .setSubject(usr.getIduser())
                 .setIssuedAt(new Date(tiempo))
                 //900000 que equivale a 15 minutos
-                .setExpiration(new Date(tiempo + 900000))
+             //   .setExpiration(new Date(tiempo + 900000))
+                .setExpiration(new Date(tiempo + tiempoext))
                 .claim("email", usr.getEmail())
                 .compact();
         JsonObjectBuilder jsoB = Json.createObjectBuilder();
@@ -67,30 +82,30 @@ public class UserDAO {
         javax.json.JsonObject jsonObj = jsoB.build();
         return jsonObj.toString();
     }
-    
+
     public boolean comprobeUniqueEmail(UserModel usr) {
         String sentency = String.format("select * from tbluser where email='%s';", usr.getEmail());
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
-    
-    public boolean validatetoken(String iduser, String email){  
-    String sentency = String.format("select * from tbluser where email='%s' and iduser='%s';",email,iduser);
+
+    public boolean validatetoken(String iduser, String email) {
+        String sentency = String.format("select * from tbluser where email='%s' and iduser='%s';", email, iduser);
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
-    
+
     public boolean insertUser(UserModel userM) {
         String structure = String.format(
                 "<user>"
-                    + "<names>" + userM.getNames() + "</names>"
-                    + "<last_name>" + userM.getLast_name() + "</last_name>"
-                    + "<email>" + userM.getEmail() + "</email>"
-                    + "<password>" + userM.getPassword() + "</password>"
-                    + "<image>" + userM.getImage() + "</image>"
-                    + "<birthdate>" + userM.getBirthdate() + "</birthdate>"
-                    + "<rol>" + userM.getRol() + "</rol>"
-                    + "<creationdate>" + userM.getCreationdate() + "</creationdate>"
-                    + "<updatedate>" + userM.getUpdatedate() + "</updatedate>"
-                    + "<state>" + userM.getState() + "</state>"    
+                + "<names>" + userM.getNames() + "</names>"
+                + "<last_name>" + userM.getLast_name() + "</last_name>"
+                + "<email>" + userM.getEmail() + "</email>"
+                + "<password>" + userM.getPassword() + "</password>"
+                + "<image>" + userM.getImage() + "</image>"
+                + "<birthdate>" + userM.getBirthdate() + "</birthdate>"
+                + "<rol>" + userM.getRol() + "</rol>"
+                + "<creationdate>" + userM.getCreationdate() + "</creationdate>"
+                + "<updatedate>" + userM.getUpdatedate() + "</updatedate>"
+                + "<state>" + userM.getState() + "</state>"
                 + "</user>");
 
         String sentency = "Select * from insertuser('" + structure + "')";
