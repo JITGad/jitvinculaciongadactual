@@ -20,29 +20,35 @@ const routes = [
     meta: { authorize: [] }
   },
   {
-    path: '/actividades',
-    name: 'Actividades',
-    component: () => import('../views/Actividad/Actividades.vue'),
+    path: '/list',
+    name: 'List',
+    component: () => import('../views/List.vue'),
     meta: { authorize: [] },
     children: [
       {
-        path: 'editar/:id',
-        name: 'EditarActividad',
-        component: () => import('../views/Actividad/EditarActividad.vue'),
+        path: 'actividades',
+        name: 'Actividades',
+        component: () => import('../views/Actividad/Actividades.vue'),
         meta: { authorize: [] },
-      },
-      {
-        path: 'crear',
-        name: 'CrearActividad',
-        component: () => import('../views/Actividad/CrearActividad.vue'),
-        meta: { authorize: [] },
-      },
-      {
-        path: 'jugar/:id',
-        name: 'ActividadJuego',
-        component: () => import('../views/Actividad/ActividadJuego.vue')
-      },
+      }
     ]
+  },
+  {
+    path: '/editar/:id',
+    name: 'EditarActividad',
+    component: () => import('../views/Actividad/EditarActividad.vue'),
+    meta: { authorize: [] },
+  },
+  {
+    path: '/crear',
+    name: 'CrearActividad',
+    component: () => import('../views/Actividad/CrearActividad.vue'),
+    meta: { authorize: [] },
+  },
+  {
+    path: '/jugar/:id',
+    name: 'ActividadJuego',
+    component: () => import('../views/Actividad/ActividadJuego.vue')
   },
   {
     path: '/login',

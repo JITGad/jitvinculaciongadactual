@@ -21,7 +21,7 @@
     </router-link>
     <router-link
       class="dashboard-nav-item dashboard-nav-link"
-      to="/actividades"
+      to="/list/actividades"
     >
       <i class="fas fa-user-alt"></i> Actividades
     </router-link>

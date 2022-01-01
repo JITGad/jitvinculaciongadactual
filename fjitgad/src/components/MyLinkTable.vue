@@ -1,5 +1,5 @@
 <template>
-  <a @click="handleClick">
+  <a @click="handleClick" style="cursor: pointer;">
     <i :class="icon"></i>
   </a>
 </template>
@@ -23,7 +23,6 @@ export default {
             context.emit('click', props.object);
         }
         return {
-            FullUrl,
             handleClick
         }
     },

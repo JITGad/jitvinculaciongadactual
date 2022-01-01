@@ -29,8 +29,8 @@ class FetchMaster {
     #get_token() {
         let user = JSON.parse(localStorage.getItem('user'));
 
-        if (user && user.accessToken) {
-            return 'Bearer ' + user.accessToken;
+        if (user && user.user_token) {
+            return 'Bearer ' + user.user_token;
         } else {
             return '';
         }
@@ -68,11 +68,11 @@ class FetchMaster {
             'datatype': 'json',
             'type': type,
             success: function (data, textStatus, request) {
-                console.log(data, textStatus, request);
+                console.log(data, textStatus, request, request.getAllResponseHeaders());
                 callback({
                     'data': data.data,
-                    'conteo': paginacion ? request.getResponseHeader('CountingPage') : undefined,
-                    'totalPaginas': paginacion ? request.getResponseHeader('TotalPages') : undefined,
+                    'conteo': paginacion ? data.CountingPage : undefined,
+                    'totalPaginas': paginacion ? data.TotalPages : undefined,
                     'status': _this.#manage_status_response(textStatus, undefined, data)
                 });
             },
@@ -104,6 +104,8 @@ class FetchMaster {
         }
 
         options['headers'] = headers;
+
+        console.log(options);
 
         $.ajax(options);
     }

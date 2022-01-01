@@ -15,11 +15,10 @@ export const auth = {
         .then(user => {
           commit('loginSuccess', user);
           return Promise.resolve(user);
-        },
-          reason => {
-            commit('loginFailure');
-            return Promise.reject(reason);
-          });
+        }).catch((reason) => {
+          commit('loginFailure');
+          return Promise.reject(reason);
+        });
     },
     logout({ commit }) {
       AuthService.logout();
