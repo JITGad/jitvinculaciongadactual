@@ -1,0 +1,241 @@
+{
+	"info": {
+		"_postman_id": "ca818bbc-2c4c-4b6f-8ef5-a6c0a6edf5b2",
+		"name": "Apis-JIT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/bjitgad/webresources/activitiestype/getActivitiestypeAdmin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQwOTc5NjkzLCJleHAiOjE2NDEwNjYwOTMsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20ifQ.SPDdFNH-MW9tymAr3ygX2C6pM3go2X6aOK2dngKH30I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/bjitgad/webresources/activitiestype/getActivitiestypeAdmin?page=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bjitgad",
+						"webresources",
+						"activitiestype",
+						"getActivitiestypeAdmin"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/bjitgad/webresources/gameimage",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUW9saW5hMTJAaG90bWFpbC5jb20ifQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiJ9yJzdWIiOiIxIiwiaWF0IjoxNjM5MDY0NTUzLCJleHAiOjE2MzkwNjU0NTMsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20ifQ.8oTycJznyDVi6vd9S-pVf-U5RLSX0zAbSoPm6T92IXE",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/bjitgad/webresources/gameimage",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bjitgad",
+						"webresources",
+						"gameimage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/bjitgad/webresources/game/postGame",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5OTc5NDU4LCJleHAiOjE2Mzk5ODAzNTgsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20ifQ.6okWW42bOykNOmpX8DQDYNK9hpkekjuXg-bZsLQpBhA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; chatset=\"utf-8\"",
+						"type": "text"
+					},
+					{
+						"key": "user_token",
+						"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5MDY0NTUzLCJleHAiOjE2MzkwNjU0NTMsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20ifQ.8oTycJznyDVi6vd9S-pVf-U5RLSX0zAbSoPm6T92IXE",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idactivitiestype\":\"1\",\r\n    \"idgametype\":\"2\",\r\n    \"name\":\"Jorge\",\r\n    \"creationdate\":\"NOW()\",\r\n    \"updatedate\":\"NOW()\",\r\n    \"state\":\"true\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/bjitgad/webresources/game/postGame",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bjitgad",
+						"webresources",
+						"game",
+						"postGame"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/bjitgad/webresources/users/logIn",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjM5OTc0OTI3LCJleHAiOjE2Mzk5NzU4MjcsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20ifQ.kifopAohfYnIP66jmaxzhIhskg-a-hS7FHWzvN3MWKs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; chatset=\"utf-8\"",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"jorge-molina12@hotmail.com\",\r\n    \"password\":\"12345\",\r\n    \"recuerdame\":true\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/bjitgad/webresources/users/logIn",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bjitgad",
+						"webresources",
+						"users",
+						"logIn"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/bjitgad/webresources/game/getGameAdmin?page=1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQwOTc5NjkzLCJleHAiOjE2NDEwNjYwOTMsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20ifQ.SPDdFNH-MW9tymAr3ygX2C6pM3go2X6aOK2dngKH30I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/bjitgad/webresources/game/getGameAdmin?page=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bjitgad",
+						"webresources",
+						"game",
+						"getGameAdmin"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://bjitgad.herokuapp.com/webresources/gameimage",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://bjitgad.herokuapp.com/webresources/gameimage",
+					"protocol": "https",
+					"host": [
+						"bjitgad",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"webresources",
+						"gameimage"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

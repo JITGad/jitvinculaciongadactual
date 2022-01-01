@@ -29,13 +29,12 @@ import javax.ws.rs.core.UriInfo;
 public class Gameresource {
     @Context
     private UriInfo context;
-    private GameDAO gameDAO;
-    private GameModel gameModel;
+   // private GameModel gameModel;
     private GameController gC;
     private AuthorizationController AuC;
 
     public Gameresource() {
-        gameDAO = new GameDAO();
+       // gameModel = new GameModel();
         gC = new GameController();
         AuC = new AuthorizationController();
     }

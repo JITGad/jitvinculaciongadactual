@@ -29,13 +29,13 @@ public class Activitiestyperesource {
 
     @Context
     private UriInfo context;
-    private ActivitiestypeModel atM;
+  //  private ActivitiestypeModel atM;
     private ActivitiestypeController atC;
     private AuthorizationController AuC;
 
     public Activitiestyperesource() {
         atC = new ActivitiestypeController();
-        atM = new ActivitiestypeModel();
+       // atM = new ActivitiestypeModel();
         AuC = new AuthorizationController();
     }
 

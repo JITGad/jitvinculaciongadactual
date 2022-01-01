@@ -2,6 +2,8 @@
 package com.jitgad.bjitgad.AllApis;
 
 import com.google.gson.JsonObject;
+import com.jitgad.bjitgad.Controller.AuthorizationController;
+import com.jitgad.bjitgad.Controller.GametypeController;
 import com.jitgad.bjitgad.DAO.GametypeDAO;
 import com.jitgad.bjitgad.DataStaticBD.DataBd;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
@@ -12,7 +14,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -28,10 +32,15 @@ public class Gametyperesource {
     private UriInfo context; 
     private GametypeDAO gametypeDAO;
     private GametypeModel gametypeModel;
+    private AuthorizationController AuC;
+    private GametypeController gtC;
+    
 
     
     public Gametyperesource() {
         gametypeDAO = new GametypeDAO();
+        gtC = new GametypeController();
+        AuC = new AuthorizationController();
     }
     
     /**
@@ -43,13 +52,41 @@ public class Gametyperesource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getgametype() {
         //TODO return proper representation object
-        String gametypeD = gametypeDAO.selectGametype();
+        String gametypeD = gtC.selectGametype();
         return Response.ok(gametypeD)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();
     }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/getgametypeAdmin")
+    public Response getgametypeAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
+        String responseJson="[]";
+        int responseCountingPage = 0;
+        //TOKENS
+        String Authorization = headers.getHeaderString("Authorization");
+        Authorization = Authorization == null ? "" : Authorization;
+        System.out.println("Authorization: " + Authorization);
+        Object[] Permt = AuC.VToken(Authorization);
+        if (Permt[0].equals(true)) {
+            responseJson = "";
+            if(!Methods.jsonrecordcount(responseJson)){
+                responseJson = "{\"message\":\"" + "" + "\",\"data\":\"" + responseJson + "\",\"flag\":" + "true" + "}"; // FORMATO DE LAS PETICIONES
+            }
+        }
+        
+        
+        //String gametypeD = gametypeDAO.selectGametype();
+        return Response.ok(responseJson)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
+                .build();
+    }
+    
     
     @Produces(MediaType.APPLICATION_JSON)
     @POST
