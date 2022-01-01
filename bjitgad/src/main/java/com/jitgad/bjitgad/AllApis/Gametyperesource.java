@@ -76,6 +76,9 @@ public class Gametyperesource {
             if(!Methods.jsonrecordcount(responseJson)){
                 responseJson = "{\"message\":\"" + "" + "\",\"data\":\"" + responseJson + "\",\"flag\":" + "true" + "}"; // FORMATO DE LAS PETICIONES
             }
+          //  responseCountingPage = gC.CountingPageGame();
+        }else {
+            responseJson = "{\"message\":\"" + Permt[1] + "\",\"data\":\"" + responseJson + "\",\"flag\":" + Permt[0] + "}";
         }
         
         

@@ -29,13 +29,13 @@ public class Activitiestyperesource {
 
     @Context
     private UriInfo context;
-  //  private ActivitiestypeModel atM;
+    //  private ActivitiestypeModel atM;
     private ActivitiestypeController atC;
     private AuthorizationController AuC;
 
     public Activitiestyperesource() {
         atC = new ActivitiestypeController();
-       // atM = new ActivitiestypeModel();
+        // atM = new ActivitiestypeModel();
         AuC = new AuthorizationController();
     }
 
@@ -47,9 +47,13 @@ public class Activitiestyperesource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getActivitiestype() {
-
-        String responseJson = atC.selectActivitiestype();
-
+        String responseJson = "";
+        responseJson = atC.selectActivitiestype();
+        if (!Methods.jsonrecordcount(responseJson)) {
+            responseJson = "{\"message\":\"No Records.\",\"flag\": true,\"data\":" + responseJson + "}";
+        } else {
+            responseJson = "{\"message\":\"Records returned successfully.\",\"flag\": true,\"data\":" + responseJson + "}";
+        }
         return Response.ok(responseJson)
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with, Access-Control-Allow-Origin")
@@ -71,8 +75,10 @@ public class Activitiestyperesource {
         if (Permt[0].equals(true)) {
             responseJson = atC.selectActivitiestypepage(page);
             if (!Methods.jsonrecordcount(responseJson)) {
-                responseJson = "{\"message\":\"" + "" + "\",\"data\":\"" + responseJson + "\",\"flag\":" + "true" + "}"; // FORMATO DE LAS PETICIONES
-            } 
+                responseJson = "{\"message\":\"No Records.\",\"flag\": true,\"data\":" + responseJson + "}";
+            } else {
+                responseJson = "{\"message\":\"Records returned successfully.\",\"flag\": true,\"data\":" + responseJson + "}";
+            }
             responseCountingPage = atC.CountingPageActivitiesType();
 
         } else {

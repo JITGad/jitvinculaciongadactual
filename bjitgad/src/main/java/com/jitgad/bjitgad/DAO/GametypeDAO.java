@@ -21,6 +21,8 @@ public class GametypeDAO {
         String json = con.getRecordsInJson(sentence);
         return json;
     }
+    
+   // public String select
 
     public boolean insertGametype(GametypeModel gametypeModel) {
         String structure = String.format(

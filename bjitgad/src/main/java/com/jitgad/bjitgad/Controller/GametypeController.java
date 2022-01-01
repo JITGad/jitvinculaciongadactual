@@ -24,4 +24,8 @@ public class GametypeController {
         return gtD.selectGametype();
     }
     
+//    public String selectGametypepage(){
+//       // return gtD.selectGametype();
+//    }
+    
 }

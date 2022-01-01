@@ -27,14 +27,15 @@ import javax.ws.rs.core.UriInfo;
 @Path("game")
 
 public class Gameresource {
+
     @Context
     private UriInfo context;
-   // private GameModel gameModel;
+    // private GameModel gameModel;
     private GameController gC;
     private AuthorizationController AuC;
 
     public Gameresource() {
-       // gameModel = new GameModel();
+        // gameModel = new GameModel();
         gC = new GameController();
         AuC = new AuthorizationController();
     }
@@ -47,9 +48,14 @@ public class Gameresource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getGame() {
-        //TODO return proper representation object
-        String gameD = gC.selectGame();
-        return Response.ok(gameD)
+        String responseJson = "";
+        responseJson = gC.selectGame();
+        if (!Methods.jsonrecordcount(responseJson)) {
+            responseJson = "{\"message\":\"No Records.\",\"flag\": true,\"data\":" + responseJson + "}";
+        } else {
+            responseJson = "{\"message\":\"Records returned successfully.\",\"flag\": true,\"data\":" + responseJson + "}";
+        }
+        return Response.ok(responseJson)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
@@ -60,7 +66,7 @@ public class Gameresource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getGameAdmin")
     public Response getGameAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
-        String responseJson="[]";
+        String responseJson = "[]";
         int responseCountingPage = 0;
         //TOKENS
         String Authorization = headers.getHeaderString("Authorization");
@@ -69,25 +75,24 @@ public class Gameresource {
         Object[] Permt = AuC.VToken(Authorization);
         if (Permt[0].equals(true)) {
             responseJson = gC.selectGamepage(page);
-            if(!Methods.jsonrecordcount(responseJson)){
-                responseJson = "{\"message\":\"" + "" + "\",\"data\":\"" + responseJson + "\",\"flag\":" + "true" + "}"; // FORMATO DE LAS PETICIONES
+            if (!Methods.jsonrecordcount(responseJson)) {
+                responseJson = "{\"message\":\"No Records.\",\"flag\": true,\"data\":" + responseJson + "}";
+            } else {
+                responseJson = "{\"message\":\"Records returned successfully.\",\"flag\": true,\"data\":" + responseJson + "}";
             }
-              responseCountingPage = gC.CountingPageGame();
+            responseCountingPage = gC.CountingPageGame();
         } else {
             responseJson = "{\"message\":\"" + Permt[1] + "\",\"data\":\"" + responseJson + "\",\"flag\":" + Permt[0] + "}";
         }
-        
+
         return Response.ok(responseJson)
                 .header("CountingPage", responseCountingPage)
-                .header("TotalPages", (responseCountingPage / 10)+1)
+                .header("TotalPages", (responseCountingPage / 10) + 1)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();
     }
-    
-    
-    
 
     @Produces(MediaType.APPLICATION_JSON)
     @POST
