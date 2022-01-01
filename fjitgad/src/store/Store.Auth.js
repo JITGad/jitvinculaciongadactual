@@ -1,4 +1,4 @@
-import AuthService from '../api/Usuarios.js';
+import AuthService from '../api/UsuariosService.js';
 import jwt_decode from "jwt-decode";
 
 const user = JSON.parse(localStorage.getItem('user'));

@@ -1,7 +1,7 @@
 <template>
-    <div>
-        dashboard
-    </div>
+    <main-layout>
+        Inicio
+    </main-layout>
 </template>
 
 <script>

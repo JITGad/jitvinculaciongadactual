@@ -24,10 +24,16 @@ import "./assets/css/list.css";
 import "./assets/css/list.css";
 import "./assets/css/style.css";
 import "./assets/css/styles.css";
+import "./assets/css/NavMenu.css";
 
 import MyForm from "./components/MyForm";
 import MyInput from "./components/MyInput";
 import MyButton from "./components/MyButton";
+import MainLayout from "./components/MainLayout";
+import Paginacion from "./components/Paginacion";
+import MyLinkTable from "./components/MyLinkTable";
+
+import "./util/EventsMenu.js";
 
 const app = createApp(App);
 
@@ -38,5 +44,8 @@ router.store = store;
 app.component("my-input", MyInput);
 app.component("my-form", MyForm);
 app.component("my-button", MyButton);
+app.component("main-layout", MainLayout);
+app.component("my-paginacion", Paginacion);
+app.component("my-link-table", MyLinkTable);
 
 app.mount('#app');

@@ -11,10 +11,7 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import('../views/About.vue')
   },
   {
     path: '/dashboard',
@@ -23,9 +20,29 @@ const routes = [
     meta: { authorize: [] }
   },
   {
-    path: '/play-activity/:id',
-    name: 'MenuActividad',
-    component: () => import('../views/MenuActividad.vue')
+    path: '/actividades',
+    name: 'Actividades',
+    component: () => import('../views/Actividad/Actividades.vue'),
+    meta: { authorize: [] },
+    children: [
+      {
+        path: 'editar/:id',
+        name: 'EditarActividad',
+        component: () => import('../views/Actividad/EditarActividad.vue'),
+        meta: { authorize: [] },
+      },
+      {
+        path: 'crear',
+        name: 'CrearActividad',
+        component: () => import('../views/Actividad/CrearActividad.vue'),
+        meta: { authorize: [] },
+      },
+      {
+        path: 'jugar/:id',
+        name: 'ActividadJuego',
+        component: () => import('../views/Actividad/ActividadJuego.vue')
+      },
+    ]
   },
   {
     path: '/login',
