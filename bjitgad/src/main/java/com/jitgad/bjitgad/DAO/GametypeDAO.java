@@ -22,7 +22,16 @@ public class GametypeDAO {
         return json;
     }
     
-   // public String select
+    public String selectGametypepage(int page){
+    sentence ="select * from tblgametype order by idgametype asc limit 10 offset "+ (page * 10 - 10);
+        String json = con.getRecordsInJson(sentence);
+        return json;
+    }
+    
+    public int CountingPageGametype(){
+      sentence = String.format("select * from tblgametype");
+      return  ((con.returnRecord(sentence)).getRowCount());
+    }
 
     public boolean insertGametype(GametypeModel gametypeModel) {
         String structure = String.format(
