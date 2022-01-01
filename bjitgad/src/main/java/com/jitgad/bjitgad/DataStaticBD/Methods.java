@@ -11,13 +11,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.table.DefaultTableModel;
+import org.json.JSONArray;
 
 /**
- * * This java class contains the methods used within the back-end of the application.
+ * * This java class contains the methods used within the back-end of the
+ * application.
  */
 public final class Methods {
 
@@ -28,23 +31,25 @@ public final class Methods {
                     .setSigningKey(DataBd.dbprivatekey)
                     .parseClaimsJws(jwt).getBody();
             response = new String[]{claims.get("sub").toString(),
-            claims.get("email").toString(),"Válidate"};
+                claims.get("email").toString(), "Válidate"};
         } catch (Exception e) {
             System.out.println("error JWT: " + e.getMessage());
-            response = new String[]{"","",e.getMessage()};
+            response = new String[]{"", "", e.getMessage()};
         }
         return response;
     }
-    
+
 //    public String getJsonResponse(Object val1, Object val2){
 //        
 //    }
-    
-    /** This method is for the security application.
+    /**
+     * This method is for the security application.
+     *
      * @param request Processes HTTP type requests
-     * @param param String type variable, contains the information obtained to the method.
+     * @param param String type variable, contains the information obtained to
+     * the method.
      * @param defaulx String type variable, return variable
-     * @return a String, for the security request. 
+     * @return a String, for the security request.
      */
     public static String securRequest(HttpServletRequest request, String param, String defaulx) {
         try {
@@ -54,7 +59,10 @@ public final class Methods {
             return defaulx;
         }
     }
-    /** This method is for the security application.
+
+    /**
+     * This method is for the security application.
+     *
      * @param email String type variable, contains the email.
      * @param params RegEt Email validator.
      * @return a String, for the security request.
@@ -68,7 +76,10 @@ public final class Methods {
             return false;
         }
     }
-    /** Convert from string to json.
+
+    /**
+     * Convert from string to json.
+     *
      * @param json String type variable, contains the json to be converted.
      * @return a json.
      */
@@ -82,7 +93,10 @@ public final class Methods {
             return new JsonObject();
         }
     }
-    /** Convert from string to json.
+
+    /**
+     * Convert from string to json.
+     *
      * @param json String type variable, contains the json to be converted.
      * @return a json.
      */
@@ -97,9 +111,13 @@ public final class Methods {
             return new JsonObject();
         }
     }
-    /** Get a part of the json.
+
+    /**
+     * Get a part of the json.
+     *
      * @param jso Variable type json, contains the information.
-     * @param param String type variable, contains the name of the json parameter to be divided.
+     * @param param String type variable, contains the name of the json
+     * parameter to be divided.
      * @return a json, divided.
      */
     public static JsonElement securGetJSON(JsonObject jso, String param) {
@@ -110,9 +128,13 @@ public final class Methods {
             return null;
         }
     }
-    /** A sub json of a json.
+
+    /**
+     * A sub json of a json.
+     *
      * @param jso Variable type json, contains the information.
-     * @param param String type variable, contains the name of the json parameter to be divided.
+     * @param param String type variable, contains the name of the json
+     * parameter to be divided.
      * @param defaulx String type variable, return variable
      * @return a json.
      */
@@ -129,9 +151,13 @@ public final class Methods {
             return defaulx;
         }
     }
-    /** Method to divide a json.
+
+    /**
+     * Method to divide a json.
+     *
      * @param jso Variable type json, contains the information.
-     * @param param String type variable, contains the name of the json parameter to be divided.
+     * @param param String type variable, contains the name of the json
+     * parameter to be divided.
      * @param defaulx String type variable, return variable
      * @return Return a String, with the json divided.
      */
@@ -148,11 +174,14 @@ public final class Methods {
             return defaulx;
         }
     }
-   /** From a json element to String.
-    * @param jse contains the element json.
-    * @param defaulx String type variable, return variable
+
+    /**
+     * From a json element to String.
+     *
+     * @param jse contains the element json.
+     * @param defaulx String type variable, return variable
      * @return Return a String, with the json divided.
-    */
+     */
     public static String JsonElementToString(JsonElement jse, String defaulx) {
         try {
             if (jse != null) {
@@ -164,9 +193,13 @@ public final class Methods {
             return defaulx;
         }
     }
-    /** from json to Integer.
+
+    /**
+     * from json to Integer.
+     *
      * @param jso Variable type json, contains the information
-     * @param param String type variable, contains the name of the json parameter to be divided.
+     * @param param String type variable, contains the name of the json
+     * parameter to be divided.
      * @param defaulx String type Integer, return variable
      * @return an integer, the variable is defaulx.
      */
@@ -182,9 +215,13 @@ public final class Methods {
             return defaulx;
         }
     }
-    /** from json to boolean
+
+    /**
+     * from json to boolean
+     *
      * @param jso Variable type json, contains the information
-     * @param param String type variable, contains the name of the json parameter to be divided.
+     * @param param String type variable, contains the name of the json
+     * parameter to be divided.
      * @param defaulx String type Boolean, return variable
      * @return an Boolean, the variable is defaulx.
      */
@@ -200,7 +237,10 @@ public final class Methods {
             return defaulx;
         }
     }
-    /**  From table to json.
+
+    /**
+     * From table to json.
+     *
      * @param table Variable of type DefaultTableModel, table with loaded data
      * @return a String, contains a json with data.
      */
@@ -229,7 +269,10 @@ public final class Methods {
         }
         return resul;
     }
-   /** Convert from a table to an html5 table
+
+    /**
+     * Convert from a table to an html5 table
+     *
      * @param table Variable of type DefaultTableModel, table with loaded data
      * @return a String, with an html5 table with data.
      */
@@ -255,4 +298,16 @@ public final class Methods {
         resul += "</table>";
         return resul;
     }
+
+    public static boolean  jsonrecordcount(String json) {
+        boolean var = false;
+        JSONArray jsonArray = new JSONArray(json);
+        Iterator<?> iterator = jsonArray.iterator();
+        while (iterator.hasNext()) {
+            var = true;
+            break;
+        }
+        return var;
+    }
+
 }

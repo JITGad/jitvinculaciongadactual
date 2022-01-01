@@ -49,8 +49,38 @@ public class Activitiestyperesource {
     public Response getActivitiestype() {
 
         String responseJson = atC.selectActivitiestype();
-       
+
         return Response.ok(responseJson)
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with, Access-Control-Allow-Origin")
+                .build();
+    }
+
+    // recibe token - administración
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/getActivitiestypeAdmin")
+    public Response getActivitiestypeAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
+        String responseJson = "[]";
+        int responseCountingPage = 0;
+        //TOKENS
+        String Authorization = headers.getHeaderString("Authorization");
+        Authorization = Authorization == null ? "" : Authorization;
+        System.out.println("Authorization: " + Authorization);
+        Object[] Permt = AuC.VToken(Authorization);
+        if (Permt[0].equals(true)) {
+            responseJson = atC.selectActivitiestypepage(page);
+            if (!Methods.jsonrecordcount(responseJson)) {
+                responseJson = "{\"message\":\"" + "" + "\",\"data\":\"" + responseJson + "\",\"flag\":" + "true" + "}"; // FORMATO DE LAS PETICIONES
+            } 
+            responseCountingPage = atC.CountingPageActivitiesType();
+
+        } else {
+            responseJson = "{\"message\":\"" + Permt[1] + "\",\"data\":\"" + responseJson + "\",\"flag\":" + Permt[0] + "}";
+        }
+        return Response.ok(responseJson)
+                .header("CountingPage", responseCountingPage)
+                .header("TotalPages", (responseCountingPage / 10) + 1)
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with, Access-Control-Allow-Origin")
                 .build();

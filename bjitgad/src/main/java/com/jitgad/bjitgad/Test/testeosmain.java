@@ -12,8 +12,12 @@ import com.jitgad.bjitgad.DataStaticBD.DataBd;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.jitgad.bjitgad.Utilities.CropImage;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
@@ -28,6 +32,14 @@ public class testeosmain {
         new Conection().testConection();
        // String sentence = "SELECT * FROM \"public\".\"TBLUSER\"; 
         Conection con = new Conection(); 
+        
+       
+//        try {
+//           // System.out.println(ci.recorte("C:/Users/jorge/Downloads/Captura29-12-2021.png"));
+//            CropImage ci = new CropImage();
+//        } catch (IOException ex) {
+//            Logger.getLogger(testeosmain.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
     public static void prueba1(){
         String datas = "{\"name\":\"Puchamon\",\"lastname\":\"Apell\",\"email\":\"pucha@gmail.com\",\"pass\":\"123\"}";

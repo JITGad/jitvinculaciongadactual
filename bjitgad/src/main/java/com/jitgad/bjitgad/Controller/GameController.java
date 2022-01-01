@@ -24,7 +24,14 @@ public class GameController {
      public String selectGame(){
         return gD.selectGame();
     }
-     
+    
+    public String selectGamepage(int page){
+        return gD.selectGamepage(page);
+    }
+    
+    public int CountingPageGame(){
+        return gD.CountingPageGame();
+    }
      
     public Object[] InsertGameC(String Idactivitiestype, String Idgametype,
             String Name, String creationdate, String updatedate, String state) {

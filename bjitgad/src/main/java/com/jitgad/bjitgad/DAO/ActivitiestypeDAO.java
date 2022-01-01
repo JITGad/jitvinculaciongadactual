@@ -23,6 +23,17 @@ public class ActivitiestypeDAO {
         return json;
     }
     
+    public String selectActivitiestypepage(int page){
+        sentence ="select * from tblactivitiestype order by idactivitiestype asc limit 10 offset "+ (page * 10 - 10);
+        String json = con.getRecordsInJson(sentence);
+        return json;
+    }
+    
+    public int CountingPageActivitiestype(){
+      sentence = String.format("select idactivitiestype as id,name as tema,image as urlimagen from tblactivitiestype");
+      return  ((con.returnRecord(sentence)).getRowCount());
+    }
+    
     public String selectgamesbyactivities(String idactivity){
         sentence = "select * from tblgametype \n" +
         "inner join tblgame on tblgame.idgametype = tblgametype.idgametype \n" +
