@@ -15,35 +15,32 @@ import sun.awt.image.ToolkitImage;
  */
 public class CropImage {
     
-String ruta = "img/img2.jpg";
+String ruta = "C:/Users/jorge/Downloads/Captura29-12-2021.png";
 int dimensiones=150;
 String[]partes= new String[16];
 
-    public CropImage() {
-    }
-    
-    public boolean recorte(String ruta)  throws IOException {
+    public CropImage() throws IOException{
+        
         int filas = 4;
         int columnas = 4;
 
         //File arc = new File(ruta);
         //System.err.println(arc.getAbsolutePath()+"--\n-"+arc.getCanonicalPath());
         
-        BufferedImage imagenSuper = ImageIO.read(new File(ruta));
+        BufferedImage imagenSuper = ImageIO.read(new File("C:/Users/jorge/Downloads/Captura29-12-2021.png"));
         ImageIcon Sup = new ImageIcon(imagenSuper.getScaledInstance(filas * dimensiones, columnas * dimensiones, BufferedImage.SCALE_AREA_AVERAGING));
         Image img1 = Sup.getImage();
         ToolkitImage tk = (ToolkitImage) img1;
         BufferedImage imagenSuper2 = tk.getBufferedImage();
         //ruta="img/cuadros.png";
         //ImageIO.write(imagenSuper2, "png", new File("C:/Users/tonyp/OneDrive/Documentos/NetBeansProjects/trataimg/web/img/img3.png"));
-     //   ruta="img/cuadros4.png";
+        ruta="C:/Users/jorge/Downloads/Captura29-12-2021.png";
         int cortef = 0, cortec = 0,i=0;
         for (int f = 0; f < filas; f++) {
             for (int c = 0; c < columnas; c++) 
             {
                 BufferedImage temporary = imagenSuper2.getSubimage(cortec, cortef, dimensiones, dimensiones);
-       
-                String rutatempo="G:/Mi unidad/2021/Universidad/Vinculación/"+f + "-" + c + ".png";
+                String rutatempo="G:/Mi unidad/2021/Universidad/Vinculación/JIT_VINCULACION/img/partes/"+f + "-" + c + ".png";
                 File file = new File(rutatempo);
                 ImageIO.write(temporary, "png", file);
                 String itemsM=String.format("img/partes/%s-%s.png", f,c);
@@ -53,8 +50,9 @@ String[]partes= new String[16];
             cortec = 0;
             cortef += dimensiones;
         }
-        return true;
     }
+    
+  
     
     public String getRuta() {
         return ruta;

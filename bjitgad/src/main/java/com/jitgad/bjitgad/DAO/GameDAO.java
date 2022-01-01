@@ -26,6 +26,17 @@ public class GameDAO {
         String json = con.getRecordsInJson(sentence);
         return json;
     }
+    
+    public String selectGamepage(int page){
+        sentence ="select * from tblgame order by idgame asc limit 10 offset "+ (page * 10 - 10);
+        String json = con.getRecordsInJson(sentence);
+        return json;
+    }
+    
+    public int CountingPageGame(){
+      sentence = String.format("select * from tblgame");
+      return  ((con.returnRecord(sentence)).getRowCount());
+    }
 
     public boolean insertGame(GameModel gameModel) {
         String structure = String.format(
