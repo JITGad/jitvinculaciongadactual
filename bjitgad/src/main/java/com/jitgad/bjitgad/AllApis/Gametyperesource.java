@@ -1,4 +1,3 @@
-
 package com.jitgad.bjitgad.AllApis;
 
 import com.google.gson.JsonObject;
@@ -27,22 +26,17 @@ import javax.ws.rs.core.UriInfo;
  */
 @Path("gametype")
 public class Gametyperesource {
-    
+
     @Context
-    private UriInfo context; 
-    private GametypeDAO gametypeDAO;
-    private GametypeModel gametypeModel;
+    private UriInfo context;
     private AuthorizationController AuC;
     private GametypeController gtC;
-    
 
-    
     public Gametyperesource() {
-        gametypeDAO = new GametypeDAO();
         gtC = new GametypeController();
         AuC = new AuthorizationController();
     }
-    
+
     /**
      * Retrieves representation of an instance of ini.CRUD
      *
@@ -51,20 +45,24 @@ public class Gametyperesource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getgametype() {
-        //TODO return proper representation object
-        String gametypeD = gtC.selectGametype();
-        return Response.ok(gametypeD)
+        String responseJson = gtC.selectGametype();
+        if (!Methods.jsonrecordcount(responseJson)) {
+            responseJson = "{\"message\":\"No Records.\",\"flag\": true,\"data\":" + responseJson + "}";
+        } else {
+            responseJson = "{\"message\":\"Records returned successfully.\",\"flag\": true,\"data\":" + responseJson + "}";
+        }
+        return Response.ok(responseJson)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getgametypeAdmin")
     public Response getgametypeAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
-        String responseJson="[]";
+        String responseJson = "[]";
         int responseCountingPage = 0;
         //TOKENS
         String Authorization = headers.getHeaderString("Authorization");
@@ -72,54 +70,60 @@ public class Gametyperesource {
         System.out.println("Authorization: " + Authorization);
         Object[] Permt = AuC.VToken(Authorization);
         if (Permt[0].equals(true)) {
-            responseJson = "";
-            if(!Methods.jsonrecordcount(responseJson)){
-                responseJson = "{\"message\":\"" + "" + "\",\"data\":\"" + responseJson + "\",\"flag\":" + "true" + "}"; // FORMATO DE LAS PETICIONES
+            responseJson = gtC.selectGametypepage(page);
+            if (!Methods.jsonrecordcount(responseJson)) {
+                responseJson = "{\"message\":\"No Records.\",\"flag\": true,\"data\":" + responseJson + "}";
+            } else {
+                responseJson = "{\"message\":\"Records returned successfully.\",\"flag\": true,\"data\":" + responseJson + "}";
             }
-          //  responseCountingPage = gC.CountingPageGame();
-        }else {
+            responseCountingPage = gtC.CountingPageGametype();
+        } else {
             responseJson = "{\"message\":\"" + Permt[1] + "\",\"data\":\"" + responseJson + "\",\"flag\":" + Permt[0] + "}";
         }
-        
-        
-        //String gametypeD = gametypeDAO.selectGametype();
         return Response.ok(responseJson)
+                .header("CountingPage", responseCountingPage)
+                .header("TotalPages", (responseCountingPage / 10) + 1)
+                .header("Acccess-Control-Expose-Headers", "TotalPages, CountingPage")
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();
     }
-    
-    
+
     @Produces(MediaType.APPLICATION_JSON)
     @POST
     @Path("/insertgametype")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response insertactivitiestype(String data) {
-        System.out.println(data);
+    public Response insertactivitiestype(@Context HttpHeaders headers, String data) {
         String responseJson = "{\"status\":\"poken:" + data + "\"}";
-        boolean insertgametype = false;
+        System.out.println("Ingresando PostActivitiesType...");
+        //  boolean insertgametype = false;
         JsonObject Jso = Methods.stringToJSON(data);
         if (Jso.size() > 0) {
-            
-            gametypeModel = new GametypeModel();
-            gametypeModel.setName(Methods.JsonToString(Jso.getAsJsonObject(), "name", ""));
-            gametypeModel.setImage(Methods.JsonToString(Jso.getAsJsonObject(), "image", ""));
-            gametypeModel.setAudio_instructions(Methods.JsonToString(Jso.getAsJsonObject(), "audio_instructions", ""));
-            gametypeModel.setCreationdate(Methods.JsonToString(Jso.getAsJsonObject(), "creationdate", ""));
-            gametypeModel.setUpdatedate(Methods.JsonToString(Jso.getAsJsonObject(), "updatedate", ""));
-            gametypeModel.setState(Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
-           
-            insertgametype = gametypeDAO.insertGametype(gametypeModel);
-            
-            if(insertgametype){
-               responseJson = "{ \"status\":" +  insertgametype + ",\"information\": \" The Game type was inserted.\"}"; 
+            Object[] responsegtC;
+            //TOKENS
+            String Authorization = headers.getHeaderString("Authorization");
+            Authorization = Authorization == null ? "" : Authorization;
+            System.out.println("Authorization: " + Authorization);
+            Object[] Permt = AuC.VToken(Authorization);
+            if (Permt[0].equals(true)) {
+                responsegtC = gtC.InsertGametypeC(Methods.JsonToString(Jso.getAsJsonObject(), "name", ""),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "image", ""),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "audio_instructions", ""),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "creationdate", ""),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "updatedate", ""),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
+
+                if (responsegtC[0].equals(true)) {
+                    responseJson = "{\"message\":\"" + responsegtC[1] + "\",\"flag\":" + responsegtC[0] + "}";
+                } else {
+                    responseJson = "{\"message\":\"" + responsegtC[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + responsegtC[0] + "}";
+                }
+            } else {
+                responseJson = "{\"message\":\"" + Permt[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + Permt[0] + "}";
             }
-            else{
-                responseJson = "{ \"status\":" +  insertgametype + ",\"information\": \" The Game type was not inserted.\"}"; 
-            }
-            
-        }else {
+
+        } else {
             responseJson = "{\"message\":\"Missing data.\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + false + "}";
         }
         return Response.ok(responseJson)
@@ -128,6 +132,5 @@ public class Gametyperesource {
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();
     }
-    
-}
 
+}

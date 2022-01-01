@@ -48,8 +48,7 @@ public class Gameresource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getGame() {
-        String responseJson = "";
-        responseJson = gC.selectGame();
+        String responseJson = gC.selectGame();
         if (!Methods.jsonrecordcount(responseJson)) {
             responseJson = "{\"message\":\"No Records.\",\"flag\": true,\"data\":" + responseJson + "}";
         } else {
@@ -84,10 +83,10 @@ public class Gameresource {
         } else {
             responseJson = "{\"message\":\"" + Permt[1] + "\",\"data\":\"" + responseJson + "\",\"flag\":" + Permt[0] + "}";
         }
-
         return Response.ok(responseJson)
                 .header("CountingPage", responseCountingPage)
                 .header("TotalPages", (responseCountingPage / 10) + 1)
+                .header("Acccess-Control-Expose-Headers", "TotalPages, CountingPage")
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")

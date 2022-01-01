@@ -47,8 +47,7 @@ public class Activitiestyperesource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getActivitiestype() {
-        String responseJson = "";
-        responseJson = atC.selectActivitiestype();
+        String responseJson = atC.selectActivitiestype();
         if (!Methods.jsonrecordcount(responseJson)) {
             responseJson = "{\"message\":\"No Records.\",\"flag\": true,\"data\":" + responseJson + "}";
         } else {
@@ -87,6 +86,7 @@ public class Activitiestyperesource {
         return Response.ok(responseJson)
                 .header("CountingPage", responseCountingPage)
                 .header("TotalPages", (responseCountingPage / 10) + 1)
+                .header("Acccess-Control-Expose-Headers", "TotalPages, CountingPage")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with, Access-Control-Allow-Origin")
                 .build();
