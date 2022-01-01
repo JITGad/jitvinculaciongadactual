@@ -66,6 +66,7 @@ public class Activitiestyperesource {
     public Response getActivitiestypeAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
         String responseJson = "[]";
         int responseCountingPage = 0;
+        int TotalPages = 0;
         //TOKENS
         String Authorization = headers.getHeaderString("Authorization");
         Authorization = Authorization == null ? "" : Authorization;
@@ -73,20 +74,20 @@ public class Activitiestyperesource {
         Object[] Permt = AuC.VToken(Authorization);
         if (Permt[0].equals(true)) {
             responseJson = atC.selectActivitiestypepage(page);
-            if (!Methods.jsonrecordcount(responseJson)) {
-                responseJson = "{\"message\":\"No Records.\",\"flag\": true,\"data\":" + responseJson + "}";
-            } else {
-                responseJson = "{\"message\":\"Records returned successfully.\",\"flag\": true,\"data\":" + responseJson + "}";
-            }
             responseCountingPage = atC.CountingPageActivitiesType();
-
+            TotalPages = (responseCountingPage / 10) + 1;
+            if (!Methods.jsonrecordcount(responseJson)) {
+                responseJson = "{\"message\":\"No Records.\",\"CountingPage\": "+responseCountingPage+",\"TotalPages\": "+TotalPages+",\"flag\": true,\"data\":" + responseJson + "}";
+            } else {
+                responseJson = "{\"message\":\"No Records.\",\"CountingPage\": "+responseCountingPage+",\"TotalPages\": "+TotalPages+",\"flag\": true,\"data\":" + responseJson + "}";
+            }
         } else {
-            responseJson = "{\"message\":\"" + Permt[1] + "\",\"data\":\"" + responseJson + "\",\"flag\":" + Permt[0] + "}";
+            responseJson = "{\"message\":\"" + Permt[1] + "\",\"CountingPage\": "+responseCountingPage+",\"TotalPages\": "+TotalPages+",\"flag\":" + Permt[0] + ",\"data\":" + responseJson + "}";
         }
         return Response.ok(responseJson)
-                .header("CountingPage", responseCountingPage)
-                .header("TotalPages", (responseCountingPage / 10) + 1)
-                .header("Acccess-Control-Expose-Headers", "TotalPages, CountingPage")
+//                .header("CountingPage", responseCountingPage)
+//                .header("TotalPages", (responseCountingPage / 10) + 1)
+//                .header("Acccess-Control-Expose-Headers", "TotalPages, CountingPage")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with, Access-Control-Allow-Origin")
                 .build();

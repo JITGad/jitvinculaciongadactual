@@ -53,10 +53,5 @@ public class GameController {
             }
 
         return new Object[]{status, message};
-    }
-     
-    
-    
-    
-    
+    }  
 }
