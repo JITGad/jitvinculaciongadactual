@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 export default {
@@ -25,21 +24,21 @@ export default {
   props: {
     tema: {
       type: String,
-      default: ""
+      default: "",
     },
     urlimagen: {
       type: String,
-      default: ""
+      default: "",
     },
     key: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   setup(props, context) {
-    const router = useRouter();
+    const Router = useRouter();
     const verActividad = function () {
-      router.push("/dashboard");
+      Router.push({ name: "ActividadJuego", params: { id: props.key } });
     };
 
     return {

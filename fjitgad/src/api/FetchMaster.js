@@ -1,30 +1,32 @@
-import { message_error } from "../util/Messages";
-
 class FetchMaster {
-
-    static JSONENCODE = 1;
-    static FORMDATAENCODE = 2;
-    GET = "GET";
-    POST = "POST";
-    PUT = "PUT";
-    DELETE = "DELETE";
+    JSONENCODE = 1;
+    FORMDATAENCODE = 2;
+    #GET = "GET";
+    #POST = "POST";
+    #PUT = "PUT";
+    #DELETE = "DELETE";
+    #RESPONSESTATUSSUCCESS = "success";
+    #RESPONSESTATUSPARSEERROR = "parsererror";
+    #RESPONSESTATUSNOTMODIFIED = "notmodified";
+    #RESPONSESTATUSTIMEOUT = "timeout";
+    #RESPONSESTATUSERROR = "error";
+    #baseUrl = process.env.VUE_APP_BASE_URL_API
 
     constructor() {
-        this.baseUrl = process.env.VUE_APP_BASE_URL_API;
     }
 
-    get(url = '', callback, error, authorize = false) {
-        this._ajaxJSON(url,
+    get(url = '', callback, authorize = false, paginacion = false) {
+        this.#ajaxJSON(url,
             undefined,
             (response) => callback(response),
-            (errorThrown) => error(errorThrown),
             undefined,
             undefined,
-            authorize
+            authorize,
+            paginacion
         );
     }
 
-    _get_token() {
+    #get_token() {
         let user = JSON.parse(localStorage.getItem('user'));
 
         if (user && user.accessToken) {
@@ -34,24 +36,54 @@ class FetchMaster {
         }
     }
 
-    _ajaxJSON(url = '', parameters = {}, callback, error,
-        type = this.GET, encode = FetchMaster.JSONENCODE, authorize = false) {
+    #manage_status_response(statusText = "", errorThrown, data) {
+        const status = { error: true, message: "" };
+        switch (statusText) {
+            case this.#RESPONSESTATUSERROR:
+                status.error = errorThrown || "A ocurrido un error en el servidor";
+            case this.#RESPONSESTATUSNOTMODIFIED:
+                status.message = errorThrown || "No se realizaron modificaciones de datos, por favor intentelo de nuevo";
+            case this.#RESPONSESTATUSPARSEERROR:
+                status.message = errorThrown || "Ha ocurrido un error con los datos enviados al servidor";
+                break;
+            case this.#RESPONSESTATUSTIMEOUT:
+                status.message = errorThrown || "El servidor ha tardado en responder"
+                break;
+            case this.#RESPONSESTATUSSUCCESS:
+                status.error = !data.flag;
+                status.message = data.message;
+            default:
+                break;
+        }
+        return status;
+    }
 
-        var headers = {};
-        var options = {
-            'url': this.baseUrl + url,
+    #ajaxJSON(url = '', parameters = {}, callback, type = this.#GET,
+        encode = FetchMaster.JSONENCODE, authorize = false, paginacion = false) {
+
+        const _this = this;
+        const headers = {};
+        const options = {
+            'url': this.#baseUrl + url,
             'datatype': 'json',
             'type': type,
-            success: function (data) {
-                console.log(data);
-                callback(JSON.stringify(data));
+            success: function (data, textStatus, request) {
+                console.log(data, textStatus, request);
+                callback({
+                    'data': data.data,
+                    'conteo': paginacion ? request.getResponseHeader('CountingPage') : undefined,
+                    'totalPaginas': paginacion ? request.getResponseHeader('TotalPages') : undefined,
+                    'status': _this.#manage_status_response(textStatus, undefined, data)
+                });
             },
-            error: function (data) {
-                message_error(data);
-                error(data);
+            error: function (request, textStatus, errorThrown) {
+                console.log(request, textStatus, errorThrown);
+                callback({
+                    'status': _this.#manage_status_response(textStatus, errorThrown, undefined)
+                });
             }
         }
-        if (type == this.POST || type == this.PUT) {
+        if (type == this.#POST || type == this.#PUT) {
             if (encode == FetchMaster.JSONENCODE) {
                 headers['Content-Type'] = "application/json; charset=utf-8";
                 options['data'] = JSON.stringify(parameters);
@@ -63,55 +95,50 @@ class FetchMaster {
             }
         }
 
-        if(authorize){
-            var token = this._get_token();
+        if (authorize) {
+            var token = this.#get_token();
 
-            if(token){
+            if (token) {
                 headers['Authorization'] = token;
             }
         }
 
         options['headers'] = headers;
-        
-        console.log(options);
-        
+
         $.ajax(options);
     }
 
-    post(url = '', parameters = {}, callback, error, 
-        encode = FetchMaster.JSONENCODE, authorize = false) {
-        this._ajaxJSON(url,
+    post(url = '', parameters = {}, callback, encode = FetchMaster.JSONENCODE, authorize = true) {
+        this.#ajaxJSON(url,
             parameters,
             (response) => callback(response),
-            (errorThrown) => error(errorThrown),
-            this.POST,
+            this.#POST,
             encode,
-            authorize
-        ); 
-    }
-
-    put(url = '', parameters = {}, callback, error, 
-        encode = FetchMaster.JSONENCODE, authorize = false) {
-        this._ajaxJSON(url,
-            parameters,
-            (response) => callback(response),
-            (errorThrown) => error(errorThrown),
-            this.PUT,
-            encode,
-            authorize
+            authorize,
+            undefined
         );
     }
 
-    delete(url = '', callback, error, authorize = false) {
-        this._ajaxJSON(url,
+    put(url = '', parameters = {}, callback, encode = FetchMaster.JSONENCODE, authorize = true) {
+        this.#ajaxJSON(url,
+            parameters,
+            (response) => callback(response),
+            this.#PUT,
+            encode,
+            authorize,
+            undefined
+        );
+    }
+
+    delete(url = '', callback, authorize = true) {
+        this.#ajaxJSON(url,
             undefined,
             (response) => callback(response),
-            (errorThrown) => error(errorThrown),
-            this.DELETE,
+            this.#DELETE,
             undefined,
-            authorize
+            authorize,
+            undefined
         );
     }
 }
-
 export default new FetchMaster();
