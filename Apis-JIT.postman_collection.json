@@ -236,6 +236,48 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "http://localhost:8080/bjitgad/webresources/activitiestype",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/bjitgad/webresources/activitiestype",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bjitgad",
+						"webresources",
+						"activitiestype"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/bjitgad/webresources/game",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/bjitgad/webresources/game",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bjitgad",
+						"webresources",
+						"game"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
