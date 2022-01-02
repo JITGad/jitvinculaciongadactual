@@ -46,6 +46,10 @@ import { useStore } from "vuex";
 export default {
   name: "NavBar",
   setup(props, context) {
+    document.body.style.height = "100%";
+    document.body.style.backgroundRepeat = "no-repeat";
+    document.body.style.background = `url(${require("../assets/image/fondo2.png")}) no-repeat center center fixed`;
+    document.body.style.backgroundSize = "100% 100%";
     const store = useStore();
     const isLogin = computed(() => store.getters["auth/isLoged"]);
     return {

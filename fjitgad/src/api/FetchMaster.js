@@ -29,8 +29,8 @@ class FetchMaster {
     #get_token() {
         let user = JSON.parse(localStorage.getItem('user'));
 
-        if (user && user.accessToken) {
-            return 'Bearer ' + user.accessToken;
+        if (user && user.user_token) {
+            return 'Bearer ' + user.user_token;
         } else {
             return '';
         }
@@ -40,7 +40,7 @@ class FetchMaster {
         const status = { error: true, message: "" };
         switch (statusText) {
             case this.#RESPONSESTATUSERROR:
-                status.error = errorThrown || "A ocurrido un error en el servidor";
+                status.message = errorThrown || "A ocurrido un error en el servidor";
             case this.#RESPONSESTATUSNOTMODIFIED:
                 status.message = errorThrown || "No se realizaron modificaciones de datos, por favor intentelo de nuevo";
             case this.#RESPONSESTATUSPARSEERROR:
@@ -68,16 +68,14 @@ class FetchMaster {
             'datatype': 'json',
             'type': type,
             success: function (data, textStatus, request) {
-                console.log(data, textStatus, request);
                 callback({
                     'data': data.data,
-                    'conteo': paginacion ? request.getResponseHeader('CountingPage') : undefined,
-                    'totalPaginas': paginacion ? request.getResponseHeader('TotalPages') : undefined,
+                    'conteo': paginacion ? data.CountingPage : undefined,
+                    'totalPaginas': paginacion ? data.TotalPages : undefined,
                     'status': _this.#manage_status_response(textStatus, undefined, data)
                 });
             },
             error: function (request, textStatus, errorThrown) {
-                console.log(request, textStatus, errorThrown);
                 callback({
                     'status': _this.#manage_status_response(textStatus, errorThrown, undefined)
                 });

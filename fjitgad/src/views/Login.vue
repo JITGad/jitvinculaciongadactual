@@ -36,8 +36,12 @@
           label="Recuerdame"
         />
 
-        <my-button label="Iniciar session" :loading="loading"/>
-        
+        <my-button
+          class="w-100 btn btn-lg btn-primary"
+          label="Iniciar session"
+          :loading="loading"
+        />
+
         <div class="alert alert-danger" role="alert" v-if="responseError.error">
           {{ responseError.message }}
         </div>
@@ -56,7 +60,7 @@ import { useStore } from "vuex";
 export default {
   name: "Login",
   components: {
-    NavBar
+    NavBar,
   },
   setup(props, context) {
     const store = useStore();
@@ -101,11 +105,6 @@ export default {
 </script>
 
 <style>
-html,
-body {
-  height: 100%;
-}
-
 body {
   padding-top: 40px;
   padding-bottom: 40px;

@@ -4,21 +4,21 @@
     <Loading v-if="loading" />
     <div v-else>
       <Actividad
-        v-for="value in actividades"
-        :tema="value.id"
-        :urlimagen="value.name"
-        :key="value.id"
+        v-for="(value, index) in actividades"
+        :tema="value.name"
+        :urlimagen="value.image"
+        :key="index"
+        :idactividad="value.id"
       ></Actividad>
     </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 import NavBar from "@/components/NavBar.vue";
 import Actividad from "@/components/Actividad.vue";
 import Loading from "@/components/Loading.vue";
-import ActividadesService from "@/api/ActividadesService";
+import ActividadesService from "../api/ActividadesService";
 import { ref, onMounted } from "vue";
 import { message_error } from "@/util/Messages";
 
@@ -36,7 +36,6 @@ export default {
     onMounted(async() => {
         const response = await ActividadesService.getActividadesJuegos();
         loading.value = false;
-        console.log(response);
         if (!response.status.error) {
           actividades.value = response.data;
         } else {

@@ -1,12 +1,12 @@
 <template>
-  <a @click="handleClick">
+  <a @click="handleClick" style="cursor: pointer;">
     <i :class="icon"></i>
   </a>
 </template>
 
 <script>
 export default {
-    name: "MyLinkEdit",
+    name: "MyLinkTable",
     emits:['click'],
     props: {
         object: {
@@ -23,7 +23,6 @@ export default {
             context.emit('click', props.object);
         }
         return {
-            FullUrl,
             handleClick
         }
     },

@@ -30,15 +30,15 @@ export default {
       type: String,
       default: "",
     },
-    key: {
-      type: Number,
+    idactividad: {
+      type: String,
       default: 0,
     },
   },
   setup(props, context) {
     const Router = useRouter();
     const verActividad = function () {
-      Router.push({ name: "ActividadJuego", params: { id: props.key } });
+      Router.push({ name: "ActividadJuego", params: { id: props.idactividad } });
     };
 
     return {
