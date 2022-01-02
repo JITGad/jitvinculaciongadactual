@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name: "MyLinkEdit",
+    name: "MyLinkTable",
     emits:['click'],
     props: {
         object: {

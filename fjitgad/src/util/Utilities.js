@@ -77,3 +77,30 @@ export const Role = {
     Admin: 'Administrador',
     Docente: 'Docente'
 }
+
+export function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function getFileBase64(file) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => {
+            console.error(error);
+            resolve("");
+        };
+    });
+}
+
+export async function readFilesToBase64(files, multiple = false) {
+    if (!multiple) {
+        return await getFileBase64(files);
+    }
+    const _arrFiles = [];
+    for (const file of files) {
+        await _arrFiles.push(await getFileBase64(file));
+    }
+    return _arrFiles;
+}

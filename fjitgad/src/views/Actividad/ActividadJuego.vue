@@ -5,9 +5,9 @@ import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
 export default {
-  name: "MenuActividad",
+  name: "ActividadJuego",
   props: {
-    key: {
+    idactividad: {
       type: Number,
       default: 0,
     },

@@ -27,7 +27,7 @@ const validationsArray = [
         "validate": function (_value = "") {
             if (_value != null) {
                 if (_value != undefined) {
-                    if (_value.length > 0) {
+                    if (_value.length > 0 || typeof(_value) == 'object') {
                         return true;
                     }
                 }

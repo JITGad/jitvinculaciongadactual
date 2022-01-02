@@ -34,21 +34,20 @@ export default {
       for (const component of state.validateComponents) {
         if (!component.validate()) {
           valid = false;
-          break;
         }
       }
       return valid;
     }
     function onSubmit(evt) {
-        evt.preventDefault();
+      evt.preventDefault();
       if (validate()) {
         emit("submit");
       }
     }
 
     return {
-        onSubmit
-    }
+      onSubmit,
+    };
   },
 };
 </script>

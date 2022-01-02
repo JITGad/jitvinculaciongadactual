@@ -13,7 +13,9 @@
       label
     }}</label>
     <div v-show="help.length > 0" class="form-text">{{ help }}</div>
-    <div v-show="error.state" class="validation-message">{{ error.message }}</div>
+    <div v-show="error.state" class="validation-message">
+      {{ error.message }}
+    </div>
   </div>
 </template>
 
@@ -67,38 +69,33 @@ export default {
     },
   },
   setup(props, context) {
-    let _arrValidations =
+    const form = inject("my-form");
+    const instance = getCurrentInstance();
+    const _arrValidations =
       props.validations.length > 0
         ? Validate.extractValidations(props.validations)
         : [];
-
     const error = reactive({
       message: "",
       state: false,
     });
     const modified = ref(false);
-
-    const iserror = computed(() => (error.value ? "invalid" : "valid"));
-    const ismodified = computed(() => (modified.value ? "modified" : ""));
     const classInput = computed(
       () =>
-        `${myClassInputType(props.type)} ${ismodified.value} ${iserror.value}`
+        `${myClassInputType(props.type)} ${modified.value ? "modified" : ""} ${
+          error.state ? "invalid" : "valid"
+        }`
     );
     const classContainer = computed(() =>
       myClassContainerInputType(props.type)
     );
-    const validationsArray = reactive(_arrValidations);
-
     const executevalidation = function (_value) {
       error.state = false;
       error.message = "";
       if (_value.length > 0) {
         modified.value = true;
       }
-      let [_error, _error_msg] = Validate.initvalidate(
-        validationsArray,
-        _value
-      );
+      let [_error, _error_msg] = Validate.initvalidate(_arrValidations, _value);
 
       error.state = !_error;
       error.message = _error_msg;
@@ -112,31 +109,23 @@ export default {
 
     const model = computed({
       get() {
-        return this.modelValue;
+        return props.modelValue;
       },
       set(value) {
         context.emit("update:modelValue", value);
       },
     });
-
-    const form = inject("my-form");
-    const uid = getCurrentInstance().uid;
-
     onMounted(function () {
-      form.bind({ validate, uid });
+      form.bind({ validate, uid: instance.uid });
     });
-
     onBeforeUnmount(() => {
-      form.unbind(uid);
+      form.unbind(instance.uid);
     });
-
     function validate() {
       return executevalidation(props.modelValue);
     }
-
     return {
       blurEventHandler,
-      validate,
       error,
       classInput,
       classContainer,

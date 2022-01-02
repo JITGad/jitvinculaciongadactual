@@ -1,64 +1,106 @@
 <template>
-  <div class="mb-3" style="text-align: center">
-    <h3>{{ title }}</h3>
-  </div>
-  <div v-if="loading">Cargando...</div>
+  <div v-if="Loading">Cargando...</div>
   <div v-else>
-    <my-form @submit="handleSubmit">
-      <my-input
-        v-model="model.nombre"
-        type="text"
-        label="Nombre"
-        placeholder="Escriba el nombre de la actividad"
-        validations="requerido"
-      />
-    </my-form>
+    <my-input
+      v-model="model.name"
+      type="text"
+      label="Nombre"
+      placeholder="Escriba el nombre de la actividad"
+      validations="requerido"
+    />
+    <my-select-boolean label="Estado" v-model="model.state" />
+    <my-input-file
+      label="Imagen"
+      v-model="model.image"
+      validations="requerido"
+    />
   </div>
 </template>
 
 <script>
-import { ref, reactive } from "vue";
 import ActividadesService from "../../api/ActividadesService.js";
+import {
+  inject,
+  getCurrentInstance,
+  reactive,
+  onMounted,
+  onBeforeUnmount,
+  ref,
+  watch,
+} from "vue";
+import { message_error } from "../../util/Messages.js";
 
 export default {
   name: "FormActividad",
+  emits: ["submit"],
   props: {
-    key: {
+    idactividad: {
       type: Number,
       default: 0,
     },
     title: {
       type: String,
-      default: "Registro",
-      required: true,
+      default: "Crear actividad"
+    },
+    edit: {
+      type: Boolean,
+      default: false
     },
   },
-  emits: ["submit"],
   setup(props, context) {
+    const Loading = ref(false);
+    const layout = inject("layout");
+    const instance = getCurrentInstance();
     const model = reactive({
-      id: 0,
-      nombre: "",
-      estado: true,
+      idactivitiestype: 0,
+      name: "",
+      image: null,
+      state: true,
     });
-
-    if (props.key > 0) {
-      model.id = props.key;
-      const response = ActividadesService.getActividad(model.id);
-      if (!response.status.error) {
-        model.nombre = response.data.nombre;
-        model.estado = response.data.estado;
-      } else {
-        message_error(response.status.message);
+    onMounted(async function () {
+      layout.bind({
+        submit,
+        clear,
+        uid: instance.uid,
+        title: props.title,
+        "url-next": "/list/actividades",
+        "is-edit": props.edit,
+      });
+      if (props.idactividad > 0) {
+        setLoading(true);
+        model.idactivitiestype = props.idactividad;
+        const response = await ActividadesService.getActividad(model.id);
+        if (!response.status.error) {
+          model.nombre = response.data.nombre;
+          model.estado = response.data.estado;
+          model.image = response.data.image;
+          setLoading(false);
+        } else {
+          message_error(response.status.message);
+        }
       }
+    });
+    onBeforeUnmount(() => {
+      layout.unbind(instance.uid);
+    });
+    function submit() {
+      return new Promise((resolve) => {
+        context.emit("submit", model, (response) => resolve(response));
+      });
     }
-
-    const handleSubmit = () => {
-      context.emit("submit", model);
-    };
-
+    function setLoading(val){
+      Loading.value = val;
+      layout.loading(val);
+    }
+    function clear() {
+      model.idactivitiestype = 0;
+      model.name = "";
+      model.state = true;
+      model.image = null;
+    }
     return {
       model,
-      handleSubmit,
+      Loading,
     };
   },
 };

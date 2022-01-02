@@ -1,6 +1,6 @@
 <template>
   <header>
-    <a class="menu-toggle btn-link"><i class="fas fa-bars"></i></a>
+    <my-button-toggle-menu/>
     <router-link class="brand-logo" to="/">
       <img
         class="brand-image"
@@ -12,24 +12,17 @@
     </router-link>
   </header>
   <nav class="dashboard-nav-list">
-    <router-link
-      to="/dashboard"
-      class="dashboard-nav-item dashboard-nav-link active"
-    >
-      <i class="fas fa-home"></i>
-      Inicio
-    </router-link>
-    <router-link
-      class="dashboard-nav-item dashboard-nav-link"
+    <my-router-link to="/dashboard" icon="fas fa-home" text="Inicio" />
+    <my-router-link
       to="/list/actividades"
-    >
-      <i class="fas fa-user-alt"></i> Actividades
-    </router-link>
+      icon="fas fa-user-alt"
+      text="Actividades"
+    />
   </nav>
 </template>
 
 <script>
 export default {
-    name: 'Sidebar'
-}
+  name: "Sidebar",
+};
 </script>

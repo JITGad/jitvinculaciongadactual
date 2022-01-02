@@ -32,3 +32,10 @@
     background: url('/images/cargando.gif') 50% 50% no-repeat rgb(249,249,249);
     opacity: .8;
 }
+
+.responsive-image {
+        width: auto;
+        height: auto;
+        max-width: 200px;
+        max-height: 150px;
+      }

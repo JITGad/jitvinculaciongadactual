@@ -1,9 +1,9 @@
 import FetchMaster from "./FetchMaster";
 
 class AuthService {
-    async login(user) {
-        return new Promise(async (resolve, reject) => {
-            await FetchMaster.post('users/logIn', user, (response) => {
+    login(user) {
+        return new Promise((resolve, reject) => {
+            FetchMaster.post('users/logIn', user, (response) => {
                 if (response.status.error) {
                     reject(response.status.message);
                     return;

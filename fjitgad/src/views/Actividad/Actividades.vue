@@ -52,27 +52,37 @@ import {
 } from "vue";
 import { useRouter } from "vue-router";
 import ActividadesService from "../../api/ActividadesService.js";
-import { confirm_action, message_error } from "../../util/Messages.js";
+import {
+  confirm_action,
+  message_error,
+  message_info,
+} from "../../util/Messages.js";
 
 export default {
   name: "Actividades",
   setup(props, context) {
+    const instance = getCurrentInstance();
     const Actividades = ref([]);
     const Router = useRouter();
-
-    const list = inject("list");
-    const uid = getCurrentInstance().uid;
+    const list = inject("layout-list");
 
     onMounted(async () => {
-      list.bind({ FetchData, uid });
-      await FetchData(list.getPaginaActual());
+      list.bind({
+        FetchData,
+        uid: instance.uid,
+        page: 1,
+        title: "Mis Actividades",
+        "url-nuevo": "/create/actividad",
+      });
+      await FetchData();
     });
 
     onBeforeUnmount(() => {
-      list.unbind(uid);
+      list.unbind(instance.uid);
     });
 
-    const FetchData = async (pActual) => {
+    const FetchData = async (pActual = 1) => {
+      list.setPageActual(pActual);
       const response = await ActividadesService.getActividadesAdministrador(
         pActual
       );
@@ -95,9 +105,19 @@ export default {
       confirm_action(
         "Confirmación",
         `Esta seguro de eliminar la actividad ${actividad.name}`,
-        () => {
-          ActividadesService.deleteActividad(actividad.idactivitiestype);
-        }
+        async () => {
+          const response = await ActividadesService.deleteActividad(
+            actividad.idactivitiestype
+          );
+          if (!response.status.error) {
+            message_info("Registro eliminado correctamente", async () => {
+              await FetchData();
+            });
+          } else {
+            message_error(response.status.message);
+          }
+        },
+        () => {}
       );
     };
 

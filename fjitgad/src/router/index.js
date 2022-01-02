@@ -34,16 +34,32 @@ const routes = [
     ]
   },
   {
-    path: '/editar/:id',
-    name: 'EditarActividad',
-    component: () => import('../views/Actividad/EditarActividad.vue'),
+    path: '/create',
+    name: 'Create',
+    component: () => import('../views/Create.vue'),
     meta: { authorize: [] },
+    children: [
+      {
+        path: 'actividad',
+        name: 'CrearActividad',
+        component: () => import('../views/Actividad/CrearActividad.vue'),
+        meta: { authorize: [] },
+      }
+    ]
   },
   {
-    path: '/crear',
-    name: 'CrearActividad',
-    component: () => import('../views/Actividad/CrearActividad.vue'),
+    path: '/edit',
+    name: 'Edit',
+    component: () => import('../views/Edit.vue'),
     meta: { authorize: [] },
+    children: [
+      {
+        path: 'actividad/:id',
+        name: 'EditarActividad',
+        component: () => import('../views/Actividad/EditarActividad.vue'),
+        meta: { authorize: [] },
+      }
+    ]
   },
   {
     path: '/jugar/:id',

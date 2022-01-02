@@ -32,8 +32,10 @@ import MyButton from "./components/MyButton";
 import MainLayout from "./components/MainLayout";
 import Paginacion from "./components/Paginacion";
 import MyLinkTable from "./components/MyLinkTable";
-
-import "./util/EventsMenu.js";
+import MyRouterLink from "./components/MyRouterLink";
+import MyButtonToggleMenu from "./components/MyButtonToggleMenu";
+import MySelectBoolean from "./components/MySelectBoolean";
+import MyInputFile from "./components/MyInputFile";
 
 const app = createApp(App);
 
@@ -47,5 +49,9 @@ app.component("my-button", MyButton);
 app.component("main-layout", MainLayout);
 app.component("my-paginacion", Paginacion);
 app.component("my-link-table", MyLinkTable);
+app.component("my-router-link", MyRouterLink);
+app.component("my-button-toggle-menu", MyButtonToggleMenu);
+app.component("my-select-boolean", MySelectBoolean);
+app.component("my-input-file", MyInputFile);
 
 app.mount('#app');

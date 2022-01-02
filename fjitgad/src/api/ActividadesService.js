@@ -5,34 +5,39 @@ class ActividadesService {
 
   #urlApi = "activitiestype"
 
-  async getActividad(idActividad = 0) {
-    return new Promise(async (resolve) => {
-      await FetchMaster.get(`getactividad/${idActividad}`, (data) => resolve(data),true);
+  getActividad(idActividad = 0) {
+    return new Promise((resolve) => {
+      FetchMaster.get(`${this.#urlApi}/getactividad/${idActividad}`, (data) => resolve(data), true);
     });
   }
 
-  async getActividadesJuegos() {
-    return new Promise(async (resolve) => {
-      await FetchMaster.get(this.#urlApi, (data) => resolve(data));
+  getActividadesJuegos() {
+    return new Promise((resolve) => {
+      FetchMaster.get(this.#urlApi, (data) => resolve(data));
     });
   }
 
-  async getActividadesAdministrador(page = 0) {
-    return new Promise(async (resolve) => {
-      await FetchMaster.get(`${this.#urlApi}/getActivitiestypeAdmin${encodeQueryString({ 'page': page })}`,
+  getActividadesAdministrador(page = 0) {
+    return new Promise((resolve) => {
+      FetchMaster.get(`${this.#urlApi}/getActivitiestypeAdmin${encodeQueryString({ 'page': page })}`,
         (data) => resolve(data), true, true)
     });
   }
 
   postActividad(actividad) {
-
+    return new Promise((resolve) => {
+      FetchMaster.post(this.#urlApi, actividad, (data) => resolve(data), undefined, true);
+    });
   }
 
-  putActividad() {
-
+  putActividad(actividad) {
+    return new Promise((resolve) => {
+      FetchMaster.put(`${this.#urlApi}/${actividad.idactivitiestype}`,
+        actividad, (data) => resolve(data), undefined, true);
+    });
   }
 
-  deleteActividad(idActividad = 0){
+  deleteActividad(idActividad = 0) {
     return new Promise(async (resolve) => {
       await FetchMaster.delete(`${this.#urlApi}/${idActividad}`, (data) => resolve(data));
     });
