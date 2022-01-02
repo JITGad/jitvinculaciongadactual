@@ -43,6 +43,12 @@ public class ActivitiestypeDAO {
         return json;
     }
     
+    public String selectactivitiesbyid(String idactivity){
+        sentence = "select * from tblactivitiestype where idactivitiestype ="+idactivity;
+        String json = con.getRecordsInJson(sentence);
+        return json;
+    }
+    
     public int selectIDActivitiestype(){
         sentence = "";
         String id = con.getNextID(sentence);

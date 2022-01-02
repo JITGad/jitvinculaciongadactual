@@ -278,6 +278,82 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "http://localhost:8080/bjitgad/webresources/activitiestype/getactivitiesbyid?activityid=4",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQxMTQ3MzU0LCJleHAiOjE2NDEyMzM3NTQsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20ifQ.QzMy4qo0BwTViagi-gW8q4ctL-B04ntjZZHQLHecfpE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/bjitgad/webresources/activitiestype/getactivitiesbyid?activityid=4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bjitgad",
+						"webresources",
+						"activitiestype",
+						"getactivitiesbyid"
+					],
+					"query": [
+						{
+							"key": "activityid",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/bjitgad/webresources/gametype/getgametypeAdmin?page=2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQwOTc5NjkzLCJleHAiOjE2NDEwNjYwOTMsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20ifQ.SPDdFNH-MW9tymAr3ygX2C6pM3go2X6aOK2dngKH30I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/bjitgad/webresources/gametype/getgametypeAdmin?page=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bjitgad",
+						"webresources",
+						"gametype",
+						"getgametypeAdmin"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

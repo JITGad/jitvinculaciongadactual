@@ -21,13 +21,13 @@ public class ActivitiestypeController {
     }
 
     public Object[] InsertActivitiesTypeC(String name, String image,
-            String creationdate, String updatedate, String state) {
+             String state) {
         String message = "";
         boolean status = false;
         atM.setName(name);
         atM.setImage(image);
-        atM.setCreationdate(creationdate);
-        atM.setUpdatedate(updatedate);
+        atM.setCreationdate("NOW()");
+        atM.setUpdatedate("NOW()");
         atM.setState(state);
         
         if(atDAO.insertActividadestype(atM)){
@@ -54,6 +54,10 @@ public class ActivitiestypeController {
     }
     public String selectgamesbyactivities(String activityid){
         return atDAO.selectgamesbyactivities(activityid);
+    }
+    
+    public String selectactivitiesbyid(String activityid){
+        return atDAO.selectactivitiesbyid(activityid);
     }
 
 }
