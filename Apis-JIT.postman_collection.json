@@ -295,7 +295,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/bjitgad/webresources/activitiestype/getactivitiesbyid?activityid=4",
+					"raw": "http://localhost:8080/bjitgad/webresources/activitiestype/getactivitiesbyid?activityid=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -310,7 +310,7 @@
 					"query": [
 						{
 							"key": "activityid",
-							"value": "4"
+							"value": "1"
 						}
 					]
 				}
@@ -325,7 +325,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQwOTc5NjkzLCJleHAiOjE2NDEwNjYwOTMsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20ifQ.SPDdFNH-MW9tymAr3ygX2C6pM3go2X6aOK2dngKH30I",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQxMTYyMDY1LCJleHAiOjE2NDEyNDg0NjUsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20ifQ.kKYLo49JgfXWJurlq13btdnEEsNyC69ur_thukQRfLs",
 							"type": "string"
 						}
 					]
@@ -333,7 +333,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/bjitgad/webresources/gametype/getgametypeAdmin?page=2",
+					"raw": "http://localhost:8080/bjitgad/webresources/gametype/getgametypeAdmin?page=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -348,7 +348,7 @@
 					"query": [
 						{
 							"key": "page",
-							"value": "2"
+							"value": "1"
 						}
 					]
 				}
@@ -378,7 +378,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"idactivitiestype\":1,\r\n    \"name\":\"12345\",\r\n    \"image\":\"\",\r\n    \"state\":true\r\n}"
+					"raw": "{\r\n    \"idactivitiestype\":1,\r\n    \"name\":\"Colores\",\r\n    \"image\":\"Vacio\",\r\n    \"state\":true\r\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/bjitgad/webresources/activitiestype/PutActivitiesType",
@@ -392,6 +392,118 @@
 						"webresources",
 						"activitiestype",
 						"PutActivitiesType"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/bjitgad/webresources/users/getUsersAdmin?page=1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQxMTgwNTAxLCJleHAiOjE2NDEyNjY5MDEsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIn0.JaMB1BbJXR2zc3xwB6XmIOwmTqGAkd5NC3Iv0DnL8Qo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/bjitgad/webresources/users/getUsersAdmin?page=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bjitgad",
+						"webresources",
+						"users",
+						"getUsersAdmin"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/bjitgad/webresources/activitiestype/DeleteActivitiesType",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQxMTc3NjAwLCJleHAiOjE2NDEyNjQwMDAsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIn0.1DWZqPB5fcuwItiO1n5ZMnb1apJgtB5mrNiVP97DjRQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; chatset=\"utf-8\"",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idactivitiestype\":14\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/bjitgad/webresources/activitiestype/DeleteActivitiesType",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bjitgad",
+						"webresources",
+						"activitiestype",
+						"DeleteActivitiesType"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/bjitgad/webresources/users/PostUserRegistration",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; chatset=\"utf-8\"",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Jose\",\r\n    \"last_name\":\"Garcia\",\r\n    \"email\":\"jose-garcia@hotmail.com\",\r\n    \"password\":\"12345\",\r\n    \"image\":\"ruta\",\r\n    \"birthday\":\"1997-12-04\",\r\n    \"rol\":\"Administrador\",\r\n    \"state\":true\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/bjitgad/webresources/users/PostUserRegistration",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bjitgad",
+						"webresources",
+						"users",
+						"PostUserRegistration"
 					]
 				}
 			},
