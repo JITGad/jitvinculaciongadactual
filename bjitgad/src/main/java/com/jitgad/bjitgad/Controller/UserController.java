@@ -62,8 +62,7 @@ public class UserController {
 
     public Object[] UserRegistration(String name, String last_name,
             String email, String password, String image, String birthday,
-            String rol, String creationdate, String updatedate,
-            String state) {
+            String rol, String state) {
         String message = "Correo inválido";
         boolean status = false;
         um.setNames(name);
@@ -73,8 +72,8 @@ public class UserController {
         um.setImage(image);
         um.setBirthdate(birthday);
         um.setRol(rol);
-        um.setCreationdate(creationdate);
-        um.setUpdatedate(updatedate);
+        um.setCreationdate("NOW()");
+        um.setUpdatedate("NOW()");
         um.setState(Boolean.parseBoolean(state));
         if (udao.comprobeUniqueEmail(um)) {
             if (udao.insertUser(um)) {
@@ -115,8 +114,12 @@ public class UserController {
         return DigestUtils.sha256Hex(pwd);
     }
     
-    public String selectUsers() {
-        return udao.selectUser();
+    public String selectUserspage(int page) {
+        return udao.selectUserspage(page);
+    }
+    
+    public int CountingPageUsers() {
+        return udao.CountingPageUsers();
     }
 
 }

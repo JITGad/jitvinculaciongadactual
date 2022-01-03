@@ -25,13 +25,18 @@ public class UserDAO {
         con = new Conection();
     }
 
-    public String selectUser() {
-        sentence = "select * from tbluser";
+    public String selectUserspage(int page) {
+        sentence ="select * from tbluser order by iduser asc limit 10 offset "+ (page * 10 - 10);
         ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
 //        datos.forEach(proyecto -> {
 //            proyecto.setShare_users(getEmailsToProyectUserAdmin(proyecto.getProjects_id_pr(), id));
 //        });
         return Methods.objectToJsonString(datos);
+    }
+    
+    public int CountingPageUsers(){
+      sentence = String.format("select * from tbluser");
+      return  ((con.returnRecord(sentence)).getRowCount());
     }
 
     public UserModel setUser(DefaultTableModel table, int index) {

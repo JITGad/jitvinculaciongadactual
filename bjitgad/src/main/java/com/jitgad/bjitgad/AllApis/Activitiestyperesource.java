@@ -271,7 +271,7 @@ public class Activitiestyperesource {
                         responseJson = Rapi.Response(String.valueOf(Permt[1]), false, data);
                     }
                 }else{
-                    responseJson = Rapi.Response("Usuario sin privilegios para realizar esta ", false, data);
+                    responseJson = Rapi.Response("Usuario sin privilegios para realizar esta actividad", false, data);
                 }
 
             } else {

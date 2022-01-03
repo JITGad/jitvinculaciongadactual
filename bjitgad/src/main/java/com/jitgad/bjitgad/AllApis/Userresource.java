@@ -1,6 +1,7 @@
 package com.jitgad.bjitgad.AllApis;
 
 import com.google.gson.JsonObject;
+import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.UserController;
 import com.jitgad.bjitgad.DAO.UserDAO;
 import com.jitgad.bjitgad.DataStaticBD.DataBd;
@@ -12,7 +13,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -26,34 +29,48 @@ public class Userresource {
 
     @Context
     private UriInfo context;
-    private UserModel um;
-    private UserDAO ud;
     private UserController userC;
     private ResponseAPI Rapi;
+    private AuthorizationController AuC;
 
     public Userresource() {
-        ud = new UserDAO();
         userC = new UserController();
         Rapi = new ResponseAPI();
+        AuC = new AuthorizationController();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUsers() {
+    @Path("/getUsersAdmin")
+    public Response getUsersAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
         //TODO return proper representation object
-        String data = ud.selectUser();
+        String data = userC.selectUserspage(page);
         String responseJson = Rapi.Response("Ocurrió un error", false, data);
+        int responseCountingPage = 0;
         try {
-            if (data.equals("{}")) {
-                responseJson = Rapi.Response("Información no encontrada", false, data);
+            //TOKENS
+            String Authorization = headers.getHeaderString("Authorization");
+            Authorization = Authorization == null ? "" : Authorization;
+            System.out.println("Authorization: " + Authorization);
+            Object[] Permt = AuC.VToken(Authorization);
+            if (Permt[2].equals("Administrador")) {
+                if (Permt[0].equals(true)) {
+                    responseCountingPage = userC.CountingPageUsers();
+                    if (data.equals("{}")) {
+                        responseJson = Rapi.AdminResponse("Información no encontrada", responseCountingPage, false, data);
+                    } else {
+                        responseJson = Rapi.AdminResponse("Datos retornados correctamente", responseCountingPage, true, data);
+                    }
+                } else {
+                    responseJson = Rapi.AdminResponse(String.valueOf(Permt[1]), responseCountingPage, false, data);
+                }
             } else {
-                responseJson = Rapi.Response("Datos retornados correctamente", true, data);
+                responseJson = Rapi.Response("Usuario sin privilegios para realizar esta actividad", false, data);
             }
         } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, data);
+            responseJson = Rapi.AdminResponse(e.getMessage(), responseCountingPage, false, responseJson);
         }
         return Response.ok(responseJson)
-                .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();
@@ -63,7 +80,8 @@ public class Userresource {
     @POST
     @Path("/logIn")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response logIn(String data) {
+    public Response logIn(String data
+    ) {
         System.out.println(data);
         String responseJson = "{\"status\":\"poken:" + data + "\"}";
         JsonObject Jso = Methods.stringToJSON(data);
@@ -98,7 +116,8 @@ public class Userresource {
     @POST
     @Path("/PostUserRegistration")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response PostUserRegistration(String data) {
+    public Response PostUserRegistration(String data
+    ) {
         System.out.println(data);
         String responseJson = "{\"status\":\"poken:" + data + "\"}";
         System.out.println("Ingresando PostUserRegistration...");
@@ -115,15 +134,13 @@ public class Userresource {
                                 Methods.JsonToString(Jso.getAsJsonObject(), "image", ""),
                                 Methods.JsonToString(Jso.getAsJsonObject(), "birthday", ""),
                                 Methods.JsonToString(Jso.getAsJsonObject(), "rol", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "creationdate", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "updatedate", ""),
                                 Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
                 if (responseUserRegistration[0].equals(true)) {
                     responseJson = Rapi.Response(String.valueOf(responseUserRegistration[1]),
-                            Boolean.parseBoolean(responseUserRegistration[0].toString()), data);
+                            Boolean.parseBoolean(responseUserRegistration[0].toString()), "{}");
                 } else {
                     responseJson = Rapi.Response(String.valueOf(responseUserRegistration[1]),
-                            Boolean.parseBoolean(responseUserRegistration[0].toString()), data);
+                            Boolean.parseBoolean(responseUserRegistration[0].toString()), "{}");
                 }
             } else {
                 responseJson = Rapi.Response("Información no encontrada", false, data);
