@@ -73,6 +73,20 @@ export function myClassInputType(type = "") {
     return myClass;
 }
 
+export function acceptTypeInputFile(type = "") {
+    let _accept = "";
+    switch (type) {
+        case "image":
+            _accept = "image/*";
+            break;
+        case "pdf":
+            _accept = "application/pdf"
+        default:
+            break;
+    }
+    return _accept;
+}
+
 export const Role = {
     Admin: 'Administrador',
     Docente: 'Docente'
@@ -103,4 +117,8 @@ export async function readFilesToBase64(files, multiple = false) {
         await _arrFiles.push(await getFileBase64(file));
     }
     return _arrFiles;
+}
+
+export function formatDateInput(date = new Date()) {
+    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 }

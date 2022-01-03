@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="es-ec">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,15 +7,26 @@
     <link rel="icon" href="<%= BASE_URL %>logo.ico">
     <title>JIT</title>
   </head>
-  <body class="d-flex flex-column h-100">
+  <body class="h-100 " style="background: url('<%= BASE_URL %>fondo2.png') center center / 100% 100% no-repeat fixed;">
     <noscript>
       <strong>Activa Javascript en tu navegador para continuar</strong>
     </noscript>
-    <main id="app" class="flex-shrink-0"></main>
+    <main id="app" class="flex-shrink-0">
+      <div class="row ">
+        <div class="row">
+          <div class="col">
+            <div class="mx-auto w-75 px-5 text-white text-center">
+              <img title="Loading" src="<%= BASE_URL %>spinner.gif" width="400" class="img-fluid" />
+              <br />
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
     <!-- built files will be auto injected -->
-    <footer id="site-footer" class="footer mt-auto py-3 bg-dark">
+    <footer class="footer py-3 bg-dark">
       <div class="container">
-          <div class="row">
+          <div class="row text-center">
               <!-- dos cuadro azul y plomo para separar h1 y h4-->
               <span class="divider grey"></span>
               <h6>© <span id="year01"></span>. Universidad Técnica Estatal de Quevedo derechos reservados.</h6>                  

@@ -30,6 +30,12 @@ const routes = [
         name: 'Actividades',
         component: () => import('../views/Actividad/Actividades.vue'),
         meta: { authorize: [] },
+      },
+      {
+        path: 'usuarios',
+        name: 'Usuarios',
+        component: () => import('../views/Usuario/Usuarios.vue'),
+        meta: { authorize: [Role.Admin] },
       }
     ]
   },
@@ -44,6 +50,12 @@ const routes = [
         name: 'CrearActividad',
         component: () => import('../views/Actividad/CrearActividad.vue'),
         meta: { authorize: [] },
+      },
+      {
+        path: 'usuario',
+        name: 'CrearUsuario',
+        component: () => import('../views/Usuario/CrearUsuario.vue'),
+        meta: { authorize: [Role.Admin] },
       }
     ]
   },
@@ -58,6 +70,12 @@ const routes = [
         name: 'EditarActividad',
         component: () => import('../views/Actividad/EditarActividad.vue'),
         meta: { authorize: [] },
+      },
+      {
+        path: 'usuario/:id',
+        name: 'EditarUsuario',
+        component: () => import('../views/Usuario/EditarUsuario.vue'),
+        meta: { authorize: [Role.Admin] },
       }
     ]
   },

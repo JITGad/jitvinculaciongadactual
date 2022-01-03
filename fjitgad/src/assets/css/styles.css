@@ -39,3 +39,16 @@
         max-width: 200px;
         max-height: 150px;
       }
+
+      .footer {
+              display: flex;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+      }
+
+.main-content{
+        height: 100vh;
+}

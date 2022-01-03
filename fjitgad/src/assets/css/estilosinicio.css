@@ -16,6 +16,7 @@
 
 .temas{	
     text-align: center;
+    margin-top: 10vh;
 }
 
 .ctrtemas{
@@ -37,11 +38,6 @@
     line-height: 40px;	
     color: black;        
 }
-
-/*.tema{
-    width: 310px;
-    height: 280px;
-}*/
 
 .imgmenu{
     position: absolute;

@@ -81,7 +81,7 @@ class FetchMaster {
                 });
             }
         }
-        if (type == this.#POST || type == this.#PUT) {
+        if (type === this.#POST || type === this.#PUT || type === this.#DELETE) {
             if (encode == FetchMaster.JSONENCODE) {
                 headers['Content-Type'] = "application/json; charset=utf-8";
                 options['data'] = JSON.stringify(parameters);
@@ -128,9 +128,9 @@ class FetchMaster {
         );
     }
 
-    delete(url = '', callback, authorize = true) {
+    delete(url = '', parameters = {}, callback, authorize = true) {
         this.#ajaxJSON(url,
-            undefined,
+            parameters,
             (response) => callback(response),
             this.#DELETE,
             undefined,

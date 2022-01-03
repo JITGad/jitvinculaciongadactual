@@ -1,5 +1,15 @@
 const validationsArray = [
     {
+        "item": "equalprop",
+        "errormessage": function (_campos) {
+            const _arr = _campos.split(";");
+            return `El campo ${_arr[0]} debe ser igual al campo ${_arr[1]}`;
+        },
+        "validate": function (_value, _prop, equal) {
+            return _value === equal ? true : false;
+        }
+    },
+    {
         "item": "solonumeros",
         "errormessage": function () {
             return "Este campo admite solo numeros"
@@ -27,7 +37,7 @@ const validationsArray = [
         "validate": function (_value = "") {
             if (_value != null) {
                 if (_value != undefined) {
-                    if (_value.length > 0 || typeof(_value) == 'object') {
+                    if (_value.length > 0 || typeof (_value) == 'object') {
                         return true;
                     }
                 }
@@ -41,7 +51,7 @@ const validationsArray = [
             return 'Este campo no puede superar los ' + _maxlength + ' caracteres';
         },
         "validate": function (_value = "", _maxlength = 0) {
-            if (_value != null && _value != undefined && _value.length <= _maxlength) {
+            if (_value != null && _value != undefined && _value.length <= parseInt(_maxlength)) {
                 return true;
             }
             return false;
@@ -53,7 +63,7 @@ const validationsArray = [
             return 'Este campo tiene que tener un minimo de  ' + _minlength + ' caracteres';
         },
         "validate": function (_value = "", _minlength = 0) {
-            if (_value != null && _value != undefined && _value.length <= _minlength) {
+            if (_value != null && _value != undefined && _value.length >= parseInt(_minlength)) {
                 return true;
             }
             return false;
@@ -66,15 +76,15 @@ const validationsArray = [
  * @returns {Array} Retorna un objeto con todas las validaciones a realizar
  */
 function extractValidations(validation = "") {
-    var _arr = validation.split(",");
-    var _res = [];
+    const _arr = validation.split(",");
+    const _res = [];
     _arr.forEach(element => {
-        var _validation = {};
+        const _validation = {};
         if (element.indexOf(":") >= 0) {
-            validation['value'] = element.split(":")[1];
+            _validation['value'] = element.split(":")[1];
             element = element.split(":")[0];
         }
-        var _searchValidation = validationsArray.find(el => el.item == element)
+        const _searchValidation = validationsArray.find(el => el.item == element)
         if (_searchValidation) {
             _validation['item'] = _searchValidation;
             _res.push(_validation);
@@ -83,14 +93,15 @@ function extractValidations(validation = "") {
     return _res;
 }
 
-function initvalidate(_validatiosArr = [], _value = "") {
+function initvalidate(_validatiosArr = [], _value = "", _equal) {
     var _res = [true, ""];
-    _validatiosArr.forEach(element => {
-        _res[0] = (element['item']).validate(_value, element['value']);
+    for (const element of _validatiosArr) {
+        _res[0] = (element['item']).validate(_value, element['value'], _equal);
         if (!_res[0]) {
             _res[1] = (element['item']).errormessage(element['value']);
+            break;
         }
-    });
+    }
     return _res;
 }
 

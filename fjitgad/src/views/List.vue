@@ -44,9 +44,11 @@ export default {
     });
 
     function bind(component) {
-      PaginaActual.value = component.page;
+      PaginaActual.value = component.pagina;
+      TotalRegistros.value = component.conteo;
+      PaginasTotales.value = component.paginas;
       Title.value = component.title;
-      UrlNuevo.value = component["url-nuevo"];
+      UrlNuevo.value = component.url_nuevo;
       state.child = component;
     }
     function unbind(uid) {

@@ -1,7 +1,7 @@
 <template>
   <form-actividad
     @submit="handleSubmit"
-    :idactividad="idactividad"
+    :idactivitiestype="idactividad"
     title="Editar actividad"
     :edit="true"
   />

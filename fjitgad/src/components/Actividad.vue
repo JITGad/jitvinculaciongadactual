@@ -7,8 +7,7 @@
   >
     <div class="tema">
       <img
-        src="{{urlimagen}}"
-        class="img-fluid"
+        :src="urlimagen"
         width="100"
         height="100"
       />════════<br /><span>{{ tema }}</span>
@@ -31,7 +30,7 @@ export default {
       default: "",
     },
     idactividad: {
-      type: String,
+      type: Number,
       default: 0,
     },
   },
