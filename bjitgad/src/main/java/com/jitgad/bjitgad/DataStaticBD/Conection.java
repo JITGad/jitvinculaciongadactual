@@ -5,19 +5,24 @@
  */
 package com.jitgad.bjitgad.DataStaticBD;
 
+import com.google.gson.JsonObject;
+import com.jitgad.bjitgad.Utilities.ReflectToClass;
 import java.io.File;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * In this class, the necessary methods for connecting, obtaining and sending data to the database are carried out.
+ * In this class, the necessary methods for connecting, obtaining and sending
+ * data to the database are carried out.
  */
 public class Conection {
+
     String user = "fjdmwraxdzfdqi";
     String password = "e2519d7aa881ecf70a6228c203e777fd403925bac01379cb5a95a1ee44883f78";
     java.sql.Connection conex;
@@ -30,7 +35,9 @@ public class Conection {
 
     }
 
-    /** Method for opening connection
+    /**
+     * Method for opening connection
+     *
      * @return Return a Boolean.
      */
     public boolean openConecction() {
@@ -44,7 +51,9 @@ public class Conection {
         return true;
     }
 
-    /** This method closes the connection
+    /**
+     * This method closes the connection
+     *
      * @return Return a Boolean.
      */
     public boolean closeConnection() {
@@ -58,7 +67,9 @@ public class Conection {
         return true;
     }
 
-    /** This method closes the ResultSet
+    /**
+     * This method closes the ResultSet
+     *
      * @return Return a Boolean.
      */
     public boolean closeResulSet() {
@@ -71,7 +82,9 @@ public class Conection {
         return true;
     }
 
-    /** Receives a query and saves it in a table
+    /**
+     * Receives a query and saves it in a table
+     *
      * @param sentecy This String variable contains the query.
      * @return Returns a table with the data loaded from the query
      */
@@ -105,8 +118,10 @@ public class Conection {
         }
         return dataModel;
     }
-    
-    /** This method receives a query from a function.
+
+    /**
+     * This method receives a query from a function.
+     *
      * @param sentecy This String variable, contains a query of a function.
      * @return Return a Boolean.
      */
@@ -125,7 +140,10 @@ public class Conection {
             return false;
         }
     }
-   /** Method to run an update on the database.
+
+    /**
+     * Method to run an update on the database.
+     *
      * @param sentecy This String variable, contains a query of a function.
      * @return an integer, amount of updates.
      */
@@ -145,8 +163,12 @@ public class Conection {
         }
         return counts;
     }
-   /** Execute any sentence in the database.
-     * @param sentecy this variable contains the sentence that will be executed in the database
+
+    /**
+     * Execute any sentence in the database.
+     *
+     * @param sentecy this variable contains the sentence that will be executed
+     * in the database
      * @return the value obtained when the sentence is executed in the database.
      */
     public String fillString(String sentecy) {
@@ -171,7 +193,10 @@ public class Conection {
         }
         return a;
     }
-   /** Get the following ID
+
+    /**
+     * Get the following ID
+     *
      * @param sentecy This String variable, contains a query of a function.
      * @return a string, with the following identifier.
      */
@@ -204,44 +229,43 @@ public class Conection {
         }
         return a;
     }
-    /** Obtain data and store it in a json
+
+    /**
+     * Obtain data and store it in a json
+     *
      * @param sentency This String variable, contains a query of a function.
      * @return a string, containing json.
      */
-    public String getRecordsInJson(String sentency)
-    {
+    public String getRecordsInJson(String sentency) {
         String resul = "[";
         DefaultTableModel table = returnRecord(sentency);
-        if (table!=null)
-        {
+        if (table != null) {
             int columCount = table.getColumnCount();
             for (int row = 0; row < table.getRowCount(); row++) {
                 String line = "";
                 for (int colum = 0; colum < columCount; colum++) {
-                    line+="\""+table.getColumnName(colum).trim()+"\":\""+table.getValueAt(row, colum).toString().trim()+"\"";
-                    if(colum<columCount-1)
-                    {
-                        line+=",";
+                    line += "\"" + table.getColumnName(colum).trim() + "\":\"" + table.getValueAt(row, colum).toString().trim() + "\"";
+                    if (colum < columCount - 1) {
+                        line += ",";
                     }
                 }
-                if(line.length()>0)
-                {
-                    resul+="{"+line+"}";
-                    if(row<table.getRowCount()-1)
-                    {
-                        resul+=",";
+                if (line.length() > 0) {
+                    resul += "{" + line + "}";
+                    if (row < table.getRowCount() - 1) {
+                        resul += ",";
                     }
                 }
             }
             resul += "]";
-        }
-        else
-        {
-            resul="[]";
+        } else {
+            resul = "[]";
         }
         return resul;
     }
-    /** Test the connection to the database.
+
+    /**
+     * Test the connection to the database.
+     *
      * @return a Boolean
      */
     public boolean testConection() {
@@ -259,5 +283,29 @@ public class Conection {
 
     public Statement createStatement() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /**
+     * This method cast query database in object java
+     *
+     * @param <T> type object
+     * @param sql is query
+     * @param obj cast resultset
+     * @param structure 0 = kamelycasestructure, 1 dabaseestructure
+     * @return ArrayList object
+     */
+    public <T> ArrayList<T> getObjectDB(String sql, Class<T> obj, int structure) {
+        ArrayList<T> datos = new ArrayList();
+        if (openConecction()) {
+            try ( Statement stm = conex.createStatement()) {
+                try ( ResultSet rs = stm.executeQuery(sql)) {
+                    //ArrayList<Users> putResult = ResultSetPropertiesSimplifyHelps.putResult(rs, Users.class);
+                    datos = ReflectToClass.putResult(rs, obj, structure);
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return datos;
     }
 }

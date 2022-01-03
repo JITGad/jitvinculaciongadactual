@@ -6,7 +6,7 @@ package com.jitgad.bjitgad.Models;
  */
 public class UserModel {
 
-    private String iduser = "-2";
+    private int iduser = 0;
     private String names = "-2";
     private String last_name = "-2";
     private String email = "-2";
@@ -16,12 +16,12 @@ public class UserModel {
     private String rol = "-2";
     private String creationdate = "-2";
     private String updatedate = "-2";
-    private String state = "-2";
+    private boolean state = true;
 
     public UserModel() {
     }
     
-    public UserModel(String _iduser,
+    public UserModel(int _iduser,
             String _names,
             String _last_name,
             String _email,
@@ -31,7 +31,7 @@ public class UserModel {
             String _rol,
             String _creationdate,
             String _updatedate,
-            String _state) {
+            boolean _state) {
         
         this.iduser = _iduser; 
         this.names = _names;
@@ -46,11 +46,11 @@ public class UserModel {
         this.state = _state;
     }
 
-    public String getIduser() {
+    public int getIduser() {
         return iduser;
     }
 
-    public void setIduser(String iduser) {
+    public void setIduser(int iduser) {
         this.iduser = iduser;
     }
 
@@ -126,11 +126,11 @@ public class UserModel {
         this.updatedate = updatedate;
     }
 
-    public String getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(boolean state) {
         this.state = state;
     }
     

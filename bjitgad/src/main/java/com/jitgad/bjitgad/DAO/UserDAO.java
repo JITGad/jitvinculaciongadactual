@@ -2,9 +2,11 @@ package com.jitgad.bjitgad.DAO;
 
 import com.jitgad.bjitgad.DataStaticBD.Conection;
 import com.jitgad.bjitgad.DataStaticBD.DataBd;
+import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.UserModel;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
@@ -23,15 +25,23 @@ public class UserDAO {
         con = new Conection();
     }
 
-    public String selectUserAll() {
-        sentence = "select * from tbluser";
-        String json = con.getRecordsInJson(sentence);
-        return json;
+    public String selectUserspage(int page) {
+        sentence ="select * from tbluser order by iduser asc limit 10 offset "+ (page * 10 - 10);
+        ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
+//        datos.forEach(proyecto -> {
+//            proyecto.setShare_users(getEmailsToProyectUserAdmin(proyecto.getProjects_id_pr(), id));
+//        });
+        return Methods.objectToJsonString(datos);
+    }
+    
+    public int CountingPageUsers(){
+      sentence = String.format("select * from tbluser");
+      return  ((con.returnRecord(sentence)).getRowCount());
     }
 
     public UserModel setUser(DefaultTableModel table, int index) {
         UserModel usr = new UserModel();
-        usr.setIduser(table.getValueAt(index, 0).toString());
+        usr.setIduser(Integer.parseInt(table.getValueAt(index, 0).toString()));
         usr.setNames(table.getValueAt(index, 1).toString());
         usr.setLast_name(table.getValueAt(index, 2).toString());
         usr.setEmail(table.getValueAt(index, 3).toString());
@@ -41,7 +51,7 @@ public class UserDAO {
         usr.setRol(table.getValueAt(index, 7).toString());
         usr.setCreationdate(table.getValueAt(index, 8).toString());
         usr.setUpdatedate(table.getValueAt(index, 9).toString());
-        usr.setState(table.getValueAt(index, 10).toString());
+        usr.setState(Boolean.parseBoolean(table.getValueAt(index, 10).toString()));
         return usr;
     }
 
@@ -64,12 +74,13 @@ public class UserDAO {
 //        System.out.println(new Date(tiempo) +"-" + new Date(tiempo+900000));
         String jwt = Jwts.builder()
                 .signWith(SignatureAlgorithm.HS256, key)
-                .setSubject(usr.getIduser())
+                .setSubject(String.valueOf(usr.getIduser()))
                 .setIssuedAt(new Date(tiempo))
                 //900000 que equivale a 15 minutos
              //   .setExpiration(new Date(tiempo + 900000))
                 .setExpiration(new Date(tiempo + tiempoext))
                 .claim("email", usr.getEmail())
+                .claim("rol", usr.getRol())
                 .compact();
         JsonObjectBuilder jsoB = Json.createObjectBuilder();
         jsoB.add("iduser", usr.getIduser());

@@ -19,8 +19,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class UserController {
 
     private Conection conex;
-    UserDAO udao;
-    UserModel um;
+    private UserDAO udao;
+    private UserModel um;
 
     public UserController() {
         conex = new Conection();
@@ -62,8 +62,7 @@ public class UserController {
 
     public Object[] UserRegistration(String name, String last_name,
             String email, String password, String image, String birthday,
-            String rol, String creationdate, String updatedate,
-            String state) {
+            String rol, String state) {
         String message = "Correo inválido";
         boolean status = false;
         um.setNames(name);
@@ -73,9 +72,9 @@ public class UserController {
         um.setImage(image);
         um.setBirthdate(birthday);
         um.setRol(rol);
-        um.setCreationdate(creationdate);
-        um.setUpdatedate(updatedate);
-        um.setState(state);
+        um.setCreationdate("NOW()");
+        um.setUpdatedate("NOW()");
+        um.setState(Boolean.parseBoolean(state));
         if (udao.comprobeUniqueEmail(um)) {
             if (udao.insertUser(um)) {
                 message = "Usuario registrado";
@@ -91,10 +90,10 @@ public class UserController {
         return new Object[]{status, message};
     }
 
-    public Object[] ValidateToken(String user_id, String email, String msg) {
+    public Object[] ValidateToken(String user_id, String email, String rol) {
         String message = "Correo inválido";
         boolean status = false;
-
+            
         if (!user_id.equals("")) {
             if (!udao.validatetoken(user_id, email)) {
                 status = true;
@@ -105,13 +104,22 @@ public class UserController {
             }
         }else{
             status = false;
-            message = msg;
+            message = "Token inválido";
         }
 
-        return new Object[]{status, message};
+        return new Object[]{status, message, rol};
     }
 
     public String encriptPassword(String pwd) {
         return DigestUtils.sha256Hex(pwd);
     }
+    
+    public String selectUserspage(int page) {
+        return udao.selectUserspage(page);
+    }
+    
+    public int CountingPageUsers() {
+        return udao.CountingPageUsers();
+    }
+
 }

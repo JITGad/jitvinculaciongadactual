@@ -2,7 +2,9 @@
 package com.jitgad.bjitgad.DAO;
 
 import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
+import java.util.ArrayList;
 
 /**
  *
@@ -18,15 +20,15 @@ public class ActivitiestypeDAO {
     }
     
     public String selectActivitiestype(){
-        sentence = "select idactivitiestype as id,name as tema,image as urlimagen from tblactivitiestype";
-        String json = con.getRecordsInJson(sentence);
-        return json;
+        sentence = "select * from tblactivitiestype where state = true";
+        ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
+        return Methods.objectToJsonString(datos);
     }
     
     public String selectActivitiestypepage(int page){
         sentence ="select * from tblactivitiestype order by idactivitiestype asc limit 10 offset "+ (page * 10 - 10);
-        String json = con.getRecordsInJson(sentence);
-        return json;
+        ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
+        return Methods.objectToJsonString(datos);
     }
     
     public int CountingPageActivitiestype(){
@@ -41,6 +43,17 @@ public class ActivitiestypeDAO {
         "where tblactivitiestype.idactivitiestype ="+idactivity;
         String json = con.getRecordsInJson(sentence);
         return json;
+    }
+    
+    public String selectactivitiesbyid(String idactivity){
+        sentence = "select * from tblactivitiestype where idactivitiestype ="+idactivity;
+        ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
+        if(datos.size()>0){
+            return Methods.objectToJsonString(datos.get(0));
+        }else{
+           return "{}";  
+        }
+       
     }
     
     public int selectIDActivitiestype(){
@@ -60,6 +73,32 @@ public class ActivitiestypeDAO {
                 + "</actividadestype>");
 
         String sentency = "Select * from insertActividadestype('" + structure + "')";
+       // System.out.println(structure);
+        return con.modifyBD(sentency);
+    }
+    
+    public boolean updateActividadestype(ActivitiestypeModel activitiestypemodel) {
+        String structure = String.format(
+                "<actividadestype>"
+                + "<idactivitiestype>" + activitiestypemodel.getIdactivitiestype() + "</idactivitiestype>"            
+                + "<name>" + activitiestypemodel.getName() + "</name>"
+                + "<image>" + activitiestypemodel.getImage() + "</image>"
+                + "<updatedate>" + activitiestypemodel.getUpdatedate() + "</updatedate>"
+                + "<state>" + activitiestypemodel.getState() + "</state>"
+                + "</actividadestype>");
+
+        String sentency = "Select * from updateActividadestype('" + structure + "')";
+       // System.out.println(structure);
+        return con.modifyBD(sentency);
+    }
+    
+    public boolean DeleteActividadestype(ActivitiestypeModel activitiestypemodel) {
+        String structure = String.format(
+                "<actividadestype>"
+                + "<idactivitiestype>" + activitiestypemodel.getIdactivitiestype() + "</idactivitiestype>"            
+                + "</actividadestype>");
+
+        String sentency = "Select * from deleteActividadestype('" + structure + "')";
        // System.out.println(structure);
         return con.modifyBD(sentency);
     }
