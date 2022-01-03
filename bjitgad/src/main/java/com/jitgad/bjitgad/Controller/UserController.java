@@ -19,8 +19,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class UserController {
 
     private Conection conex;
-    UserDAO udao;
-    UserModel um;
+    private UserDAO udao;
+    private UserModel um;
 
     public UserController() {
         conex = new Conection();
@@ -75,7 +75,7 @@ public class UserController {
         um.setRol(rol);
         um.setCreationdate(creationdate);
         um.setUpdatedate(updatedate);
-        um.setState(state);
+        um.setState(Boolean.parseBoolean(state));
         if (udao.comprobeUniqueEmail(um)) {
             if (udao.insertUser(um)) {
                 message = "Usuario registrado";
@@ -91,10 +91,10 @@ public class UserController {
         return new Object[]{status, message};
     }
 
-    public Object[] ValidateToken(String user_id, String email, String msg) {
+    public Object[] ValidateToken(String user_id, String email, String rol) {
         String message = "Correo inválido";
         boolean status = false;
-
+            
         if (!user_id.equals("")) {
             if (!udao.validatetoken(user_id, email)) {
                 status = true;
@@ -105,13 +105,18 @@ public class UserController {
             }
         }else{
             status = false;
-            message = msg;
+            message = "Token inválido";
         }
 
-        return new Object[]{status, message};
+        return new Object[]{status, message, rol};
     }
 
     public String encriptPassword(String pwd) {
         return DigestUtils.sha256Hex(pwd);
     }
+    
+    public String selectUsers() {
+        return udao.selectUser();
+    }
+
 }

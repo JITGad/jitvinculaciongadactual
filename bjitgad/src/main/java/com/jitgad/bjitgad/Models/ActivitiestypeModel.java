@@ -6,22 +6,22 @@ package com.jitgad.bjitgad.Models;
  */
 public class ActivitiestypeModel {
     
-    private String idactivitiestype = "-2";
+    private int idactivitiestype = 0;
     private String name = "-2";
     private String image = "-2";
     private String creationdate = "-2";
     private String updatedate = "-2";
-    private String state = "-2";
+    private boolean state = true;
 
     public ActivitiestypeModel() {
     }
 
-    public ActivitiestypeModel(String Idactivitiestype,
+    public ActivitiestypeModel(int Idactivitiestype,
             String Name,
             String Image,
             String Creationdate,
             String Updatedate,
-            String State) {
+            boolean State) {
         this.idactivitiestype = Idactivitiestype;
         this.name = Name;
         this.image = Image;
@@ -30,11 +30,11 @@ public class ActivitiestypeModel {
         this.state = State;
     }
 
-    public String getIdactivitiestype() {
+    public int getIdactivitiestype() {
         return idactivitiestype;
     }
 
-    public void setIdactivitiestype(String idactivitiestype) {
+    public void setIdactivitiestype(int idactivitiestype) {
         this.idactivitiestype = idactivitiestype;
     }
 
@@ -70,11 +70,11 @@ public class ActivitiestypeModel {
         this.updatedate = updatedate;
     }
 
-    public String getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(boolean state) {
         this.state = state;
     }
 

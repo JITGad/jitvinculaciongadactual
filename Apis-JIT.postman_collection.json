@@ -354,6 +354,48 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "http://localhost:8080/bjitgad/webresources/activitiestype/PutActivitiesType",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQxMTYyMDY1LCJleHAiOjE2NDEyNDg0NjUsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20ifQ.kKYLo49JgfXWJurlq13btdnEEsNyC69ur_thukQRfLs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; chatset=\"utf-8\"",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idactivitiestype\":1,\r\n    \"name\":\"12345\",\r\n    \"image\":\"\",\r\n    \"state\":true\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/bjitgad/webresources/activitiestype/PutActivitiesType",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bjitgad",
+						"webresources",
+						"activitiestype",
+						"PutActivitiesType"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

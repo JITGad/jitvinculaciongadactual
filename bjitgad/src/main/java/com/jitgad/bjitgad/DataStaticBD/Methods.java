@@ -5,6 +5,7 @@
  */
 package com.jitgad.bjitgad.DataStaticBD;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonObject;
@@ -17,12 +18,15 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * * This java class contains the methods used within the back-end of the
  * application.
  */
 public final class Methods {
+
+    public static final Gson gson = new Gson();
 
     public static String[] getDataToJwt(String jwt) {
         String[] response;
@@ -31,7 +35,7 @@ public final class Methods {
                     .setSigningKey(DataBd.dbprivatekey)
                     .parseClaimsJws(jwt).getBody();
             response = new String[]{claims.get("sub").toString(),
-                claims.get("email").toString(), "Válidate"};
+                claims.get("email").toString(), claims.get("rol").toString()};
         } catch (Exception e) {
             System.out.println("error JWT: " + e.getMessage());
             response = new String[]{"", "", e.getMessage()};
@@ -299,7 +303,7 @@ public final class Methods {
         return resul;
     }
 
-    public static boolean  jsonrecordcount(String json) {
+    public static boolean jsonrecordcount(String json) {
         boolean var = false;
         JSONArray jsonArray = new JSONArray(json);
         Iterator<?> iterator = jsonArray.iterator();
@@ -308,6 +312,18 @@ public final class Methods {
             break;
         }
         return var;
+    }
+
+    public static boolean jsonrecordcountobject(String json) {
+        boolean var = false;
+        JSONObject jsonObject = new JSONObject();
+        return !jsonObject.keys().hasNext();
+    }
+
+    public static String objectToJsonString(Object obj) {
+        String result;
+        result = gson.toJson(obj);
+        return result;
     }
 
 }

@@ -21,42 +21,83 @@ public class ActivitiestypeController {
     }
 
     public Object[] InsertActivitiesTypeC(String name, String image,
-             String state) {
+            String state) {
         String message = "";
         boolean status = false;
         atM.setName(name);
         atM.setImage(image);
         atM.setCreationdate("NOW()");
         atM.setUpdatedate("NOW()");
-        atM.setState(state);
-        
-        if(atDAO.insertActividadestype(atM)){
+        atM.setState(Boolean.parseBoolean(state));
+
+        if (atDAO.insertActividadestype(atM)) {
             message = "The Activities type was inserted.";
             status = true;
-        }   else {
-                message = "The Activities type was not inserted";
-                status = false;
-            }
+        } else {
+            message = "The Activities type was not inserted";
+            status = false;
+        }
 
         return new Object[]{status, message};
     }
+
+    public Object[] UpdateActivitiesTypeC(int idactivitiestype,
+            String name,
+            String image,
+            String state) {
+        String message = "";
+        boolean status = false;
+        
+        atM.setIdactivitiestype(idactivitiestype);
+        atM.setName(name);
+        atM.setImage(image);
+        atM.setState(status);
+        atM.setUpdatedate("NOW()");
+        
+        if (atDAO.updateActividadestype(atM)) {
+            message = "Registros actualizados correctamente";
+            status = true;
+        } else {
+            message = "Los registros no fueron actualizados, ocurrió un error";
+            status = false;
+        }
+        
+        return new Object[]{status, message};
+    }
     
-    public String selectActivitiestype(){
+    public Object[] DeleteActividadestype(int idactivitiestype){
+        String message = "";
+        boolean status = false;
+        atM.setIdactivitiestype(idactivitiestype);
+        
+        if (atDAO.DeleteActividadestype(atM)) {
+            message = "Registro eliminado correctamente";
+            status = true;
+        } else {
+            message = "El registro no fué eliminado, ocurrió un error";
+            status = false;
+        }
+        
+        return new Object[]{status, message};
+    }
+
+    public String selectActivitiestype() {
         return atDAO.selectActivitiestype();
     }
-    
-    public String selectActivitiestypepage(int page){
+
+    public String selectActivitiestypepage(int page) {
         return atDAO.selectActivitiestypepage(page);
     }
-    
-    public int CountingPageActivitiesType(){
+
+    public int CountingPageActivitiesType() {
         return atDAO.CountingPageActivitiestype();
     }
-    public String selectgamesbyactivities(String activityid){
+
+    public String selectgamesbyactivities(String activityid) {
         return atDAO.selectgamesbyactivities(activityid);
     }
-    
-    public String selectactivitiesbyid(String activityid){
+
+    public String selectactivitiesbyid(String activityid) {
         return atDAO.selectactivitiesbyid(activityid);
     }
 
