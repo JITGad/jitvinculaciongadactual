@@ -36,6 +36,8 @@ import MyRouterLink from "./components/MyRouterLink";
 import MyButtonToggleMenu from "./components/MyButtonToggleMenu";
 import MySelectBoolean from "./components/MySelectBoolean";
 import MyInputFile from "./components/MyInputFile";
+import MySelect from "./components/MySelect";
+import MyAutorization from "./components/MyAutorization";
 
 const app = createApp(App);
 
@@ -53,5 +55,7 @@ app.component("my-router-link", MyRouterLink);
 app.component("my-button-toggle-menu", MyButtonToggleMenu);
 app.component("my-select-boolean", MySelectBoolean);
 app.component("my-input-file", MyInputFile);
+app.component("my-select", MySelect);
+app.component("my-autorization", MyAutorization);
 
 app.mount('#app');

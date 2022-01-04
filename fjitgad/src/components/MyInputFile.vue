@@ -10,6 +10,7 @@
           type="file"
           @blur="blurEventHandler"
           ref="fileInput"
+          :accept="AcceptTypeInput"
         />
         <input
           v-else
@@ -19,6 +20,7 @@
           multiple
           @blur="blurEventHandler"
           ref="fileInput"
+          :accept="AcceptTypeInput"
         />
       </div>
       <div class="col-2">
@@ -34,6 +36,7 @@
 <script>
 import * as Validate from "../util/ValidationTypes.js";
 import { readFilesToBase64 } from "../util/Utilities.js";
+import { acceptTypeInputFile } from "../util/Utilities.js";
 import {
   onBeforeUnmount,
   onMounted,
@@ -67,6 +70,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    type: {
+      type: String,
+      default: "pdf",
+    },
   },
   setup(props, context) {
     const form = inject("my-form");
@@ -77,7 +84,7 @@ export default {
       props.validations.length > 0
         ? Validate.extractValidations(props.validations)
         : [];
-
+    const AcceptTypeInput = computed(() => acceptTypeInputFile(props.type));
     const error = reactive({
       message: "",
       state: false,
@@ -157,6 +164,7 @@ export default {
       error,
       loading,
       fileInput,
+      AcceptTypeInput,
     };
   },
 };

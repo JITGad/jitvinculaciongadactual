@@ -8,7 +8,7 @@
         :tema="value.name"
         :urlimagen="value.image"
         :key="index"
-        :idactividad="value.id"
+        :idactividad="value.idactivitiestype"
       ></Actividad>
     </div>
   </div>

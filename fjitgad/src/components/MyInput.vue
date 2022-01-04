@@ -67,6 +67,10 @@ export default {
       type: String,
       default: "",
     },
+    equal: {
+      type: String,
+      default: "",
+    },
   },
   setup(props, context) {
     const form = inject("my-form");
@@ -95,7 +99,7 @@ export default {
       if (_value.length > 0) {
         modified.value = true;
       }
-      let [_error, _error_msg] = Validate.initvalidate(_arrValidations, _value);
+      let [_error, _error_msg] = Validate.initvalidate(_arrValidations, _value, props.equal);
 
       error.state = !_error;
       error.message = _error_msg;

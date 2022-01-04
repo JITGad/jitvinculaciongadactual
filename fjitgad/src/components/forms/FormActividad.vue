@@ -13,6 +13,7 @@
       label="Imagen"
       v-model="model.image"
       validations="requerido"
+      type="image"
     />
   </div>
 </template>
@@ -26,7 +27,6 @@ import {
   onMounted,
   onBeforeUnmount,
   ref,
-  watch,
 } from "vue";
 import { message_error } from "../../util/Messages.js";
 
@@ -34,29 +34,30 @@ export default {
   name: "FormActividad",
   emits: ["submit"],
   props: {
-    idactividad: {
+    idactivitiestype: {
       type: Number,
       default: 0,
     },
     title: {
       type: String,
-      default: "Crear actividad"
+      default: "Crear actividad",
     },
     edit: {
       type: Boolean,
-      default: false
+      default: false,
     },
   },
   setup(props, context) {
-    const Loading = ref(false);
-    const layout = inject("layout");
-    const instance = getCurrentInstance();
-    const model = reactive({
+    const InitialState = {
       idactivitiestype: 0,
       name: "",
       image: null,
       state: true,
-    });
+    };
+    const Loading = ref(false);
+    const layout = inject("layout");
+    const instance = getCurrentInstance();
+    const model = reactive({...InitialState});
     onMounted(async function () {
       layout.bind({
         submit,
@@ -66,14 +67,11 @@ export default {
         "url-next": "/list/actividades",
         "is-edit": props.edit,
       });
-      if (props.idactividad > 0) {
+      if (props.idactivitiestype > 0) {
         setLoading(true);
-        model.idactivitiestype = props.idactividad;
-        const response = await ActividadesService.getActividad(model.id);
+        const response = await ActividadesService.getActividad(props.idactivitiestype);
         if (!response.status.error) {
-          model.nombre = response.data.nombre;
-          model.estado = response.data.estado;
-          model.image = response.data.image;
+          Object.assign(model, response.data);
           setLoading(false);
         } else {
           message_error(response.status.message);
@@ -88,15 +86,12 @@ export default {
         context.emit("submit", model, (response) => resolve(response));
       });
     }
-    function setLoading(val){
+    function setLoading(val) {
       Loading.value = val;
       layout.loading(val);
     }
     function clear() {
-      model.idactivitiestype = 0;
-      model.name = "";
-      model.state = true;
-      model.image = null;
+      Object.assign(model, InitialState);
     }
     return {
       model,
