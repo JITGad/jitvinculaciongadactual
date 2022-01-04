@@ -90,6 +90,52 @@ public class UserController {
         return new Object[]{status, message};
     }
 
+    public Object[] PutUser(int iduser,String name, String last_name,
+            String email, String password, String image, String birthday,
+            String rol, String state) {
+        String message = "Correo inválido";
+        boolean status = false;
+        um.setIduser(iduser);
+        um.setNames(name);
+        um.setLast_name(last_name);
+        um.setEmail(email);
+        um.setPassword(encriptPassword(password));
+        um.setImage(image);
+        um.setBirthdate(birthday);
+        um.setRol(rol);
+        um.setUpdatedate("NOW()");
+        um.setState(Boolean.parseBoolean(state));
+        if (udao.comprobeUniqueEmail(um)) {
+            if (udao.updateUser(um)) {
+                message = "Usuario actualizado con éxito";
+                status = true;
+            } else {
+                message = "Usuario no actualizado, ocurrió un error";
+                status = false;
+            }
+        } else {
+            message = "El correo ya se encuentra registrado";
+            status = false;
+        }
+        return new Object[]{status, message};
+    }
+
+    public Object[] DeleteUser(int iduser){
+        String message = "";
+        boolean status = false;
+        um.setIduser(iduser);
+        
+        if (udao.deleteUser(um)) {
+            message = "Usuario eliminado correctamente";
+            status = true;
+        } else {
+            message = "El usuario no fué eliminado, ocurrió un error";
+            status = false;
+        }
+        
+        return new Object[]{status, message};
+    }
+
     public Object[] ValidateToken(String user_id, String email, String rol) {
         String message = "Correo inválido";
         boolean status = false;

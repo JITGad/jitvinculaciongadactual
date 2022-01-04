@@ -42,6 +42,8 @@ DECLARE root_xpath TEXT = '/actividadestype/';
 	return resul;																			 
   END;
 $BODY$;
+ALTER FUNCTION public.deleteActividadestype(xml)
+    OWNER TO fjdmwraxdzfdqi;
 
 ----------------UPDATE----------------
 
@@ -66,6 +68,8 @@ DECLARE root_xpath TEXT = '/actividadestype/';
 	return resul;																			 
   END;
 $BODY$;
+ALTER FUNCTION public.updateActividadestype(xml)
+    OWNER TO fjdmwraxdzfdqi;
 
 ------------------------------------------------------------------------------
 ---------------------------JUEGO-------------------------------------
@@ -163,7 +167,56 @@ ALTER FUNCTION public.insertuser(xml)
     OWNER TO fjdmwraxdzfdqi;
 
 ----------------DELETE----------------
+
+CREATE OR REPLACE FUNCTION public.deleteUser(
+	message_xml xml)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE root_xpath TEXT = '/user/';
+  resul integer = 0;
+  BEGIN
+    DELETE FROM public.tbluser
+	WHERE 
+	iduser = (xpath(root_xpath|| 'iduser/text()', message_xml))[1]::text::integer;
+	return resul;																			 
+  END;
+$BODY$;
+ALTER FUNCTION public.deleteUser(xml)
+    OWNER TO fjdmwraxdzfdqi;
+
 ----------------UPDATE----------------
+
+CREATE OR REPLACE FUNCTION public.updateUser(
+	message_xml xml)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE root_xpath TEXT = '/user/';
+  resul integer = 0;
+  BEGIN
+    UPDATE public.tbluser
+		SET 
+		names = (xpath(root_xpath|| 'names/text()', message_xml))[1],
+		last_name = (xpath(root_xpath|| 'last_name/text()', message_xml))[1],
+		email = (xpath(root_xpath|| 'email/text()', message_xml))[1],
+		password = (xpath(root_xpath|| 'password/text()', message_xml))[1],
+		image = (xpath(root_xpath|| 'image/text()', message_xml))[1],
+		birthdate = (xpath(root_xpath|| 'birthdate/text()', message_xml))[1]::text::date,
+		rol = (xpath(root_xpath|| 'rol/text()', message_xml))[1],
+		updatedate = (xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
+		state = (xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean			  
+	WHERE 
+	iduser = (xpath(root_xpath|| 'iduser/text()', message_xml))[1]::text::integer;
+	return resul;																			 
+  END;
+$BODY$;
+ALTER FUNCTION public.updateUser(xml)
+    OWNER TO fjdmwraxdzfdqi;
 
 
 *************------------------------------------------------------------------------------*************

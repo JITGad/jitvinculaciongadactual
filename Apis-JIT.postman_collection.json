@@ -13,7 +13,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQwOTc5NjkzLCJleHAiOjE2NDEwNjYwOTMsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20ifQ.SPDdFNH-MW9tymAr3ygX2C6pM3go2X6aOK2dngKH30I",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQxMTgwNTAxLCJleHAiOjE2NDEyNjY5MDEsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIn0.JaMB1BbJXR2zc3xwB6XmIOwmTqGAkd5NC3Iv0DnL8Qo",
 							"type": "string"
 						}
 					]
@@ -21,7 +21,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/bjitgad/webresources/activitiestype/getActivitiestypeAdmin?page=2",
+					"raw": "http://localhost:8080/bjitgad/webresources/activitiestype/getActivitiestypeAdmin?page=1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -36,7 +36,7 @@
 					"query": [
 						{
 							"key": "page",
-							"value": "2"
+							"value": "1"
 						}
 					]
 				}
@@ -504,6 +504,90 @@
 						"webresources",
 						"users",
 						"PostUserRegistration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/bjitgad/webresources/users/putuser",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQxMjY1MzY5LCJleHAiOjE2NDEzNTE3NjksImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIn0.-27T9k4-83LADLDfr6qc7rRywTJUk9Vi-ik5m8x2otI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; chatset=\"utf-8\"",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"iduser\":2,\r\n    \"name\":\"Jose\",\r\n    \"last_name\":\"Garcia\",\r\n    \"email\":\"jose-garciaelloco@gmail.com\",\r\n    \"password\":\"123\",\r\n    \"image\":\"\",\r\n    \"birthday\":\"\",\r\n    \"rol\":\"Docente\",\r\n    \"state\":true\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/bjitgad/webresources/users/putuser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bjitgad",
+						"webresources",
+						"users",
+						"putuser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/bjitgad/webresources/users/deleteuser",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQxMjY1MzY5LCJleHAiOjE2NDEzNTE3NjksImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIn0.-27T9k4-83LADLDfr6qc7rRywTJUk9Vi-ik5m8x2otI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; chatset=\"utf-8\"",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"iduser\":2\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/bjitgad/webresources/users/deleteuser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bjitgad",
+						"webresources",
+						"users",
+						"deleteuser"
 					]
 				}
 			},

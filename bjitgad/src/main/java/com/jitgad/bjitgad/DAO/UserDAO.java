@@ -123,4 +123,35 @@ public class UserDAO {
         System.out.println(structure);
         return con.modifyBD(sentency);
     }
+
+    public boolean updateUser(UserModel userM) {
+        String structure = String.format(
+                "<user>"
+                + "<iduser>" + userM.getIduser() + "</iduser>"
+                + "<names>" + userM.getNames() + "</names>"
+                + "<last_name>" + userM.getLast_name() + "</last_name>"
+                + "<email>" + userM.getEmail() + "</email>"
+                + "<password>" + userM.getPassword() + "</password>"
+                + "<image>" + userM.getImage() + "</image>"
+                + "<birthdate>" + userM.getBirthdate() + "</birthdate>"
+                + "<rol>" + userM.getRol() + "</rol>"
+                + "<updatedate>" + userM.getUpdatedate() + "</updatedate>"
+                + "<state>" + userM.getState() + "</state>"
+                + "</user>");
+
+        String sentency = "Select * from updateUser('" + structure + "')";
+        System.out.println(structure);
+        return con.modifyBD(sentency);
+    }
+
+    public boolean deleteUser(UserModel userM) {
+        String structure = String.format(
+                "<user>"
+                + "<iduser>" + userM.getIduser() + "</iduser>"
+                + "</user>");
+
+        String sentency = "Select * from deleteUser('" + structure + "')";
+        System.out.println(structure);
+        return con.modifyBD(sentency);
+    }
 }

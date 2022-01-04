@@ -9,8 +9,10 @@ import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.UserModel;
 import com.jitgad.bjitgad.Resources.ResponseAPI;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -116,8 +118,7 @@ public class Userresource {
     @POST
     @Path("/PostUserRegistration")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response PostUserRegistration(String data
-    ) {
+    public Response PostUserRegistration(String data) {
         System.out.println(data);
         String responseJson = "{\"status\":\"poken:" + data + "\"}";
         System.out.println("Ingresando PostUserRegistration...");
@@ -154,5 +155,92 @@ public class Userresource {
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();
     }
+    
+    
+    @Produces(MediaType.APPLICATION_JSON)
+    @PUT
+    @Path("/putuser")
+    public Response PutUser(String data) {
+        System.out.println(data);
+        String responseJson = "{\"status\":\"poken:" + data + "\"}";
+        System.out.println("Ingresando PutUser...");
+        JsonObject Jso = Methods.stringToJSON(data);
+        try {
+            if (Jso.size() > 0) {
+                Object[] responseUserUpdate = userC.PutUser(
+                                Methods.JsonToInteger(Jso.getAsJsonObject(), "iduser", 0),
+                                Methods.JsonToString(Jso.getAsJsonObject(), "name", ""),
+                                Methods.JsonToString(Jso.getAsJsonObject(), "last_name", ""),
+                                Methods.JsonToString(Jso.getAsJsonObject(), "email", ""),
+                                Methods.JsonToString(Jso.getAsJsonObject(), "password", ""),
+                                Methods.JsonToString(Jso.getAsJsonObject(), "image", ""),
+                                Methods.JsonToString(Jso.getAsJsonObject(), "birthday", ""),
+                                Methods.JsonToString(Jso.getAsJsonObject(), "rol", ""),
+                                Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
+                if (responseUserUpdate[0].equals(true)) {
+                    responseJson = Rapi.Response(String.valueOf(responseUserUpdate[1]),
+                            Boolean.parseBoolean(responseUserUpdate[0].toString()), "{}");
+                } else {
+                    responseJson = Rapi.Response(String.valueOf(responseUserUpdate[1]),
+                            Boolean.parseBoolean(responseUserUpdate[0].toString()), "{}");
+                }
+            } else {
+                responseJson = Rapi.Response("Información no encontrada", false, data);
+            }
+        } catch (Exception e) {
+            responseJson = Rapi.Response(e.getMessage(), false, data);
+        }
 
+        return Response.ok(responseJson)
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
+                .build();
+    }
+
+    @Produces(MediaType.APPLICATION_JSON)
+    @DELETE
+    @Path("/deleteuser")
+    public Response DeleteActivitiesType(@Context HttpHeaders headers, String data) {
+        String responseJson = "{\"status\":\"poken:" + data + "\"}";
+        System.out.println("Ingresando deleteuser...");
+        JsonObject Jso = Methods.stringToJSON(data);
+        System.out.println(responseJson);
+        try {
+            if (Jso.size() > 0) {
+                
+                //TOKENS
+                String Authorization = headers.getHeaderString("Authorization");
+                Authorization = Authorization == null ? "" : Authorization;
+                System.out.println("Authorization: " + Authorization);
+                Object[] Permt = AuC.VToken(Authorization);
+              
+                if (Permt[2].equals("Administrador")) {
+                    if (Permt[0].equals(true)) {
+                        Object[] responseUserDelete = userC.DeleteUser(
+                                Methods.JsonToInteger(Jso.getAsJsonObject(), "iduser", 0));
+                        if (responseUserDelete[0].equals(true)) {
+                            responseJson = Rapi.Response(String.valueOf(responseUserDelete[1]), 
+                            Boolean.parseBoolean(responseUserDelete[0].toString()), data);
+                        } else {
+                            responseJson = Rapi.Response(String.valueOf(responseUserDelete[1]), 
+                            Boolean.parseBoolean(responseUserDelete[0].toString()), data);
+                        }
+                    } else {
+                        responseJson = Rapi.Response(String.valueOf(Permt[1]), false, data);
+                    }
+                }else{
+                    responseJson = Rapi.Response("Usuario sin privilegios para realizar esta actividad", false, data);
+                }
+
+            } else {
+                responseJson = Rapi.Response("Información no encontrada", false, data);
+            }
+        } catch (Exception e) {
+            responseJson = Rapi.Response(e.getMessage(), false, data);
+        }
+        return Response.ok(responseJson)
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
+                .build();
+    }
 }
