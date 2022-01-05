@@ -10,6 +10,7 @@ import com.jitgad.bjitgad.DataStaticBD.DataBd;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.jitgad.bjitgad.Controller.FileController;
 import com.jitgad.bjitgad.Utilities.CropImage;
 import com.jitgad.bjitgad.Utilities.UFile;
 import java.io.File;
@@ -30,38 +31,9 @@ public class testeosmain {
         new Conection().testConection();
         Conection con = new Conection();
 
-        File ruta = new File("C:/Users/jorge/Downloads/");
-        File f = new File(ruta, "WhatsApp Image 2022-01-03 at 16.48.07.jpeg");
-
-        UFile uf = new UFile();
-        
-        String bextraimage = "files/image/";
-        String bextravideo = "files/video/";
-        String baserutarelativa = (uf.getPath()).replace('\\', '/');
-        String baseextraimage = (baserutarelativa + bextraimage).replace('\\', '/');;
-
-        if (!new File(baseextraimage).exists()) {  //se comprueba si la ruta existe o no
-            System.out.println("El directorio " + new File(baseextraimage).getName() + " no existe");
-            if (new File(baseextraimage).mkdir()) { //se crea la ruta. Si se ha creado correctamente
-                System.out.println("Directorio creado");
-                try {
-                    System.out.println((uf.B64StringtoImageFile(uf.encodeFileToBase64Binary(f),baseextraimage + "ARCHIVOGENERADOJAVA.jpeg"))
-                    ?"Imagen creada":"Imagen no creada");
-                } catch (IOException ex) {
-                    Logger.getLogger(testeosmain.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else {
-                System.out.println("No se ha podido crear " + new File(baseextraimage).getName());
-            }
-        } else {
-           // System.out.println("El directorio ya existe");
-            try {
-               System.out.println((uf.B64StringtoImageFile(uf.encodeFileToBase64Binary(f),baseextraimage + "ARCHIVOGENERADOJAVA.jpeg"))
-                    ?"Imagen creada":"Imagen no creada");
-            } catch (IOException ex) {
-                Logger.getLogger(testeosmain.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+       String ruta = "C:/Users/jorge/Downloads/WhatsApp Image 2022-01-03 at 16.48.07.jpeg";
+       FileController fc = new FileController();
+       fc.createfile(ruta);
 
     }
 
