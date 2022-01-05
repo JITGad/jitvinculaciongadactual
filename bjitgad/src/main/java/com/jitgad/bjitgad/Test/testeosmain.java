@@ -34,28 +34,29 @@ public class testeosmain {
         File f = new File(ruta, "WhatsApp Image 2022-01-03 at 16.48.07.jpeg");
 
         UFile uf = new UFile();
+        
+        String bextraimage = "files/image/";
+        String bextravideo = "files/video/";
+        String baserutarelativa = (uf.getPath()).replace('\\', '/');
+        String baseextraimage = (baserutarelativa + bextraimage).replace('\\', '/');;
 
-        String baserutarelativa = (uf.getPath() + "Files/").replace('\\', '/');
-        //String baserutarelativa = uf.getPath().replace('\\', '/');
-        System.out.println(baserutarelativa);
-
-        if (!new File(baserutarelativa).exists()) {  //se comprueba si la ruta existe o no
-            System.out.println("El directorio " + new File(baserutarelativa).getName() + " no existe");
-            if (new File(baserutarelativa).mkdir()) { //se crea la ruta. Si se ha creado correctamente
+        if (!new File(baseextraimage).exists()) {  //se comprueba si la ruta existe o no
+            System.out.println("El directorio " + new File(baseextraimage).getName() + " no existe");
+            if (new File(baseextraimage).mkdir()) { //se crea la ruta. Si se ha creado correctamente
                 System.out.println("Directorio creado");
                 try {
-                    System.out.println((uf.B64StringtoImageFile(uf.encodeFileToBase64Binary(f),baserutarelativa + "ARCHIVOGENERADOJAVA.jpeg"))
+                    System.out.println((uf.B64StringtoImageFile(uf.encodeFileToBase64Binary(f),baseextraimage + "ARCHIVOGENERADOJAVA.jpeg"))
                     ?"Imagen creada":"Imagen no creada");
                 } catch (IOException ex) {
                     Logger.getLogger(testeosmain.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
-                System.out.println("No se ha podido crear " + new File(baserutarelativa).getName());
+                System.out.println("No se ha podido crear " + new File(baseextraimage).getName());
             }
         } else {
            // System.out.println("El directorio ya existe");
             try {
-               System.out.println((uf.B64StringtoImageFile(uf.encodeFileToBase64Binary(f),baserutarelativa + "ARCHIVOGENERADOJAVA.jpeg"))
+               System.out.println((uf.B64StringtoImageFile(uf.encodeFileToBase64Binary(f),baseextraimage + "ARCHIVOGENERADOJAVA.jpeg"))
                     ?"Imagen creada":"Imagen no creada");
             } catch (IOException ex) {
                 Logger.getLogger(testeosmain.class.getName()).log(Level.SEVERE, null, ex);

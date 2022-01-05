@@ -1,14 +1,16 @@
 package com.jitgad.bjitgad.Utilities;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.xml.bind.DatatypeConverter;
-import net.iharder.Base64;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -48,65 +50,67 @@ public class UFile {
         }
     }
 
-    public boolean B64StringtoImageFile(String base64, String fileurl) {
-        try {
-            String encoded = DatatypeConverter.printBase64Binary(base64.getBytes("UTF-8"));
-            byte[] decodedBytes = DatatypeConverter.parseBase64Binary(encoded);
-            DatatypeConverter.parseBase64Binary(encoded);
-            FileUtils.writeByteArrayToFile(new File(fileurl), decodedBytes);
-            return true;
-        } catch (Exception e) {
-            System.out.println("Error creating image:" + e.getMessage());
-            return false;
+    /**
+     * Obtain the extension.
+     * @param filename
+     * @return 
+     */
+    public String extensionfile(String filename) {
+        String fe = "";
+        int i = filename.lastIndexOf('.');
+        if (i > 0) {
+            fe = filename.substring(i + 1);
         }
-    }
-    
-     public boolean B64StringtoImageFileC(String base64, String fileurl) {
-        String[] parts = base64.split(",");
-        try {
-            byte[] decodedBytes = DatatypeConverter.parseBase64Binary(parts[1]);
-            DatatypeConverter.parseBase64Binary(parts[1]);
-            FileUtils.writeByteArrayToFile(new File(fileurl), decodedBytes);
-            return true;
-        } catch (Exception e) {
-            System.out.println("Error creating image:" + e.getMessage());
-            return false;
-        }
+        return fe;
     }
 
-    public String encodetext(String value) {
-        return Base64.encodeBytes(value != null ? value.getBytes() : null);
+    public boolean B64StringtoImageFile(String base64, String fileurl) {
+        
+        String base64String = "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAHkAAAB5C...";
+        String[] strings = base64String.split(",");
+        String extension;
+        switch (strings[0]) {//check image's extension
+            case "data:image/jpeg;base64":
+                extension = "jpeg";
+                break;
+            case "data:image/png;base64":
+                extension = "png";
+                break;
+            case "data:video/mp4;base64":
+                extension = "mp4";
+                break;
+            default://should write cases for more images types
+                extension = "jpg";
+                break;
+        }
+        
+        byte[] data = DatatypeConverter.parseBase64Binary(base64);
+        File file = new File(fileurl);
+        try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
+            outputStream.write(data);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public String encodeFileToBase64Binary(File file) throws IOException {
         String encodedfile = null;
         try {
             FileInputStream fileInputStreamReader = new FileInputStream(file);
-            byte[] bytes = new byte[(int) file.length()];
+            byte[] bytes = new byte[(int)file.length()];
             fileInputStreamReader.read(bytes);
-            encodedfile = org.apache.commons.codec.binary.Base64.encodeBase64(bytes).toString();
-
-            byte[] bytesEncoded = org.apache.commons.codec.binary.Base64.encodeBase64(bytes);
-            encodedfile = new String(bytesEncoded);
-
+            encodedfile = new String(Base64.encodeBase64(bytes));
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block  
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block  
             e.printStackTrace();
         }
+        
+        
         return encodedfile;
     }
 
-    public String decode(String base64) {
-        try {
-            byte[] value = Base64.decode(base64);
-            return new String(value);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return base64;
-    }
-
 }
+
