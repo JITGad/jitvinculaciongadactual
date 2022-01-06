@@ -66,23 +66,7 @@ public class UFile {
 
     public boolean B64StringtoImageFile(String base64, String fileurl) {
         
-        String base64String = "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAHkAAAB5C...";
-        String[] strings = base64String.split(",");
-        String extension;
-        switch (strings[0]) {//check image's extension
-            case "data:image/jpeg;base64":
-                extension = "jpeg";
-                break;
-            case "data:image/png;base64":
-                extension = "png";
-                break;
-            case "data:video/mp4;base64":
-                extension = "mp4";
-                break;
-            default://should write cases for more images types
-                extension = "jpg";
-                break;
-        }
+        
         
         byte[] data = DatatypeConverter.parseBase64Binary(base64);
         File file = new File(fileurl);
