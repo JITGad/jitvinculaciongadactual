@@ -18,6 +18,7 @@ public class FileController {
 
     public boolean createfile(String base64String, String type) throws UnsupportedEncodingException {
 
+        boolean band = false;
 //        File f = new File(rutaimg);
         UFile uf = new UFile();
 
@@ -46,15 +47,12 @@ public class FileController {
         String baserutarelativa = (uf.getPath() + "").replace('\\', '/');
         String baseextraimage = "";
 
-        Object[] Permt = validateformat("png", baserutarelativa);
+        Object[] Permt = validateformat(extension, baserutarelativa);
         if (Boolean.parseBoolean(Permt[0].toString())) {
 
             if (createfilebase(Permt[1].toString())) {
-
                 String ruta = Permt[1].toString() + type + "/";
-
                 System.out.println(ruta);
-
                 //COMPROBAR SI EXISTEN LAS CARPETAS DE IMAGENES O VIDEOS
                 // FIN COMPROBACIÓN CARPETAS IMAGENES O VIDEO
                 if (!new File(ruta).exists()) {  //se comprueba si la ruta existe o no
@@ -62,21 +60,28 @@ public class FileController {
                     System.out.println(ruta);
                     if (new File(ruta).mkdir()) { //se crea la ruta. Si se ha creado correctamente
                         System.out.println("Directorio creado");
-                        System.out.println((uf.B64StringtoImageFile(base64String, ruta + "ARCHIVOGENERADOJAVA.jpeg"))
-                                ? "Imagen creada" : "Imagen no creada");
+
+//                        System.out.println((uf.B64StringtoImageFile(strings[1], ruta + "ARCHIVOGENERADOJAVA.jpeg"))
+//                                ? "Imagen creada" : "Imagen no creada");
+                        band = uf.B64StringtoImageFile(strings[1], ruta + "ARCHIVOGENERADOJAVA.jpeg");
+                        return band;
                     } else {
                         System.out.println("No se ha podido crear " + new File(ruta).getName());
                     }
                 } else {
                     // System.out.println("El directorio ya existe");
-                    System.out.println((uf.B64StringtoImageFile(base64String, ruta + "ARCHIVOGENERADOJAVA.jpeg"))
-                            ? "Imagen creada" : "Imagen no creada");
+//                    System.out.println((uf.B64StringtoImageFile(strings[1], ruta + "ARCHIVOGENERADOJAVA.jpeg"))
+//                            ? "Imagen creada" : "Imagen no creada");
+                    band = uf.B64StringtoImageFile(strings[1], ruta + "ARCHIVOGENERADOJAVA.jpeg");
+                    return band;
                 }
             } else {
                 System.out.println("No se ha podido crear archivo base " + new File(baseextraimage).getName());
+                return band;
             }
         }
-        return false;
+        return band;
+
     }
 
     public boolean createfilebase(String rutabase) {
@@ -105,6 +110,7 @@ public class FileController {
             if (extension.equals("mp4")) {
                 return new Object[]{true, (baserutarelativa + "video/").replace('\\', '/')};
             } else {
+                System.out.println("NO EXISTE ESTA EXTENSIÓN");
                 return new Object[]{false, ""};
             }
         }

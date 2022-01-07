@@ -304,8 +304,7 @@ public class Activitiestyperesource {
                 String name = Methods.JsonToString(Jso.getAsJsonObject(), "name", "");
                 String base64 = Methods.JsonToString(Jso.getAsJsonObject(), "base64", "");
                 FileController fc = new FileController();
-                
-                responseJson = Rapi.Response("Información no encontrada", fc.createfile(base64,name), data);
+                responseJson = Rapi.Response("Imagen creada con éxito", fc.createfile(base64,name), data);
                 
             } else {
                 responseJson = Rapi.Response("Información no encontrada", false, data);
