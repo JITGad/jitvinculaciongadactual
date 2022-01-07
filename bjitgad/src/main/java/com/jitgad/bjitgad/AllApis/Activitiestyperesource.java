@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.jitgad.bjitgad.Controller.ActivitiestypeController;
 import com.jitgad.bjitgad.Controller.AuthorizationController;
+import com.jitgad.bjitgad.Controller.FileController;
 import com.jitgad.bjitgad.Controller.UserController;
 import com.jitgad.bjitgad.DAO.ActivitiestypeDAO;
 import com.jitgad.bjitgad.DataStaticBD.DataBd;
@@ -274,6 +275,38 @@ public class Activitiestyperesource {
                     responseJson = Rapi.Response("Usuario sin privilegios para realizar esta actividad", false, data);
                 }
 
+            } else {
+                responseJson = Rapi.Response("Información no encontrada", false, data);
+            }
+        } catch (Exception e) {
+            responseJson = Rapi.Response(e.getMessage(), false, data);
+        }
+        return Response.ok(responseJson)
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
+                .build();
+    }
+    
+    
+    /*
+     add activities
+     */
+    @Produces(MediaType.APPLICATION_JSON)
+    @POST
+    @Path("/postActivitiesimage")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response postActivitiesimage(String data) {
+        String responseJson = "{\"status\":\"poken:" + data + "\"}";
+        System.out.println("Ingresando postActivitiesimage...");
+        JsonObject Jso = Methods.stringToJSON(data);
+        try {
+            if (Jso.size() > 0) {
+                String name = Methods.JsonToString(Jso.getAsJsonObject(), "name", "");
+                String base64 = Methods.JsonToString(Jso.getAsJsonObject(), "base64", "");
+                FileController fc = new FileController();
+                
+                responseJson = Rapi.Response("Información no encontrada", fc.createfile(base64,name), data);
+                
             } else {
                 responseJson = Rapi.Response("Información no encontrada", false, data);
             }
