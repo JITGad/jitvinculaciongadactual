@@ -26,17 +26,27 @@ public class UserDAO {
     }
 
     public String selectUserspage(int page) {
-        sentence ="select * from tbluser order by iduser asc limit 10 offset "+ (page * 10 - 10);
+        sentence = "select * from tbluser order by iduser asc limit 10 offset " + (page * 10 - 10);
         ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
 //        datos.forEach(proyecto -> {
 //            proyecto.setShare_users(getEmailsToProyectUserAdmin(proyecto.getProjects_id_pr(), id));
 //        });
         return Methods.objectToJsonString(datos);
     }
-    
-    public int CountingPageUsers(){
-      sentence = String.format("select * from tbluser");
-      return  ((con.returnRecord(sentence)).getRowCount());
+
+    public String selectUserspagebyid(int page, int id) {
+        sentence = "select * from tbluser where iduser = " + id + " order by iduser asc limit 10 offset " + (page * 10 - 10);
+        ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
+        if (datos.size() > 0) {
+            return Methods.objectToJsonString(datos.get(0));
+        } else {
+            return "{}";
+        }
+    }
+
+    public int CountingPageUsers() {
+        sentence = String.format("select * from tbluser");
+        return ((con.returnRecord(sentence)).getRowCount());
     }
 
     public UserModel setUser(DefaultTableModel table, int index) {
@@ -67,17 +77,17 @@ public class UserDAO {
                 // 1 día
                 tiempoext = 86400000;
             }
-        }else{
+        } else {
             // 1 día
             tiempoext = 86400000;
-        } 
+        }
 //        System.out.println(new Date(tiempo) +"-" + new Date(tiempo+900000));
         String jwt = Jwts.builder()
                 .signWith(SignatureAlgorithm.HS256, key)
                 .setSubject(String.valueOf(usr.getIduser()))
                 .setIssuedAt(new Date(tiempo))
                 //900000 que equivale a 15 minutos
-             //   .setExpiration(new Date(tiempo + 900000))
+                //   .setExpiration(new Date(tiempo + 900000))
                 .setExpiration(new Date(tiempo + tiempoext))
                 .claim("email", usr.getEmail())
                 .claim("rol", usr.getRol())

@@ -12,6 +12,7 @@ import com.jitgad.bjitgad.DataStaticBD.DataBd;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
 import com.jitgad.bjitgad.Resources.ResponseAPI;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -57,7 +58,7 @@ public class Activitiestyperesource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getActivitiestype() {
+    public Response getActivitiestype(){
         String data = atC.selectActivitiestype();
         String responseJson = Rapi.Response("Ocurrió un error", false, data);
         try {
@@ -223,18 +224,18 @@ public class Activitiestyperesource {
                             Methods.JsonToString(Jso.getAsJsonObject(), "image", ""),
                             Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
                     if (responseatC[0].equals(true)) {
-                        responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), data);
+                        responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), String.valueOf(responseatC[2]));
                     } else {
-                        responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), data);
+                        responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), String.valueOf(responseatC[2]));
                     }
                 } else {
-                    responseJson = Rapi.Response(String.valueOf(Permt[1]), false, data);
+                    responseJson = Rapi.Response(String.valueOf(Permt[1]), false, "");
                 }
             } else {
-                responseJson = Rapi.Response("Información no encontrada", false, data);
+                responseJson = Rapi.Response("Información no encontrada", false, "");
             }
         } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, data);
+            responseJson = Rapi.Response(e.getMessage(), false, "");
         }
         return Response.ok(responseJson)
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
@@ -304,8 +305,8 @@ public class Activitiestyperesource {
                 String name = Methods.JsonToString(Jso.getAsJsonObject(), "name", "");
                 String base64 = Methods.JsonToString(Jso.getAsJsonObject(), "base64", "");
                 FileController fc = new FileController();
-                Object[] CreateFile = fc.createfile(base64,name);
-                responseJson = Rapi.Response("Imagen creada con éxito", Boolean.parseBoolean(CreateFile[0].toString()), String.valueOf(CreateFile[2].toString()));
+                Object[] CreateFile = fc.createfile(base64,"Activities",name);
+                responseJson = Rapi.Response("Imagen creada con éxito", Boolean.parseBoolean(CreateFile[0].toString()), String.valueOf(CreateFile[1].toString()+ "/"+ name+ "/"+CreateFile[2].toString()));
                 
             } else {
                 responseJson = Rapi.Response("Información no encontrada", false, data);

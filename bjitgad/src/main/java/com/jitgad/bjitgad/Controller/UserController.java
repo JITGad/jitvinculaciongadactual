@@ -163,6 +163,9 @@ public class UserController {
     public String selectUserspage(int page) {
         return udao.selectUserspage(page);
     }
+    public String selectUserspagebyid(int page, int id) {
+        return udao.selectUserspagebyid(page, id);
+    }
     
     public int CountingPageUsers() {
         return udao.CountingPageUsers();

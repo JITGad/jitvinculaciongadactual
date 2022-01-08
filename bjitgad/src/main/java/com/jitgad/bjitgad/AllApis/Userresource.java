@@ -77,6 +77,43 @@ public class Userresource {
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();
     }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/getUsersAdminbyid")
+    public Response getUsersAdminbyid(@Context HttpHeaders headers, @QueryParam("page") int page, @QueryParam("id") int id) {
+        //TODO return proper representation object
+        String data = userC.selectUserspagebyid(page,id);
+        String responseJson = Rapi.Response("Ocurrió un error", false, data);
+        int responseCountingPage = 0;
+        try {
+            //TOKENS
+            String Authorization = headers.getHeaderString("Authorization");
+            Authorization = Authorization == null ? "" : Authorization;
+            System.out.println("Authorization: " + Authorization);
+            Object[] Permt = AuC.VToken(Authorization);
+            if (Permt[2].equals("Administrador")) {
+                if (Permt[0].equals(true)) {
+                    responseCountingPage = userC.CountingPageUsers();
+                    if (data.equals("{}")) {
+                        responseJson = Rapi.AdminResponse("Información no encontrada", responseCountingPage, false, data);
+                    } else {
+                        responseJson = Rapi.AdminResponse("Datos retornados correctamente", responseCountingPage, true, data);
+                    }
+                } else {
+                    responseJson = Rapi.AdminResponse(String.valueOf(Permt[1]), responseCountingPage, false, data);
+                }
+            } else {
+                responseJson = Rapi.Response("Usuario sin privilegios para realizar esta actividad", false, data);
+            }
+        } catch (Exception e) {
+            responseJson = Rapi.AdminResponse(e.getMessage(), responseCountingPage, false, responseJson);
+        }
+        return Response.ok(responseJson)
+                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
+                .build();
+    }
 
     @Produces(MediaType.APPLICATION_JSON)
     @POST
