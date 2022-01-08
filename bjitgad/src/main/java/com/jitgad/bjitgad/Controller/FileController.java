@@ -16,13 +16,11 @@ public class FileController {
     public FileController() {
     }
 
-    public boolean createfile(String base64String, String type) throws UnsupportedEncodingException {
+    public Object[] createfile(String base64String, String type) throws UnsupportedEncodingException {
 
         boolean band = false;
-//        File f = new File(rutaimg);
         UFile uf = new UFile();
 
-        // String type = "activities";
         String[] strings = base64String.split(",");
         String extension;
         switch (strings[0]) {//check image's extension
@@ -40,10 +38,6 @@ public class FileController {
                 break;
         }
 
-        //String brimage = "images/"+type+"/".replace('\\', '/');;
-//        String brimage = "images/".replace('\\', '/');;
-//        String brivideo = "videos/".replace('\\', '/');;
-        // String brivideo = "videos/"+type+"/".replace('\\', '/');;
         String baserutarelativa = (uf.getPath() + "").replace('\\', '/');
         String baseextraimage = "";
 
@@ -60,11 +54,11 @@ public class FileController {
                     System.out.println(ruta);
                     if (new File(ruta).mkdir()) { //se crea la ruta. Si se ha creado correctamente
                         System.out.println("Directorio creado");
-
 //                        System.out.println((uf.B64StringtoImageFile(strings[1], ruta + "ARCHIVOGENERADOJAVA.jpeg"))
 //                                ? "Imagen creada" : "Imagen no creada");
                         band = uf.B64StringtoImageFile(strings[1], ruta + "ARCHIVOGENERADOJAVA.jpeg");
-                        return band;
+                        return new Object[]{band, Permt[2], "ARCHIVOGENERADOJAVA.jpeg"};
+                      //  return band;
                     } else {
                         System.out.println("No se ha podido crear " + new File(ruta).getName());
                     }
@@ -73,14 +67,14 @@ public class FileController {
 //                    System.out.println((uf.B64StringtoImageFile(strings[1], ruta + "ARCHIVOGENERADOJAVA.jpeg"))
 //                            ? "Imagen creada" : "Imagen no creada");
                     band = uf.B64StringtoImageFile(strings[1], ruta + "ARCHIVOGENERADOJAVA.jpeg");
-                    return band;
+                    return new Object[]{band, Permt[2], "ARCHIVOGENERADOJAVA.jpeg"};
                 }
             } else {
                 System.out.println("No se ha podido crear archivo base " + new File(baseextraimage).getName());
-                return band;
+                return new Object[]{band, Permt[2], "ARCHIVOGENERADOJAVA.jpeg"};
             }
         }
-        return band;
+        return new Object[]{band, Permt[2], "ARCHIVOGENERADOJAVA.jpeg"};
 
     }
 
@@ -105,10 +99,10 @@ public class FileController {
     public Object[] validateformat(String extension, String baserutarelativa) {
 
         if (extension.equals("jpeg") || extension.equals("png") || extension.equals("jpg")) {
-            return new Object[]{true, (baserutarelativa + "images/").replace('\\', '/')};
+            return new Object[]{true, (baserutarelativa + "images/").replace('\\', '/'), "images"};
         } else {
             if (extension.equals("mp4")) {
-                return new Object[]{true, (baserutarelativa + "video/").replace('\\', '/')};
+                return new Object[]{true, (baserutarelativa + "video/").replace('\\', '/'), "video"};
             } else {
                 System.out.println("NO EXISTE ESTA EXTENSIÓN");
                 return new Object[]{false, ""};
