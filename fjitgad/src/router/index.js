@@ -36,7 +36,13 @@ const routes = [
         name: 'Usuarios',
         component: () => import('../views/Usuario/Usuarios.vue'),
         meta: { authorize: [Role.Admin] },
-      }
+      },
+      {
+        path: 'tipo-juegos',
+        name: 'TipoJuegos',
+        component: () => import('../views/TipoJuego/TipoJuegos.vue'),
+        meta: { authorize: [Role.Admin] },
+      },
     ]
   },
   {
@@ -56,6 +62,12 @@ const routes = [
         name: 'CrearUsuario',
         component: () => import('../views/Usuario/CrearUsuario.vue'),
         meta: { authorize: [Role.Admin] },
+      },
+      {
+        path: 'tipojuego',
+        name: 'CrearTipoJuego',
+        component: () => import('../views/TipoJuego/CrearTipoJuego.vue'),
+        meta: { authorize: [] },
       }
     ]
   },
@@ -76,13 +88,19 @@ const routes = [
         name: 'EditarUsuario',
         component: () => import('../views/Usuario/EditarUsuario.vue'),
         meta: { authorize: [Role.Admin] },
+      },
+      {
+        path: 'tipo-juego/:id',
+        name: 'EditarTipoJuego',
+        component: () => import('../views/TipoJuego/EditarTipoJuego.vue'),
+        meta: { authorize: [] },
       }
     ]
   },
   {
     path: '/jugar/:id',
-    name: 'ActividadJuego',
-    component: () => import('../views/Actividad/ActividadJuego.vue')
+    name: 'Jugar',
+    component: () => import('../views/Jugar.vue')
   },
   {
     path: '/login',

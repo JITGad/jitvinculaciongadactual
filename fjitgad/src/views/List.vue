@@ -1,5 +1,5 @@
 <template>
-  <main-layout>
+  <main-layout-admin>
     <div style="text-align: center">
       <h3>{{ Title }}</h3>
     </div>
@@ -18,7 +18,7 @@
       :paginasTotales="PaginasTotales"
       @paginaSeleccionada="PaginaSeleccionada"
     />
-  </main-layout>
+  </main-layout-admin>
 </template>
 
 <script>
@@ -44,11 +44,11 @@ export default {
     });
 
     function bind(component) {
-      PaginaActual.value = component.pagina;
-      TotalRegistros.value = component.conteo;
-      PaginasTotales.value = component.paginas;
-      Title.value = component.title;
-      UrlNuevo.value = component.url_nuevo;
+      PaginaActual.value = component.pagina || 1;
+      TotalRegistros.value = component.conteo || 1;
+      PaginasTotales.value = component.paginas || 1;
+      Title.value = component.title || "";
+      UrlNuevo.value = component.url_nuevo || "";
       state.child = component;
     }
     function unbind(uid) {

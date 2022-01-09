@@ -4,45 +4,43 @@
       <tr>
         <th scope="col">Id</th>
         <th scope="col">Nombre</th>
-        <th scope="col">Apellido</th>
-        <th scope="col">Correo electronico</th>
-        <th scope="col">Rol</th>
         <th scope="col">Estado</th>
         <th scope="col">Imagen</th>
         <th scope="col">Editar</th>
-        <th scope="col">Eliminar</th>
+        <my-autorization roles="Administrador">
+          <th scope="col">Eliminar</th>
+        </my-autorization>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(usuario, index) in Usuarios" :key="index">
-        <th scope="row">{{ usuario.iduser }}</th>
-        <td>{{ usuario.names }}</td>
-        <td>{{ usuario.last_name }}</td>
-        <td>{{ usuario.email }}</td>
-        <td>{{ usuario.rol }}</td>
-        <td>{{ usuario.state ? "Activo" : "Inactivo" }}</td>
+      <tr v-for="(actividad, index) in Juegos" :key="index">
+        <th scope="row">{{ actividad.idactivitiestype }}</th>
+        <td>{{ actividad.name }}</td>
+        <td>{{ actividad.state ? "Activo" : "Inactivo" }}</td>
         <td align="center">
           <img
             class="brand-image"
             width="30"
             height="24"
-            :src="usuario.image"
+            :src="actividad.image"
           />
         </td>
         <td align="center">
           <my-link-table
-            :object="usuario"
+            :object="actividad"
             icon="fas fa-pen"
-            @click="EditarUsuario"
+            @click="EditarActividad"
           />
         </td>
-        <td align="center">
-          <my-link-table
-            :object="usuario"
-            icon="fas fa-trash"
-            @click="EliminarUsuario"
-          />
-        </td>
+        <my-autorization roles="Administrador">
+          <td align="center">
+            <my-link-table
+              :object="actividad"
+              icon="fas fa-trash"
+              @click="EliminarActividad"
+            />
+          </td>
+        </my-autorization>
       </tr>
     </tbody>
   </table>
@@ -57,7 +55,7 @@ import {
   onBeforeUnmount,
 } from "vue";
 import { useRouter } from "vue-router";
-import UsuariosService from "../../api/UsuariosService.js";
+import JuegosService from "../../api/JuegosService.js";
 import {
   confirm_action,
   message_error,
@@ -65,10 +63,10 @@ import {
 } from "../../util/Messages.js";
 
 export default {
-  name: "Usuarios",
+  name: "Juegos",
   setup(props, context) {
     const instance = getCurrentInstance();
-    const Usuarios = ref([]);
+    const Juegos = ref([]);
     const Router = useRouter();
     const list = inject("layout-list");
 
@@ -76,8 +74,8 @@ export default {
       list.bind({
         FetchData,
         uid: instance.uid,
-        title: "Mis Usuarios",
-        url_nuevo: "/create/usuario",
+        title: "Mis Juegos",
+        url_nuevo: "/create/actividad",
       });
       await FetchData();
     });
@@ -88,29 +86,31 @@ export default {
 
     const FetchData = async (pActual = 1) => {
       list.setPageActual(pActual);
-      const response = await UsuariosService.getUsuariosAdministrador(pActual);
+      const response = await JuegosService.getJuegosAdministrador(
+        pActual
+      );
       if (!response.status.error) {
         list.changeData(response.conteo, response.totalPaginas);
-        Usuarios.value = response.data;
+        Juegos.value = response.data;
       } else {
         message_error(response.status.message);
       }
     };
 
-    const EditarUsuario = (_usuario) => {
+    const EditarActividad = (actividad) => {
       Router.push({
-        name: "EditarUsuario",
-        params: { id: _usuario["iduser"] },
+        name: "EditarActividad",
+        params: { id: actividad["idactivitiestype"] },
       });
     };
 
-    const EliminarUsuario = (_usuario) => {
+    const EliminarActividad = (actividad) => {
       confirm_action(
         "Confirmación",
-        `Esta seguro de eliminar la Usuario ${_usuario.names}`,
+        `Esta seguro de eliminar la actividad ${actividad.name}`,
         async () => {
-          const response = await UsuariosService.deleteUsuario(
-            _usuario.iduser
+          const response = await JuegosService.deleteActividad(
+            actividad.idactivitiestype
           );
           if (!response.status.error) {
             message_info("Registro eliminado correctamente", async () => {
@@ -125,10 +125,11 @@ export default {
     };
 
     return {
-      Usuarios,
-      EditarUsuario,
-      EliminarUsuario,
+      Juegos,
+      EditarActividad,
+      EliminarActividad,
     };
   },
 };
 </script>
+

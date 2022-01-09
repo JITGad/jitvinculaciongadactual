@@ -29,7 +29,8 @@ import "./assets/css/NavMenu.css";
 import MyForm from "./components/MyForm";
 import MyInput from "./components/MyInput";
 import MyButton from "./components/MyButton";
-import MainLayout from "./components/MainLayout";
+import MainLayoutAdmin from "./components/MainLayoutAdmin";
+import MainLayoutJuego from "./components/MainLayoutJuego";
 import Paginacion from "./components/Paginacion";
 import MyLinkTable from "./components/MyLinkTable";
 import MyRouterLink from "./components/MyRouterLink";
@@ -38,6 +39,7 @@ import MySelectBoolean from "./components/MySelectBoolean";
 import MyInputFile from "./components/MyInputFile";
 import MySelect from "./components/MySelect";
 import MyAutorization from "./components/MyAutorization";
+import MyFooter from "./components/MyFooter";
 
 const app = createApp(App);
 
@@ -48,7 +50,8 @@ router.store = store;
 app.component("my-input", MyInput);
 app.component("my-form", MyForm);
 app.component("my-button", MyButton);
-app.component("main-layout", MainLayout);
+app.component("main-layout-admin", MainLayoutAdmin);
+app.component("main-layout-juego", MainLayoutJuego);
 app.component("my-paginacion", Paginacion);
 app.component("my-link-table", MyLinkTable);
 app.component("my-router-link", MyRouterLink);
@@ -57,5 +60,6 @@ app.component("my-select-boolean", MySelectBoolean);
 app.component("my-input-file", MyInputFile);
 app.component("my-select", MySelect);
 app.component("my-autorization", MyAutorization);
+app.component("my-footer", MyFooter);
 
 app.mount('#app');

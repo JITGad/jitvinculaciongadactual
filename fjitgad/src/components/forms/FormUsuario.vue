@@ -2,7 +2,7 @@
   <div v-if="Loading">Cargando...</div>
   <div v-else>
     <my-input
-      v-model="model.name"
+      v-model="model.names"
       type="text"
       label="Nombres"
       placeholder="Escriba los nombres del usuario"
@@ -27,7 +27,8 @@
       type="password"
       label="Contraseña"
       placeholder="Escriba la contraseña del usuario"
-      validations="requerido,minlength:6"
+      :help="HelpPassword"
+      :validations="ValidationPassword"
     />
     <my-input
       v-model="model.confirm_password"
@@ -35,7 +36,8 @@
       type="password"
       label="Repita la Contraseña"
       placeholder="Repita la contraseña del usuario"
-      validations="requerido,equalprop:Contraseña;Repetir Contraseña,minlength:6"
+      :help="HelpPassword"
+      :validations="ValidationConfirmPassword"
     />
     <my-input-file label="Imagen" v-model="model.image" type="image" />
     <my-input
@@ -62,6 +64,7 @@ import {
   reactive,
   onMounted,
   onBeforeUnmount,
+  computed,
   ref,
 } from "vue";
 import { message_error } from "../../util/Messages.js";
@@ -89,7 +92,7 @@ export default {
   setup(props, context) {
     const InitialState = {
       iduser: 0,
-      name: "",
+      names: "",
       last_name: "",
       email: "",
       password: "",
@@ -99,6 +102,19 @@ export default {
       rol: "",
       state: true,
     };
+    const HelpPassword = computed(() => {
+      return props.edit
+        ? "Si envia este campo vacio, se mantendra la contraseña anterior"
+        : "";
+    });
+    const ValidationPassword = computed(() => {
+      return `${props.edit ? "" : "requerido,"}minlength:6`;
+    });
+    const ValidationConfirmPassword = computed(() => {
+      return `${
+        props.edit ? "" : "requerido,"
+      }equalprop:Contraseña;Repetir Contraseña,minlength:6`;
+    });
     const Roles = ref([]);
     Roles.value.push(new ObjectSelect(Role.Admin, Role.Admin));
     Roles.value.push(new ObjectSelect(Role.Docente, Role.Docente));
@@ -117,7 +133,7 @@ export default {
       });
       if (props.iduser > 0) {
         setLoading(true);
-        const response = await UsuariosService.getUser(model.iduser);
+        const response = await UsuariosService.getUsuario(props.iduser);
         if (!response.status.error) {
           Object.assign(model, response.data);
           setLoading(false);
@@ -145,6 +161,9 @@ export default {
       model,
       Loading,
       Roles,
+      HelpPassword,
+      ValidationConfirmPassword,
+      ValidationPassword,
     };
   },
 };

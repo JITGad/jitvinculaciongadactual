@@ -63,7 +63,7 @@ const validationsArray = [
             return 'Este campo tiene que tener un minimo de  ' + _minlength + ' caracteres';
         },
         "validate": function (_value = "", _minlength = 0) {
-            if (_value != null && _value != undefined && _value.length >= parseInt(_minlength)) {
+            if (_value == null || _value == undefined || _value.length == 0 || _value.length >= parseInt(_minlength)) {
                 return true;
             }
             return false;

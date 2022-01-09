@@ -7,6 +7,7 @@
       :placeholder="placeholder"
       :class="classInput"
       v-model="model"
+      :disabled="disabled"
       @blur="blurEventHandler($event)"
     />
     <label class="form-check-label" v-if="type == 'checkbox'">{{
@@ -71,6 +72,10 @@ export default {
       type: String,
       default: "",
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    }
   },
   setup(props, context) {
     const form = inject("my-form");

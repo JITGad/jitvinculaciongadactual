@@ -1,5 +1,5 @@
 <template>
-  <main-layout>
+  <main-layout-admin>
     <div class="mb-3" style="text-align: center">
       <h3>{{ Title }}</h3>
     </div>
@@ -28,7 +28,7 @@
         />
       </div>
     </my-form>
-  </main-layout>
+  </main-layout-admin>
 </template>
 
 <script>

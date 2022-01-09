@@ -3,46 +3,52 @@
     <thead class="thead-light">
       <tr>
         <th scope="col">Id</th>
-        <th scope="col">Nombre</th>
-        <th scope="col">Apellido</th>
-        <th scope="col">Correo electronico</th>
-        <th scope="col">Rol</th>
+        <th scope="col">Texto</th>
+        <th scope="col">Nombre corto</th>
         <th scope="col">Estado</th>
         <th scope="col">Imagen</th>
+        <th scope="col">Audio de instrucciones</th>
         <th scope="col">Editar</th>
-        <th scope="col">Eliminar</th>
+        <my-autorization roles="Administrador">
+          <th scope="col">Eliminar</th>
+        </my-autorization>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(usuario, index) in Usuarios" :key="index">
-        <th scope="row">{{ usuario.iduser }}</th>
-        <td>{{ usuario.names }}</td>
-        <td>{{ usuario.last_name }}</td>
-        <td>{{ usuario.email }}</td>
-        <td>{{ usuario.rol }}</td>
-        <td>{{ usuario.state ? "Activo" : "Inactivo" }}</td>
+      <tr v-for="(tipojuego, index) in TipoJuegos" :key="index">
+        <th scope="row">{{ tipojuego.idgametype }}</th>
+        <td>{{ tipojuego.name }}</td>
+        <td>{{ tipojuego.shortname }}</td>
+        <td>{{ tipojuego.state ? "Activo" : "Inactivo" }}</td>
         <td align="center">
           <img
             class="brand-image"
             width="30"
             height="24"
-            :src="usuario.image"
+            :src="tipojuego.image"
           />
         </td>
         <td align="center">
+          <audio controls="controls" :src="tipojuego.audio_instructions">
+            <source src="" type="audio/*" />
+          </audio>
+        </td>
+        <td align="center">
           <my-link-table
-            :object="usuario"
+            :object="tipojuego"
             icon="fas fa-pen"
-            @click="EditarUsuario"
+            @click="EditarTipoJuego"
           />
         </td>
-        <td align="center">
-          <my-link-table
-            :object="usuario"
-            icon="fas fa-trash"
-            @click="EliminarUsuario"
-          />
-        </td>
+        <my-autorization roles="Administrador">
+          <td align="center">
+            <my-link-table
+              :object="tipojuego"
+              icon="fas fa-trash"
+              @click="EliminarTipoJuego"
+            />
+          </td>
+        </my-autorization>
       </tr>
     </tbody>
   </table>
@@ -57,7 +63,7 @@ import {
   onBeforeUnmount,
 } from "vue";
 import { useRouter } from "vue-router";
-import UsuariosService from "../../api/UsuariosService.js";
+import TipoJuegosService from "../../api/TipoJuegosService.js";
 import {
   confirm_action,
   message_error,
@@ -65,10 +71,10 @@ import {
 } from "../../util/Messages.js";
 
 export default {
-  name: "Usuarios",
+  name: "TipoJuegos",
   setup(props, context) {
     const instance = getCurrentInstance();
-    const Usuarios = ref([]);
+    const TipoJuegos = ref([]);
     const Router = useRouter();
     const list = inject("layout-list");
 
@@ -76,8 +82,8 @@ export default {
       list.bind({
         FetchData,
         uid: instance.uid,
-        title: "Mis Usuarios",
-        url_nuevo: "/create/usuario",
+        title: "Mis Tipos de juegos",
+        url_nuevo: "/create/tipojuego",
       });
       await FetchData();
     });
@@ -88,29 +94,31 @@ export default {
 
     const FetchData = async (pActual = 1) => {
       list.setPageActual(pActual);
-      const response = await UsuariosService.getUsuariosAdministrador(pActual);
+      const response = await TipoJuegosService.getTipoJuegosAdministrador(
+        pActual
+      );
       if (!response.status.error) {
         list.changeData(response.conteo, response.totalPaginas);
-        Usuarios.value = response.data;
+        TipoJuegos.value = response.data;
       } else {
         message_error(response.status.message);
       }
     };
 
-    const EditarUsuario = (_usuario) => {
+    const EditarTipoJuego = (TipoJuego) => {
       Router.push({
-        name: "EditarUsuario",
-        params: { id: _usuario["iduser"] },
+        name: "EditarTipoJuego",
+        params: { id: TipoJuego["idgametype"] },
       });
     };
 
-    const EliminarUsuario = (_usuario) => {
+    const EliminarTipoJuego = (TipoJuego) => {
       confirm_action(
         "Confirmación",
-        `Esta seguro de eliminar la Usuario ${_usuario.names}`,
+        `Esta seguro de eliminar la TipoJuego ${TipoJuego.name}`,
         async () => {
-          const response = await UsuariosService.deleteUsuario(
-            _usuario.iduser
+          const response = await TipoJuegosService.deleteTipoJuego(
+            TipoJuego.idgametype
           );
           if (!response.status.error) {
             message_info("Registro eliminado correctamente", async () => {
@@ -125,10 +133,11 @@ export default {
     };
 
     return {
-      Usuarios,
-      EditarUsuario,
-      EliminarUsuario,
+      TipoJuegos,
+      EditarTipoJuego,
+      EliminarTipoJuego,
     };
   },
 };
 </script>
+

@@ -76,9 +76,6 @@ export default {
         uid: instance.uid,
         title: "Mis Actividades",
         url_nuevo: "/create/actividad",
-        conteo: 1,
-        paginas: 1,
-        pagina: 1,
       });
       await FetchData();
     });

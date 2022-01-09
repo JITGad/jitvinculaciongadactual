@@ -64,10 +64,13 @@ h1, .h1 {
 
 .dashboard {
     display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
+    display: -ms-grid;
+    display: grid;
     min-height: 100vh;
+    -ms-grid-columns: 100%;
+    grid-template-columns: 100%;
+    -ms-grid-rows: 80% 20%;
+    grid-template-rows: 80% 20%;
 }
 
 .dashboard-app {

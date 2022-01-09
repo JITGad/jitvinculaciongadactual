@@ -1,7 +1,7 @@
 <template>
-    <main-layout>
+    <main-layout-admin>
         Inicio
-    </main-layout>
+    </main-layout-admin>
 </template>
 
 <script>
