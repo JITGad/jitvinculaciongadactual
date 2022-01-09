@@ -108,11 +108,7 @@ public class ActivitiestypeController {
         return atDAO.CountingPageActivitiestype();
     }
 
-    public String selectgamesbyactivities(String activityid) {
-        return atDAO.selectgamesbyactivities(activityid);
-    }
-
-    public String selectactivitiesbyid(String activityid) {
+    public String selectactivitiesbyid(int activityid) {
         return atDAO.selectactivitiesbyid(activityid);
     }
 

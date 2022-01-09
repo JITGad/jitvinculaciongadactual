@@ -52,16 +52,7 @@ public class ActivitiestypeDAO {
         return ((con.returnRecord(sentence)).getRowCount());
     }
 
-    public String selectgamesbyactivities(String idactivity) {
-        sentence = "select * from tblgametype \n"
-                + "inner join tblgame on tblgame.idgametype = tblgametype.idgametype \n"
-                + "inner join tblactivitiestype on tblgame.idactivitiestype = tblactivitiestype.idactivitiestype\n"
-                + "where tblactivitiestype.idactivitiestype =" + idactivity;
-        String json = con.getRecordsInJson(sentence);
-        return json;
-    }
-
-    public String selectactivitiesbyid(String idactivity) {
+    public String selectactivitiesbyid(int idactivity) {
         sentence = "select * from tblactivitiestype where idactivitiestype =" + idactivity;
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
         if (datos.size() > 0) {

@@ -7,13 +7,14 @@ package com.jitgad.bjitgad.Models;
  */
 public class GameModel {
 
-    private String idactivitiestype = "-2";
-    private String idgametype = "-2";
-    private String name = "-2";
-    private String audio_instructions = "-2";
-    private String creationdate = "-2";
-    private String updatedate = "-2";
-    private String state = "-2";
+    private int idgame = 0;
+    private String idactivitiestype = "";
+    private String idgametype = "";
+    private String name = "";
+    private String creationdate = "";
+    private String updatedate = "";
+    private boolean state = true;
+    private int level = 0;
 
     public GameModel() {
     }
@@ -21,17 +22,25 @@ public class GameModel {
     public GameModel(String _idactivitiestype,
             String _idgametype,
             String _name,
-            String _audio_instructions,
             String _creationdate,
             String _updatedate,
-            String _state) {
+            boolean _state,
+            int _level) {
         this.idactivitiestype = _idactivitiestype;
         this.idgametype = _idgametype;
         this.name = _name;
-        this.audio_instructions = _audio_instructions;
         this.creationdate = _creationdate;
         this.updatedate = _updatedate;
         this.state = _state;
+        this.level = _level;
+    }
+
+    public int getIdgame() {
+        return idgame;
+    }
+
+    public void setIdgame(int idgame) {
+        this.idgame = idgame;
     }
 
     public String getIdactivitiestype() {
@@ -57,15 +66,7 @@ public class GameModel {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getAudio_instructions() {
-        return audio_instructions;
-    }
-
-    public void setAudio_instructions(String audio_instructions) {
-        this.audio_instructions = audio_instructions;
-    }
-
+    
     public String getCreationdate() {
         return creationdate;
     }
@@ -82,12 +83,22 @@ public class GameModel {
         this.updatedate = updatedate;
     }
 
-    public String getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(boolean state) {
         this.state = state;
     }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+    
+    
 
 }

@@ -1,19 +1,11 @@
 package com.jitgad.bjitgad.AllApis;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.jitgad.bjitgad.Controller.ActivitiestypeController;
 import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.FileController;
-import com.jitgad.bjitgad.Controller.UserController;
-import com.jitgad.bjitgad.DAO.ActivitiestypeDAO;
-import com.jitgad.bjitgad.DataStaticBD.DataBd;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
-import com.jitgad.bjitgad.Models.ActivitiestypeModel;
 import com.jitgad.bjitgad.Resources.ResponseAPI;
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -27,8 +19,6 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  *
@@ -112,12 +102,14 @@ public class Activitiestyperesource {
                 .build();
     }
 
-    // by id activities
+    /**
+     * Actividades por ID
+     */
     @Produces(MediaType.APPLICATION_JSON)
     @GET
     @Path("/getactivitiesbyid")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getactivitiesbyid(@Context HttpHeaders headers, @QueryParam("activityid") String activityid) {
+    public Response getactivitiesbyid(@Context HttpHeaders headers, @QueryParam("activityid") int activityid) {
         String data = "{}";
         String responseJson = Rapi.Response("Ocurrió un error", false, data);
         try {
@@ -150,20 +142,7 @@ public class Activitiestyperesource {
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
                 .build();
     }
-
-    @Produces(MediaType.APPLICATION_JSON)
-    @GET
-    @Path("/gamesbyactivities")
-    @Consumes(MediaType.APPLICATION_JSON)
-    // @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response getgamesbyactivities(@QueryParam("activityid") String activityid) {
-        String responseJson = atC.selectgamesbyactivities(activityid);;
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
-    }
-
+    
     /*
      add activities
      */
@@ -190,9 +169,9 @@ public class Activitiestyperesource {
                                 Methods.JsonToString(Jso.getAsJsonObject(), "image", ""),
                                 Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
                         if (responseatC[0].equals(true)) {
-                            responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), String.valueOf(responseatC[2]));
+                            responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), "{}");
                         } else {
-                            responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), String.valueOf(responseatC[2]));
+                            responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), "{}");
                         }
                     } else {
                         responseJson = Rapi.Response(String.valueOf(Permt[1]), false, "{}");

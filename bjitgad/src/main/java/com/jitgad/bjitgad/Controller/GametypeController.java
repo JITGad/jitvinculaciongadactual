@@ -49,10 +49,10 @@ public class GametypeController {
         gtM.setState(state);
         gtM.setShortname(shortname);
         if (gtD.insertGametype(gtM)) {
-            message = "The Game Type was inserted.";
+            message = "Registros insertados correctamente";
             status = true;
         } else {
-            message = "The Game Type was not inserted";
+            message = "Registros no insertados, ocurrió un error!";
             status = false;
         }
         return new Object[]{status, message};
