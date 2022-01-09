@@ -3,7 +3,6 @@ package com.jitgad.bjitgad.AllApis;
 import com.google.gson.JsonObject;
 import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.DetailsimageController;
-import com.jitgad.bjitgad.Controller.UserController;
 import com.jitgad.bjitgad.DataStaticBD.DataBd;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.DetailsimageModel;

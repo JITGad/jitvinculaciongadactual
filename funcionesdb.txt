@@ -84,13 +84,14 @@ AS $BODY$
 DECLARE root_xpath TEXT = '/game/';
   resul integer = 0;
   BEGIN
-    INSERT INTO public.tblgame(idactivitiestype,idgametype,name,creationdate,updatedate,state)values
+    INSERT INTO public.tblgame(idactivitiestype,idgametype,name,creationdate,updatedate,state,level)values
 			((xpath(root_xpath|| 'idactivitiestype/text()', message_xml))[1]::text::integer,
 			 (xpath(root_xpath|| 'idgametype/text()', message_xml))[1]::text::integer,
 			 (xpath(root_xpath|| 'name/text()', message_xml))[1],
 			 (xpath(root_xpath|| 'creationdate/text()', message_xml))[1]::text::date,
 			(xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
-			(xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean);
+			(xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean,
+			(xpath(root_xpath|| 'level/text()', message_xml))[1]::text::integer);
 	return resul;																			 
   END;
 $BODY$;
@@ -98,7 +99,59 @@ $BODY$;
 ALTER FUNCTION public.insertGame(xml)
     OWNER TO fjdmwraxdzfdqi;
 ----------------DELETE----------------
+
+CREATE OR REPLACE FUNCTION public.deleteGame(
+	message_xml xml)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE root_xpath TEXT = '/game/';
+  resul integer = 0;
+  BEGIN	
+
+	DELETE FROM public.tblgame
+	WHERE 
+	idgame = (xpath(root_xpath|| 'idgame/text()', message_xml))[1]::text::integer;
+	return resul;		
+	
+  END;
+$BODY$;
+
+ALTER FUNCTION public.deleteGame(xml)
+    OWNER TO fjdmwraxdzfdqi;
+
 ----------------UPDATE----------------
+
+CREATE OR REPLACE FUNCTION public.updateGame(
+	message_xml xml)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE root_xpath TEXT = '/game/';
+  resul integer = 0;
+  BEGIN	
+  
+	UPDATE public.tblgame
+		SET 
+		idactivitiestype = (xpath(root_xpath|| 'idactivitiestype/text()', message_xml))[1]::text::integer,
+		idgametype = (xpath(root_xpath|| 'idgametype/text()', message_xml))[1]::text::integer,
+		name = (xpath(root_xpath|| 'name/text()', message_xml))[1],
+		updatedate = (xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
+		state = (xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean,
+		level = (xpath(root_xpath|| 'level/text()', message_xml))[1]::text::integer
+	WHERE 
+	idgame = (xpath(root_xpath|| 'idgame/text()', message_xml))[1]::text::integer;
+	return resul;
+	
+  END;
+$BODY$;
+
+ALTER FUNCTION public.updateGame(xml)
+    OWNER TO fjdmwraxdzfdqi;
 
 ------------------------------------------------------------------------------
 
