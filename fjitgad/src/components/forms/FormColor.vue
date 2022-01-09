@@ -1,34 +1,18 @@
 <template>
   <div v-if="Loading">Cargando...</div>
   <div v-else>
+    {{model.name}}
     <my-input
       v-model="model.name"
       type="text"
       label="Nombre"
-      placeholder="Escriba el nombre del Juego"
+      placeholder="Escriba el nombre del color"
       validations="requerido"
     />
-    <my-input
-      v-model="model.levels"
-      type="number"
-      label="Niveles"
-      placeholder="Escriba los niveles del Juego"
-      validations="requerido"
-    />
-    <my-select
-      placeholder="Seleccione un tipo de actividad"
-      v-model="model.idactivitiestype"
-      label="Tipo de actividad"
-      type="int"
-      :data="TipoActividades"
-      validations="requerido"
-    />
-    <my-select
-      placeholder="Seleccione un tipo de juego"
-      v-model="model.idgametype"
-      label="Tipo de juego"
-      type="int"
-      :data="TipoJuegos"
+    <my-input-color
+      v-model="model.hexcode"
+      label="Color en hexadecimal"
+      placeholder="Escriba el nombre del color"
       validations="requerido"
     />
     <my-select-boolean label="Estado" v-model="model.state" />
@@ -36,9 +20,7 @@
 </template>
 
 <script>
-import JuegosService from "../../api/JuegosService.js";
-import ActividadesService from "../../api/ActividadesService.js";
-import TipoJuegosService from "../../api/TipoJuegosService.js";
+import ColoresService from "../../api/ColoresService.js";
 import {
   inject,
   getCurrentInstance,
@@ -50,16 +32,16 @@ import {
 import { message_error } from "../../util/Messages.js";
 
 export default {
-  name: "FormJuego",
+  name: "FormColor",
   emits: ["submit"],
   props: {
-    idgame: {
+    idcolor: {
       type: Number,
       default: 0,
     },
     title: {
       type: String,
-      default: "Crear Juego",
+      default: "Crear color",
     },
     edit: {
       type: Boolean,
@@ -68,16 +50,11 @@ export default {
   },
   setup(props, context) {
     const InitialState = {
-      idgame: 0,
-      idactivitiestype: 0,
-      idgametype: 0,
-      levels: 0,
+      idcolor: 0,
       name: "",
+      hexcode: "#000000",
       state: true,
-      detail: {},
     };
-    const TipoActividades = ref([]);
-    const TipoJuegos = ref([]);
     const Loading = ref(false);
     const layout = inject("layout");
     const instance = getCurrentInstance();
@@ -88,12 +65,12 @@ export default {
         clear,
         uid: instance.uid,
         title: props.title,
-        "url-next": "/list/Juegos",
+        "url-next": "/list/colors",
         "is-edit": props.edit,
       });
-      if (props.idgame > 0) {
+      if (props.idcolor > 0) {
         setLoading(true);
-        const response = await JuegosService.getJuego(props.idgame);
+        const response = await ColoresService.getColor(props.idcolor);
         if (!response.status.error) {
           Object.assign(model, response.data);
           setLoading(false);
@@ -101,9 +78,6 @@ export default {
           message_error(response.status.message);
         }
       }
-      TipoActividades.value =
-        await ActividadesService.getActividadesSelectMenu();
-      TipoJuegos.value = await TipoJuegosService.getTipoJuegosSelectMenu();
     });
     onBeforeUnmount(() => {
       layout.unbind(instance.uid);
@@ -123,8 +97,6 @@ export default {
     return {
       model,
       Loading,
-      TipoActividades,
-      TipoJuegos,
     };
   },
 };

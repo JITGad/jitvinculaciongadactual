@@ -68,6 +68,7 @@ export default {
       Sending.value = true;
       const response = await state.child.submit();
       Sending.value = false;
+      console.log(response);
       if (!response.status.error) {
         if (IsNext.value) {
           Next();

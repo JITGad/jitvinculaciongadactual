@@ -1,5 +1,6 @@
 import FetchMaster from "./FetchMaster.js";
 import { encodeQueryString } from "../util/Utilities.js";
+import ObjectSelect from "../util/ObjectSelect.js";
 
 class ActividadesService {
 
@@ -15,6 +16,20 @@ class ActividadesService {
   getActividadesJuegos() {
     return new Promise((resolve) => {
       FetchMaster.get(this.#urlApi, (data) => resolve(data));
+    });
+  }
+
+  getActividadesSelectMenu() {
+    return new Promise((resolve) => {
+      FetchMaster.get(this.#urlApi, (data) => {
+        const result = []
+        if (Array.isArray(data.data)) {
+          for (const tipojuego of data.data) {
+            result.push(new ObjectSelect(tipojuego.id, tipojuego.name));
+          }
+        }
+        resolve(data);
+      },true, false);
     });
   }
 

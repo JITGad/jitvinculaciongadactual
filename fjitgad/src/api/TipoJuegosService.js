@@ -12,9 +12,17 @@ class TipoJuegosService {
         });
     }
 
-    getTipoJuegosJuegos() {
+    getTipoJuegosSelectMenu() {
         return new Promise((resolve) => {
-            FetchMaster.get(this.#urlApi, (data) => resolve(data), true, true);
+            FetchMaster.get(this.#urlApi, (data) => {
+                const result = [];
+                if (Array.isArray(data.data)) {
+                    for (const tipojuego of data.data) {
+                        result.push(new ObjectSelect(tipojuego.id, tipojuego.name));
+                    }
+                }
+                resolve(data);
+            }, true, false);
         });
     }
 

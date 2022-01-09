@@ -203,10 +203,10 @@ h1, .h1 {
     transition: ease-out 0.5s;
 }
 
-    .dashboard-nav-item i {
-        width: 36px;
+    .dashboard-nav-item i, .dashboard-nav-item svg {
+        margin-right: 20px;
         font-size: 19px;
-        margin-left: -40px;
+        margin-left: -30px;
     }
 
     .dashboard-nav-item:hover {
@@ -319,7 +319,7 @@ h1, .h1 {
         color: #875de5;
     }
 
-    .menu-toggle i {
+    .menu-toggle i, .menu-toggle svg {
         font-size: 20px;
     }
 

@@ -66,6 +66,9 @@ export function myClassInputType(type = "") {
         case "checkbox":
             myClass = "form-check-input";
             break;
+        case "color":
+            myClass = "form-control form-control-color"
+            break;
         default:
             myClass = "form-control";
             break;

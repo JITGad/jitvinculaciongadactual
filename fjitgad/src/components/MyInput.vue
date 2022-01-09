@@ -3,7 +3,6 @@
     <label class="form-label" v-show="type != 'checkbox'">{{ label }}</label>
     <input
       :type="type"
-      :value="modelValue"
       :placeholder="placeholder"
       :class="classInput"
       v-model="model"
@@ -42,8 +41,7 @@ export default {
   emits: ["update:modelValue"],
   props: {
     modelValue: {
-      type: [String, Boolean],
-      default: "",
+      type: [String, Number],
       required: true,
     },
     type: {
@@ -75,7 +73,7 @@ export default {
     disabled: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   setup(props, context) {
     const form = inject("my-form");
@@ -101,10 +99,12 @@ export default {
     const executevalidation = function (_value) {
       error.state = false;
       error.message = "";
-      if (_value.length > 0) {
-        modified.value = true;
-      }
-      let [_error, _error_msg] = Validate.initvalidate(_arrValidations, _value, props.equal);
+
+      let [_error, _error_msg] = Validate.initvalidate(
+        _arrValidations,
+        _value,
+        props.equal
+      );
 
       error.state = !_error;
       error.message = _error_msg;
@@ -121,6 +121,7 @@ export default {
         return props.modelValue;
       },
       set(value) {
+        modified.value = true;
         context.emit("update:modelValue", value);
       },
     });

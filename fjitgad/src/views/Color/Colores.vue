@@ -5,8 +5,6 @@
         <th scope="col">Id</th>
         <th scope="col">Nombre</th>
         <th scope="col">Estado</th>
-        <th scope="col">Tipo de actividad</th>
-        <th scope="col">Tipo de juego</th>
         <th scope="col">Editar</th>
         <my-autorization roles="Administrador">
           <th scope="col">Eliminar</th>
@@ -14,25 +12,26 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(juego, index) in Juegos" :key="index">
-        <th scope="row">{{ juego.idgame }}</th>
-        <td>{{ juego.name }}</td>
-        <td>{{ juego.state ? "Activo" : "Inactivo" }}</td>
-        <td align="center">{{ juego.tipoactividad }}</td>
-        <td align="center">{{ juego.tipojuego }}</td>
+      <tr v-for="(Color, index) in Colores" :key="index">
+        <th scope="row">{{ Color.idcolor }}</th>
+        <td>{{ Color.name }}</td>
+        <td>
+
+        </td>
+        <td>{{ Color.state ? "Activo" : "Inactivo" }}</td>
         <td align="center">
           <my-link-table
-            :object="juego"
+            :object="Color"
             icon="fas fa-pen"
-            @click="EditarJuego"
+            @click="EditarColor"
           />
         </td>
         <my-autorization roles="Administrador">
           <td align="center">
             <my-link-table
-              :object="juego"
+              :object="Color"
               icon="fas fa-trash"
-              @click="EliminarJuego"
+              @click="EliminarColor"
             />
           </td>
         </my-autorization>
@@ -50,7 +49,7 @@ import {
   onBeforeUnmount,
 } from "vue";
 import { useRouter } from "vue-router";
-import JuegosService from "../../api/JuegosService.js";
+import ColoresService from "../../api/ColoresService.js";
 import {
   confirm_action,
   message_error,
@@ -58,10 +57,10 @@ import {
 } from "../../util/Messages.js";
 
 export default {
-  name: "Juegos",
+  name: "Colores",
   setup(props, context) {
     const instance = getCurrentInstance();
-    const Juegos = ref([]);
+    const Colores = ref([]);
     const Router = useRouter();
     const list = inject("layout-list");
 
@@ -69,8 +68,8 @@ export default {
       list.bind({
         FetchData,
         uid: instance.uid,
-        title: "Mis Juegos",
-        url_nuevo: "/create/juego",
+        title: "Mis Colores",
+        url_nuevo: "/create/color",
       });
       await FetchData();
     });
@@ -81,29 +80,31 @@ export default {
 
     const FetchData = async (pActual = 1) => {
       list.setPageActual(pActual);
-      const response = await JuegosService.getJuegosAdministrador(pActual);
+      const response = await ColoresService.getColoresAdministrador(
+        pActual
+      );
       if (!response.status.error) {
         list.changeData(response.conteo, response.totalPaginas);
-        Juegos.value = response.data;
+        Colores.value = response.data;
       } else {
         message_error(response.status.message);
       }
     };
 
-    const Editarjuego = (juego) => {
+    const EditarColor = (Color) => {
       Router.push({
-        name: "EditarJuego",
-        params: { id: juego["idgame"] },
+        name: "EditarColor",
+        params: { id: Color["idactivitiestype"] },
       });
     };
 
-    const Eliminarjuego = (juego) => {
+    const EliminarColor = (Color) => {
       confirm_action(
         "Confirmación",
-        `Esta seguro de eliminar el juego ${juego.name}`,
+        `Esta seguro de eliminar la Color ${Color.name}`,
         async () => {
-          const response = await JuegosService.deleteJuego(
-            juego.idgame
+          const response = await ColoresService.deleteColor(
+            Color.idcolor
           );
           if (!response.status.error) {
             message_info("Registro eliminado correctamente", async () => {
@@ -118,9 +119,9 @@ export default {
     };
 
     return {
-      Juegos,
-      Editarjuego,
-      Eliminarjuego,
+      Colores,
+      EditarColor,
+      EliminarColor,
     };
   },
 };
