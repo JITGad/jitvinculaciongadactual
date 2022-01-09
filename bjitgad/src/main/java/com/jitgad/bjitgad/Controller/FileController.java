@@ -16,7 +16,7 @@ public class FileController {
     public FileController() {
     }
 
-    public Object[] createfile(String base64String, String type) throws UnsupportedEncodingException {
+    public Object[] createfile(String base64String, String type, String name) throws UnsupportedEncodingException {
 
         boolean band = false;
         UFile uf = new UFile();
@@ -48,7 +48,6 @@ public class FileController {
                 String ruta = Permt[1].toString() + type + "/";
                 System.out.println(ruta);
                 //COMPROBAR SI EXISTEN LAS CARPETAS DE IMAGENES O VIDEOS
-                // FIN COMPROBACIÓN CARPETAS IMAGENES O VIDEO
                 if (!new File(ruta).exists()) {  //se comprueba si la ruta existe o no
                     System.out.println("El directorio " + new File(ruta).getName() + " no existe");
                     System.out.println(ruta);
@@ -56,8 +55,8 @@ public class FileController {
                         System.out.println("Directorio creado");
 //                        System.out.println((uf.B64StringtoImageFile(strings[1], ruta + "ARCHIVOGENERADOJAVA.jpeg"))
 //                                ? "Imagen creada" : "Imagen no creada");
-                        band = uf.B64StringtoImageFile(strings[1], ruta + "ARCHIVOGENERADOJAVA.jpeg");
-                        return new Object[]{band, Permt[2], "ARCHIVOGENERADOJAVA.jpeg"};
+                        band = uf.B64StringtoImageFile(strings[1], ruta + name +"."+extension);
+                    return new Object[]{band, Permt[2], name +"."+extension};
                       //  return band;
                     } else {
                         System.out.println("No se ha podido crear " + new File(ruta).getName());
@@ -66,19 +65,21 @@ public class FileController {
                     // System.out.println("El directorio ya existe");
 //                    System.out.println((uf.B64StringtoImageFile(strings[1], ruta + "ARCHIVOGENERADOJAVA.jpeg"))
 //                            ? "Imagen creada" : "Imagen no creada");
-                    band = uf.B64StringtoImageFile(strings[1], ruta + "ARCHIVOGENERADOJAVA.jpeg");
-                    return new Object[]{band, Permt[2], "ARCHIVOGENERADOJAVA.jpeg"};
+                    band = uf.B64StringtoImageFile(strings[1], ruta + name +"."+extension);
+                    return new Object[]{band, Permt[2], name +"."+extension};
                 }
             } else {
                 System.out.println("No se ha podido crear archivo base " + new File(baseextraimage).getName());
-                return new Object[]{band, Permt[2], "ARCHIVOGENERADOJAVA.jpeg"};
+                return new Object[]{band, Permt[2], name +"."+extension};
             }
         }
-        return new Object[]{band, Permt[2], "ARCHIVOGENERADOJAVA.jpeg"};
+        return new Object[]{band, Permt[2], name +"."+extension};
 
     }
 
     public boolean createfilebase(String rutabase) {
+        // SI SON VARIAS CARPETAS, SE SEPARA LOS NOMBRES DE CADA CARPETA CON UN 
+        // String[] carpetas = rutabase.split("/");
         boolean band = false;
         if (!new File(rutabase).exists()) {
             if (!new File(rutabase).getName().equals("images")) {

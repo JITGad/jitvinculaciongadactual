@@ -7,10 +7,10 @@ package com.jitgad.bjitgad.Models;
 public class ActivitiestypeModel {
     
     private int idactivitiestype = 0;
-    private String name = "-2";
-    private String image = "-2";
-    private String creationdate = "-2";
-    private String updatedate = "-2";
+    private String name = "";
+    private String image = "";
+    private String creationdate = "";
+    private String updatedate = "";
     private boolean state = true;
 
     public ActivitiestypeModel() {

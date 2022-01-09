@@ -7,15 +7,15 @@ package com.jitgad.bjitgad.Models;
 public class UserModel {
 
     private int iduser = 0;
-    private String names = "-2";
-    private String last_name = "-2";
-    private String email = "-2";
-    private String password = "-2";
-    private String image = "-2";
-    private String birthdate = "-2";
-    private String rol = "-2";
-    private String creationdate = "-2";
-    private String updatedate = "-2";
+    private String names = "";
+    private String last_name = "";
+    private String email = "";
+    private String password = "";
+    private String image = "";
+    private String birthdate = "";
+    private String rol = "";
+    private String creationdate = "";
+    private String updatedate = "";
     private boolean state = true;
 
     public UserModel() {
