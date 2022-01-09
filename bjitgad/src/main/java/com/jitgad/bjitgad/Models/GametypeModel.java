@@ -6,29 +6,41 @@ package com.jitgad.bjitgad.Models;
  */
 public class GametypeModel {
     
-    private String name = "-2";
-    private String image = "-2";
-    private String audio_instructions = "-2";
-    private String creationdate = "-2";
-    private String updatedate = "-2";
-    private String state = "-2";
-    
+    private int idgametype = 0;
+    private String name = "";
+    private String image = "";
+    private String audio_instructions = "";
+    private String creationdate = "";
+    private String updatedate = "";
+    private boolean state = true;
+    private String shortname = "";
+          
+            
     public GametypeModel(){
         
     }
-    
     public GametypeModel(String _name,
             String _image,
             String _audio_instructions,
             String _creationdate,
             String _updatedate,
-            String _state){
+            boolean _state,
+            String _shortname){
     this.name=_name;
     this.image=_image;
     this.audio_instructions=_audio_instructions;
     this.creationdate=_creationdate;
     this.updatedate=_updatedate;
     this.state=_state;
+    this.shortname=_shortname;
+    }
+
+    public int getIdgametype() {
+        return idgametype;
+    }
+
+    public void setIdgametype(int idgametype) {
+        this.idgametype = idgametype;
     }
 
     public String getName() {
@@ -71,13 +83,23 @@ public class GametypeModel {
         this.updatedate = updatedate;
     }
 
-    public String getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(boolean state) {
         this.state = state;
     }
+
+    public String getShortname() {
+        return shortname;
+    }
+
+    public void setShortname(String shortname) {
+        this.shortname = shortname;
+    }
+
+    
     
     
     

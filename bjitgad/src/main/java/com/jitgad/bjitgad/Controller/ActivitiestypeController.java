@@ -42,10 +42,10 @@ public class ActivitiestypeController {
             atM.setState(Boolean.parseBoolean(state));
 
             if (atDAO.insertActividadestype(atM)) {
-                message = "The Activities type was inserted.";
+                message = "Registros insertados correctamente";
                 status = true;
             } else {
-                message = "The Activities type was not inserted";
+                message = "Registros no insertados, ocurrió un error!";
                 status = false;
             }
         } catch (UnsupportedEncodingException ex) {

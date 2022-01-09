@@ -6,6 +6,7 @@
 package com.jitgad.bjitgad.DataStaticBD;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonObject;
@@ -25,8 +26,10 @@ import org.json.JSONObject;
  * application.
  */
 public final class Methods {
-
-    public static final Gson gson = new Gson();
+    
+//    public static final GsonBuilder builder = new GsonBuilder().serializeNulls();
+//    public static final Gson gson = builder.create();
+    
 
     public static String[] getDataToJwt(String jwt) {
         String[] response;
@@ -322,7 +325,13 @@ public final class Methods {
 
     public static String objectToJsonString(Object obj) {
         String result;
+        
+        GsonBuilder builder = new GsonBuilder();
+        builder.serializeNulls();
+        Gson gson = builder.create();
+        
         result = gson.toJson(obj);
+        System.out.println(result);
         return result;
     }
 

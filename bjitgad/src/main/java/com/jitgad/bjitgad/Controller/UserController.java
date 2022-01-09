@@ -95,18 +95,25 @@ public class UserController {
             String rol, String state) {
         String message = "Correo inválido";
         boolean status = false;
+        boolean passband = false;
         um.setIduser(iduser);
         um.setNames(name);
         um.setLast_name(last_name);
         um.setEmail(email);
-        um.setPassword(encriptPassword(password));
+        if(!password.isEmpty())
+        {
+          um.setPassword(encriptPassword(password));
+        }
+        else{
+          passband = true;  
+        }
         um.setImage(image);
         um.setBirthdate(birthday);
         um.setRol(rol);
         um.setUpdatedate("NOW()");
         um.setState(Boolean.parseBoolean(state));
-        if (udao.comprobeUniqueEmail(um)) {
-            if (udao.updateUser(um)) {
+        if (udao.comprobeUniqueEmailUpdate(um)) {
+            if (udao.updateUser(um,passband)) {
                 message = "Usuario actualizado con éxito";
                 status = true;
             } else {
@@ -163,8 +170,8 @@ public class UserController {
     public String selectUserspage(int page) {
         return udao.selectUserspage(page);
     }
-    public String selectUserspagebyid(int page, int id) {
-        return udao.selectUserspagebyid(page, id);
+    public String selectUsersbyid(int id) {
+        return udao.selectUsersbyid(id);
     }
     
     public int CountingPageUsers() {
