@@ -4,6 +4,13 @@ import FetchMaster from "./FetchMaster";
 class AuthService {
     #urlApi = "users"
 
+    getUsuario(id = 0) {
+        return new Promise((resolve) => {
+          FetchMaster.get(`${this.#urlApi}/getUsersAdminbyid${encodeQueryString({ 'id': id })}`,
+            (data) => resolve(data), true);
+        });
+      }
+
     getUsuariosAdministrador(page = 1) {
         return new Promise((resolve) => {
             FetchMaster.get(`${this.#urlApi}/getUsersAdmin${encodeQueryString({ 'page': page })}`,
@@ -19,10 +26,16 @@ class AuthService {
 
     putUsuario(Usuario) {
         return new Promise((resolve) => {
-          FetchMaster.put(`${this.#urlApi}/${Usuario.iduser}`,
-            Usuario, (data) => resolve(data), undefined, true);
+            FetchMaster.put(`${this.#urlApi}/putuser`,
+                Usuario, (data) => resolve(data), undefined, true);
         });
-      }
+    }
+
+    deleteUsuario(iduser = 0) {
+        return new Promise(async (resolve) => {
+            await FetchMaster.delete(`${this.#urlApi}/deleteuser`, { 'iduser': iduser }, (data) => resolve(data));
+        });
+    }
 
     login(user) {
         return new Promise((resolve, reject) => {

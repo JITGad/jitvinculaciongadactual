@@ -1,7 +1,7 @@
 <template>
   <div class="mb-3">
     <div class="row">
-      <div class="col-10">
+      <div class="col-8">
         <label class="form-label">{{ label }}</label>
         <input
           v-if="!multiple"
@@ -23,8 +23,15 @@
           :accept="AcceptTypeInput"
         />
       </div>
-      <div class="col-2">
-        <img ref="imagenPrevisualizacion" class="responsive-image" />
+      <div class="col-4">
+        <img v-if="type == 'image'" ref="filePrev" class="responsive-image" />
+        <audio
+          v-if="type == 'audio'"
+          ref="filePrev"
+          controls="controls"
+        >
+          <source src="" type="audio/*" />
+        </audio>
       </div>
     </div>
     <div v-show="error.state" class="validation-message">
@@ -78,7 +85,7 @@ export default {
   setup(props, context) {
     const form = inject("my-form");
     const instance = getCurrentInstance();
-    const imagenPrevisualizacion = ref(null);
+    const filePrev = ref(null);
     const fileInput = ref(null);
     const _arrValidations =
       props.validations.length > 0
@@ -102,10 +109,10 @@ export default {
       (value, prevValue) => {
         if (value == null || value.length == 0) {
           fileInput.value.value = "";
-          imagenPrevisualizacion.value.src = "";
+          filePrev.value.src = "";
           return;
         }
-        imagenPrevisualizacion.value.src = value;
+        filePrev.value.src = value;
       }
     );
     const executevalidation = function (_value) {
@@ -131,12 +138,12 @@ export default {
       loading.value = true;
       const archivos = event.target.files;
       if (!archivos || !archivos.length) {
-        imagenPrevisualizacion.value.src = "";
+        filePrev.value.src = "";
         return;
       }
       const primerArchivo = archivos[0];
       const objectURL = URL.createObjectURL(primerArchivo);
-      imagenPrevisualizacion.value.src = objectURL;
+      filePrev.value.src = objectURL;
       const fileBase64 = await readFilesToBase64(
         props.multiple ? archivos : primerArchivo,
         props.multiple
@@ -145,9 +152,7 @@ export default {
       loading.value = false;
     }
     onMounted(function () {
-      imagenPrevisualizacion.value.src = props.modelValue
-        ? props.modelValue
-        : "";
+      filePrev.value.src = props.modelValue ? props.modelValue : "";
       form.bind({ validate, uid: instance.uid });
     });
     onBeforeUnmount(() => {
@@ -160,7 +165,7 @@ export default {
       changeFiles,
       classInput,
       blurEventHandler,
-      imagenPrevisualizacion,
+      filePrev,
       error,
       loading,
       fileInput,

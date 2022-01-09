@@ -17,6 +17,7 @@
         <slot></slot>
       </div>
     </div>
+    <my-footer/>
   </div>
 </template>
 
@@ -26,7 +27,7 @@ import { computed } from "vue";
 import Sidebar from "./Sidebar.vue";
 
 export default {
-  name: "MainLayout",
+  name: "MainLayoutAdmin",
   components: {
     Sidebar,
   },
@@ -35,7 +36,7 @@ export default {
     document.body.style.background = "";
     const store = useStore();
     const usuario = computed(() => {
-      return store.state.auth.user.names + store.state.auth.user.last_name;
+      return store.state.auth.user.names + " " + store.state.auth.user.last_name;
     });
     return {
       usuario,

@@ -80,7 +80,14 @@ export function acceptTypeInputFile(type = "") {
             _accept = "image/*";
             break;
         case "pdf":
-            _accept = "application/pdf"
+            _accept = "application/pdf";
+            break;
+        case "audio":
+            _accept = "audio/*";
+            break;
+        case "video":
+            _accept = "video/*";
+            break;
         default:
             break;
     }

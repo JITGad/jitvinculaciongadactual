@@ -68,6 +68,7 @@ class FetchMaster {
             'datatype': 'json',
             'type': type,
             success: function (data, textStatus, request) {
+                console.log(data);
                 callback({
                     'data': data.data,
                     'conteo': paginacion ? data.CountingPage : undefined,

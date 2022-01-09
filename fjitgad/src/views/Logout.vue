@@ -1,7 +1,9 @@
 <template>
+  <main-layout-juego>
     <div class="text-center">
-        <h1>Cerrando session</h1>
+      <h1>Cerrando session</h1>
     </div>
+  </main-layout-juego>
 </template>
 
 <script>
@@ -10,12 +12,12 @@ import { useRouter } from "vue-router";
 import { onMounted } from "vue";
 
 export default {
-    name: "Logout",
-    setup() {
-        const store = useStore();
-        const router = useRouter();
-        store.dispatch("auth/logout");
-        onMounted(() => router.push("/"));
-    },
-}
+  name: "Logout",
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    store.dispatch("auth/logout");
+    onMounted(() => router.push("/"));
+  },
+};
 </script>

@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <NavBar></NavBar>
+  <main-layout-juego>
     <div class="form-signin">
       <my-form @submit="handleLogin">
         <div class="text-center">
@@ -47,21 +46,18 @@
         </div>
       </my-form>
     </div>
-  </div>
+  </main-layout-juego>
 </template>
 
 <script>
 // @ is an alias to /src
-import NavBar from "@/components/NavBar.vue";
+
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 export default {
   name: "Login",
-  components: {
-    NavBar,
-  },
   setup(props, context) {
     const store = useStore();
     const router = useRouter();
@@ -105,11 +101,6 @@ export default {
 </script>
 
 <style>
-body {
-  padding-top: 40px;
-  padding-bottom: 40px;
-}
-
 .form-signin {
   width: 100%;
   max-width: 500px;

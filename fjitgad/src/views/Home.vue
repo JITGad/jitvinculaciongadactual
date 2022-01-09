@@ -1,5 +1,5 @@
 <template>
-  <NavBar></NavBar>
+  <main-layout-juego>
   <div class="temas">
     <Loading v-if="loading" />
     <div v-else>
@@ -12,10 +12,10 @@
       ></Actividad>
     </div>
   </div>
+  </main-layout-juego>
 </template>
 
 <script>
-import NavBar from "@/components/NavBar.vue";
 import Actividad from "@/components/Actividad.vue";
 import Loading from "@/components/Loading.vue";
 import ActividadesService from "../api/ActividadesService";
@@ -25,7 +25,6 @@ import { message_error } from "@/util/Messages";
 export default {
   name: "Home",
   components: {
-    NavBar,
     Actividad,
     Loading
   },

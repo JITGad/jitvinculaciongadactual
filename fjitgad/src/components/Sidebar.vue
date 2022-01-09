@@ -19,6 +19,11 @@
         icon="fas fa-user-alt"
         text="Usuarios"
       />
+      <my-router-link
+        to="/list/tipo-juegos"
+        icon="fas fa-layer-group"
+        text="Tipos de juegos"
+      />
     </my-autorization>
     <my-router-link
       to="/list/actividades"
