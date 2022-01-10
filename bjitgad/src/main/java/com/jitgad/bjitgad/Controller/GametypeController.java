@@ -52,7 +52,7 @@ public class GametypeController {
             message = "Registros insertados correctamente";
             status = true;
         } else {
-            message = "Registros no insertados, ocurrió un error!";
+            message = "Registros no insertados, datos erróneos para enviar a la base de datos!";
             status = false;
         }
         return new Object[]{status, message};
@@ -77,7 +77,7 @@ public class GametypeController {
             message = "Registros actualizados correctamente";
             status = true;
         } else {
-            message = "Los registros no fueron actualizados, ocurrió un error";
+            message = "Los registros no fueron actualizados, datos erróneos para enviar a la base de datos!";
             status = false;
         }
         return new Object[]{status, message};
@@ -92,7 +92,7 @@ public class GametypeController {
             message = "Registro eliminado correctamente";
             status = true;
         } else {
-            message = "El registro no fué eliminado, ocurrió un error";
+            message = "El registro no fué eliminado, datos erróneos para enviar a la base de datos!";
             status = false;
         }
 

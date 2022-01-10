@@ -57,7 +57,7 @@ public class GameController {
             message = "Registros insertados correctamente";
             status = true;
         }   else {
-                message = "Registros no insertados, ocurrió un error en la base de datos!";
+                message = "Registros no insertados, datos erróneos para enviar a la base de datos!";
                 status = false;
             }
 
@@ -81,7 +81,7 @@ public class GameController {
             message = "Registros actualizados correctamente";
             status = true;
         }   else {
-            message = "Los registros no fueron actualizados, ocurrió un error en la base de datos!";
+            message = "Los registros no fueron actualizados, datos erróneos para enviar a la base de datos!";
                 status = false;
             }
 
@@ -97,7 +97,7 @@ public class GameController {
             message = "Registro eliminado correctamente";
             status = true;
         }   else {
-            message = "El registro no fué eliminado, ocurrió un error en la base de datos!";
+            message = "El registro no fué eliminado, datos erróneos para enviar a la base de datos!";
             status = false;
             }
 

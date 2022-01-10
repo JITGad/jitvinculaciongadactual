@@ -24,14 +24,15 @@ public class ActivitiestypeController {
     }
 
     public Object[] InsertActivitiesTypeC(String name, String image,
-            String state) {
+            String state,
+            String realpath) {
         String message = "";
         boolean status = false;
 
         FileController fc = new FileController();
         Object[] CreateFile;
         try {
-            CreateFile = fc.createfile(image, "Activities",name);
+            CreateFile = fc.createfile(image, "Activities",name,realpath);
             if(Boolean.parseBoolean(CreateFile[0].toString())){
                 image = String.valueOf(CreateFile[1].toString() + "/" + name + "/" + CreateFile[2].toString());
             }
@@ -45,7 +46,7 @@ public class ActivitiestypeController {
                 message = "Registros insertados correctamente";
                 status = true;
             } else {
-                message = "Registros no insertados, ocurrió un error!";
+                message = "Registros no insertados, datos erróneos para enviar a la base de datos!";
                 status = false;
             }
         } catch (UnsupportedEncodingException ex) {
@@ -73,7 +74,7 @@ public class ActivitiestypeController {
             message = "Registros actualizados correctamente";
             status = true;
         } else {
-            message = "Los registros no fueron actualizados, ocurrió un error";
+            message = "Los registros no fueron actualizados, datos erróneos para enviar a la base de datos!";
             status = false;
         }
 
@@ -89,15 +90,15 @@ public class ActivitiestypeController {
             message = "Registro eliminado correctamente";
             status = true;
         } else {
-            message = "El registro no fué eliminado, ocurrió un error";
+            message = "El registro no fué eliminado, datos erróneos para enviar a la base de datos!";
             status = false;
         }
 
         return new Object[]{status, message};
     }
 
-    public String selectActivitiestype(){
-        return atDAO.selectActivitiestype();
+    public String selectActivitiestype(String realpath){
+        return atDAO.selectActivitiestype(realpath);
     }
 
     public String selectActivitiestypepage(int page) {

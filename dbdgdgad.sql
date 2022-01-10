@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 9.x                               */
-/* Created on:     7/12/2021 23:22:28                           */
+/* Created on:     9/1/2022 13:07:44                            */
 /*==============================================================*/
 
 
@@ -85,7 +85,9 @@ IDACTIVITIESTYPE
 /*==============================================================*/
 create table TBLCOLORTYPE (
    IDCOLORTYPE          SERIAL               not null,
-   COLOR                VARCHAR(30)          not null,
+   NAME                 VARCHAR(30)          not null,
+   RGB                  VARCHAR(20)          not null,
+   HTML                 VARCHAR(20)          not null,
    CREATIONDATE         DATE                 not null,
    UPDATEDATE           DATE                 not null,
    STATE                BOOL                 not null,
@@ -138,6 +140,7 @@ create table TBLGAME (
    CREATIONDATE         DATE                 not null,
    UPDATEDATE           DATE                 not null,
    STATE                BOOL                 not null,
+   LEVEL                INT4                 not null,
    constraint PK_TBLGAME primary key (IDGAME)
 );
 
@@ -211,6 +214,7 @@ create table TBLGAMETYPE (
    CREATIONDATE         DATE                 not null,
    UPDATEDATE           DATE                 not null,
    STATE                BOOL                 not null,
+   SHORTNAME            VARCHAR(50)          not null,
    constraint PK_TBLGAMETYPE primary key (IDGAMETYPE)
 );
 

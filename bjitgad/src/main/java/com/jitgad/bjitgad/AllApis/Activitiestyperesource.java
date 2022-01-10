@@ -6,6 +6,7 @@ import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.FileController;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Resources.ResponseAPI;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -28,7 +29,7 @@ import javax.ws.rs.core.UriInfo;
 public class Activitiestyperesource {
 
     @Context
-    private UriInfo context;
+    private HttpServletRequest request;
     //  private ActivitiestypeModel atM;
     private ActivitiestypeController atC;
     private AuthorizationController AuC;
@@ -49,7 +50,9 @@ public class Activitiestyperesource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getActivitiestype() {
-        String data = atC.selectActivitiestype();
+        String contextx = request.getServletContext().getRealPath("/");
+        System.out.println(contextx);
+        String data = atC.selectActivitiestype(contextx);
         String responseJson = Rapi.Response("Ocurrió un error", false, data);
         try {
             if (data.equals("{}")) {
@@ -71,7 +74,8 @@ public class Activitiestyperesource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getActivitiestypeAdmin")
     public Response getActivitiestypeAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
-        String responseJson = atC.selectActivitiestypepage(page);;
+        String data = atC.selectActivitiestypepage(page);
+        String responseJson = Rapi.Response("Ocurrió un error", false, data);
         int responseCountingPage = 0;
         try {
             //TOKENS
@@ -82,19 +86,19 @@ public class Activitiestyperesource {
                 Object[] Permt = AuC.VToken(Authorization);
                 if (Permt[0].equals(true)) {
                     responseCountingPage = atC.CountingPageActivitiesType();
-                    if (responseJson.equals("{}")) {
-                        responseJson = Rapi.AdminResponse("Información no encontrada", responseCountingPage, false, responseJson);
+                    if (data.equals("{}")) {
+                        responseJson = Rapi.AdminResponse("Información no encontrada", responseCountingPage, false, data);
                     } else {
-                        responseJson = Rapi.AdminResponse("Datos retornados correctamente", responseCountingPage, true, responseJson);
+                        responseJson = Rapi.AdminResponse("Datos retornados correctamente", responseCountingPage, true, data);
                     }
                 } else {
-                    responseJson = Rapi.AdminResponse(String.valueOf(Permt[1]), responseCountingPage, false, responseJson);
+                    responseJson = Rapi.AdminResponse(String.valueOf(Permt[1]), responseCountingPage, false, data);
                 }
             } else {
-                responseJson = Rapi.AdminResponse("Token vacio", responseCountingPage, false, responseJson);
+                responseJson = Rapi.AdminResponse("Token vacio", responseCountingPage, false, data);
             }
         } catch (Exception e) {
-            responseJson = Rapi.AdminResponse(e.getMessage(), responseCountingPage, false, responseJson);
+            responseJson = Rapi.AdminResponse(e.getMessage(), responseCountingPage, false, data);
         }
         return Response.ok(responseJson)
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
@@ -167,7 +171,8 @@ public class Activitiestyperesource {
                         responseatC = atC.InsertActivitiesTypeC(
                                 Methods.JsonToString(Jso.getAsJsonObject(), "name", ""),
                                 Methods.JsonToString(Jso.getAsJsonObject(), "image", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
+                                Methods.JsonToString(Jso.getAsJsonObject(), "state", ""),
+                                request.getServletContext().getRealPath("/"));
                         if (responseatC[0].equals(true)) {
                             responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), "{}");
                         } else {
@@ -294,12 +299,13 @@ public class Activitiestyperesource {
         String responseJson = "{\"status\":\"poken:" + data + "\"}";
         System.out.println("Ingresando postActivitiesimage...");
         JsonObject Jso = Methods.stringToJSON(data);
+         String contextx = request.getServletContext().getRealPath("/");
         try {
             if (Jso.size() > 0) {
                 String name = Methods.JsonToString(Jso.getAsJsonObject(), "name", "");
                 String base64 = Methods.JsonToString(Jso.getAsJsonObject(), "base64", "");
                 FileController fc = new FileController();
-                Object[] CreateFile = fc.createfile(base64, "Activities", name);
+                Object[] CreateFile = fc.createfile(base64, "Activities", name, contextx);
                 responseJson = Rapi.Response("Imagen creada con éxito", Boolean.parseBoolean(CreateFile[0].toString()), String.valueOf(CreateFile[1].toString() + "/" + name + "/" + CreateFile[2].toString()));
 
             } else {

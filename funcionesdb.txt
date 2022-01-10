@@ -364,8 +364,10 @@ AS $BODY$
 DECLARE root_xpath TEXT = '/colortype/';
   resul integer = 0;
   BEGIN
-    INSERT INTO public.tblcolortype(color,creationdate,updatedate,state)values
-			((xpath(root_xpath|| 'color/text()', message_xml))[1],
+    INSERT INTO public.tblcolortype(name,rgb,html,creationdate,updatedate,state)values
+			((xpath(root_xpath|| 'name/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'rgb/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'html/text()', message_xml))[1],
 			 (xpath(root_xpath|| 'creationdate/text()', message_xml))[1]::text::date,
 			(xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
 			(xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean);
@@ -376,7 +378,57 @@ ALTER FUNCTION public.insertcolortype(xml)
     OWNER TO fjdmwraxdzfdqi;
 
 ----------------DELETE----------------
+
+CREATE OR REPLACE FUNCTION public.deletecolortype(
+	message_xml xml)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE root_xpath TEXT = '/colortype/';
+  resul integer = 0;
+  BEGIN
+  	
+	DELETE FROM public.tblcolortype
+	WHERE 
+	idcolortype = (xpath(root_xpath|| 'idcolortype/text()', message_xml))[1]::text::integer;
+	return resul;
+	
+  END;
+$BODY$;
+ALTER FUNCTION public.deletecolortype(xml)
+    OWNER TO fjdmwraxdzfdqi;
+
+
 ----------------UPDATE----------------
+
+CREATE OR REPLACE FUNCTION public.updatecolortype(
+	message_xml xml)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE root_xpath TEXT = '/colortype/';
+  resul integer = 0;
+  BEGIN
+  	
+	UPDATE public.tblcolortype
+		SET 
+		name = (xpath(root_xpath|| 'name/text()', message_xml))[1],
+		rgb = (xpath(root_xpath|| 'rgb/text()', message_xml))[1],
+		html = (xpath(root_xpath|| 'html/text()', message_xml))[1],
+		updatedate = (xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
+		state = (xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean
+	WHERE 
+	idcolortype = (xpath(root_xpath|| 'idcolortype/text()', message_xml))[1]::text::integer;
+	return resul;
+	
+  END;
+$BODY$;
+ALTER FUNCTION public.updatecolortype(xml)
+    OWNER TO fjdmwraxdzfdqi;
 
 
 *************------------------------------------------------------------------------------*************

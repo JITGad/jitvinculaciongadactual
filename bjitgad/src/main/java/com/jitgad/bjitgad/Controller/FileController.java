@@ -16,7 +16,7 @@ public class FileController {
     public FileController() {
     }
 
-    public Object[] createfile(String base64String, String type, String name) throws UnsupportedEncodingException {
+    public Object[] createfile(String base64String, String type, String name, String realpath) throws UnsupportedEncodingException {
 
         boolean band = false;
         UFile uf = new UFile();
@@ -38,7 +38,7 @@ public class FileController {
                 break;
         }
 
-        String baserutarelativa = (uf.getPath() + "").replace('\\', '/');
+        String baserutarelativa = (realpath + "").replace('\\', '/');
         String baseextraimage = "";
 
         Object[] Permt = validateformat(extension, baserutarelativa);

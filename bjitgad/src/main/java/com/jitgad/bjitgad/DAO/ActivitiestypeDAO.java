@@ -24,20 +24,17 @@ public class ActivitiestypeDAO {
         uf = new UFile();
     }
 
-    public String selectActivitiestype() {
+    public String selectActivitiestype(String realpath) {
         sentence = "select * from tblactivitiestype where state = true";
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
-        try {
-            
+//        try {
             for (int i = 0; i < datos.size(); i++) {
-               // System.out.println(datos.get(i).getImage());
-               // System.out.println(uf.getPath() + datos.get(i).getImage());
-                datos.get(i).setImage((uf.getPath() + datos.get(i).getImage()).replace('\\', '/'));
+                datos.get(i).setImage((realpath + datos.get(i).getImage()).replace('\\', '/'));
             }
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(ActivitiestypeDAO.class.getName()).log(Level.SEVERE, null, ex);
-            
-        }
+//        } catch (UnsupportedEncodingException ex) {
+//            Logger.getLogger(ActivitiestypeDAO.class.getName()).log(Level.SEVERE, null, ex);
+//            
+//        }
          return Methods.objectToJsonString(datos);
     }
 

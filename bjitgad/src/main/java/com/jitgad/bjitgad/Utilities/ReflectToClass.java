@@ -57,7 +57,7 @@ public class ReflectToClass {
                     } catch (NoSuchFieldException e) { // Class When the field is not defined by the object,skip
                         continue;
                     }
-
+                    
                     Method method = obj.getMethod("set" + replace, type);
                     /**
                      * Determine the type of data read

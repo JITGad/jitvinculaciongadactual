@@ -6,30 +6,62 @@ package com.jitgad.bjitgad.Models;
  */
 public class ColortypeModel {
 
-    private String color = "-2";
-    private String creationdate = "-2";
-    private String updatedate = "-2";
-    private String state = "-2";
+    private int idcolortype = 0;
+    private String name = "";
+    private String rgb = "";
+    private String html = "";
+    private String creationdate = "";
+    private String updatedate = "";
+    private boolean state = true;
 
     public ColortypeModel() {
     }
     
-    public ColortypeModel(String _color,
+    public ColortypeModel(int _idcolortype,String _name,
+            String _rgb,
+            String _html,
             String _creationdate,
             String _updatedate,
-            String _state) {
-        this.color = _color;
+            boolean _state) {
+        this.idcolortype = _idcolortype;
+        this.name = _name;
+        this.rgb = _rgb;
+        this.html = _html;
         this.creationdate = _creationdate;
         this.updatedate = _updatedate;
         this.state = _state;
     }
 
-    public String getColor() {
-        return color;
+    public int getIdcolortype() {
+        return idcolortype;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setIdcolortype(int idcolortype) {
+        this.idcolortype = idcolortype;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getRgb() {
+        return rgb;
+    }
+
+    public void setRgb(String rgb) {
+        this.rgb = rgb;
+    }
+
+    public String getHtml() {
+        return html;
+    }
+
+    public void setHtml(String html) {
+        this.html = html;
     }
 
     public String getCreationdate() {
@@ -48,13 +80,15 @@ public class ColortypeModel {
         this.updatedate = updatedate;
     }
 
-    public String getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(boolean state) {
         this.state = state;
     }
+
+    
     
     
 }
