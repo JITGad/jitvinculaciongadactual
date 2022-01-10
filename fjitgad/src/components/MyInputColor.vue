@@ -1,20 +1,23 @@
 <template>
   <div class="mb-3">
     <label class="form-label">{{ label }}</label>
-    <select
-      :class="classSelect"
-      v-model="selected"
-      @blur="blurEventHandler($event)"
-    >
-      <option value="0" selected hidden disabled>--{{ placeholder }}--</option>
-      <my-option
-        v-for="(option, index) in data"
-        :value="option.id"
-        :text="option.text"
-        :actual="selected"
-        :key="index"
+    <div style="display: flex">
+      <input
+        type="color"
+        :title="placeholder"
+        :class="classInputColor"
+        v-model="model"
+        @blur="blurEventHandler($event)"
       />
-    </select>
+      <input
+        type="text"
+        :placeholder="placeholder"
+        :class="classInputText"
+        v-model="model"
+        @blur="blurEventHandler($event)"
+      />
+    </div>
+    <div v-show="help.length > 0" class="form-text">{{ help }}</div>
     <div v-show="error.state" class="validation-message">
       {{ error.message }}
     </div>
@@ -22,47 +25,43 @@
 </template>
 
 <script>
-import MyOption from "./MyOption.vue";
 import * as Validate from "../util/ValidationTypes.js";
 import {
+  myClassContainerInputType,
+  myClassInputType,
+} from "../util/Utilities.js";
+import {
+  onBeforeUnmount,
+  onMounted,
   inject,
   getCurrentInstance,
-  computed,
-  onMounted,
-  onBeforeUnmount,
   ref,
   reactive,
+  computed,
 } from "vue";
+
 export default {
-  name: "MySelect",
-  emits: ["update:modelValue"],
+  name: "MyInput",
   inheritAttrs: false,
-  components: {
-    MyOption,
-  },
+  emits: ["update:modelValue"],
   props: {
-    placeholder: {
-      type: String,
-      default: "Seleccione",
-    },
     modelValue: {
-      type: [String, Number],
-      default: "0",
+      type: [String, Boolean],
+      default: "",
       required: true,
-    },
-    type: {
-      type: String,
-      default: "string",
     },
     label: {
       type: String,
       default: "",
       required: true,
     },
-    data: {
-      type: Array,
-      default: [],
-      required: true,
+    help: {
+      type: String,
+      default: "",
+    },
+    placeholder: {
+      type: String,
+      default: "",
     },
     validations: {
       type: String,
@@ -81,30 +80,22 @@ export default {
       state: false,
     });
     const modified = ref(false);
-    const selected = computed({
-      get() {
-        return props.modelValue ? props.modelValue : "0";
-      },
-      set(value) {
-        modified.value = true;
-        context.emit("update:modelValue", props.type == "int" ? parseInt(value) : value );
-      },
-    });
-    const classSelect = computed(
+    const classInputColor = computed(
       () =>
-        `form-select ${modified.value ? "modified" : ""} ${
+        `form-control form-control-color ${modified.value ? "modified" : ""} ${
           error.state ? "invalid" : "valid"
         }`
     );
-
+    const classInputText = computed(
+      () =>
+        `form-control ${modified.value ? "modified" : ""} ${
+          error.state ? "invalid" : "valid"
+        }`
+    );
     const executevalidation = function (_value) {
       error.state = false;
       error.message = "";
-      modified.value = true;
-      let [_error, _error_msg] = Validate.initvalidate(
-        _arrValidations,
-        _value == "0" ? "" : _value
-      );
+      let [_error, _error_msg] = Validate.initvalidate(_arrValidations, _value);
 
       error.state = !_error;
       error.message = _error_msg;
@@ -112,25 +103,34 @@ export default {
       return !error.state;
     };
 
-    onMounted(function () {
-      form.bind({ validate, uid: instance.uid });
-    });
-
-    onBeforeUnmount(() => {
-      form.unbind(instance.uid);
-    });
-
-    function validate() {
-      return executevalidation(props.modelValue);
-    }
     const blurEventHandler = function (e) {
       executevalidation(e.target.value);
     };
+
+    const model = computed({
+      get() {
+        return props.modelValue;
+      },
+      set(value) {
+        modified.value = true;
+        context.emit("update:modelValue", value);
+      },
+    });
+    onMounted(function () {
+      form.bind({ validate, uid: instance.uid });
+    });
+    onBeforeUnmount(() => {
+      form.unbind(instance.uid);
+    });
+    function validate() {
+      return executevalidation(props.modelValue);
+    }
     return {
-      selected,
-      classSelect,
       blurEventHandler,
       error,
+      classInputColor,
+      classInputText,
+      model,
     };
   },
 };

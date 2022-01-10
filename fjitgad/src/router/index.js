@@ -43,6 +43,18 @@ const routes = [
         component: () => import('../views/TipoJuego/TipoJuegos.vue'),
         meta: { authorize: [Role.Admin] },
       },
+      {
+        path: 'colors',
+        name: 'Colores',
+        component: () => import('../views/Color/Colores.vue'),
+        meta: { authorize: [] },
+      },
+      {
+        path: 'juegos',
+        name: 'Juegos',
+        component: () => import('../views/Juego/Juegos.vue'),
+        meta: { authorize: [] },
+      },
     ]
   },
   {
@@ -68,7 +80,19 @@ const routes = [
         name: 'CrearTipoJuego',
         component: () => import('../views/TipoJuego/CrearTipoJuego.vue'),
         meta: { authorize: [] },
-      }
+      },
+      {
+        path: 'color',
+        name: 'CrearColor',
+        component: () => import('../views/Color/CrearColor.vue'),
+        meta: { authorize: [] },
+      },
+      {
+        path: 'juego',
+        name: 'CrearJuego',
+        component: () => import('../views/Juego/CrearJuego.vue'),
+        meta: { authorize: [] },
+      },
     ]
   },
   {
@@ -94,7 +118,19 @@ const routes = [
         name: 'EditarTipoJuego',
         component: () => import('../views/TipoJuego/EditarTipoJuego.vue'),
         meta: { authorize: [] },
-      }
+      },
+      {
+        path: 'color/:id',
+        name: 'EditarColor',
+        component: () => import('../views/Color/EditarColor.vue'),
+        meta: { authorize: [] },
+      },
+      {
+        path: 'juego',
+        name: 'EditarJuego',
+        component: () => import('../views/Juego/EditarJuego.vue'),
+        meta: { authorize: [] },
+      },
     ]
   },
   {

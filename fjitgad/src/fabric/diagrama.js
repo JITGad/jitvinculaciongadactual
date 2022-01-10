@@ -1,4 +1,4 @@
-import fabric from "./customFabric.js";
+import fabric from "./extendFabric.js";
 
 fabric.Diagram = fabric.util.createClass(fabric.Canvas, {
     initialize: function (elContainer, properties) {
