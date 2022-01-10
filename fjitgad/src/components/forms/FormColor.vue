@@ -1,7 +1,6 @@
 <template>
   <div v-if="Loading">Cargando...</div>
   <div v-else>
-    {{model.name}}
     <my-input
       v-model="model.name"
       type="text"
@@ -10,7 +9,7 @@
       validations="requerido"
     />
     <my-input-color
-      v-model="model.hexcode"
+      v-model="model.html"
       label="Color en hexadecimal"
       placeholder="Escriba el nombre del color"
       validations="requerido"
@@ -35,7 +34,7 @@ export default {
   name: "FormColor",
   emits: ["submit"],
   props: {
-    idcolor: {
+    idcolortype: {
       type: Number,
       default: 0,
     },
@@ -50,9 +49,10 @@ export default {
   },
   setup(props, context) {
     const InitialState = {
-      idcolor: 0,
+      idcolortype: 0,
+      rgb: "",
       name: "",
-      hexcode: "#000000",
+      html: "#000000",
       state: true,
     };
     const Loading = ref(false);
@@ -68,9 +68,9 @@ export default {
         "url-next": "/list/colors",
         "is-edit": props.edit,
       });
-      if (props.idcolor > 0) {
+      if (props.idcolortype > 0) {
         setLoading(true);
-        const response = await ColoresService.getColor(props.idcolor);
+        const response = await ColoresService.getColor(props.idcolortype);
         if (!response.status.error) {
           Object.assign(model, response.data);
           setLoading(false);

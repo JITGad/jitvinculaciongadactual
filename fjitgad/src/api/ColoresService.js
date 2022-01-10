@@ -3,7 +3,7 @@ import { encodeQueryString } from "../util/Utilities.js";
 
 class ColoresService {
 
-  #urlApi = "color"
+  #urlApi = "colortype"
 
   getColor(colorid = 0) {
     return new Promise((resolve) => {
@@ -21,20 +21,20 @@ class ColoresService {
 
   postColor(Color) {
     return new Promise((resolve) => {
-      FetchMaster.post(`${this.#urlApi}/postcolor`, Color, (data) => resolve(data), undefined, true);
+      FetchMaster.post(`${this.#urlApi}/postColortype`, Color, (data) => resolve(data), undefined, true);
     });
   }
 
   putColor(Color) {
     return new Promise((resolve) => {
-      FetchMaster.put(`${this.#urlApi}/Putcolor`,
+      FetchMaster.put(`${this.#urlApi}/putColortype`,
         Color, (data) => resolve(data), undefined, true);
     });
   }
 
   deleteColor(idColor = 0) {
     return new Promise(async (resolve) => {
-      await FetchMaster.delete(`${this.#urlApi}/Deletecolor`, { 'idcolor': idColor }, (data) => resolve(data));
+      await FetchMaster.delete(`${this.#urlApi}/deleteColortype`, { 'idcolortype': idColor }, (data) => resolve(data));
     });
   }
 }
