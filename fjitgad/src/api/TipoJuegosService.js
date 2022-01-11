@@ -3,7 +3,7 @@ import { encodeQueryString } from "../util/Utilities.js";
 
 class TipoJuegosService {
 
-    #urlApi = "gametype"
+    #urlApi = "webresources/gametype"
 
     getTipoJuego(idtipo = 0) {
         return new Promise((resolve) => {

@@ -3,7 +3,7 @@ import { encodeQueryString } from "../util/Utilities.js";
 
 class ColoresService {
 
-  #urlApi = "colortype"
+  #urlApi = "webresources/colortype"
 
   getColor(colorid = 0) {
     return new Promise((resolve) => {

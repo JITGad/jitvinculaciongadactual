@@ -4,7 +4,7 @@ import ObjectSelect from "../util/ObjectSelect.js";
 
 class ActividadesService {
 
-  #urlApi = "activitiestype"
+  #urlApi = "webresources/activitiestype"
 
   getActividad(activityid = 0) {
     return new Promise((resolve) => {

@@ -41,7 +41,7 @@ export default {
   emits: ["update:modelValue"],
   props: {
     modelValue: {
-      type: [String, Number],
+      type: [String, Number, Boolean],
       required: true,
     },
     type: {

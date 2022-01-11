@@ -62,7 +62,7 @@ class FetchMaster {
         encode = FetchMaster.JSONENCODE, authorize = false, paginacion = false) {
 
         const _this = this;
-        const headers = {};
+        const headers = {'Access-Control-Allow-Origin': '*'};
         const options = {
             'url': this.#baseUrl + url,
             'datatype': 'json',
@@ -103,7 +103,7 @@ class FetchMaster {
         }
 
         options['headers'] = headers;
-
+console.log(options);
         $.ajax(options);
     }
 

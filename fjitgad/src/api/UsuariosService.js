@@ -2,7 +2,7 @@ import { encodeQueryString } from "../util/Utilities";
 import FetchMaster from "./FetchMaster";
 
 class AuthService {
-    #urlApi = "users"
+    #urlApi = "webresources/users"
 
     getUsuario(id = 0) {
         return new Promise((resolve) => {
