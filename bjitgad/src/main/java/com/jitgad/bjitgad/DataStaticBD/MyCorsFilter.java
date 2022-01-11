@@ -92,7 +92,7 @@ public final class MyCorsFilter implements Filter {
  
 	public void init(FilterConfig filterConfig) throws ServletException {
 		parseAndStore("*", "GET,POST,HEAD,OPTIONS",
-				"Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers",
+				"Origin,Accept,X-Requested-With,Content-Type,Authorization,Access-Control-Request-Method,Access-Control-Request-Headers",
 				"", "true", "1800", "true");
 		if (filterConfig != null) {
 			String configAllowedOrigins = filterConfig.getInitParameter("cors.allowed.origins");
@@ -487,7 +487,7 @@ public final class MyCorsFilter implements Filter {
 	public static final Collection<String> SIMPLE_HTTP_REQUEST_HEADERS = new HashSet(
 			Arrays.asList(new String[] { "Accept", "Accept-Language", "Content-Language" }));
 	public static final Collection<String> SIMPLE_HTTP_RESPONSE_HEADERS = new HashSet(Arrays.asList(new String[] {
-			"Cache-Control", "Content-Language", "Content-Type", "Expires", "Last-Modified", "Pragma" }));
+			"Cache-Control", "Content-Language", "Content-Type", "Expires", "Last-Modified", "Pragma", "Authorization" }));
 	public static final Collection<String> SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES = new HashSet(
 			Arrays.asList(new String[] { "application/x-www-form-urlencoded", "multipart/form-data", "text/plain" }));
 	public static final String DEFAULT_ALLOWED_ORIGINS = "*";
