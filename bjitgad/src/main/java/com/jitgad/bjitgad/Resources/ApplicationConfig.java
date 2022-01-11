@@ -34,6 +34,6 @@ public class ApplicationConfig extends Application {
         resources.add(com.jitgad.bjitgad.AllApis.Questionsresource.class);
         resources.add(com.jitgad.bjitgad.AllApis.Userresource.class);
        // resources.add(com.jitgad.bjitgad.DataStaticBD.Cors.class);
-        resources.add(com.jitgad.bjitgad.DataStaticBD.Cors.class);
+        resources.add(com.jitgad.bjitgad.DataStaticBD.MyCorsFilter.class);
     } 
 }

@@ -26,8 +26,9 @@ import org.apache.tomcat.util.res.StringManager;
  *
  * @author jorge
  */
-public class MyCorsFilter {
-    private static final Log log = LogFactory.getLog(MyCorsFilter.class);
+
+public final class MyCorsFilter implements Filter {
+	private static final Log log = LogFactory.getLog(MyCorsFilter.class);
 	private static final StringManager sm = StringManager.getManager("org.apache.catalina.filters");
 	private final Collection<String> allowedOrigins;
 	private boolean anyOriginAllowed;
@@ -58,10 +59,40 @@ public class MyCorsFilter {
 		this.allowedHttpHeaders = new HashSet();
 		this.exposedHeaders = new HashSet();
 	}
-        
-        public void init(FilterConfig filterConfig) throws ServletException {
+ 
+	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+			throws IOException, ServletException {
+		if ((!(servletRequest instanceof HttpServletRequest)) || (!(servletResponse instanceof HttpServletResponse))) {
+			throw new ServletException(sm.getString("corsFilter.onlyHttp"));
+		}
+		HttpServletRequest request = (HttpServletRequest) servletRequest;
+		HttpServletResponse response = (HttpServletResponse) servletResponse;
+ 
+		CORSRequestType requestType = checkRequestType(request);
+		if (this.decorateRequest) {
+			decorateCORSProperties(request, requestType);
+		}
+		switch (requestType) {
+		case SIMPLE:
+			handleSimpleCORS(request, response, filterChain);
+			break;
+		case ACTUAL:
+			handleSimpleCORS(request, response, filterChain);
+			break;
+		case PRE_FLIGHT:
+			handlePreflightCORS(request, response, filterChain);
+			break;
+		case NOT_CORS:
+			handleNonCORS(request, response, filterChain);
+			break;
+		default:
+			handleInvalidCORS(request, response, filterChain);
+		}
+	}
+ 
+	public void init(FilterConfig filterConfig) throws ServletException {
 		parseAndStore("*", "GET,POST,HEAD,OPTIONS",
-				"Origin,Accept,X-Requested-With,Authorization,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers",
+				"Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers",
 				"", "true", "1800", "true");
 		if (filterConfig != null) {
 			String configAllowedOrigins = filterConfig.getInitParameter("cors.allowed.origins");
@@ -456,7 +487,7 @@ public class MyCorsFilter {
 	public static final Collection<String> SIMPLE_HTTP_REQUEST_HEADERS = new HashSet(
 			Arrays.asList(new String[] { "Accept", "Accept-Language", "Content-Language" }));
 	public static final Collection<String> SIMPLE_HTTP_RESPONSE_HEADERS = new HashSet(Arrays.asList(new String[] {
-			"Cache-Control", "Content-Language", "Content-Type", "Expires", "Last-Modified", "Pragma", "Authorization" }));
+			"Cache-Control", "Content-Language", "Content-Type", "Expires", "Last-Modified", "Pragma" }));
 	public static final Collection<String> SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES = new HashSet(
 			Arrays.asList(new String[] { "application/x-www-form-urlencoded", "multipart/form-data", "text/plain" }));
 	public static final String DEFAULT_ALLOWED_ORIGINS = "*";
@@ -473,5 +504,4 @@ public class MyCorsFilter {
 	public static final String PARAM_CORS_ALLOWED_METHODS = "cors.allowed.methods";
 	public static final String PARAM_CORS_PREFLIGHT_MAXAGE = "cors.preflight.maxage";
 	public static final String PARAM_CORS_REQUEST_DECORATE = "cors.request.decorate";
-
 }
