@@ -52,7 +52,7 @@ public class Activitiestyperesource {
     public Response getActivitiestype() {
         String contextx = request.getServletContext().getRealPath("/");
         System.out.println(contextx);
-        String data = atC.selectActivitiestype(contextx);
+        String data = atC.selectActivitiestype();
         String responseJson = Rapi.Response("Ocurrió un error", false, data);
         try {
             if (data.equals("{}")) {

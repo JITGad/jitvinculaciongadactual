@@ -97,8 +97,8 @@ public class ActivitiestypeController {
         return new Object[]{status, message};
     }
 
-    public String selectActivitiestype(String realpath){
-        return atDAO.selectActivitiestype(realpath);
+    public String selectActivitiestype(){
+        return atDAO.selectActivitiestype();
     }
 
     public String selectActivitiestypepage(int page) {

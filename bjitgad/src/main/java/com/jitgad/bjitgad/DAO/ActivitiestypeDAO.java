@@ -3,6 +3,7 @@ package com.jitgad.bjitgad.DAO;
 import com.jitgad.bjitgad.DataStaticBD.Conection;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
+import com.jitgad.bjitgad.Utilities.InetAddressUtil;
 import com.jitgad.bjitgad.Utilities.UFile;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -18,18 +19,21 @@ public class ActivitiestypeDAO {
     Conection con;
     String sentence;
     UFile uf;
+    InetAddressUtil ipreal;
 
     public ActivitiestypeDAO() {
         con = new Conection();
         uf = new UFile();
+        ipreal = new InetAddressUtil();
     }
 
-    public String selectActivitiestype(String realpath) {
+    public String selectActivitiestype() {
+        
         sentence = "select * from tblactivitiestype where state = true";
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
-//        try {
+////        try {
             for (int i = 0; i < datos.size(); i++) {
-                datos.get(i).setImage((realpath + datos.get(i).getImage()).replace('\\', '/'));
+                datos.get(i).setImage((ipreal.getHostIp()+ ":8080/bjitgad/" + datos.get(i).getImage()).replace('\\', '/'));
             }
 //        } catch (UnsupportedEncodingException ex) {
 //            Logger.getLogger(ActivitiestypeDAO.class.getName()).log(Level.SEVERE, null, ex);
