@@ -18,6 +18,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.ext.Provider;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.apache.tomcat.util.res.StringManager;
@@ -27,6 +28,7 @@ import org.apache.tomcat.util.res.StringManager;
  * @author jorge
  */
 
+@Provider
 public final class MyCorsFilter implements Filter {
 	private static final Log log = LogFactory.getLog(MyCorsFilter.class);
 	private static final StringManager sm = StringManager.getManager("org.apache.catalina.filters");
@@ -52,14 +54,15 @@ public final class MyCorsFilter implements Filter {
 	public static final String HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST = "cors.isCorsRequest";
 	public static final String HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE = "cors.request.type";
 	public static final String HTTP_REQUEST_ATTRIBUTE_REQUEST_HEADERS = "cors.request.headers";
- 
+        
 	public MyCorsFilter() {
 		this.allowedOrigins = new HashSet();
 		this.allowedHttpMethods = new HashSet();
 		this.allowedHttpHeaders = new HashSet();
 		this.exposedHeaders = new HashSet();
 	}
- 
+        
+        @Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
 		if ((!(servletRequest instanceof HttpServletRequest)) || (!(servletResponse instanceof HttpServletResponse))) {
@@ -89,7 +92,7 @@ public final class MyCorsFilter implements Filter {
 			handleInvalidCORS(request, response, filterChain);
 		}
 	}
- 
+        
 	public void init(FilterConfig filterConfig) throws ServletException {
 		parseAndStore("*", "GET,POST,HEAD,OPTIONS",
 				"Origin,Accept,X-Requested-With,Content-Type,Authorization,Access-Control-Request-Method,Access-Control-Request-Headers",
@@ -504,4 +507,5 @@ public final class MyCorsFilter implements Filter {
 	public static final String PARAM_CORS_ALLOWED_METHODS = "cors.allowed.methods";
 	public static final String PARAM_CORS_PREFLIGHT_MAXAGE = "cors.preflight.maxage";
 	public static final String PARAM_CORS_REQUEST_DECORATE = "cors.request.decorate";
+        
 }
