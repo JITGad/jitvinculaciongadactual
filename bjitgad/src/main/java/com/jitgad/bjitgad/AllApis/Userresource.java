@@ -7,7 +7,6 @@ import com.jitgad.bjitgad.DAO.UserDAO;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.UserModel;
-import com.jitgad.bjitgad.Models.UserTokenModel;
 import com.jitgad.bjitgad.Resources.ResponseAPI;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import javax.ws.rs.Consumes;
@@ -130,12 +129,24 @@ public class Userresource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response logIn(String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-        UserTokenModel user;
-        user = (UserTokenModel) Methods.StringJsonToObject(data, UserTokenModel.class);
         try {
-            responseData = userC.LogIn(user);
-            responseData.setData(userC.BuildToken((UserTokenModel) responseData.getData()));
-
+            JsonObject Jso = Methods.stringToJSON(data);
+            if (Jso.size() > 0) {
+                UserController userCon = new UserController();
+    
+                Object[] responseLogIn = userCon.LogIn(Methods.JsonToString(Jso.getAsJsonObject(), "email", "{}"),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "password", ""));
+    
+                responseData.setMessage(String.valueOf(responseLogIn[1]));
+                responseData.setFlag(Boolean.valueOf(responseLogIn[0].toString()));
+                responseData.setData((new UserDAO().userDataJson((UserModel) responseLogIn[2],
+                        Methods.JsonToString(Jso.getAsJsonObject(), "recuerdame", "{}"))));
+                
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+            
+            responseData.setMessage("Información no encontrada");
+            
             return Response.ok(Methods.objectToJsonString(responseData)).build();
         } catch (Exception e) {
             responseData.setFlag(false);

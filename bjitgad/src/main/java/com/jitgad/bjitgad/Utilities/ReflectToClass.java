@@ -1,7 +1,6 @@
 
 package com.jitgad.bjitgad.Utilities;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -9,11 +8,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  *
@@ -37,7 +32,6 @@ public class ReflectToClass {
         try {
             ArrayList<T> arrayList = new ArrayList<>();
             ResultSetMetaData metaData = rs.getMetaData();
-            List<Field> fields = getAllFields(obj);
             /**
              * Get total columns
              */
@@ -59,10 +53,8 @@ public class ReflectToClass {
                     String replace = name.replaceFirst(substring, substring.toUpperCase());
                     Class<?> type = null;
                     try {
-                        //type = obj.getDeclaredField(name).getType();// Get field type
-                        type = fields.stream().filter(field -> field.getName().equals(name)).findAny().orElse(null).getType();
-                        
-                    } catch (Exception e) { // Class When the field is not defined by the object,skip
+                        type = obj.getDeclaredField(name).getType();// Get field type
+                    } catch (NoSuchFieldException e) { // Class When the field is not defined by the object,skip
                         continue;
                     }
                     
@@ -131,11 +123,4 @@ public class ReflectToClass {
         return builder.toString();
     }
     
-    public static List<Field> getAllFields(Class<?> type) {
-        List<Field> fields = new ArrayList<>();
-        for (Class<?> c = type; c != null; c = c.getSuperclass()) {
-            fields.addAll(Arrays.asList(c.getDeclaredFields()));
-        }
-        return fields;
-    }
 }

@@ -4,7 +4,7 @@ import com.jitgad.bjitgad.DataStaticBD.Conection;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.UserModel;
-import com.jitgad.bjitgad.Models.UserTokenModel;
+import com.jitgad.bjitgad.Models.UserTokenRModel;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class UserDAO {
     public UserDAO() {
         con = new Conection();
     }
-
+    
     public String selectUserspage(int page) {
         sentence = "select iduser,names,last_name, email,image, birthdate, rol, creationdate, updatedate, state from tbluser order by iduser asc limit 10 offset " + (page * 10 - 10);
         ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
@@ -36,7 +36,7 @@ public class UserDAO {
     }
 
     public String selectUsersbyid(int id) {
-        sentence = "select iduser,names,last_name, email,image, birthdate, rol, state from tbluser where iduser =" + id;
+        sentence = "select iduser,names,last_name, email,image, birthdate, rol, state from tbluser where iduser ="+ id;
         ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
         if (datos.size() > 0) {
             return Methods.objectToJsonString(datos.get(0));
@@ -66,15 +66,58 @@ public class UserDAO {
         return usr;
     }
 
+    public UserTokenRModel userDataJson(UserModel usr, String rec) {
+        UserTokenRModel utrm = new UserTokenRModel();
+        String key = Configuration.dbprivatekey;
+        long tiempo = System.currentTimeMillis();
+        long tiempoext = 0;
+        if (!rec.isEmpty()) {
+            if (rec.equals(true)) {
+                // 10 días
+                tiempoext = 864000000;
+            } else {
+                // 1 día
+                tiempoext = 86400000;
+            }
+        } else {
+            // 1 día
+            tiempoext = 86400000;
+        }
+//        System.out.println(new Date(tiempo) +"-" + new Date(tiempo+900000));
+        String jwt = Jwts.builder()
+                .signWith(SignatureAlgorithm.HS256, key)
+                .setSubject(String.valueOf(usr.getIduser()))
+                .setIssuedAt(new Date(tiempo))
+                //900000 que equivale a 15 minutos
+                //   .setExpiration(new Date(tiempo + 900000))
+                .setExpiration(new Date(tiempo + tiempoext))
+                .claim("email", usr.getEmail())
+                .claim("rol", usr.getRol())
+                .compact();
+
+        utrm.setIduser(usr.getIduser());
+        utrm.setNames(usr.getNames());
+        utrm.setLast_name(usr.getLast_name());
+        utrm.setEmail(usr.getEmail());
+        utrm.setImage(usr.getImage());
+        utrm.setRol(usr.getRol());
+        utrm.setUser_token(jwt);
+        
+        return utrm;
+    }
+
     public boolean comprobeUniqueEmail(UserModel usr) {
         String sentency = String.format("select * from tbluser where email='%s';", usr.getEmail());
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
-
+    
     public boolean comprobeUniqueEmailUpdate(UserModel usr) {
         String sentency = String.format("select * from tbluser where email='%s' and iduser != '%s';", usr.getEmail(), usr.getIduser());
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
+    
+    
+    
 
     public boolean validatetoken(String iduser, String email) {
         String sentency = String.format("select * from tbluser where email='%s' and iduser='%s';", email, iduser);
@@ -114,7 +157,7 @@ public class UserDAO {
                 + "<rol>" + userM.getRol() + "</rol>"
                 + "<updatedate>" + userM.getUpdatedate() + "</updatedate>"
                 + "<state>" + userM.getState() + "</state>"
-                + "<passband>" + userM.getState() + "</passband>"
+                + "<passband>" + userM.getState() + "</passband>"        
                 + "</user>");
 
         String sentency = "Select * from updateUser('" + structure + "')";
