@@ -4,6 +4,7 @@ import com.jitgad.bjitgad.DataStaticBD.Conection;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.UserModel;
+import com.jitgad.bjitgad.Models.UserTokenModel;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class UserDAO {
         return usr;
     }
 
-    public String userDataJson(UserModel usr, String rec) {
+    public UserTokenModel userDataJson(UserModel usr, String rec) {
         String key = Configuration.dbprivatekey;
         long tiempo = System.currentTimeMillis();
         long tiempoext = 0;
@@ -92,16 +93,19 @@ public class UserDAO {
                 .claim("email", usr.getEmail())
                 .claim("rol", usr.getRol())
                 .compact();
-        JsonObjectBuilder jsoB = Json.createObjectBuilder();
-        jsoB.add("iduser", usr.getIduser());
-        jsoB.add("names", usr.getNames());
-        jsoB.add("last_name", usr.getLast_name());
-        jsoB.add("email", usr.getEmail());
-        jsoB.add("image", usr.getImage());
-        jsoB.add("rol", usr.getRol());
-        jsoB.add("user_token", jwt);
-        javax.json.JsonObject jsonObj = jsoB.build();
-        return jsonObj.toString();
+//        JsonObjectBuilder jsoB = Json.createObjectBuilder();
+//        jsoB.add("iduser", usr.getIduser());
+//        jsoB.add("names", usr.getNames());
+//        jsoB.add("last_name", usr.getLast_name());
+//        jsoB.add("email", usr.getEmail());
+//        jsoB.add("image", usr.getImage());
+//        jsoB.add("rol", usr.getRol());
+//        jsoB.add("user_token", jwt);
+//        javax.json.JsonObject jsonObj = jsoB.build();
+        UserTokenModel jsouserB = (UserTokenModel) usr;
+        jsouserB.setUser_token(sentence);
+        
+        return jsouserB;
     }
 
     public boolean comprobeUniqueEmail(UserModel usr) {

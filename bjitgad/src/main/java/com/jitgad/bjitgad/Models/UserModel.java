@@ -16,6 +16,7 @@ public class UserModel {
     private String rol = "";
     private String creationdate = "";
     private String updatedate = "";
+    
     private boolean state = true;
 
     public UserModel() {

@@ -139,8 +139,8 @@ public class Userresource {
     
                 responseData.setMessage(String.valueOf(responseLogIn[1]));
                 responseData.setFlag(Boolean.valueOf(responseLogIn[0].toString()));
-                responseData.setData((new UserDAO().userDataJson((UserModel) responseLogIn[2],
-                        Methods.JsonToString(Jso.getAsJsonObject(), "recuerdame", "{}"))));
+                responseData.setData(Methods.objectToJsonString((new UserDAO().userDataJson((UserModel) responseLogIn[2],
+                        Methods.JsonToString(Jso.getAsJsonObject(), "recuerdame", "{}")))));
                 
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
             }
