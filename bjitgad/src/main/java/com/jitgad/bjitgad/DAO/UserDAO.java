@@ -25,7 +25,7 @@ public class UserDAO {
     public UserDAO() {
         con = new Conection();
     }
-    
+
     public String selectUserspage(int page) {
         sentence = "select iduser,names,last_name, email,image, birthdate, rol, creationdate, updatedate, state from tbluser order by iduser asc limit 10 offset " + (page * 10 - 10);
         ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
@@ -36,7 +36,7 @@ public class UserDAO {
     }
 
     public String selectUsersbyid(int id) {
-        sentence = "select iduser,names,last_name, email,image, birthdate, rol, state from tbluser where iduser ="+ id;
+        sentence = "select iduser,names,last_name, email,image, birthdate, rol, state from tbluser where iduser =" + id;
         ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
         if (datos.size() > 0) {
             return Methods.objectToJsonString(datos.get(0));
@@ -66,60 +66,15 @@ public class UserDAO {
         return usr;
     }
 
-    public UserTokenModel userDataJson(UserModel usr, String rec) {
-        String key = Configuration.dbprivatekey;
-        long tiempo = System.currentTimeMillis();
-        long tiempoext = 0;
-        if (!rec.isEmpty()) {
-            if (rec.equals(true)) {
-                // 10 días
-                tiempoext = 864000000;
-            } else {
-                // 1 día
-                tiempoext = 86400000;
-            }
-        } else {
-            // 1 día
-            tiempoext = 86400000;
-        }
-//        System.out.println(new Date(tiempo) +"-" + new Date(tiempo+900000));
-        String jwt = Jwts.builder()
-                .signWith(SignatureAlgorithm.HS256, key)
-                .setSubject(String.valueOf(usr.getIduser()))
-                .setIssuedAt(new Date(tiempo))
-                //900000 que equivale a 15 minutos
-                //   .setExpiration(new Date(tiempo + 900000))
-                .setExpiration(new Date(tiempo + tiempoext))
-                .claim("email", usr.getEmail())
-                .claim("rol", usr.getRol())
-                .compact();
-//        JsonObjectBuilder jsoB = Json.createObjectBuilder();
-//        jsoB.add("iduser", usr.getIduser());
-//        jsoB.add("names", usr.getNames());
-//        jsoB.add("last_name", usr.getLast_name());
-//        jsoB.add("email", usr.getEmail());
-//        jsoB.add("image", usr.getImage());
-//        jsoB.add("rol", usr.getRol());
-//        jsoB.add("user_token", jwt);
-//        javax.json.JsonObject jsonObj = jsoB.build();
-        UserTokenModel jsouserB = (UserTokenModel) usr;
-        jsouserB.setUser_token(sentence);
-        
-        return jsouserB;
-    }
-
     public boolean comprobeUniqueEmail(UserModel usr) {
         String sentency = String.format("select * from tbluser where email='%s';", usr.getEmail());
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
-    
+
     public boolean comprobeUniqueEmailUpdate(UserModel usr) {
         String sentency = String.format("select * from tbluser where email='%s' and iduser != '%s';", usr.getEmail(), usr.getIduser());
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
-    
-    
-    
 
     public boolean validatetoken(String iduser, String email) {
         String sentency = String.format("select * from tbluser where email='%s' and iduser='%s';", email, iduser);
@@ -159,7 +114,7 @@ public class UserDAO {
                 + "<rol>" + userM.getRol() + "</rol>"
                 + "<updatedate>" + userM.getUpdatedate() + "</updatedate>"
                 + "<state>" + userM.getState() + "</state>"
-                + "<passband>" + userM.getState() + "</passband>"        
+                + "<passband>" + userM.getState() + "</passband>"
                 + "</user>");
 
         String sentency = "Select * from updateUser('" + structure + "')";

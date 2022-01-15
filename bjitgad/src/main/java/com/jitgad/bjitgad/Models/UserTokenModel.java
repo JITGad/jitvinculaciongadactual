@@ -7,6 +7,7 @@ package com.jitgad.bjitgad.Models;
 public class UserTokenModel extends UserModel {
     
     private String user_token;
+    private Boolean recuerdame;
 
     public UserTokenModel() {
         super();
@@ -23,4 +24,12 @@ public class UserTokenModel extends UserModel {
     public void setUser_token(String user_token) {
         this.user_token = user_token;
     }  
+
+    public Boolean getRecuerdame() {
+        return recuerdame;
+    }
+
+    public void setRecuerdame(Boolean recuerdame) {
+        this.recuerdame = recuerdame;
+    }
 }

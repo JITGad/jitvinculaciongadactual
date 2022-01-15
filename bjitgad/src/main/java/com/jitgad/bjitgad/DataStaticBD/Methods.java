@@ -335,4 +335,11 @@ public final class Methods {
         return result;
     }
 
+    public static Object StringJsonToObject(String json, Class objectClass) {
+        final Gson gson = new Gson();
+    
+        Object res = gson.fromJson(json, objectClass);
+        
+        return res;
+    }
 }

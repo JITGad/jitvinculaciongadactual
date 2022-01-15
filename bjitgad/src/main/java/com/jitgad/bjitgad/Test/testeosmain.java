@@ -4,33 +4,20 @@ package com.jitgad.bjitgad.Test;
  *
  * @author jorge
  */
-import com.jitgad.bjitgad.DataStaticBD.Conection;
 import com.jitgad.bjitgad.ApisClient.NewJerseyClient;
-import com.jitgad.bjitgad.DataStaticBD.Configuration;
-import com.jitgad.bjitgad.DataStaticBD.Methods;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.jitgad.bjitgad.Controller.FileController;
-import com.jitgad.bjitgad.Utilities.CropImage;
-import com.jitgad.bjitgad.Utilities.InetAddressUtil;
-import com.jitgad.bjitgad.Utilities.UFile;
-import java.io.File;
+import com.jitgad.bjitgad.Models.UserModel;
+import com.jitgad.bjitgad.Models.UserTokenModel;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 public class testeosmain {
 
     public static void main(String[] args) throws UnsupportedEncodingException, IOException {
-        new Conection().testConection();
-        Conection con = new Conection();
+        //new Conection().testConection();
+        //Conection con = new Conection();
 
 //       String ruta = "C:/Users/jorge/Downloads/WhatsApp Image 2022-01-03 at 16.48.07.jpeg";
 //       UFile uf = new UFile();
@@ -41,8 +28,15 @@ public class testeosmain {
       // fc.createfile(uf.encodeFileToBase64Binary(f),"Activities");
      //   System.out.println(uf.encodeFileToBase64Binary(f));
      
-     InetAddressUtil ipreal = new InetAddressUtil();
-        System.out.println(ipreal.getHostIp());
+     //InetAddressUtil ipreal = new InetAddressUtil();
+       // System.out.println(ipreal.getHostIp());
+       UserModel usr = new UserTokenModel();
+       UserTokenModel jsouserB = null;
+       if(usr instanceof UserTokenModel){
+               jsouserB = (UserTokenModel) usr;
+            }
+       
+        System.out.println(jsouserB);
     }
 
     public static void prueba1() {

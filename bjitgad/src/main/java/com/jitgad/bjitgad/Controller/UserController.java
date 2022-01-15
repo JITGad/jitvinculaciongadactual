@@ -7,7 +7,14 @@ package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.UserDAO;
 import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.Models.UserModel;
+import com.jitgad.bjitgad.Models.UserTokenModel;
+import com.jitgad.bjitgad.Utilities.ResponseData;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -34,27 +41,52 @@ public class UserController {
      *
      * @return this function returns an object type vector, and receives two
      * variables for user access
-     * @param email It is a String variable, this variable will contain the
-     * user's mail
-     * @param pwd It is a String variable, this variable will contain the
-     * encrypted password of the user
+     * @param user It is a variable user for login
      */
-    public Object[] LogIn(String email, String pwd) {
-        DefaultTableModel table = conex.returnRecord("select * from tbluser where email='" + email + "'");
+    public ResponseData LogIn(UserTokenModel user) {
+        ArrayList<UserTokenModel> datos = conex.getObjectDB("select * from tbluser where email='" + user.getEmail() + "'", UserTokenModel.class, 1);
         String message = "Usuario no encontrado";
         boolean status = false;
-        UserModel usr = new UserModel();
-        if (table.getRowCount() > 0) {
+        UserTokenModel usr = new UserTokenModel();
+        if (datos.size() > 0) {
+            usr = datos.get(0);
+            usr.setRecuerdame(user.getRecuerdame());
             message = "Contraseña incorrecta";
-            for (int index = 0; index < table.getRowCount(); index++) {
-                if (encriptPassword(pwd).equals(table.getValueAt(index, 4).toString())) {
-                    usr = udao.setUser(table, index);
-                    message = "Acceso consedido.";
-                    status = true;
-                }
+            if (encriptPassword(user.getPassword()).equals(usr.getPassword())) {
+                message = "Acceso consedido.";
+                status = true;
             }
         }
-        return new Object[]{status, message, usr};
+        return new ResponseData(message,status, usr);
+    }
+    
+    public UserTokenModel BuildToken(UserTokenModel usr) {
+        String key = Configuration.dbprivatekey;
+        long tiempo = System.currentTimeMillis();
+        long tiempoext;
+        if (usr.getRecuerdame()) {
+            // 10 días
+            tiempoext = 864000000;
+        } else {
+            // 1 día
+            tiempoext = 86400000;
+        }
+//        System.out.println(new Date(tiempo) +"-" + new Date(tiempo+900000));
+        String jwt = Jwts.builder()
+                .signWith(SignatureAlgorithm.HS256, key)
+                .setSubject(String.valueOf(usr.getIduser()))
+                .setIssuedAt(new Date(tiempo))
+                //900000 que equivale a 15 minutos
+                //   .setExpiration(new Date(tiempo + 900000))
+                .setExpiration(new Date(tiempo + tiempoext))
+                .claim("email", usr.getEmail())
+                .claim("rol", usr.getRol())
+                .compact();
+
+        UserTokenModel jsouserB = (UserTokenModel) usr;
+        jsouserB.setUser_token(jwt);
+
+        return jsouserB;
     }
 
     public Object[] UserRegistration(String name, String last_name,
@@ -87,7 +119,7 @@ public class UserController {
         return new Object[]{status, message};
     }
 
-    public Object[] PutUser(int iduser,String name, String last_name,
+    public Object[] PutUser(int iduser, String name, String last_name,
             String email, String password, String image, String birthday,
             String rol, String state) {
         String message = "Correo inválido";
@@ -97,12 +129,10 @@ public class UserController {
         um.setNames(name);
         um.setLast_name(last_name);
         um.setEmail(email);
-        if(!password.isEmpty())
-        {
-          um.setPassword(encriptPassword(password));
-        }
-        else{
-          passband = true;  
+        if (!password.isEmpty()) {
+            um.setPassword(encriptPassword(password));
+        } else {
+            passband = true;
         }
         um.setImage(image);
         um.setBirthdate(birthday);
@@ -110,7 +140,7 @@ public class UserController {
         um.setUpdatedate("NOW()");
         um.setState(Boolean.parseBoolean(state));
         if (udao.comprobeUniqueEmailUpdate(um)) {
-            if (udao.updateUser(um,passband)) {
+            if (udao.updateUser(um, passband)) {
                 message = "Usuario actualizado con éxito";
                 status = true;
             } else {
@@ -124,11 +154,11 @@ public class UserController {
         return new Object[]{status, message};
     }
 
-    public Object[] DeleteUser(int iduser){
+    public Object[] DeleteUser(int iduser) {
         String message = "";
         boolean status = false;
         um.setIduser(iduser);
-        
+
         if (udao.deleteUser(um)) {
             message = "Usuario eliminado correctamente";
             status = true;
@@ -136,14 +166,14 @@ public class UserController {
             message = "El usuario no fué eliminado, ocurrió un error";
             status = false;
         }
-        
+
         return new Object[]{status, message};
     }
 
     public Object[] ValidateToken(String user_id, String email, String rol) {
         String message = "Correo inválido";
         boolean status = false;
-            
+
         if (!user_id.equals("")) {
             if (!udao.validatetoken(user_id, email)) {
                 status = true;
@@ -152,7 +182,7 @@ public class UserController {
                 status = false;
                 message = "Token inválido";
             }
-        }else{
+        } else {
             status = false;
             message = "Token inválido";
         }
@@ -163,14 +193,15 @@ public class UserController {
     public String encriptPassword(String pwd) {
         return DigestUtils.sha256Hex(pwd);
     }
-    
+
     public String selectUserspage(int page) {
         return udao.selectUserspage(page);
     }
+
     public String selectUsersbyid(int id) {
         return udao.selectUsersbyid(id);
     }
-    
+
     public int CountingPageUsers() {
         return udao.CountingPageUsers();
     }
