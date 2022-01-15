@@ -13,6 +13,7 @@ public class ApplicationConfig extends Application {
 
     @Override
     public Set<Class<?>> getClasses() {
+        System.out.println("corriendo apis");
         Set<Class<?>> resources = new java.util.HashSet<>();
         addRestResourceClasses(resources);
         return resources;
@@ -32,7 +33,6 @@ public class ApplicationConfig extends Application {
         resources.add(com.jitgad.bjitgad.AllApis.Gametyperesource.class);
         resources.add(com.jitgad.bjitgad.AllApis.Itemsquestionsresource.class);
         resources.add(com.jitgad.bjitgad.AllApis.Questionsresource.class);
-        resources.add(com.jitgad.bjitgad.AllApis.Userresource.class);
-        resources.add(com.jitgad.bjitgad.DataStaticBD.CorsResponseFilter.class);
+        resources.add(com.jitgad.bjitgad.AllApis.Userresource.class);        
     } 
 }

@@ -1,7 +1,7 @@
 package com.jitgad.bjitgad.DAO;
 
 import com.jitgad.bjitgad.DataStaticBD.Conection;
-import com.jitgad.bjitgad.DataStaticBD.DataBd;
+import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.UserModel;
 import io.jsonwebtoken.Jwts;
@@ -66,7 +66,7 @@ public class UserDAO {
     }
 
     public String userDataJson(UserModel usr, String rec) {
-        String key = DataBd.dbprivatekey;
+        String key = Configuration.dbprivatekey;
         long tiempo = System.currentTimeMillis();
         long tiempoext = 0;
         if (!rec.isEmpty()) {

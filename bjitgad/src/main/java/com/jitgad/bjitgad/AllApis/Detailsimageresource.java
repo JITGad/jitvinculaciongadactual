@@ -3,7 +3,7 @@ package com.jitgad.bjitgad.AllApis;
 import com.google.gson.JsonObject;
 import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.DetailsimageController;
-import com.jitgad.bjitgad.DataStaticBD.DataBd;
+import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.DetailsimageModel;
 import javax.ws.rs.Consumes;
@@ -80,14 +80,14 @@ public class Detailsimageresource {
                 if (responseDiC[0].equals(true)) {
                     responseJson = "{\"message\":\"" + responseDiC[1] + "\",\"flag\":" + responseDiC[0] + "}";
                 } else {
-                    responseJson = "{\"message\":\"" + responseDiC[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + responseDiC[0] + "}";
+                    responseJson = "{\"message\":\"" + responseDiC[1] + "\",\"nameApplication\":\"" + Configuration.nameApplication + "\",\"flag\":" + responseDiC[0] + "}";
                 }
             } else {
-                responseJson = "{\"message\":\"" + Permt[1] + "\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + Permt[0] + "}";
+                responseJson = "{\"message\":\"" + Permt[1] + "\",\"nameApplication\":\"" + Configuration.nameApplication + "\",\"flag\":" + Permt[0] + "}";
             }
 
         } else {
-            responseJson = "{\"message\":\"Missing data.\",\"nameApplication\":\"" + DataBd.nameApplication + "\",\"flag\":" + false + "}";
+            responseJson = "{\"message\":\"Missing data.\",\"nameApplication\":\"" + Configuration.nameApplication + "\",\"flag\":" + false + "}";
         }
         return Response.ok(responseJson)
                 .header("Access-Control-Allow-Origin", "*")

@@ -4,10 +4,11 @@ import com.google.gson.JsonObject;
 import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.UserController;
 import com.jitgad.bjitgad.DAO.UserDAO;
-import com.jitgad.bjitgad.DataStaticBD.DataBd;
+import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.UserModel;
 import com.jitgad.bjitgad.Resources.ResponseAPI;
+import com.jitgad.bjitgad.Utilities.ResponseData;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -94,16 +95,18 @@ public class Userresource {
             //TOKENS
             String Authorization = headers.getHeaderString("Authorization");
             Authorization = Authorization == null ? "" : Authorization;
-            System.out.println("Authorization: " + Authorization);
+            if (Configuration.DEBUG) {
+                System.out.println("Authorization: " + Authorization);
+            }
             if (!Authorization.isEmpty()) {
                 Object[] Permt = AuC.VToken(Authorization);
                 if (Permt[2].equals("Administrador")) {
                     if (Permt[0].equals(true)) {
                         if (data.equals("{}")) {
                             responseJson = Rapi.Response("Información no encontrada", false, data);
-                        } else {
-                            responseJson = Rapi.Response("Datos retornados correctamente", true, data);
-                        }
+                            return Response.ok(responseJson).build();
+                        } 
+                        responseJson = Rapi.Response("Datos retornados correctamente", true, data);
                     } else {
                         responseJson = Rapi.Response(String.valueOf(Permt[1]), false, data);
                     }
@@ -117,10 +120,7 @@ public class Userresource {
         } catch (Exception e) {
             responseJson = Rapi.Response(e.getMessage(), false, data);
         }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
+        return Response.ok(responseJson).build();
     }
 
     @Produces(MediaType.APPLICATION_JSON)
@@ -128,32 +128,39 @@ public class Userresource {
     @Path("/logIn")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response logIn(String data) {
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
-        JsonObject Jso = Methods.stringToJSON(data);
-        if (Jso.size() > 0) {
-            UserController userCon = new UserController();
-            Object[] responseLogIn;
-            responseLogIn = userCon.LogIn(Methods.JsonToString(Jso.getAsJsonObject(), "email", "{}"),
-                    Methods.JsonToString(Jso.getAsJsonObject(), "password", ""));
-            if (responseLogIn[0].equals(true)) {
-                responseJson = Rapi.Response(String.valueOf(responseLogIn[1]),
-                        Boolean.valueOf(responseLogIn[0].toString()),
-                        (new UserDAO().userDataJson((UserModel) responseLogIn[2],
-                                Methods.JsonToString(Jso.getAsJsonObject(), "recuerdame", "{}"))));
-            } else {
-                responseJson = Rapi.Response(String.valueOf(responseLogIn[1]),
-                        Boolean.valueOf(responseLogIn[0].toString()),
-                        (new UserDAO().userDataJson((UserModel) responseLogIn[2],
-                                Methods.JsonToString(Jso.getAsJsonObject(), "recuerdame", "{}"))));
+        ResponseData responseData = new ResponseData("Ocurrio un error", false);
+        try {
+            JsonObject Jso = Methods.stringToJSON(data);
+            if (Jso.size() > 0) {
+                UserController userCon = new UserController();
+    
+                Object[] responseLogIn = userCon.LogIn(Methods.JsonToString(Jso.getAsJsonObject(), "email", "{}"),
+                        Methods.JsonToString(Jso.getAsJsonObject(), "password", ""));
+    
+                responseData.setMessage(String.valueOf(responseLogIn[1]));
+                responseData.setFlag(Boolean.valueOf(responseLogIn[0].toString()));
+                responseData.setData((new UserDAO().userDataJson((UserModel) responseLogIn[2],
+                        Methods.JsonToString(Jso.getAsJsonObject(), "recuerdame", "{}"))));
+                
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
             }
-        } else {
-            responseJson = Rapi.Response("Información no encontrada", false, data);
+            
+            responseData.setMessage("Información no encontrada");
+            
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+                responseData.setMessage(e.getMessage());
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
         }
-//        System.out.println(responseJson);
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
 
     @Produces(MediaType.APPLICATION_JSON)

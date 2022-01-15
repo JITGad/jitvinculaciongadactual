@@ -23,6 +23,14 @@
             <version>2.15</version>
         </dependency>
         -->
+        <!-- https://repo.maven.apache.org/maven2/org/apache/tomcat/tomcat-catalina/7.0.42/tomcat-catalina-7.0.42.pom -->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-catalina</artifactId>
+            <version>7.0.42</version>
+            <scope>provided</scope>
+        </dependency>
+        
         <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server -->
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>

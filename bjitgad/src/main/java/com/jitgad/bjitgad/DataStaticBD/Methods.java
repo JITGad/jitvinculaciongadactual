@@ -35,7 +35,7 @@ public final class Methods {
         String[] response;
         try {
             Claims claims = Jwts.parser()
-                    .setSigningKey(DataBd.dbprivatekey)
+                    .setSigningKey(Configuration.dbprivatekey)
                     .parseClaimsJws(jwt).getBody();
             response = new String[]{claims.get("sub").toString(),
                 claims.get("email").toString(), claims.get("rol").toString()};

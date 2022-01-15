@@ -3,7 +3,7 @@ package com.jitgad.bjitgad.AllApis;
 import com.google.gson.JsonObject;
 import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.GameController;
-import com.jitgad.bjitgad.DataStaticBD.DataBd;
+import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Resources.ResponseAPI;
 import javax.ws.rs.Consumes;

@@ -6,7 +6,7 @@ package com.jitgad.bjitgad.Test;
  */
 import com.jitgad.bjitgad.DataStaticBD.Conection;
 import com.jitgad.bjitgad.ApisClient.NewJerseyClient;
-import com.jitgad.bjitgad.DataStaticBD.DataBd;
+import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

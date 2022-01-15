@@ -63,10 +63,7 @@ public class Activitiestyperesource {
         } catch (Exception e) {
             responseJson = Rapi.Response(e.getMessage(), false, data);
         }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with, Access-Control-Allow-Origin")
-                .build();
+        return Response.ok(responseJson).build();
     }
 
     // recibe token - administración
@@ -100,10 +97,7 @@ public class Activitiestyperesource {
         } catch (Exception e) {
             responseJson = Rapi.AdminResponse(e.getMessage(), responseCountingPage, false, data);
         }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with, Access-Control-Allow-Origin")
-                .build();
+        return Response.ok(responseJson).build();
     }
 
     /**

@@ -58,14 +58,14 @@ class FetchMaster {
         return status;
     }
 
-    #ajaxJSON(url = '', parameters = {}, callback, type = this.#GET,
+    #sendAjax(url = '', parameters = {}, callback, type = this.#GET,
         encode = FetchMaster.JSONENCODE, authorize = false, paginacion = false) {
-
         const _this = this;
-        const headers = {'Access-Control-Allow-Origin': '*'};
+        const headers = {};
         const options = {
             'url': this.#baseUrl + url,
-            'datatype': 'json',
+            'datatype': 'jsonp',
+            jsonp: "$jsonp",
             'type': type,
             success: function (data, textStatus, request) {
                 console.log(data);
@@ -103,8 +103,68 @@ class FetchMaster {
         }
 
         options['headers'] = headers;
-console.log(options);
         $.ajax(options);
+    }
+
+    #sendFetch(url = '', parameters = {}, callback, type = this.#GET,
+        encode = FetchMaster.JSONENCODE, authorize = false, paginacion = false) {
+        const myHeaders = {'Content-Type': 'application/json'};
+        const options = {
+            method: type,
+            headers: myHeaders,
+            cache: 'default',
+            mode: 'cors',
+            credentials: 'omit'
+        };
+
+        if (authorize) {
+            var token = this.#get_token();
+            if (token) {
+                myHeaders['Authorization'] = token;
+            }
+
+        }
+
+        if (type === this.#POST || type === this.#PUT || type === this.#DELETE) {
+            if (encode == FetchMaster.JSONENCODE) {
+                options['body'] = JSON.stringify(parameters);
+            } else if (encode == FetchMaster.FORMDATAENCODE) {
+                myHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
+                options['body'] = parameters;
+            }
+        }
+
+        console.log(options);
+
+        fetch(this.#baseUrl + url, options)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                callback({
+                    'data': JSON.parse(data.data),
+                    'conteo': paginacion ? data.CountingPage : undefined,
+                    'totalPaginas': paginacion ? data.TotalPages : undefined,
+                    'status': {
+                        error: false,
+                        message: data.message
+                    }
+                });
+            })
+            .catch(function (error) {
+                callback({
+                    'status': {
+                        error: true,
+                        message: error
+                    }
+                });
+            });
+    }
+
+    #ajaxJSON(url = '', parameters = {}, callback, type = this.#GET,
+        encode = FetchMaster.JSONENCODE, authorize = false, paginacion = false) {
+
+        //this.#sendAjax(url,parameters,callback,type,encode,authorize,paginacion);
+        this.#sendFetch(url, parameters, callback, type, encode, authorize, paginacion);
     }
 
     post(url = '', parameters = {}, callback, encode = FetchMaster.JSONENCODE, authorize = true) {

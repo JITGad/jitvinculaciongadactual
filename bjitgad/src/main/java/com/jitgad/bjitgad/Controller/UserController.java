@@ -47,9 +47,6 @@ public class UserController {
         if (table.getRowCount() > 0) {
             message = "Contraseña incorrecta";
             for (int index = 0; index < table.getRowCount(); index++) {
-                System.out.println("-" + encriptPassword(pwd) + "-");
-                System.out.println("-" + table.getValueAt(index, 4).toString() + "-");
-                System.out.println(encriptPassword(pwd).equals(table.getValueAt(index, 4).toString()));
                 if (encriptPassword(pwd).equals(table.getValueAt(index, 4).toString())) {
                     usr = udao.setUser(table, index);
                     message = "Acceso consedido.";
