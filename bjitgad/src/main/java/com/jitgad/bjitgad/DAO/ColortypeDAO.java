@@ -20,10 +20,10 @@ public class ColortypeDAO {
         con = new Conection();
     }
 
-    public String selectColortypepage(int page) {
+    public ArrayList<ColortypeModel> selectColortypepage(int page) {
         sentence = "select * from tblcolortype order by idcolortype asc limit 10 offset " + (page * 10 - 10);
         ArrayList<ColortypeModel> datos = con.getObjectDB(sentence, ColortypeModel.class, 1);
-        return Methods.objectToJsonString(datos);
+        return datos;
     }
 
     public int CountingPageColortype() {

@@ -2,7 +2,9 @@ package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.GameDAO;
 import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GameModel;
+import java.util.ArrayList;
 
 /**
  *
@@ -21,11 +23,11 @@ public class GameController {
         
     }
     
-     public String selectGame(){
+     public ArrayList<GameModel> selectGame(){
         return gD.selectGame();
     }
     
-    public String selectGamepage(int page){
+    public ArrayList<GameModel> selectGamepage(int page){
         return gD.selectGamepage(page);
     }
     
@@ -37,7 +39,7 @@ public class GameController {
         return gD.selectGamebyid(gameid);
     }
 
-    public String selectgamesbyactivities(int activityid) {
+    public ArrayList<ClaveValorModel> selectgamesbyactivities(int activityid) {
         return gD.selectgamesbyactivities(activityid);
     }
      

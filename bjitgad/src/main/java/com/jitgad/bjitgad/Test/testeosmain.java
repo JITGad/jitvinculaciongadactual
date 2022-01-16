@@ -5,6 +5,7 @@ package com.jitgad.bjitgad.Test;
  * @author jorge
  */
 import com.jitgad.bjitgad.ApisClient.NewJerseyClient;
+import com.jitgad.bjitgad.DataStaticBD.Conection;
 import com.jitgad.bjitgad.Models.UserModel;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -18,7 +19,7 @@ import java.io.UnsupportedEncodingException;
 public class testeosmain {
 
     public static void main(String[] args) throws UnsupportedEncodingException, IOException {
-        //new Conection().testConection();
+        new Conection().testConection();
         //Conection con = new Conection();
 
 //       String ruta = "C:/Users/jorge/Downloads/WhatsApp Image 2022-01-03 at 16.48.07.jpeg";
