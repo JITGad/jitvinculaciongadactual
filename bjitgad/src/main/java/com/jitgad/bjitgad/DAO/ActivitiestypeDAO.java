@@ -27,25 +27,20 @@ public class ActivitiestypeDAO {
         ipreal = new InetAddressUtil();
     }
 
-    public String selectActivitiestype() {
-        
+    public ArrayList<ActivitiestypeModel> selectActivitiestype(String path) {
+
         sentence = "select * from tblactivitiestype where state = true";
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
-////        try {
-            for (int i = 0; i < datos.size(); i++) {
-                datos.get(i).setImage((ipreal.getHostIp()+ ":8080/bjitgad/" + datos.get(i).getImage()).replace('\\', '/'));
-            }
-//        } catch (UnsupportedEncodingException ex) {
-//            Logger.getLogger(ActivitiestypeDAO.class.getName()).log(Level.SEVERE, null, ex);
-//            
-//        }
-         return Methods.objectToJsonString(datos);
+        for (int i = 0; i < datos.size(); i++) {
+            datos.get(i).setImage((ipreal.getHostIp() + ":8080/bjitgad/" + datos.get(i).getImage()).replace('\\', '/'));
+        }
+        return datos;
     }
 
-    public String selectActivitiestypepage(int page) {
+    public ArrayList<ActivitiestypeModel> selectActivitiestypepage(int page) {
         sentence = "select * from tblactivitiestype order by idactivitiestype asc limit 10 offset " + (page * 10 - 10);
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
-        return Methods.objectToJsonString(datos);
+        return datos;
     }
 
     public int CountingPageActivitiestype() {

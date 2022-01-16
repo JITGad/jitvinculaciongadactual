@@ -3,7 +3,9 @@ package com.jitgad.bjitgad.Controller;
 import com.jitgad.bjitgad.DAO.ActivitiestypeDAO;
 import com.jitgad.bjitgad.DataStaticBD.Conection;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
+import com.jitgad.bjitgad.Utilities.ResponseData;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,38 +25,32 @@ public class ActivitiestypeController {
         atDAO = new ActivitiestypeDAO();
     }
 
-    public Object[] InsertActivitiesTypeC(String name, String image,
-            String state,
+    public ResponseData InsertActivitiesTypeC(ActivitiestypeModel request,
             String realpath) {
-        String message = "";
-        boolean status = false;
+      
+        ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
         FileController fc = new FileController();
         Object[] CreateFile;
         try {
-            CreateFile = fc.createfile(image, "Activities",name,realpath);
+            CreateFile = fc.createfile(request.getImage(), "Activities",request.getName(),realpath);
             if(Boolean.parseBoolean(CreateFile[0].toString())){
-                image = String.valueOf(CreateFile[1].toString() + "/" + name + "/" + CreateFile[2].toString());
+                request.setImage(String.valueOf(CreateFile[1].toString() + "/" + "Activities" + "/" + CreateFile[2].toString()));
             }
-            atM.setName(name);
-            atM.setImage(image);
-            atM.setCreationdate("NOW()");
-            atM.setUpdatedate("NOW()");
-            atM.setState(Boolean.parseBoolean(state));
+            request.setCreationdate("NOW()");
+            request.setUpdatedate("NOW()");
 
-            if (atDAO.insertActividadestype(atM)) {
-                message = "Registros insertados correctamente";
-                status = true;
+            if (atDAO.insertActividadestype(request)) {
+                responseData.setMessage("Registros insertados correctamente");
+                responseData.setFlag(true);
             } else {
-                message = "Registros no insertados, datos erróneos para enviar a la base de datos!";
-                status = false;
+                responseData.setMessage("Registros no insertados, datos erróneos para enviar a la base de datos!");
+                responseData.setFlag(false);
             }
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(ActivitiestypeController.class.getName()).log(Level.SEVERE, null, ex);
         }
-       // responseJson = Rapi.Response("Imagen creada con éxito", Boolean.parseBoolean(CreateFile[0].toString()), String.valueOf(CreateFile[1].toString() + "/" + name + "/" + CreateFile[2].toString()));
-
-        return new Object[]{status, message, image};
+        return responseData;
     }
 
     public Object[] UpdateActivitiesTypeC(int idactivitiestype,
@@ -97,11 +93,11 @@ public class ActivitiestypeController {
         return new Object[]{status, message};
     }
 
-    public String selectActivitiestype(){
-        return atDAO.selectActivitiestype();
+    public ArrayList<ActivitiestypeModel>  selectActivitiestype(String path){
+        return atDAO.selectActivitiestype(path);
     }
 
-    public String selectActivitiestypepage(int page) {
+    public ArrayList<ActivitiestypeModel> selectActivitiestypepage(int page) {
         return atDAO.selectActivitiestypepage(page);
     }
 
