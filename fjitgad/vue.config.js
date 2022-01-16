@@ -10,5 +10,8 @@ module.exports = {
                 jQuery: 'jquery'
             })
         ]
-    }
+    },
+    devServer: {
+        port: 9000, // CHANGE YOUR PORT HERE!
+      },
 }

@@ -14,7 +14,7 @@ class ColoresService {
 
   getColoresAdministrador(page = 1) {
     return new Promise((resolve) => {
-      FetchMaster.get(`${this.#urlApi}/getcolorAdmin${encodeQueryString({ 'page': page })}`,
+      FetchMaster.get(`${this.#urlApi}/getcolortypeAdmin${encodeQueryString({ 'page': page })}`,
         (data) => resolve(data), true, true)
     });
   }
