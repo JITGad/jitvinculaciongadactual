@@ -15,78 +15,38 @@
     </properties>
     
     <dependencies>	
-        
-        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client 
         <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>2.15</version>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <version>3.0.0</version>
+            <type>jar</type>
         </dependency>
-        -->
+
         <!-- https://repo.maven.apache.org/maven2/org/apache/tomcat/tomcat-catalina/7.0.42/tomcat-catalina-7.0.42.pom -->
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-catalina</artifactId>
-            <version>7.0.42</version>
+            <version>10.0.14</version>
             <scope>provided</scope>
         </dependency>
         
-        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server -->
         <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-server</artifactId>
-            <version>2.15</version>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>3.0.2</version>
         </dependency>
         
-        <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common -->
         <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-common</artifactId>
-            <version>2.15</version>
-        </dependency>		
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>3.0.2</version>
+        </dependency>	
 		
         <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-servlet -->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
-            <version>2.15</version>
-        </dependency>
-		
-        <!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.2.7</version>
-        </dependency>
-        
-        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
-            <scope>provided</scope>
-        </dependency>
-        
-        <!-- https://mvnrepository.com/artifact/org.ow2.asm/asm -->
-        <dependency>
-            <groupId>org.ow2.asm</groupId>
-            <artifactId>asm</artifactId>
-            <version>5.0.2</version>
-        </dependency>
-        
-        <!-- https://mvnrepository.com/artifact/org.osgi/org.osgi.core -->
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
-            <version>4.2.0</version>
-            <scope>provided</scope>
-        </dependency>
-		
-        <!-- https://mvnrepository.com/artifact/javax.persistence/persistence-api -->
-        <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
-            <version>1.0</version>
+            <version>3.0.2</version>
         </dependency>
 
         <!--otras-->
@@ -110,13 +70,6 @@
             <scope>test</scope>
         </dependency>
         
-        <!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
-        <dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>javax.mail</artifactId>
-            <version>1.6.2</version>
-        </dependency>
-        
         <!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
         <dependency>
             <groupId>commons-lang</groupId>
@@ -131,13 +84,6 @@
             <version>42.2.18</version>
         </dependency>
         
-        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
-        <!--        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.9</version>
-        </dependency>-->
-        
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -149,70 +95,7 @@
             <artifactId>commons-codec</artifactId>
             <version>1.11</version>
         </dependency>
-                
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20180130</version>
-        </dependency>
-        
-        <!-- https://mvnrepository.com/artifact/org.jasypt/jasypt -->
-        <dependency>
-            <groupId>org.jasypt</groupId>
-            <artifactId>jasypt</artifactId>
-            <version>1.9.3</version>
-        </dependency>
-        <!--DEependencias de websocket-->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.6.4</version>
-        </dependency>
-        <!--https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket--> 
-        <dependency>
-            <groupId>org.java-websocket</groupId>
-            <artifactId>Java-WebSocket</artifactId>
-            <version>1.5.1</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.websocket</groupId>
-            <artifactId>javax.websocket-api</artifactId>
-            <version>1.1</version>
-            <type>jar</type>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.json/javax.json-api -->
-       <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.json</artifactId>
-            <version>1.1.4</version>
-        </dependency>
-        <!--  https://mvnrepository.com/artifact/net.iharder/base64  -->
-        <dependency>
-            <groupId>net.iharder</groupId>
-            <artifactId>base64</artifactId>
-            <version>2.3.9</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.tomcat/juli -->
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>juli</artifactId>
-            <version>6.0.26</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-util -->
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-util</artifactId>
-            <version>7.0.22</version>
-        </dependency>
-
     </dependencies>
-    
-    
 
     <build>
         <plugins>
@@ -221,8 +104,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>11</source>
+                    <target>11</target>
                     <compilerArguments>
                         <endorseddirs>${endorsed.dir}</endorseddirs>
                     </compilerArguments>
@@ -231,7 +114,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.3</version>
+                <version>3.3.2</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
@@ -239,7 +122,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <phase>validate</phase>

@@ -141,7 +141,7 @@ class FetchMaster {
             .then(data => {
                 console.log(data)
                 callback({
-                    'data': JSON.parse(data.data),
+                    'data': data.data,
                     'conteo': paginacion ? data.CountingPage : undefined,
                     'totalPaginas': paginacion ? data.TotalPages : undefined,
                     'status': {

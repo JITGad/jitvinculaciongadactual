@@ -37,7 +37,7 @@ public class ReflectToClass {
         try {
             ArrayList<T> arrayList = new ArrayList<>();
             ResultSetMetaData metaData = rs.getMetaData();
-            List<Field> fields = getAllFields(obj);
+            //List<Field> fields = getAllFields(obj);
             /**
              * Get total columns
              */
@@ -59,8 +59,8 @@ public class ReflectToClass {
                     String replace = name.replaceFirst(substring, substring.toUpperCase());
                     Class<?> type = null;
                     try {
-                        //type = obj.getDeclaredField(name).getType();// Get field type
-                        type = fields.stream().filter(field -> field.getName().equals(name)).findAny().orElse(null).getType();
+                        type = obj.getDeclaredField(name).getType();// Get field type
+                        //type = fields.stream().filter(field -> field.getName().equals(name)).findAny().orElse(null).getType();
                         
                     } catch (Exception e) { // Class When the field is not defined by the object,skip
                         continue;

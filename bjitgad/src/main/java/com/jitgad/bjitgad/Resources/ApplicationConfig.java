@@ -1,14 +1,16 @@
 package com.jitgad.bjitgad.Resources;
 
 import java.util.Set;
-import javax.ws.rs.core.Application;
+import jakarta.ws.rs.ApplicationPath;
+import jakarta.ws.rs.core.Application;
 
 /**
  *
  * @author jorge
  */
 
-@javax.ws.rs.ApplicationPath("webresources")
+@ApplicationPath("webresources")
+
 public class ApplicationConfig extends Application {
 
     @Override

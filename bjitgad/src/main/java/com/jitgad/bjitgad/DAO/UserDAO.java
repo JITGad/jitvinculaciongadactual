@@ -1,16 +1,9 @@
 package com.jitgad.bjitgad.DAO;
 
 import com.jitgad.bjitgad.DataStaticBD.Conection;
-import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.UserModel;
-import com.jitgad.bjitgad.Models.UserTokenModel;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.ArrayList;
-import java.util.Date;
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
 import javax.swing.table.DefaultTableModel;
 
 /**

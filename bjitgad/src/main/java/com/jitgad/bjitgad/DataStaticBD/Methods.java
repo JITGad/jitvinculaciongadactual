@@ -7,19 +7,18 @@ package com.jitgad.bjitgad.DataStaticBD;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.servlet.http.HttpServletRequest;
 import javax.swing.table.DefaultTableModel;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  * * This java class contains the methods used within the back-end of the
@@ -308,7 +307,7 @@ public final class Methods {
 
     public static boolean jsonrecordcount(String json) {
         boolean var = false;
-        JSONArray jsonArray = new JSONArray(json);
+        JsonArray jsonArray = new Gson().fromJson(json, JsonArray.class);
         Iterator<?> iterator = jsonArray.iterator();
         while (iterator.hasNext()) {
             var = true;
@@ -319,8 +318,8 @@ public final class Methods {
 
     public static boolean jsonrecordcountobject(String json) {
         boolean var = false;
-        JSONObject jsonObject = new JSONObject();
-        return !jsonObject.keys().hasNext();
+        JsonObject jsonObject = new JsonObject();
+        return !jsonObject.keySet().isEmpty();
     }
 
     public static String objectToJsonString(Object obj) {

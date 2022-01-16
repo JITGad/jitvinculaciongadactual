@@ -2,21 +2,18 @@
 package com.jitgad.bjitgad.Utilities;
 
 
+import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author jorge
  */
 public class InetAddressUtil {
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(InetAddressUtil.class);
     
     /*
     Obtener la dirección del host
@@ -35,10 +32,11 @@ public class InetAddressUtil {
 
             realIp = address.getHostAddress();
 
-            LOGGER.info("Obtenga la dirección IP del host correctamente, dirección IP del host: {}", address);
             return address.getHostAddress();
         } catch (Exception e) {
-            LOGGER.error("Obtener la dirección IP del host es anormal", e);
+            if (Configuration.DEBUG) {
+                System.err.println(e.getMessage());
+            }
         }
 
         return realIp;

@@ -7,11 +7,14 @@ package com.jitgad.bjitgad.Test;
 import com.jitgad.bjitgad.ApisClient.NewJerseyClient;
 import com.jitgad.bjitgad.Models.UserModel;
 import com.jitgad.bjitgad.Models.UserTokenModel;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
 
 public class testeosmain {
 
@@ -52,9 +55,9 @@ public class testeosmain {
         Client client;
         String BASE_URI = "http://localhost:8080/restAPI/webresources";
         String datas = "{\"name\":\"Puchamon\",\"lastname\":\"Apell\",\"email\":\"pucha@gmail.com\",\"pass\":\"123\"}";
-        client = javax.ws.rs.client.ClientBuilder.newClient();
+        client = ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path("misapis");
-        Response r = webTarget.path("add").request(javax.ws.rs.core.MediaType.APPLICATION_JSON).post(javax.ws.rs.client.Entity.entity(datas, javax.ws.rs.core.MediaType.APPLICATION_JSON), Response.class);
+        Response r = webTarget.path("add").request(MediaType.APPLICATION_JSON).post(Entity.entity(datas, MediaType.APPLICATION_JSON), Response.class);
 
         System.out.println(r.getStatus());
         System.out.println(r.readEntity(String.class));
