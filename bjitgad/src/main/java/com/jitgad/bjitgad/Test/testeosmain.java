@@ -6,7 +6,6 @@ package com.jitgad.bjitgad.Test;
  */
 import com.jitgad.bjitgad.ApisClient.NewJerseyClient;
 import com.jitgad.bjitgad.Models.UserModel;
-import com.jitgad.bjitgad.Models.UserTokenModel;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -33,13 +32,13 @@ public class testeosmain {
      
      //InetAddressUtil ipreal = new InetAddressUtil();
        // System.out.println(ipreal.getHostIp());
-       UserModel usr = new UserTokenModel();
-       UserTokenModel jsouserB = null;
-       if(usr instanceof UserTokenModel){
-               jsouserB = (UserTokenModel) usr;
-            }
-       
-        System.out.println(jsouserB);
+//       UserModel usr = new UserTokenModel();
+//       UserTokenModel jsouserB = null;
+//       if(usr instanceof UserTokenModel){
+//               jsouserB = (UserTokenModel) usr;
+//            }
+//       
+//        System.out.println(jsouserB);
     }
 
     public static void prueba1() {

@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  *
@@ -62,7 +60,7 @@ public class ReflectToClass {
                         type = obj.getDeclaredField(name).getType();// Get field type
                         //type = fields.stream().filter(field -> field.getName().equals(name)).findAny().orElse(null).getType();
                         
-                    } catch (Exception e) { // Class When the field is not defined by the object,skip
+                    } catch (NoSuchFieldException | SecurityException e) { // Class When the field is not defined by the object,skip
                         continue;
                     }
                     

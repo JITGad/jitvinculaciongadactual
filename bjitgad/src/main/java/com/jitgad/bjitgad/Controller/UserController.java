@@ -7,8 +7,16 @@ package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.UserDAO;
 import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.Configuration;
+import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.UserModel;
-import javax.swing.table.DefaultTableModel;
+import com.jitgad.bjitgad.Models.UserRequestModel;
+import com.jitgad.bjitgad.Models.UserTokenRModel;
+import com.jitgad.bjitgad.Utilities.ResponseData;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.ArrayList;
+import java.util.Date;
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**
@@ -18,9 +26,9 @@ import org.apache.commons.codec.digest.DigestUtils;
  */
 public class UserController {
 
-    private Conection conex;
-    private UserDAO udao;
-    private UserModel um;
+    private final Conection conex;
+    private final UserDAO udao;
+    private final UserModel um;
 
     public UserController() {
         conex = new Conection();
@@ -34,29 +42,24 @@ public class UserController {
      *
      * @return this function returns an object type vector, and receives two
      * variables for user access
-     * @param email It is a String variable, this variable will contain the
+     * @param request It is a String variable, this variable will contain the
      * user's mail
-     * @param pwd It is a String variable, this variable will contain the
-     * encrypted password of the user
      */
-    public Object[] LogIn(String email, String pwd) {
-        DefaultTableModel table = conex.returnRecord("select * from tbluser where email='" + email + "'");
-        String message = "Usuario no encontrado";
-        boolean status = false;
-        UserModel usr = new UserModel();
-        if (table.getRowCount() > 0) {
-            message = "Contraseña incorrecta";
-            for (int index = 0; index < table.getRowCount(); index++) {
-                if (encriptPassword(pwd).equals(table.getValueAt(index, 4).toString())) {
-                    usr = udao.setUser(table, index);
-                    message = "Acceso consedido.";
-                    status = true;
-                }
+    public ResponseData LogIn(UserRequestModel request) {
+        ArrayList<UserModel> datos = conex.getObjectDB("select * from tbluser where email='" + request.getEmail() + "'", UserModel.class, 1);
+        ResponseData responseData = new ResponseData("Usuario no encontrado", false);
+        if (datos.size() > 0) {
+            UserModel userDB = datos.get(0);
+            responseData.setMessage("Contraseña incorrecta");
+            if (encriptPassword(request.getPassword()).equals(userDB.getPassword())) {
+                responseData.setMessage("Acceso consedido.");
+                responseData.setFlag(true);
+                responseData.setData(Methods.StringJsonToObject(Methods.objectToJsonString(userDB), UserTokenRModel.class));
             }
         }
-        return new Object[]{status, message, usr};
+        return responseData;
     }
-
+    
     public Object[] UserRegistration(String name, String last_name,
             String email, String password, String image, String birthday,
             String rol, String state) {
@@ -173,6 +176,31 @@ public class UserController {
     
     public int CountingPageUsers() {
         return udao.CountingPageUsers();
+    }
+
+    public UserTokenRModel BuildToken(UserTokenRModel userTokenRModel, UserRequestModel userRequest) {
+        String key = Configuration.dbprivatekey;
+        long tiempo = System.currentTimeMillis();
+        long tiempoext;
+        if (userRequest.getRecuerdame()) {
+            // 10 días
+            tiempoext = 864000000;
+        } else {
+            // 1 día
+            tiempoext = 86400000;
+        }
+        String jwt = Jwts.builder()
+                .signWith(SignatureAlgorithm.HS256, key)
+                .setSubject(String.valueOf(userTokenRModel.getIduser()))
+                .setIssuedAt(new Date(tiempo))
+                .setExpiration(new Date(tiempo + tiempoext))
+                .claim("email", userTokenRModel.getEmail())
+                .claim("rol", userTokenRModel.getRol())
+                .compact();
+
+        userTokenRModel.setUser_token(jwt);
+
+        return userTokenRModel;
     }
 
 }

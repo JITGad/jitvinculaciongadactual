@@ -5,7 +5,8 @@ import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.UserController;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
-import com.jitgad.bjitgad.Models.UserTokenModel;
+import com.jitgad.bjitgad.Models.UserRequestModel;
+import com.jitgad.bjitgad.Models.UserTokenRModel;
 import com.jitgad.bjitgad.Resources.ResponseAPI;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import jakarta.ws.rs.Consumes;
@@ -31,9 +32,9 @@ public class Userresource {
 
     @Context
     private UriInfo context;
-    private UserController userC;
-    private ResponseAPI Rapi;
-    private AuthorizationController AuC;
+    private final UserController userC;
+    private final ResponseAPI Rapi;
+    private final AuthorizationController AuC;
 
     public Userresource() {
         userC = new UserController();
@@ -128,11 +129,10 @@ public class Userresource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response logIn(String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-        UserTokenModel user;
-        user = (UserTokenModel) Methods.StringJsonToObject(data, UserTokenModel.class);
+        UserRequestModel userRequest = (UserRequestModel) Methods.StringJsonToObject(data, UserRequestModel.class);
         try {
-            responseData = userC.LogIn(user);
-            responseData.setData(userC.BuildToken((UserTokenModel) responseData.getData()));
+            responseData = userC.LogIn(userRequest);
+            responseData.setData(userC.BuildToken((UserTokenRModel)responseData.getData(), userRequest));
 
             return Response.ok(Methods.objectToJsonString(responseData)).build();
         } catch (Exception e) {

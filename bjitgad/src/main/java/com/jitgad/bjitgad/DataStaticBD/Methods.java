@@ -12,9 +12,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.jitgad.bjitgad.Models.UserTokenRModel;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -333,5 +336,11 @@ public final class Methods {
         System.out.println(result);
         return result;
     }
-
+ public static Object StringJsonToObject(String json, Class objectClass) {
+        final Gson gson = new Gson();
+    
+        Object res = gson.fromJson(json, objectClass);
+        
+        return res;
+    }
 }
