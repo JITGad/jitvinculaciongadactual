@@ -9,6 +9,8 @@ import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ColortypeModel;
 import com.jitgad.bjitgad.Resources.ResponseAPI;
+import com.jitgad.bjitgad.Utilities.ResponseData;
+import com.jitgad.bjitgad.Utilities.ResponseDataPage;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -22,6 +24,7 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
+import java.util.ArrayList;
 
 /**
  *
@@ -35,6 +38,7 @@ public class Colortyperesource {
     private ColortypeController ctypeC;
     private AuthorizationController AuC;
     private ResponseAPI Rapi;
+    private ColortypeModel colortypeModel;
 
     public Colortyperesource() {
         ctypeC = new ColortypeController();
@@ -46,71 +50,129 @@ public class Colortyperesource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getcolortypeAdmin")
     public Response getColortypeAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
-        String data = ctypeC.selectColortypepage(page);
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
-        int responseCountingPage = 0;
+             
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando getcolortypeAdmin...");
+        }
+        ResponseDataPage responseDataPage = new ResponseDataPage("Ocurrió un error", page, true);
+        
         try {
+            int responseCountingPage = 0;
             //TOKENS
             String Authorization = headers.getHeaderString("Authorization");
             Authorization = Authorization == null ? "" : Authorization;
-            System.out.println("Authorization: " + Authorization);
+            if (Configuration.DEBUG) {
+                System.out.println("Authorization: " + Authorization);
+            }
+
             if (!Authorization.isEmpty()) {
+                ArrayList<ColortypeModel> data = ctypeC.selectColortypepage(page);
                 Object[] Permt = AuC.VToken(Authorization);
                 if (Permt[0].equals(true)) {
                     responseCountingPage = ctypeC.CountingPageColortype();
-                    if (data.equals("{}")) {
-                        responseJson = Rapi.AdminResponse("Información no encontrada", responseCountingPage, false, data);
-                    } else {
-                        responseJson = Rapi.AdminResponse("Datos retornados correctamente", responseCountingPage, true, data);
+                    if (data.size() > 0) {
+
+                        responseDataPage.setMessage("Información encontrada");
+                        responseDataPage.setCountingpage(responseCountingPage);
+                        responseDataPage.setData(data);
+                        return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
                     }
-                } else {
-                    responseJson = Rapi.AdminResponse(String.valueOf(Permt[1]), responseCountingPage, false, data);
+
+                    responseDataPage.setMessage("Información no encontrada");
+                    responseDataPage.setCountingpage(responseCountingPage);
+                    responseDataPage.setData(data);
+                    return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
                 }
-            } else {
-                responseJson = Rapi.AdminResponse("Token vacio", responseCountingPage, false, data);
+
+                responseDataPage.setMessage(String.valueOf(Permt[1]));
+                responseDataPage.setCountingpage(responseCountingPage);
+                return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
+
             }
+
+            responseDataPage.setMessage("Token vacio");
+            responseDataPage.setCountingpage(responseCountingPage);
+            return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
+
         } catch (Exception e) {
-            responseJson = Rapi.AdminResponse(e.getMessage(), responseCountingPage, false, data);
+            responseDataPage.setFlag(false);
+
+            if (Configuration.DEBUG) {
+
+                responseDataPage.setMessage(e.getMessage());
+
+                return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
+            }
+
+            responseDataPage.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
         }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with, Access-Control-Allow-Origin")
-                .build();
+        return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getcolortypebyid")
     public Response getColortypebyid(@Context HttpHeaders headers, @QueryParam("idcolortype") int idcolortype) {
-        String data = ctypeC.selectColortypebyid(idcolortype);
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
+        
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando getactivitiesbyid...");
+        }
+        ResponseData responseData = new ResponseData("Ocurrio un error", true);
+        
         try {
+            
             //TOKENS
             String Authorization = headers.getHeaderString("Authorization");
             Authorization = Authorization == null ? "" : Authorization;
-            System.out.println("Authorization: " + Authorization);
+            if (Configuration.DEBUG) {
+                System.out.println("Authorization: " + Authorization);
+            }
+
             if (!Authorization.isEmpty()) {
                 Object[] Permt = AuC.VToken(Authorization);
                 if (Permt[0].equals(true)) {
-                    if (data.equals("{}")) {
-                        responseJson = Rapi.Response("Información no encontrada", false, data);
-                    } else {
-                        responseJson = Rapi.Response("Datos retornados correctamente", true, data);
+
+                    JsonObject data = Methods.stringToJSON(ctypeC.selectColortypebyid(idcolortype));
+
+                    if (data.size() > 0) {
+
+                        responseData.setMessage("Información encontrada");
+                        responseData.setData(data);
+
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+
                     }
-                } else {
-                    responseJson = Rapi.Response(String.valueOf(Permt[1]), false, data);
+                    responseData.setMessage("Información no encontrada");
+
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
+
                 }
-            } else {
-                responseJson = Rapi.Response("Tokén vacio", true, data);
+                responseData.setMessage(String.valueOf(Permt[1]));
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
             }
+            responseData.setMessage("Tokén vacio");
+
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
 
         } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, data);
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+
+                responseData.setMessage(e.getMessage());
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
         }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with, Access-Control-Allow-Origin")
-                .build();
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
 
     @Produces(MediaType.APPLICATION_JSON)
@@ -118,46 +180,63 @@ public class Colortyperesource {
     @Path("/postColortype")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response PostColortype(@Context HttpHeaders headers, String data) {
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
-        System.out.println("Ingresando postColortype...");
+        
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando postColortype...");
+        }
+        
+        ResponseData responseData = new ResponseData("Ocurrio un error", false);
+        
+        colortypeModel = 
+                (ColortypeModel) 
+                Methods.StringJsonToObject(data, ColortypeModel.class);
+        
         JsonObject Jso = Methods.stringToJSON(data);
+   
         try {
+            
             if (Jso.size() > 0) {
-                Object[] responsectype;
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                System.out.println("Authorization: " + Authorization);
-                if (!Authorization.isEmpty()) {
-                    Object[] Permt = AuC.VToken(Authorization);
-                    if (Permt[0].equals(true)) {
-                        responsectype = ctypeC.InsertColortype(
-                                Methods.JsonToString(Jso.getAsJsonObject(), "name", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "rgb", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "html", ""),
-                                Boolean.parseBoolean(Methods.JsonToString(Jso.getAsJsonObject(), "state", "")));
-
-                        if (responsectype[0].equals(true)) {
-                            responseJson = Rapi.Response(String.valueOf(responsectype[1]), Boolean.parseBoolean(responsectype[0].toString()), "{}");
-                        } else {
-                            responseJson = Rapi.Response(String.valueOf(responsectype[1]), Boolean.parseBoolean(responsectype[0].toString()), "{}");
-                        }
-                    } else {
-                        responseJson = Rapi.Response(String.valueOf(Permt[1]), false, "{}");
-                    }
-                } else {
-                    responseJson = Rapi.Response("Tokén vacio", true, data);
+                
+                if (Configuration.DEBUG) {
+                   System.out.println("Authorization: " + Authorization); 
                 }
-            } else {
-                responseJson = Rapi.Response("Información no encontrada", false, "{}");
+                if (!Authorization.isEmpty()) {
+
+                    Object[] Permt = AuC.VToken(Authorization);
+
+                    if (Permt[0].equals(true)) {
+
+                        responseData = ctypeC.InsertColortype(colortypeModel);
+
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+                    }
+                    responseData.setMessage(String.valueOf(Permt[1]));
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                }
+                responseData.setMessage("Tokén vacio");
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
             }
+            responseData.setMessage("Información no encontrada");
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
         } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, "{}");
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+                responseData.setMessage(e.getMessage());
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
         }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
 
 
@@ -165,93 +244,126 @@ public class Colortyperesource {
     @PUT
     @Path("/putColortype")
     public Response PutColortype(@Context HttpHeaders headers, String data) {
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
-        System.out.println("Ingresando putColortype...");
+
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando putColortype...");
+        }
+        
+        ResponseData responseData = new ResponseData("Ocurrio un error", false);
+        
+        colortypeModel = 
+                (ColortypeModel) 
+                Methods.StringJsonToObject(data, ColortypeModel.class);
+        
         JsonObject Jso = Methods.stringToJSON(data);
+   
         try {
+            
             if (Jso.size() > 0) {
-                Object[] responsectype;
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                System.out.println("Authorization: " + Authorization);
-                if (!Authorization.isEmpty()) {
-                    Object[] Permt = AuC.VToken(Authorization);
-                    if (Permt[0].equals(true)) {
-                        responsectype = ctypeC.UpdateColortype(
-                            Methods.JsonToInteger(Jso.getAsJsonObject(), "idcolortype", 0),
-                            Methods.JsonToString(Jso.getAsJsonObject(), "name", ""),
-                            Methods.JsonToString(Jso.getAsJsonObject(), "rgb", ""),
-                            Methods.JsonToString(Jso.getAsJsonObject(), "html", ""),
-                            Boolean.parseBoolean(Methods.JsonToString(Jso.getAsJsonObject(), "state", "")));
-                        if (responsectype[0].equals(true)) {
-                            responseJson = Rapi.Response(String.valueOf(responsectype[1]), Boolean.parseBoolean(responsectype[0].toString()), "{}");
-                        } else {
-                            responseJson = Rapi.Response(String.valueOf(responsectype[1]), Boolean.parseBoolean(responsectype[0].toString()), "{}");
-                        }
-                    } else {
-                        responseJson = Rapi.Response(String.valueOf(Permt[1]), false, "{}");
-                    }
-                } else {
-                    responseJson = Rapi.Response("Tokén vacio", true, data);
+                
+                if (Configuration.DEBUG) {
+                   System.out.println("Authorization: " + Authorization); 
                 }
-            } else {
-                responseJson = Rapi.Response("Información no encontrada", false, "{}");
+                if (!Authorization.isEmpty()) {
+
+                    Object[] Permt = AuC.VToken(Authorization);
+
+                    if (Permt[0].equals(true)) {
+
+                        responseData = ctypeC.UpdateColortype(colortypeModel);
+
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+                    }
+                    responseData.setMessage(String.valueOf(Permt[1]));
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                }
+                responseData.setMessage("Tokén vacio");
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
             }
+            responseData.setMessage("Información no encontrada");
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
         } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, "{}");
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+                responseData.setMessage(e.getMessage());
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
         }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
 
     @Produces(MediaType.APPLICATION_JSON)
     @DELETE
     @Path("/deleteColortype")
     public Response DeleteActivitiesType(@Context HttpHeaders headers, String data) {
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
-        System.out.println("Ingresando deleteColortype...");
+     
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando deleteColortype...");
+        }
+        
+        ResponseData responseData = new ResponseData("Ocurrio un error", false);
+        
+        colortypeModel = 
+                (ColortypeModel) 
+                Methods.StringJsonToObject(data, ColortypeModel.class);
+        
         JsonObject Jso = Methods.stringToJSON(data);
-        System.out.println(responseJson);
+   
         try {
+            
             if (Jso.size() > 0) {
-                Object[] responseatC;
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                System.out.println("Authorization: " + Authorization);
-                if (!Authorization.isEmpty()) {
-                    Object[] Permt = AuC.VToken(Authorization);
-                    if (Permt[2].equals("Administrador")) {
-                        if (Permt[0].equals(true)) {
-                            responseatC = ctypeC.DeleteColortype(
-                                    Methods.JsonToInteger(Jso.getAsJsonObject(), "idcolortype", 0));
-                            if (responseatC[0].equals(true)) {
-                                responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), data);
-                            } else {
-                                responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), data);
-                            }
-                        } else {
-                            responseJson = Rapi.Response(String.valueOf(Permt[1]), false, data);
-                        }
-                    } else {
-                        responseJson = Rapi.Response("Usuario sin privilegios para realizar esta actividad", false, data);
-                    }
-                } else {
-                    responseJson = Rapi.Response("Tokén vacio", true, data);
+                
+                if (Configuration.DEBUG) {
+                   System.out.println("Authorization: " + Authorization); 
                 }
-            } else {
-                responseJson = Rapi.Response("Información no encontrada", false, data);
+                if (!Authorization.isEmpty()) {
+
+                    Object[] Permt = AuC.VToken(Authorization);
+
+                    if (Permt[0].equals(true)) {
+
+                        responseData = ctypeC.DeleteColortype(colortypeModel);
+
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+                    }
+                    responseData.setMessage(String.valueOf(Permt[1]));
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                }
+                responseData.setMessage("Tokén vacio");
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
             }
+            responseData.setMessage("Información no encontrada");
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
         } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, data);
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+                responseData.setMessage(e.getMessage());
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
         }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
 
 

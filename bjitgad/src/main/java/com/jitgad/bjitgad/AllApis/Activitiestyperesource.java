@@ -38,6 +38,7 @@ public class Activitiestyperesource {
     private ActivitiestypeController atC;
     private AuthorizationController AuC;
     private ResponseAPI Rapi;
+    private ActivitiestypeModel activitiestypeModel;
 
     public Activitiestyperesource() {
         atC = new ActivitiestypeController();
@@ -235,8 +236,7 @@ public class Activitiestyperesource {
         }
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
-        //  String responseJson = Rapi.Response("Ocurrió un error", false, data);
-        ActivitiestypeModel activitiestypeModel
+        activitiestypeModel
                 = (ActivitiestypeModel) Methods.StringJsonToObject(data, ActivitiestypeModel.class);
 
         JsonObject Jso = Methods.stringToJSON(data);
@@ -245,7 +245,11 @@ public class Activitiestyperesource {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                System.out.println("Authorization: " + Authorization);
+                
+                if (Configuration.DEBUG) {
+                   System.out.println("Authorization: " + Authorization); 
+                }
+                
                 if (!Authorization.isEmpty()) {
 
                     Object[] Permt = AuC.VToken(Authorization);
@@ -287,92 +291,124 @@ public class Activitiestyperesource {
     @PUT
     @Path("/PutActivitiesType")
     public Response PutActivitiesType(@Context HttpHeaders headers, String data) {
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
-        System.out.println("Ingresando PutActivitiesType...");
+        
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando PutActivitiesType...");
+        }
+        
+        ResponseData responseData = new ResponseData("Ocurrio un error", false);
+        
+        activitiestypeModel
+                = (ActivitiestypeModel) Methods.StringJsonToObject(data, ActivitiestypeModel.class);
+        
         JsonObject Jso = Methods.stringToJSON(data);
-        try {
+        try {    
+            
             if (Jso.size() > 0) {
-                Object[] responseatC;
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                System.out.println("Authorization: " + Authorization);
-                if (!Authorization.isEmpty()) {
-                    Object[] Permt = AuC.VToken(Authorization);
-                    if (Permt[0].equals(true)) {
-                        responseatC = atC.UpdateActivitiesTypeC(
-                                Methods.JsonToInteger(Jso.getAsJsonObject(), "idactivitiestype", 0),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "name", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "image", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
-                        if (responseatC[0].equals(true)) {
-                            responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), "{}");
-                        } else {
-                            responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), "{}");
-                        }
-                    } else {
-                        responseJson = Rapi.Response(String.valueOf(Permt[1]), false, "{}");
-                    }
-                } else {
-                    responseJson = Rapi.Response("Tokén vacio", true, data);
+                
+                if (Configuration.DEBUG) {
+                   System.out.println("Authorization: " + Authorization); 
                 }
-            } else {
-                responseJson = Rapi.Response("Información no encontrada", false, "{}");
-            }
-        } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, "{}");
-        }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
-    }
+                if (!Authorization.isEmpty()) {
 
+                    Object[] Permt = AuC.VToken(Authorization);
+
+                    if (Permt[0].equals(true)) {
+
+                        responseData = atC.UpdateActivitiesTypeC(activitiestypeModel,
+                                request.getServletContext().getRealPath("/"));
+
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+                    }
+                    responseData.setMessage(String.valueOf(Permt[1]));
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                }
+                responseData.setMessage("Tokén vacio");
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+            }
+            responseData.setMessage("Información no encontrada");
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+                responseData.setMessage(e.getMessage());
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
+        }
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
+    }
+        
     @Produces(MediaType.APPLICATION_JSON)
     @DELETE
     @Path("/DeleteActivitiesType")
     public Response DeleteActivitiesType(@Context HttpHeaders headers, String data) {
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
-        System.out.println("Ingresando DeleteActivitiesType...");
+        
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando DeleteActivitiesType...");
+        }
+        ResponseData responseData = new ResponseData("Ocurrio un error", false);
+        
+        activitiestypeModel = 
+                (ActivitiestypeModel) 
+                Methods.StringJsonToObject(data, ActivitiestypeModel.class);
+        
         JsonObject Jso = Methods.stringToJSON(data);
-        System.out.println(responseJson);
-        try {
+        try {    
+            
             if (Jso.size() > 0) {
-                Object[] responseatC;
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                System.out.println("Authorization: " + Authorization);
-                if (!Authorization.isEmpty()) {
-                    Object[] Permt = AuC.VToken(Authorization);
-                    if (Permt[2].equals("Administrador")) {
-                        if (Permt[0].equals(true)) {
-                            responseatC = atC.DeleteActividadestype(
-                                    Methods.JsonToInteger(Jso.getAsJsonObject(), "idactivitiestype", 0));
-                            if (responseatC[0].equals(true)) {
-                                responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), data);
-                            } else {
-                                responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), data);
-                            }
-                        } else {
-                            responseJson = Rapi.Response(String.valueOf(Permt[1]), false, data);
-                        }
-                    } else {
-                        responseJson = Rapi.Response("Usuario sin privilegios para realizar esta actividad", false, data);
-                    }
-                } else {
-                    responseJson = Rapi.Response("Tokén vacio", true, data);
+                
+                if (Configuration.DEBUG) {
+                    
+                   System.out.println("Authorization: " + Authorization); 
                 }
-            } else {
-                responseJson = Rapi.Response("Información no encontrada", false, data);
+                if (!Authorization.isEmpty()) {
+
+                    Object[] Permt = AuC.VToken(Authorization);
+
+                    if (Permt[0].equals(true)) {
+
+                        responseData = atC.DeleteActividadestype(activitiestypeModel);
+
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+                    }
+                    responseData.setMessage(String.valueOf(Permt[1]));
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                }
+                responseData.setMessage("Tokén vacio");
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
             }
+            responseData.setMessage("Información no encontrada");
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+        
         } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, data);
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+                responseData.setMessage(e.getMessage());
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
         }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
 
     /*

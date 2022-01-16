@@ -2,6 +2,7 @@ package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.ActivitiestypeDAO;
 import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import java.io.UnsupportedEncodingException;
@@ -18,24 +19,29 @@ public class ActivitiestypeController {
     private Conection conex;
     private ActivitiestypeDAO atDAO;
     private ActivitiestypeModel atM;
+    private FileController fc;
 
     public ActivitiestypeController() {
         conex = new Conection();
         atM = new ActivitiestypeModel();
         atDAO = new ActivitiestypeDAO();
+        fc = new FileController();
     }
 
     public ResponseData InsertActivitiesTypeC(ActivitiestypeModel request,
             String realpath) {
-      
+
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
-        FileController fc = new FileController();
         Object[] CreateFile;
         try {
-            CreateFile = fc.createfile(request.getImage(), "Activities",request.getName(),realpath);
-            if(Boolean.parseBoolean(CreateFile[0].toString())){
-                request.setImage(String.valueOf(CreateFile[1].toString() + "/" + "Activities" + "/" + CreateFile[2].toString()));
+            CreateFile = fc.createfile(request.getImage(),
+                    "Activities", request.getName(), realpath);
+            if (Boolean.parseBoolean(CreateFile[0].toString())) {
+                request.setImage(String.valueOf(CreateFile[1].toString()
+                        + "/" + "Activities" + "/" + CreateFile[2].toString()));
+            } else {
+                request.setImage("");
             }
             request.setCreationdate("NOW()");
             request.setUpdatedate("NOW()");
@@ -43,57 +49,110 @@ public class ActivitiestypeController {
             if (atDAO.insertActividadestype(request)) {
                 responseData.setMessage("Registros insertados correctamente");
                 responseData.setFlag(true);
-            } else {
-                responseData.setMessage("Registros no insertados, datos erróneos para enviar a la base de datos!");
-                responseData.setFlag(false);
+                return responseData;
             }
+            responseData.setMessage("Registros no insertados,"
+                    + "datos erróneos para enviar a la base de datos!");
+            responseData.setFlag(false);
+            return responseData;
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(ActivitiestypeController.class.getName()).log(Level.SEVERE, null, ex);
+
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+                responseData.setMessage(e.getMessage());
+                return responseData;
+            }
+
+            responseData.setMessage("Ha ocurrido un error insertado "
+                    + "un tipo de color, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
         }
         return responseData;
     }
 
-    public Object[] UpdateActivitiesTypeC(int idactivitiestype,
-            String name,
-            String image,
-            String state) {
-        String message = "";
-        boolean status = false;
+    public ResponseData UpdateActivitiesTypeC(ActivitiestypeModel request,
+            String realpath) {
 
-        atM.setIdactivitiestype(idactivitiestype);
-        atM.setName(name);
-        atM.setImage(image);
-        atM.setState(status);
-        atM.setUpdatedate("NOW()");
+        ResponseData responseData = new ResponseData("Ocurrió un error", false);
+        Object[] CreateFile;
 
-        if (atDAO.updateActividadestype(atM)) {
-            message = "Registros actualizados correctamente";
-            status = true;
-        } else {
-            message = "Los registros no fueron actualizados, datos erróneos para enviar a la base de datos!";
-            status = false;
+        try {
+            CreateFile = fc.createfile(request.getImage(),
+                    "Activities", request.getName(), realpath);
+            if (Boolean.parseBoolean(CreateFile[0].toString())) {
+                request.setImage(String.valueOf(CreateFile[1].toString()
+                        + "/" + "Activities" + "/" + CreateFile[2].toString()));
+            } else {
+                request.setImage("");
+            }
+
+            request.setUpdatedate("NOW()");
+
+            if (atDAO.updateActividadestype(request)) {
+                responseData.setMessage("Registros actualizados correctamente");
+                responseData.setFlag(true);
+               return responseData;
+            }
+            responseData.setMessage("Registros no insertados,"
+                    + "datos erróneos para enviar a la base de datos!");
+            responseData.setFlag(false);
+            return responseData;
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(ActivitiestypeController.class.getName()).log(Level.SEVERE, null, ex);
+
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+                responseData.setMessage(e.getMessage());
+                return responseData;
+            }
+
+            responseData.setMessage("Ha ocurrido un error insertado "
+                    + "un tipo de color, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
         }
-
-        return new Object[]{status, message};
+        return responseData;
     }
 
-    public Object[] DeleteActividadestype(int idactivitiestype) {
-        String message = "";
-        boolean status = false;
-        atM.setIdactivitiestype(idactivitiestype);
+    public ResponseData DeleteActividadestype(ActivitiestypeModel request) {
 
-        if (atDAO.DeleteActividadestype(atM)) {
-            message = "Registro eliminado correctamente";
-            status = true;
-        } else {
-            message = "El registro no fué eliminado, datos erróneos para enviar a la base de datos!";
-            status = false;
+        ResponseData responseData = new ResponseData("Ocurrió un error", false);
+
+        try {
+            if (atDAO.DeleteActividadestype(request)) {
+
+                responseData.setMessage("Registro eliminado correctamente");
+                responseData.setFlag(true);
+                return responseData;
+            }
+            responseData.setMessage("El registro no fué eliminado,"
+                    + "datos erróneos para enviar a la base de datos!");
+            responseData.setFlag(false);
+
+            return responseData;
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+                responseData.setMessage(e.getMessage());
+                return responseData;
+            }
+
+            responseData.setMessage("Ha ocurrido un error eliminando "
+                    + "un tipo de color, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
         }
-
-        return new Object[]{status, message};
+        return responseData;
     }
 
-    public ArrayList<ActivitiestypeModel>  selectActivitiestype(String path){
+    public ArrayList<ActivitiestypeModel> selectActivitiestype(String path) {
         return atDAO.selectActivitiestype(path);
     }
 

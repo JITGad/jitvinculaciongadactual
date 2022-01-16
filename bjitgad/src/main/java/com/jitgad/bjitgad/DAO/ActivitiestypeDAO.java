@@ -1,14 +1,13 @@
 package com.jitgad.bjitgad.DAO;
 
 import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
 import com.jitgad.bjitgad.Utilities.InetAddressUtil;
 import com.jitgad.bjitgad.Utilities.UFile;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -29,10 +28,10 @@ public class ActivitiestypeDAO {
 
     public ArrayList<ActivitiestypeModel> selectActivitiestype(String path) {
 
-        sentence = "select * from tblactivitiestype where state = true";
+        sentence = "select * from tblactivitiestype where state = true order by idactivitiestype";
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
         for (int i = 0; i < datos.size(); i++) {
-            datos.get(i).setImage((ipreal.getHostIp() + ":8080/bjitgad/" + datos.get(i).getImage()).replace('\\', '/'));
+            datos.get(i).setImage((Configuration.ipdominioservidor + datos.get(i).getImage()).replace('\\', '/'));
         }
         return datos;
     }
@@ -40,6 +39,9 @@ public class ActivitiestypeDAO {
     public ArrayList<ActivitiestypeModel> selectActivitiestypepage(int page) {
         sentence = "select * from tblactivitiestype order by idactivitiestype asc limit 10 offset " + (page * 10 - 10);
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
+        for (int i = 0; i < datos.size(); i++) {
+            datos.get(i).setImage((Configuration.ipdominioservidor + datos.get(i).getImage()).replace('\\', '/'));
+        }
         return datos;
     }
 
@@ -51,6 +53,9 @@ public class ActivitiestypeDAO {
     public String selectactivitiesbyid(int idactivity) {
         sentence = "select * from tblactivitiestype where idactivitiestype =" + idactivity;
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
+        for (int i = 0; i < datos.size(); i++) {
+            datos.get(i).setImage((Configuration.ipdominioservidor + datos.get(i).getImage()).replace('\\', '/'));
+        }
         if (datos.size() > 0) {
             return Methods.objectToJsonString(datos.get(0));
         } else {

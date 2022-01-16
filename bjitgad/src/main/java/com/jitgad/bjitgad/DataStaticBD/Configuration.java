@@ -13,6 +13,7 @@ public class Configuration {
     public static String dbPassword = "e2519d7aa881ecf70a6228c203e777fd403925bac01379cb5a95a1ee44883f78";
     public static String dbPort = "5432";
     public static String dbprivatekey = "12345GFEDCBA$.$123Barcelona";
+    public static String ipdominioservidor= "http://192.241.152.203:8080/bjitgad/";
     
     public static boolean DEBUG = true;
 }

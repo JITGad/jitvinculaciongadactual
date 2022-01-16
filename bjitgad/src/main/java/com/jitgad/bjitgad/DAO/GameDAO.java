@@ -24,16 +24,16 @@ public class GameDAO {
         con = new Conection();
     }
 
-    public String selectGame() {
+    public ArrayList<GameModel> selectGame() {
         sentence = "select * from tblgame";
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
-        return Methods.objectToJsonString(datos);
+        return datos;
     }
     
-    public String selectGamepage(int page){
+    public ArrayList<GameModel> selectGamepage(int page){
         sentence ="select * from tblgame order by idgame asc limit 10 offset "+ (page * 10 - 10);
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
-        return Methods.objectToJsonString(datos);
+        return datos;
     }
     
     public String selectGamebyid(int gameid){
@@ -51,13 +51,13 @@ public class GameDAO {
       return  ((con.returnRecord(sentence)).getRowCount());
     }
 
-    public String selectgamesbyactivities(int idactivity) {
+    public ArrayList<ClaveValorModel> selectgamesbyactivities(int idactivity) {
         sentence = "select tblgame.idgame as id, tblgame.name as name from tblgametype "
                 + "inner join tblgame on tblgame.idgametype = tblgametype.idgametype "
                 + "inner join tblactivitiestype "
                 + "on tblgame.idactivitiestype = tblactivitiestype.idactivitiestypewhere tblactivitiestype.idactivitiestype =" + idactivity;
         ArrayList<ClaveValorModel> datos = con.getObjectDB(sentence, ClaveValorModel.class, 1);
-        return Methods.objectToJsonString(datos);
+        return datos;
     }
 
     public boolean insertGame(GameModel gameModel) {
