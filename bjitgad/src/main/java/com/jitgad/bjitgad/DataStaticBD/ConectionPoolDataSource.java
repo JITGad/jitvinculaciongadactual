@@ -11,7 +11,7 @@ import java.sql.SQLException;
  * @author jgarc
  */
 public class ConectionPoolDataSource {
-    private static IConnectionPool conection;
+    private static Conection conection;
     
     static {
         try {
@@ -21,7 +21,7 @@ public class ConectionPoolDataSource {
         }
     }
     
-    public static IConnectionPool getConnection() {
+    public static Conection getConnection() {
         return conection;
     }
     
