@@ -1,11 +1,10 @@
 package com.jitgad.bjitgad.DAO;
 
-import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.Models.ColortypeModel;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -13,11 +12,11 @@ import java.util.logging.Logger;
  */
 public class ColortypeDAO {
 
-    Conection con;
+    ConectionPool con;
     String sentence;
 
     public ColortypeDAO() {
-        con = new Conection();
+        con = ConectionPoolDataSource.getConnection();
     }
 
     public ArrayList<ColortypeModel> selectColortypepage(int page) {

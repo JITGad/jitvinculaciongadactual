@@ -5,7 +5,8 @@
  */
 package com.jitgad.bjitgad.DAO;
 
-import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.GameModel;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
@@ -17,11 +18,11 @@ import java.util.ArrayList;
  */
 public class GameDAO {
 
-    Conection con;
+    ConectionPool con;
     String sentence;
 
     public GameDAO() {
-        con = new Conection();
+        con = ConectionPoolDataSource.getConnection();
     }
 
     public ArrayList<GameModel> selectGame() {

@@ -6,7 +6,7 @@
 package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.UserDAO;
-import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.UserModel;
@@ -26,12 +26,10 @@ import org.apache.commons.codec.digest.DigestUtils;
  */
 public class UserController {
 
-    private final Conection conex;
     private final UserDAO udao;
     private final UserModel um;
 
     public UserController() {
-        conex = new Conection();
         udao = new UserDAO();
         um = new UserModel();
     }
@@ -46,10 +44,9 @@ public class UserController {
      * user's mail
      */
     public ResponseData LogIn(UserRequestModel request) {
-        ArrayList<UserModel> datos = conex.getObjectDB("select * from tbluser where email='" + request.getEmail() + "'", UserModel.class, 1);
+        UserModel userDB = udao.getUserEmail(request.getEmail());
         ResponseData responseData = new ResponseData("Usuario no encontrado", false);
-        if (datos.size() > 0) {
-            UserModel userDB = datos.get(0);
+        if (userDB != null) {
             responseData.setMessage("Contraseña incorrecta");
             if (encriptPassword(request.getPassword()).equals(userDB.getPassword())) {
                 responseData.setMessage("Acceso consedido.");

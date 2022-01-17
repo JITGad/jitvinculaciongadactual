@@ -1,7 +1,7 @@
 package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.GameDAO;
-import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GameModel;
@@ -14,12 +14,10 @@ import java.util.ArrayList;
  */
 public class GameController {
 
-    private Conection conex;
     private GameDAO gD;
     private GameModel gM;
 
     public GameController() {
-        conex = new Conection();
         gD = new GameDAO();
         gM = new GameModel();
 

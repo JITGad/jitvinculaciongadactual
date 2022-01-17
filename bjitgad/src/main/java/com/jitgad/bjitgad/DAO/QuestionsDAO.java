@@ -1,7 +1,8 @@
 
 package com.jitgad.bjitgad.DAO;
 
-import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 
 /**
  *
@@ -9,11 +10,11 @@ import com.jitgad.bjitgad.DataStaticBD.Conection;
  */
 public class QuestionsDAO {
     
-    Conection con;
+    ConectionPool con;
     String sentence;
 
     public QuestionsDAO() {
-        con = new Conection();
+        con = ConectionPoolDataSource.getConnection();
     }
     
     public String selectQuestions(){

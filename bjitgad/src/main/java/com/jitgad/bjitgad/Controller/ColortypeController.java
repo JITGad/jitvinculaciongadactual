@@ -1,7 +1,7 @@
 package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.ColortypeDAO;
-import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ColortypeModel;
@@ -15,12 +15,10 @@ import java.util.ArrayList;
  */
 public class ColortypeController {
 
-    private Conection conex;
     private ColortypeModel ctModel;
     private ColortypeDAO ctypDAO;
 
     public ColortypeController() {
-        conex = new Conection();
         ctModel = new ColortypeModel();
         ctypDAO = new ColortypeDAO();
     }

@@ -1,6 +1,7 @@
 package com.jitgad.bjitgad.DAO;
 
-import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
@@ -15,13 +16,13 @@ import java.util.ArrayList;
  */
 public class ActivitiestypeDAO {
 
-    Conection con;
+    ConectionPool con;
     String sentence;
     UFile uf;
     InetAddressUtil ipreal;
 
     public ActivitiestypeDAO() {
-        con = new Conection();
+        con = ConectionPoolDataSource.getConnection();
         uf = new UFile();
         ipreal = new InetAddressUtil();
     }

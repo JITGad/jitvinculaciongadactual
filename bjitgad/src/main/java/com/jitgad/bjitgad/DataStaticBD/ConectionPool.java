@@ -21,13 +21,13 @@ import javax.swing.table.DefaultTableModel;
  * In this class, the necessary methods for connecting, obtaining and sending
  * data to the database are carried out.
  */
-public class Conection implements IConnectionPool {
+public class ConectionPool implements IConnectionPool {
 
-    private String user;
-    private String password;
-    private String url;
+    private final String user;
+    private final String password;
+    private final String url;
 
-    private List<Connection> connectionPool;
+    private final List<Connection> connectionPool;
     private final List<Connection> usedConnections = new ArrayList<>();
 
     private static final int INITIAL_POOL_SIZE = 10;
@@ -35,11 +35,7 @@ public class Conection implements IConnectionPool {
     private static final int MAX_TIMEOUT = 5;
 
     Connection conex;
-
-    public Conection() {
-
-    }
-
+    
     /**
      * Receives a query and saves it in a table
      *
@@ -319,18 +315,20 @@ public class Conection implements IConnectionPool {
         return this.password;
     }
 
-    public static Conection create(
+    public static ConectionPool create(
             String url, String user,
-            String password) throws SQLException {
-
+            String password) throws SQLException, ClassNotFoundException {
+        
+        Class.forName("org.postgresql.Driver");
+        
         List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
         for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
             pool.add(createConnection(url, user, password));
         }
-        return new Conection(url, user, password, pool);
+        return new ConectionPool(url, user, password, pool);
     }
 
-    private Conection(String url, String user, String password, List<Connection> connectionPool) {
+    private ConectionPool(String url, String user, String password, List<Connection> connectionPool){        
         this.url = url;
         this.user = user;
         this.password = password;

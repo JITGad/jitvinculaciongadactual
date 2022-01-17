@@ -1,7 +1,7 @@
 package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.ActivitiestypeDAO;
-import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
@@ -16,13 +16,11 @@ import java.util.logging.Logger;
  */
 public class ActivitiestypeController {
 
-    private Conection conex;
     private ActivitiestypeDAO atDAO;
     private ActivitiestypeModel atM;
     private FileController fc;
 
     public ActivitiestypeController() {
-        conex = new Conection();
         atM = new ActivitiestypeModel();
         atDAO = new ActivitiestypeDAO();
         fc = new FileController();

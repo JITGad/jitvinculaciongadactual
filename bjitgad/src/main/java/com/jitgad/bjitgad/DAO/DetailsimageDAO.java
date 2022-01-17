@@ -1,6 +1,7 @@
 package com.jitgad.bjitgad.DAO;
 
-import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.Models.DetailsimageModel;
 
 /**
@@ -9,11 +10,11 @@ import com.jitgad.bjitgad.Models.DetailsimageModel;
  */
 public class DetailsimageDAO {
 
-    Conection con;
+    ConectionPool con;
     String sentence;
 
     public DetailsimageDAO() {
-        con = new Conection();
+        con = ConectionPoolDataSource.getConnection();
     }
 
     public String selectDetailsimage() {

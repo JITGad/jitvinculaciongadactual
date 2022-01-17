@@ -2,7 +2,7 @@
 package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.DetailsimageDAO;
-import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.Models.DetailsimageModel;
 
 /**
@@ -11,12 +11,10 @@ import com.jitgad.bjitgad.Models.DetailsimageModel;
  */
 public class DetailsimageController {
     
-    private Conection conex;
     private DetailsimageDAO dio;
     private DetailsimageModel dim;
 
     public DetailsimageController() {
-        conex = new Conection();
         dio = new DetailsimageDAO();
         dim = new DetailsimageModel();
     }

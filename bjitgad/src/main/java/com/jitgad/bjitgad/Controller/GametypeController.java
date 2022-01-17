@@ -1,7 +1,7 @@
 package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.GametypeDAO;
-import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.Models.GametypeModel;
 
 /**
@@ -10,12 +10,10 @@ import com.jitgad.bjitgad.Models.GametypeModel;
  */
 public class GametypeController {
 
-    private Conection conex;
     private GametypeDAO gtD;
     private GametypeModel gtM;
 
     public GametypeController() {
-        conex = new Conection();
         gtD = new GametypeDAO();
         gtM = new GametypeModel();
     }

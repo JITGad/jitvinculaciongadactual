@@ -1,6 +1,8 @@
 package com.jitgad.bjitgad.DAO;
 
-import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
+import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.UserModel;
 import java.util.ArrayList;
@@ -12,19 +14,16 @@ import javax.swing.table.DefaultTableModel;
  */
 public class UserDAO {
 
-    Conection con;
+    ConectionPool con;
     String sentence;
 
     public UserDAO() {
-        con = new Conection();
+        con = ConectionPoolDataSource.getConnection();
     }
 
     public String selectUserspage(int page) {
         sentence = "select iduser,names,last_name, email,image, birthdate, rol, creationdate, updatedate, state from tbluser order by iduser asc limit 10 offset " + (page * 10 - 10);
         ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
-//        datos.forEach(proyecto -> {
-//            proyecto.setShare_users(getEmailsToProyectUserAdmin(proyecto.getProjects_id_pr(), id));
-//        });
         return Methods.objectToJsonString(datos);
     }
 
@@ -111,7 +110,9 @@ public class UserDAO {
                 + "</user>");
 
         String sentency = "Select * from updateUser('" + structure + "')";
-        System.out.println(structure);
+        if (Configuration.DEBUG) {
+            System.out.println(structure);    
+        }
         return con.modifyBD(sentency);
     }
 
@@ -122,7 +123,17 @@ public class UserDAO {
                 + "</user>");
 
         String sentency = "Select * from deleteUser('" + structure + "')";
-        System.out.println(structure);
+        if (Configuration.DEBUG) {
+            System.out.println(structure);    
+        }
         return con.modifyBD(sentency);
+    }
+
+    public UserModel getUserEmail(String email) {
+        ArrayList<UserModel> datos = con.getObjectDB("select * from tbluser where email='" + email + "'", UserModel.class, 1);
+        if (datos.size() > 0) {
+            return datos.get(0);
+        }
+        return null;
     }
 }

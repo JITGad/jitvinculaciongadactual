@@ -2,7 +2,7 @@
 package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.GameimageDAO;
-import com.jitgad.bjitgad.DataStaticBD.Conection;
+import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.Models.GameimageModel;
 
 /**
@@ -11,12 +11,10 @@ import com.jitgad.bjitgad.Models.GameimageModel;
  */
 public class GameimageController {
     
-    private Conection conex;
     private GameimageDAO giD;
     private GameimageModel giM;
 
     public GameimageController() {
-        conex = new Conection();
         giD = new GameimageDAO();
         giM = new GameimageModel();
     }

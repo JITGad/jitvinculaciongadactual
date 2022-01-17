@@ -11,17 +11,18 @@ import java.sql.SQLException;
  * @author jgarc
  */
 public class ConectionPoolDataSource {
-    private static Conection conection;
+    
+    private static ConectionPool conection;
     
     static {
         try {
-            conection = Conection.create(Configuration.dburl, Configuration.dbUser, Configuration.dbPassword);
-        } catch (SQLException e) {
+            conection = ConectionPool.create(Configuration.dburl, Configuration.dbUser, Configuration.dbPassword);
+        } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e.getMessage());
         }
     }
     
-    public static Conection getConnection() {
+    public static ConectionPool getConnection() {
         return conection;
     }
     
