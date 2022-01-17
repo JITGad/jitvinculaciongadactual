@@ -44,8 +44,13 @@ public class GametypeController {
         Object[] CFImage = fc.createfile(request.getImage(),
                     "Game", request.getName(), realpath);
         
+        if (Boolean.parseBoolean(CFImage[0].toString())) {
+                request.setImage(String.valueOf(CFImage[1].toString()
+                        + "/" + "Game" + "/" + CFImage[2].toString()));
+        } else {
+            request.setImage("");
+        }
         
-        request.setImage("");
         request.setAudio_instructions("");
         request.setVideo_instructions("");
 

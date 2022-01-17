@@ -32,8 +32,7 @@ public class ActivitiestypeController {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
-        Object[] CreateFile;
-            CreateFile = fc.createfile(request.getImage(),
+        Object[] CreateFile = fc.createfile(request.getImage(),
                     "Activities", request.getName(), realpath);
             if (Boolean.parseBoolean(CreateFile[0].toString())) {
                 request.setImage(String.valueOf(CreateFile[1].toString()
