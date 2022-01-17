@@ -10,6 +10,7 @@ import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.GameModel;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -61,7 +62,7 @@ public class GameDAO {
         return datos;
     }
 
-    public boolean insertGame(GameModel gameModel) {
+    public boolean insertGame(GameModel gameModel) throws SQLException {
         String structure = String.format(
                 "<game>"
                 + "<idactivitiestype>" + gameModel.getIdactivitiestype() + "</idactivitiestype>"
@@ -78,7 +79,7 @@ public class GameDAO {
         return con.modifyBD(sentency);
     }
 
-    public boolean updateGame(GameModel gameModel) {
+    public boolean updateGame(GameModel gameModel) throws SQLException {
         String structure = String.format(
                 "<game>"
                 + "<idgame>" + gameModel.getIdgame() + "</idgame>"
@@ -95,7 +96,7 @@ public class GameDAO {
         return con.modifyBD(sentency);
     }
 
-    public boolean deleteGame(GameModel gameModel) {
+    public boolean deleteGame(GameModel gameModel) throws SQLException {
         String structure = String.format(
                 "<game>"
                 + "<idgame>" + gameModel.getIdgame() + "</idgame>"

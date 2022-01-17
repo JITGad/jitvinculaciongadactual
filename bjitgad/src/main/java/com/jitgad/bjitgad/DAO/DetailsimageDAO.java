@@ -3,6 +3,7 @@ package com.jitgad.bjitgad.DAO;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.Models.DetailsimageModel;
+import java.sql.SQLException;
 
 /**
  *
@@ -23,7 +24,7 @@ public class DetailsimageDAO {
         return json;
     }
 
-    public boolean insertDetailsimage(DetailsimageModel detailsimageModel) {
+    public boolean insertDetailsimage(DetailsimageModel detailsimageModel) throws SQLException {
         String structure = String.format(
                 "<detailsimag>"
                 + "<idgameimage>" + detailsimageModel.getIdgameimage() + "</idgameimage>"

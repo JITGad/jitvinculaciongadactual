@@ -3,6 +3,10 @@ package com.jitgad.bjitgad.Controller;
 import com.jitgad.bjitgad.DAO.GametypeDAO;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.Models.GametypeModel;
+import com.jitgad.bjitgad.Utilities.ResponseData;
+import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -12,16 +16,15 @@ public class GametypeController {
 
     private GametypeDAO gtD;
     private GametypeModel gtM;
+    private FileController fc;
 
     public GametypeController() {
         gtD = new GametypeDAO();
         gtM = new GametypeModel();
+        fc = new FileController();
     }
 
-//    public String selectGametype() {
-//        return gtD.selectGametype();
-//    }
-    public String selectGametypepage(int page) {
+    public ArrayList<GametypeModel> selectGametypepage(int page) {
         return gtD.selectGametypepage(page);
     }
 
@@ -33,68 +36,76 @@ public class GametypeController {
         return gtD.selectGametypebyid(id);
     }
 
-    public Object[] InsertGametypeC(String name,
-            String image, String audio_instructions,
-            boolean state,
-            String shortname) {
-        String message = "";
-        boolean status = false;
-        gtM.setName(name);
-        gtM.setImage(image);
-        gtM.setAudio_instructions(audio_instructions);
-        gtM.setCreationdate("NOW()");
-        gtM.setUpdatedate("NOW()");
-        gtM.setState(state);
-        gtM.setShortname(shortname);
-        if (gtD.insertGametype(gtM)) {
-            message = "Registros insertados correctamente";
-            status = true;
-        } else {
-            message = "Registros no insertados, datos erróneos para enviar a la base de datos!";
-            status = false;
-        }
-        return new Object[]{status, message};
+    public ResponseData InsertGametypeC(GametypeModel request,
+            String realpath) throws SQLException, UnsupportedEncodingException {
 
+        ResponseData responseData = new ResponseData("Ocurrió un error", false);
+
+        Object[] CFImage = fc.createfile(request.getImage(),
+                    "Game", request.getName(), realpath);
+        
+        
+        request.setImage("");
+        request.setAudio_instructions("");
+        request.setVideo_instructions("");
+
+        request.setShortname(request.getShortname()
+                .trim()
+                .replaceAll("\\s+", "")
+                .toLowerCase());
+        request.setCreationdate("NOW()");
+        request.setUpdatedate("NOW()");
+
+        if (gtD.insertGametype(request)) {
+            
+            responseData.setMessage("Registros insertados correctamente");
+            responseData.setFlag(true);
+            
+            return responseData;
+        }
+
+        return responseData;
     }
 
-    public Object[] UpdateGametypeC(int idgametype,
-            String name,String image, 
-            String audio_instructions,
-            boolean state,
-            String shortname) {
-        String message = "";
-        boolean status = false;
-        gtM.setIdgametype(idgametype);
-        gtM.setName(name);
-        gtM.setImage(image);
-        gtM.setAudio_instructions(audio_instructions);
-        gtM.setUpdatedate("NOW()");
-        gtM.setState(state);
-        gtM.setShortname(shortname);
-        if (gtD.updateGametype(gtM)) {
-            message = "Registros actualizados correctamente";
-            status = true;
-        } else {
-            message = "Los registros no fueron actualizados, datos erróneos para enviar a la base de datos!";
-            status = false;
+    public ResponseData UpdateGametypeC(GametypeModel request,
+            String realpath) throws SQLException {
+
+        ResponseData responseData = new ResponseData("Ocurrió un error", false);
+
+        request.setImage("");
+        request.setAudio_instructions("");
+        request.setVideo_instructions("");
+
+        request.setShortname(request.getShortname()
+                .trim()
+                .replaceAll("\\s+", "")
+                .toLowerCase());
+        request.setUpdatedate("NOW()");
+
+        if (gtD.updateGametype(request)) {
+            
+            responseData.setMessage("Registros actualizados correctamente");
+            responseData.setFlag(true);
+            
+            return responseData;
         }
-        return new Object[]{status, message};
+
+        return responseData;
     }
 
-    public Object[] DeleteGametypeC(int idgametype) {
-        String message = "";
-        boolean status = false;
-        gtM.setIdgametype(idgametype);
+    public ResponseData DeleteGametypeC(GametypeModel request) throws SQLException {
+        
+        ResponseData responseData = new ResponseData("Ocurrió un error", false);
+     
+            if (gtD.DeleteGametype(request)) {
 
-        if (gtD.DeleteGametype(gtM)) {
-            message = "Registro eliminado correctamente";
-            status = true;
-        } else {
-            message = "El registro no fué eliminado, datos erróneos para enviar a la base de datos!";
-            status = false;
-        }
+                responseData.setMessage("Registro eliminado correctamente");
+                responseData.setFlag(true);
+                
+                return responseData;
+            }
 
-        return new Object[]{status, message};
+            return responseData;
     }
 
 }

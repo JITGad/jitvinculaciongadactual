@@ -30,9 +30,7 @@ public class ConectionPool implements IConnectionPool {
     private final List<Connection> connectionPool;
     private final List<Connection> usedConnections = new ArrayList<>();
 
-    private static final int INITIAL_POOL_SIZE = 10;
-    private static final int MAX_POOL_SIZE = 20;
-    private static final int MAX_TIMEOUT = 5;
+    
 
     Connection conex;
     
@@ -77,16 +75,16 @@ public class ConectionPool implements IConnectionPool {
      * @param sentecy This String variable, contains a query of a function.
      * @return Return a Boolean.
      */
-    public boolean modifyBD(String sentecy) {
+    public boolean modifyBD(String sentecy) throws SQLException {
         try {
             conex = getConnection();
             try (Statement st = conex.createStatement()) {
                 st.execute(sentecy);
                 return true;
-            }
+            } 
         } catch (SQLException exc) {
-            System.out.println("Error ModifyBD:" + exc.getMessage());
-            return false;
+           // System.out.println("Error ModifyBD:" + exc.getMessage());
+            throw exc;
         } finally {
             releaseConnection(conex);
         }
@@ -266,7 +264,7 @@ public class ConectionPool implements IConnectionPool {
     @Override
     public Connection getConnection() throws SQLException {
         if (connectionPool.isEmpty()) {
-            if (usedConnections.size() < MAX_POOL_SIZE) {
+            if (usedConnections.size() < Configuration.MAX_POOL_SIZE) {
                 connectionPool.add(createConnection(url, user, password));
             } else {
                 throw new RuntimeException(
@@ -277,7 +275,7 @@ public class ConectionPool implements IConnectionPool {
         Connection connection = connectionPool
                 .remove(connectionPool.size() - 1);
 
-        if (!connection.isValid(MAX_TIMEOUT)) {
+        if (!connection.isValid(Configuration.MAX_TIMEOUT)) {
             connection = createConnection(url, user, password);
         }
 
@@ -321,8 +319,8 @@ public class ConectionPool implements IConnectionPool {
         
         Class.forName("org.postgresql.Driver");
         
-        List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
-        for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
+        List<Connection> pool = new ArrayList<>(Configuration.INITIAL_POOL_SIZE);
+        for (int i = 0; i < Configuration.INITIAL_POOL_SIZE; i++) {
             pool.add(createConnection(url, user, password));
         }
         return new ConectionPool(url, user, password, pool);

@@ -4,6 +4,7 @@ package com.jitgad.bjitgad.Controller;
 import com.jitgad.bjitgad.DAO.DetailsimageDAO;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.Models.DetailsimageModel;
+import java.sql.SQLException;
 
 /**
  *
@@ -24,7 +25,7 @@ public class DetailsimageController {
     }
     
     public Object[] InsertDetailsimageC(String idgameimage, String clipping_type_,
-            String image, String creationdate, String updatedate, String state) {
+            String image, String creationdate, String updatedate, String state) throws SQLException {
         String message = "";
         boolean status = false;
         dim.setIdgameimage(idgameimage);
@@ -41,7 +42,6 @@ public class DetailsimageController {
                 message = "The Details image type was not inserted";
                 status = false;
             }
-
         return new Object[]{status, message};
     }
 }

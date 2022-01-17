@@ -4,6 +4,7 @@ package com.jitgad.bjitgad.Controller;
 import com.jitgad.bjitgad.DAO.GameimageDAO;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.Models.GameimageModel;
+import java.sql.SQLException;
 
 /**
  *
@@ -26,7 +27,7 @@ public class GameimageController {
     public Object[] InsertGameimageC(String idgame, String idcolortype,
             String image, String paragraph, String audio_parag,
             String video_parag, String creationdate, String updatedate,
-            String state) {
+            String state) throws SQLException {
         String message = "";
         boolean status = false;
         giM.setIdgame(idgame);

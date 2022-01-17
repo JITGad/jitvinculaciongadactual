@@ -53,47 +53,47 @@ public class Detailsimageresource {
                 .build();
     }
     
-    @Produces(MediaType.APPLICATION_JSON)
-    @POST
-    @Path("/postDetailsimage")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response PostDetailsimage(@Context HttpHeaders headers, String data) {
-        String responseJson = "{\"status\":\"poken:" + data + "\"}";
-        System.out.println("Ingresando PostDetailsimage...");
-        JsonObject Jso = Methods.stringToJSON(data);
-        if (Jso.size() > 0) {
-            Object[] responseDiC;
-            //TOKENS
-            String Authorization = headers.getHeaderString("Authorization");
-            Authorization = Authorization == null ? "" : Authorization;
-            System.out.println("Authorization: " + Authorization);
-            Object[] Permt = AuC.VToken(Authorization);
-            if (Permt[0].equals(true)) {
-                responseDiC = diC.InsertDetailsimageC(
-                        Methods.JsonToString(Jso.getAsJsonObject(), "idgameimage", ""),
-                        Methods.JsonToString(Jso.getAsJsonObject(), "clipping_type_", ""),
-                        Methods.JsonToString(Jso.getAsJsonObject(), "image", ""),
-                        Methods.JsonToString(Jso.getAsJsonObject(), "creationdate", ""),
-                        Methods.JsonToString(Jso.getAsJsonObject(), "updatedate", ""),
-                        Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
-
-                if (responseDiC[0].equals(true)) {
-                    responseJson = "{\"message\":\"" + responseDiC[1] + "\",\"flag\":" + responseDiC[0] + "}";
-                } else {
-                    responseJson = "{\"message\":\"" + responseDiC[1] + "\",\"nameApplication\":\"" + Configuration.nameApplication + "\",\"flag\":" + responseDiC[0] + "}";
-                }
-            } else {
-                responseJson = "{\"message\":\"" + Permt[1] + "\",\"nameApplication\":\"" + Configuration.nameApplication + "\",\"flag\":" + Permt[0] + "}";
-            }
-
-        } else {
-            responseJson = "{\"message\":\"Missing data.\",\"nameApplication\":\"" + Configuration.nameApplication + "\",\"flag\":" + false + "}";
-        }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
-    }
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @POST
+//    @Path("/postDetailsimage")
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public Response PostDetailsimage(@Context HttpHeaders headers, String data) {
+//        String responseJson = "{\"status\":\"poken:" + data + "\"}";
+//        System.out.println("Ingresando PostDetailsimage...");
+//        JsonObject Jso = Methods.stringToJSON(data);
+//        if (Jso.size() > 0) {
+//            Object[] responseDiC;
+//            //TOKENS
+//            String Authorization = headers.getHeaderString("Authorization");
+//            Authorization = Authorization == null ? "" : Authorization;
+//            System.out.println("Authorization: " + Authorization);
+//            Object[] Permt = AuC.VToken(Authorization);
+//            if (Permt[0].equals(true)) {
+//                responseDiC = diC.InsertDetailsimageC(
+//                        Methods.JsonToString(Jso.getAsJsonObject(), "idgameimage", ""),
+//                        Methods.JsonToString(Jso.getAsJsonObject(), "clipping_type_", ""),
+//                        Methods.JsonToString(Jso.getAsJsonObject(), "image", ""),
+//                        Methods.JsonToString(Jso.getAsJsonObject(), "creationdate", ""),
+//                        Methods.JsonToString(Jso.getAsJsonObject(), "updatedate", ""),
+//                        Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
+//
+//                if (responseDiC[0].equals(true)) {
+//                    responseJson = "{\"message\":\"" + responseDiC[1] + "\",\"flag\":" + responseDiC[0] + "}";
+//                } else {
+//                    responseJson = "{\"message\":\"" + responseDiC[1] + "\",\"nameApplication\":\"" + Configuration.nameApplication + "\",\"flag\":" + responseDiC[0] + "}";
+//                }
+//            } else {
+//                responseJson = "{\"message\":\"" + Permt[1] + "\",\"nameApplication\":\"" + Configuration.nameApplication + "\",\"flag\":" + Permt[0] + "}";
+//            }
+//
+//        } else {
+//            responseJson = "{\"message\":\"Missing data.\",\"nameApplication\":\"" + Configuration.nameApplication + "\",\"flag\":" + false + "}";
+//        }
+//        return Response.ok(responseJson)
+//                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+//                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
+//                .build();
+//    }
 
 }

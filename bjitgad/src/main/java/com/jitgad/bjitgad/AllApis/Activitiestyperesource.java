@@ -34,7 +34,6 @@ public class Activitiestyperesource {
 
     @Context
     private HttpServletRequest request;
-    //  private ActivitiestypeModel atM;
     private ActivitiestypeController atC;
     private AuthorizationController AuC;
     private ResponseAPI Rapi;

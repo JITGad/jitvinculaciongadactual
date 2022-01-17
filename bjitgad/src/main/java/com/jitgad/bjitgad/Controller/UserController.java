@@ -15,6 +15,7 @@ import com.jitgad.bjitgad.Models.UserTokenRModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -59,7 +60,7 @@ public class UserController {
     
     public Object[] UserRegistration(String name, String last_name,
             String email, String password, String image, String birthday,
-            String rol, String state) {
+            String rol, String state) throws SQLException {
         String message = "Correo inválido";
         boolean status = false;
         um.setNames(name);
@@ -89,7 +90,7 @@ public class UserController {
 
     public Object[] PutUser(int iduser,String name, String last_name,
             String email, String password, String image, String birthday,
-            String rol, String state) {
+            String rol, String state) throws SQLException {
         String message = "Correo inválido";
         boolean status = false;
         boolean passband = false;
@@ -124,7 +125,7 @@ public class UserController {
         return new Object[]{status, message};
     }
 
-    public Object[] DeleteUser(int iduser){
+    public Object[] DeleteUser(int iduser) throws SQLException{
         String message = "";
         boolean status = false;
         um.setIduser(iduser);

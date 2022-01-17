@@ -5,6 +5,7 @@ import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.UserModel;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
@@ -73,7 +74,7 @@ public class UserDAO {
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
 
-    public boolean insertUser(UserModel userM) {
+    public boolean insertUser(UserModel userM) throws SQLException {
         String structure = String.format(
                 "<user>"
                 + "<names>" + userM.getNames() + "</names>"
@@ -93,7 +94,7 @@ public class UserDAO {
         return con.modifyBD(sentency);
     }
 
-    public boolean updateUser(UserModel userM, boolean passband) {
+    public boolean updateUser(UserModel userM, boolean passband) throws SQLException {
         String structure = String.format(
                 "<user>"
                 + "<iduser>" + userM.getIduser() + "</iduser>"
@@ -116,7 +117,7 @@ public class UserDAO {
         return con.modifyBD(sentency);
     }
 
-    public boolean deleteUser(UserModel userM) {
+    public boolean deleteUser(UserModel userM) throws SQLException {
         String structure = String.format(
                 "<user>"
                 + "<iduser>" + userM.getIduser() + "</iduser>"

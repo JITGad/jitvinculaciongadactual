@@ -6,6 +6,7 @@ import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,12 +28,11 @@ public class ActivitiestypeController {
     }
 
     public ResponseData InsertActivitiesTypeC(ActivitiestypeModel request,
-            String realpath) {
+            String realpath) throws UnsupportedEncodingException, SQLException {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
         Object[] CreateFile;
-        try {
             CreateFile = fc.createfile(request.getImage(),
                     "Activities", request.getName(), realpath);
             if (Boolean.parseBoolean(CreateFile[0].toString())) {
@@ -49,36 +49,16 @@ public class ActivitiestypeController {
                 responseData.setFlag(true);
                 return responseData;
             }
-            responseData.setMessage("Registros no insertados,"
-                    + "datos erróneos para enviar a la base de datos!");
-            responseData.setFlag(false);
-            return responseData;
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(ActivitiestypeController.class.getName()).log(Level.SEVERE, null, ex);
 
-        } catch (Exception e) {
-            responseData.setFlag(false);
-
-            if (Configuration.DEBUG) {
-                responseData.setMessage(e.getMessage());
-                return responseData;
-            }
-
-            responseData.setMessage("Ha ocurrido un error insertado "
-                    + "un tipo de color, vuelva a intentarlo mas tarde");
-
-            System.err.println(e.getMessage());
-        }
         return responseData;
     }
 
     public ResponseData UpdateActivitiesTypeC(ActivitiestypeModel request,
-            String realpath) {
+            String realpath) throws UnsupportedEncodingException, SQLException {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
         Object[] CreateFile;
 
-        try {
             CreateFile = fc.createfile(request.getImage(),
                     "Activities", request.getName(), realpath);
             if (Boolean.parseBoolean(CreateFile[0].toString())) {
@@ -95,59 +75,22 @@ public class ActivitiestypeController {
                 responseData.setFlag(true);
                return responseData;
             }
-            responseData.setMessage("Registros no insertados,"
-                    + "datos erróneos para enviar a la base de datos!");
-            responseData.setFlag(false);
+           
             return responseData;
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(ActivitiestypeController.class.getName()).log(Level.SEVERE, null, ex);
-
-        } catch (Exception e) {
-            responseData.setFlag(false);
-
-            if (Configuration.DEBUG) {
-                responseData.setMessage(e.getMessage());
-                return responseData;
-            }
-
-            responseData.setMessage("Ha ocurrido un error insertado "
-                    + "un tipo de color, vuelva a intentarlo mas tarde");
-
-            System.err.println(e.getMessage());
-        }
-        return responseData;
     }
 
-    public ResponseData DeleteActividadestype(ActivitiestypeModel request) {
+    public ResponseData DeleteActividadestype(ActivitiestypeModel request) throws SQLException {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
-
-        try {
+     
             if (atDAO.DeleteActividadestype(request)) {
 
                 responseData.setMessage("Registro eliminado correctamente");
                 responseData.setFlag(true);
                 return responseData;
             }
-            responseData.setMessage("El registro no fue eliminado,"
-                    + "datos erróneos para enviar a la base de datos!");
-            responseData.setFlag(false);
 
             return responseData;
-        } catch (Exception e) {
-            responseData.setFlag(false);
-
-            if (Configuration.DEBUG) {
-                responseData.setMessage(e.getMessage());
-                return responseData;
-            }
-
-            responseData.setMessage("Ha ocurrido un error eliminando "
-                    + "un tipo de color, vuelva a intentarlo mas tarde");
-
-            System.err.println(e.getMessage());
-        }
-        return responseData;
     }
 
     public ArrayList<ActivitiestypeModel> selectActivitiestype(String path) {

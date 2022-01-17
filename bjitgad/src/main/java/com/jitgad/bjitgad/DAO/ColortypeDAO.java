@@ -4,6 +4,7 @@ import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.Models.ColortypeModel;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -18,7 +19,7 @@ public class ColortypeDAO {
     public ColortypeDAO() {
         con = ConectionPoolDataSource.getConnection();
     }
-
+    
     public ArrayList<ColortypeModel> selectColortypepage(int page) {
         sentence = "select * from tblcolortype order by idcolortype asc limit 10 offset " + (page * 10 - 10);
         ArrayList<ColortypeModel> datos = con.getObjectDB(sentence, ColortypeModel.class, 1);
@@ -40,7 +41,7 @@ public class ColortypeDAO {
         }
     }
 
-    public boolean insertColortype(ColortypeModel colortypeModel) {
+    public boolean insertColortype(ColortypeModel colortypeModel) throws SQLException {
         String structure = String.format(
                 "<colortype>"
                 + "<name>" + colortypeModel.getName()+ "</name>"
@@ -54,7 +55,7 @@ public class ColortypeDAO {
         String sentency = "Select * from insertcolortype('" + structure + "')";
         return con.modifyBD(sentency);
     }
-    public boolean updatecolortype(ColortypeModel colortypeModel) {
+    public boolean updatecolortype(ColortypeModel colortypeModel) throws SQLException {
         String structure = String.format(
                 "<colortype>"
                 + "<idcolortype>" + colortypeModel.getIdcolortype()+ "</idcolortype>"        
@@ -70,7 +71,7 @@ public class ColortypeDAO {
         return con.modifyBD(sentency);
     }
     
-    public boolean deletecolortype(ColortypeModel colortypeModel) {
+    public boolean deletecolortype(ColortypeModel colortypeModel) throws SQLException {
         String structure = String.format(
                 "<colortype>"
                 + "<idcolortype>" + colortypeModel.getIdcolortype()+ "</idcolortype>"        

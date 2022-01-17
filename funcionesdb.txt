@@ -172,14 +172,18 @@ AS $BODY$
 DECLARE root_xpath TEXT = '/gametype/';
   resul integer = 0;
   BEGIN
-    INSERT INTO public.tblgametype(name,image,audio_instructions,creationdate,updatedate,state,shortname)values
+    INSERT INTO public.tblgametype(name,image,audio_instructions,text_instructions,
+								   video_instructions,shortname,creationdate,
+								   updatedate,state)values
 			((xpath(root_xpath|| 'name/text()', message_xml))[1],
 			 (xpath(root_xpath|| 'image/text()', message_xml))[1],
 			 (xpath(root_xpath|| 'audio_instructions/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'text_instructions/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'video_instructions/text()', message_xml))[1],
+			 (xpath(root_xpath|| 'shortname/text()', message_xml))[1],
 			 (xpath(root_xpath|| 'creationdate/text()', message_xml))[1]::text::date,
 			(xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
-			(xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean,
-			(xpath(root_xpath|| 'shortname/text()', message_xml))[1]);
+			(xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean);
 	return resul;																			 
   END;
 $BODY$;
@@ -229,9 +233,11 @@ DECLARE root_xpath TEXT = '/gametype/';
 		name = (xpath(root_xpath|| 'name/text()', message_xml))[1],
 		image = (xpath(root_xpath|| 'image/text()', message_xml))[1],
 		audio_instructions = (xpath(root_xpath|| 'audio_instructions/text()', message_xml))[1],
+		text_instructions = (xpath(root_xpath|| 'text_instructions/text()', message_xml))[1],
+		video_instructions = (xpath(root_xpath|| 'video_instructions/text()', message_xml))[1],
+		shortname = (xpath(root_xpath|| 'shortname/text()', message_xml))[1],
 		updatedate = (xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
-		state = (xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean,
-		shortname = (xpath(root_xpath|| 'shortname/text()', message_xml))[1]
+		state = (xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean
 	WHERE 
 	idgametype = (xpath(root_xpath|| 'idgametype/text()', message_xml))[1]::text::integer;
 	return resul;

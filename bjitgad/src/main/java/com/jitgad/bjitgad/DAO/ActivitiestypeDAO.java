@@ -7,6 +7,7 @@ import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
 import com.jitgad.bjitgad.Utilities.InetAddressUtil;
 import com.jitgad.bjitgad.Utilities.UFile;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 
@@ -71,7 +72,7 @@ public class ActivitiestypeDAO {
         return 1;
     }
 
-    public boolean insertActividadestype(ActivitiestypeModel activitiestypemodel) {
+    public boolean insertActividadestype(ActivitiestypeModel activitiestypemodel) throws SQLException {
         String structure = String.format(
                 "<actividadestype>"
                 + "<name>" + activitiestypemodel.getName() + "</name>"
@@ -86,7 +87,7 @@ public class ActivitiestypeDAO {
         return con.modifyBD(sentency);
     }
 
-    public boolean updateActividadestype(ActivitiestypeModel activitiestypemodel) {
+    public boolean updateActividadestype(ActivitiestypeModel activitiestypemodel) throws SQLException {
         String structure = String.format(
                 "<actividadestype>"
                 + "<idactivitiestype>" + activitiestypemodel.getIdactivitiestype() + "</idactivitiestype>"
@@ -101,7 +102,7 @@ public class ActivitiestypeDAO {
         return con.modifyBD(sentency);
     }
 
-    public boolean DeleteActividadestype(ActivitiestypeModel activitiestypemodel) {
+    public boolean DeleteActividadestype(ActivitiestypeModel activitiestypemodel) throws SQLException {
         String structure = String.format(
                 "<actividadestype>"
                 + "<idactivitiestype>" + activitiestypemodel.getIdactivitiestype() + "</idactivitiestype>"

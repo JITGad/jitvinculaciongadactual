@@ -8,31 +8,29 @@ public class GametypeModel {
     
     private int idgametype = 0;
     private String name = "";
-    private String image = "";
-    private String audio_instructions = "";
-    private String creationdate = "";
-    private String updatedate = "";
+    private String image= "";
+    private String audio_instructions= "";
+    private String text_instructions= "";
+    private String video_instructions= "";
+    private String shortname= "";
+    private String creationdate= "";
+    private String updatedate= "";
     private boolean state = true;
-    private String shortname = "";
-          
-            
-    public GametypeModel(){
-        
+
+    public GametypeModel() {
     }
-    public GametypeModel(String _name,
-            String _image,
-            String _audio_instructions,
-            String _creationdate,
-            String _updatedate,
-            boolean _state,
-            String _shortname){
-    this.name=_name;
-    this.image=_image;
-    this.audio_instructions=_audio_instructions;
-    this.creationdate=_creationdate;
-    this.updatedate=_updatedate;
-    this.state=_state;
-    this.shortname=_shortname;
+
+    public GametypeModel(int idgametype, String name, String image, String audio_instructions, String text_instructions, String video_instructions, String shortname, String creationdate, String updatedate, boolean state) {
+        this.idgametype = idgametype;
+        this.name = name;
+        this.image = image;
+        this.audio_instructions = audio_instructions;
+        this.text_instructions = text_instructions;
+        this.video_instructions = video_instructions;
+        this.shortname = shortname;
+        this.creationdate = creationdate;
+        this.updatedate = updatedate;
+        this.state = state;
     }
 
     public int getIdgametype() {
@@ -67,6 +65,30 @@ public class GametypeModel {
         this.audio_instructions = audio_instructions;
     }
 
+    public String getText_instructions() {
+        return text_instructions;
+    }
+
+    public void setText_instructions(String text_instructions) {
+        this.text_instructions = text_instructions;
+    }
+
+    public String getVideo_instructions() {
+        return video_instructions;
+    }
+
+    public void setVideo_instructions(String video_instructions) {
+        this.video_instructions = video_instructions;
+    }
+
+    public String getShortname() {
+        return shortname;
+    }
+
+    public void setShortname(String shortname) {
+        this.shortname = shortname;
+    }
+
     public String getCreationdate() {
         return creationdate;
     }
@@ -90,14 +112,12 @@ public class GametypeModel {
     public void setState(boolean state) {
         this.state = state;
     }
-
-    public String getShortname() {
-        return shortname;
-    }
-
-    public void setShortname(String shortname) {
-        this.shortname = shortname;
-    }
+    
+    
+    
+          
+   
+    
 
     
     

@@ -55,16 +55,13 @@ public class FileController {
 
                     if (createfilebase(Permt[1].toString())) {
                         String ruta = Permt[1].toString() + type + "/";
-                        //   System.out.println(ruta);
                         //COMPROBAR SI EXISTEN LAS CARPETAS DE IMAGENES O VIDEOS
                         if (!new File(ruta).exists()) {  //se comprueba si la ruta existe o no
                             //  System.out.println("El directorio " + new File(ruta).getName() + " no existe");
-                            //  System.out.println(ruta);
                             if (new File(ruta).mkdir()) { //se crea la ruta. Si se ha creado correctamente
                                 //   System.out.println("Directorio creado");
-
                                 band = uf.B64StringtoImageFile(strings[1], ruta + name + "." + extension);
-
+                                
                                 return new Object[]{band, Permt[2], name + "." + extension};
                             } else {
                                 // System.out.println("No se ha podido crear " + new File(ruta).getName());

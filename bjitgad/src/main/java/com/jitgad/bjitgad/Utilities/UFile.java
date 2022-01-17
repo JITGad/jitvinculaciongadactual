@@ -66,8 +66,6 @@ public class UFile {
 
     public boolean B64StringtoImageFile(String base64, String fileurl) {
         
-        
-        
         byte[] data = DatatypeConverter.parseBase64Binary(base64);
         File file = new File(fileurl);
         try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
