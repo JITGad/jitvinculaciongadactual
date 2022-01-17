@@ -134,12 +134,9 @@ class FetchMaster {
             }
         }
 
-        console.log(options);
-
         fetch(this.#baseUrl + url, options)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 callback({
                     'data': data.data,
                     'conteo': paginacion ? data.CountingPage : undefined,

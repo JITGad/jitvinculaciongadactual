@@ -8,9 +8,9 @@
     <div class="tema">
       <img
         :src="urlimagen"
-        width="100"
-        height="100"
-      />════════<br /><span>{{ tema }}</span>
+        width="150"
+        height="150"
+      />════════<br /><span style="font-size: 30px;">{{ tema }}</span>
     </div>
   </div>
 </template>
