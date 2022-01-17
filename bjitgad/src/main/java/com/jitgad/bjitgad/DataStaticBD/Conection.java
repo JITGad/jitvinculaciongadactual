@@ -5,15 +5,15 @@
  */
 package com.jitgad.bjitgad.DataStaticBD;
 
-import com.google.gson.JsonObject;
 import com.jitgad.bjitgad.Utilities.ReflectToClass;
-import java.io.File;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -21,65 +21,23 @@ import javax.swing.table.DefaultTableModel;
  * In this class, the necessary methods for connecting, obtaining and sending
  * data to the database are carried out.
  */
-public class Conection {
+public class Conection implements IConnectionPool {
 
-    String user = "fjdmwraxdzfdqi";
-    String password = "e2519d7aa881ecf70a6228c203e777fd403925bac01379cb5a95a1ee44883f78";
-    java.sql.Connection conex;
-    DefaultTableModel dataModel;
-    ResultSet result;
-    ResultSetMetaData rsmd;
-    java.sql.Statement st;
+    private String user;
+    private String password;
+    private String url;
+
+    private List<Connection> connectionPool;
+    private final List<Connection> usedConnections = new ArrayList<>();
+
+    private static final int INITIAL_POOL_SIZE = 10;
+    private static final int MAX_POOL_SIZE = 20;
+    private static final int MAX_TIMEOUT = 5;
+
+    Connection conex;
 
     public Conection() {
 
-    }
-
-    /**
-     * Method for opening connection
-     *
-     * @return Return a Boolean.
-     */
-    public boolean openConecction() {
-        try {
-            Class.forName("org.postgresql.Driver");
-            conex = DriverManager.getConnection("jdbc:postgresql://ec2-34-195-69-118.compute-1.amazonaws.com:5432/dfc5nss9nj0c2e", user, password);
-        } catch (Exception exc) {
-            System.out.println("No connection");
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * This method closes the connection
-     *
-     * @return Return a Boolean.
-     */
-    public boolean closeConnection() {
-        try {
-            st.close();
-            conex.close();
-        } catch (Exception exc) {
-            System.out.println("Error close connection:" + exc.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * This method closes the ResultSet
-     *
-     * @return Return a Boolean.
-     */
-    public boolean closeResulSet() {
-        try {
-            result.close();
-        } catch (SQLException ex) {
-            System.out.println("error in close resulset:" + ex.getMessage());
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -89,34 +47,32 @@ public class Conection {
      * @return Returns a table with the data loaded from the query
      */
     public DefaultTableModel returnRecord(String sentecy) {
-        if (openConecction()) {
-            try {
-                st = conex.createStatement();
-                result = st.executeQuery(sentecy);
-                dataModel = new DefaultTableModel();
-                rsmd = result.getMetaData();
-                int n = rsmd.getColumnCount();
-                for (int i = 1; i <= n; i++) {
-                    dataModel.addColumn(rsmd.getColumnName(i));
-                }
-                String[] row = new String[n];
-                while (result.next()) {
-                    for (int i = 0; i < n; i++) {
-                        row[i] = (result.getString(rsmd.getColumnName(i + 1)) == null) ? "" : result.getString(rsmd.getColumnName(i + 1));
+        try {
+            conex = getConnection();
+            try (Statement st = conex.createStatement()) {
+                try (ResultSet result = st.executeQuery(sentecy)) {
+                    DefaultTableModel dataModel = new DefaultTableModel();
+                    ResultSetMetaData rsmd = result.getMetaData();
+                    int n = rsmd.getColumnCount();
+                    for (int i = 1; i <= n; i++) {
+                        dataModel.addColumn(rsmd.getColumnName(i));
                     }
-                    dataModel.addRow(row);
+                    String[] row = new String[n];
+                    while (result.next()) {
+                        for (int i = 0; i < n; i++) {
+                            row[i] = (result.getString(rsmd.getColumnName(i + 1)) == null) ? "" : result.getString(rsmd.getColumnName(i + 1));
+                        }
+                        dataModel.addRow(row);
+                    }
+                    return dataModel;
                 }
-            } catch (Exception exc) {
-                System.out.println("Error return Record:" + exc.getMessage());
-                dataModel = null;
-            } finally {
-                if (result != null) {
-                    closeResulSet();
-                }
-            };
-            closeConnection();
+            }
+        } catch (SQLException exc) {
+            System.out.println("Error return Record:" + exc.getMessage());
+            return null;
+        } finally {
+            releaseConnection(conex);
         }
-        return dataModel;
     }
 
     /**
@@ -126,18 +82,17 @@ public class Conection {
      * @return Return a Boolean.
      */
     public boolean modifyBD(String sentecy) {
-        if (openConecction()) {
-            try {
-                st = conex.createStatement();
+        try {
+            conex = getConnection();
+            try (Statement st = conex.createStatement()) {
                 st.execute(sentecy);
-            } catch (Exception exc) {
-                System.out.println("Error ModifyBD:" + exc.getMessage());
-                return false;
+                return true;
             }
-            closeConnection();
-            return true;
-        } else {
+        } catch (SQLException exc) {
+            System.out.println("Error ModifyBD:" + exc.getMessage());
             return false;
+        } finally {
+            releaseConnection(conex);
         }
     }
 
@@ -149,17 +104,15 @@ public class Conection {
      */
     public int updateDB(String sentecy) {
         int counts = 0;
-        if (openConecction()) {
-            try {
-                st = conex.createStatement();
+        try {
+            conex = getConnection();
+            try (Statement st = conex.createStatement()) {
                 counts = st.executeUpdate(sentecy);
-            } catch (Exception exc) {
-                System.out.println("Error UpdateBD:" + exc.getMessage());
-                counts = 0;
             }
-            closeConnection();
-        } else {
-            counts = 0;
+        } catch (SQLException exc) {
+            System.out.println("Error UpdateBD:" + exc.getMessage());
+        } finally {
+            releaseConnection(conex);
         }
         return counts;
     }
@@ -173,23 +126,20 @@ public class Conection {
      */
     public String fillString(String sentecy) {
         String a = "";
-        if (openConecction()) {
-            try {
-                st = conex.createStatement();
-                result = st.executeQuery(sentecy);
-                while (result.next()) {
-                    a = result.getString(1);
+        try {
+            conex = getConnection();
+            try (Statement st = conex.createStatement()) {
+                try (ResultSet result = st.executeQuery(sentecy)) {
+                    while (result.next()) {
+                        a = result.getString(1);
+                    }
                 }
-
-            } catch (Exception exc) {
-                System.out.println("Error fill string:" + exc.getMessage());
-                return "";
-            } finally {
-                if (result != null) {
-                    closeResulSet();
-                }
-            };
-            closeConnection();
+            }
+        } catch (SQLException exc) {
+            System.out.println("Error fill string:" + exc.getMessage());
+            return "";
+        } finally {
+            releaseConnection(conex);
         }
         return a;
     }
@@ -202,30 +152,27 @@ public class Conection {
      */
     public String getNextID(String sentecy) {
         String a = "-1";
-        if (openConecction()) {
-            try {
-                st = conex.createStatement();
-                result = st.executeQuery(sentecy);
-                while (result.next()) {
-                    a = result.getString(1);
+        try {
+            conex = getConnection();
+            try (Statement st = conex.createStatement()) {
+                try (ResultSet result = st.executeQuery(sentecy)) {
+                    while (result.next()) {
+                        a = result.getString(1);
+                    }
+                    int numer;
+                    try {
+                        numer = Integer.parseInt(a) + 1;
+                    } catch (NumberFormatException e) {
+                        numer = 1;
+                    }
+                    a = numer + "";
                 }
-                int numer = 1;
-                try {
-                    numer = Integer.parseInt(a) + 1;
-                } catch (NumberFormatException e) {
-                    numer = 1;
-                }
-                a = numer + "";
-
-            } catch (Exception exc) {
-                System.out.println("No next id:" + exc.getMessage());
-                a = "1";
-            } finally {
-                if (result != null) {
-                    closeResulSet();
-                }
-            };
-            closeConnection();
+            }
+        } catch (SQLException exc) {
+            System.out.println("No next id:" + exc.getMessage());
+            a = "1";
+        } finally {
+            releaseConnection(conex);
         }
         return a;
     }
@@ -269,20 +216,15 @@ public class Conection {
      * @return a Boolean
      */
     public boolean testConection() {
-        boolean test = openConecction();
-        if (test) {
-            try {
-                conex.close();
-            } catch (SQLException ex) {
-                System.out.println("error test conection:" + ex.getMessage());
-            }
+        boolean test = true;
+        try {
+            conex = getConnection();
+            test = releaseConnection(conex);
+        } catch (SQLException ex) {
+            System.out.println("error test conection:" + ex.getMessage());
         }
         System.out.println("test:" + test);
         return test;
-    }
-
-    public Statement createStatement() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -296,16 +238,108 @@ public class Conection {
      */
     public <T> ArrayList<T> getObjectDB(String sql, Class<T> obj, int structure) {
         ArrayList<T> datos = new ArrayList();
-        if (openConecction()) {
-            try ( Statement stm = conex.createStatement()) {
-                try ( ResultSet rs = stm.executeQuery(sql)) {
+        try {
+            conex = getConnection();
+            try (Statement stm = conex.createStatement()) {
+                try (ResultSet rs = stm.executeQuery(sql)) {
                     //ArrayList<Users> putResult = ResultSetPropertiesSimplifyHelps.putResult(rs, Users.class);
                     datos = ReflectToClass.putResult(rs, obj, structure);
                 }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
             }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            releaseConnection(conex);
         }
         return datos;
     }
+
+    @Override
+    public void shutdown() throws SQLException {
+        usedConnections.forEach(this::releaseConnection);
+        for (Connection c : connectionPool) {
+            c.close();
+        }
+        connectionPool.clear();
+    }
+
+    /**
+     *
+     * @return @throws SQLException
+     */
+    @Override
+    public Connection getConnection() throws SQLException {
+        if (connectionPool.isEmpty()) {
+            if (usedConnections.size() < MAX_POOL_SIZE) {
+                connectionPool.add(createConnection(url, user, password));
+            } else {
+                throw new RuntimeException(
+                        "Maximum pool size reached, no available connections!");
+            }
+        }
+
+        Connection connection = connectionPool
+                .remove(connectionPool.size() - 1);
+
+        if (!connection.isValid(MAX_TIMEOUT)) {
+            connection = createConnection(url, user, password);
+        }
+
+        usedConnections.add(connection);
+        return connection;
+    }
+
+    private static Connection createConnection(String url, String user, String password) throws SQLException {
+        return DriverManager.getConnection(url, user, password);
+    }
+
+    @Override
+    public int getSize() {
+        return connectionPool.size() + usedConnections.size();
+    }
+
+    @Override
+    public boolean releaseConnection(Connection connection) {
+        connectionPool.add(connection);
+        return usedConnections.remove(connection);
+    }
+
+    @Override
+    public String getUrl() {
+        return this.url;
+    }
+
+    @Override
+    public String getUser() {
+        return this.user;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    public static Conection create(
+            String url, String user,
+            String password) throws SQLException {
+
+        List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
+        for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
+            pool.add(createConnection(url, user, password));
+        }
+        return new Conection(url, user, password, pool);
+    }
+
+    private Conection(String url, String user, String password, List<Connection> connectionPool) {
+        this.url = url;
+        this.user = user;
+        this.password = password;
+        this.connectionPool = connectionPool;
+    }
+
+    @Override
+    public List<Connection> getConnectionPool() {
+        return connectionPool;
+    }
+
 }
