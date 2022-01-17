@@ -39,7 +39,7 @@ public class GameDAO {
     public String selectGamebyid(int gameid){
         sentence ="select * from tblgame where idgame="+gameid;
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
-        if (datos.size() > 0) {
+       if (datos.size() > 0) {
             return Methods.objectToJsonString(datos.get(0));
         } else {
             return "{}";
@@ -84,7 +84,6 @@ public class GameDAO {
                 + "<idactivitiestype>" + gameModel.getIdactivitiestype() + "</idactivitiestype>"
                 + "<idgametype>" + gameModel.getIdgametype() + "</idgametype>"
                 + "<name>" + gameModel.getName() + "</name>"
-                + "<creationdate>" + gameModel.getCreationdate() + "</creationdate>"
                 + "<updatedate>" + gameModel.getUpdatedate() + "</updatedate>"
                 + "<state>" + gameModel.getState() + "</state>"
                 + "<level>" + gameModel.getLevel() + "</level>" 

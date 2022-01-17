@@ -115,7 +115,7 @@ public class ColortypeController {
                 responseData.setFlag(true);
                 return responseData;
             }
-            responseData.setMessage("El registro no fué eliminado,"
+            responseData.setMessage("El registro no fue eliminado,"
                     + "datos erróneos para enviar a la base de datos!");
             responseData.setFlag(false);
 

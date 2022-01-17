@@ -38,6 +38,7 @@ public class Gameresource {
     private GameController gC;
     private AuthorizationController AuC;
     private ResponseAPI Rapi;
+    private GameModel gameModel;
 
     public Gameresource() {
         gC = new GameController();
@@ -53,8 +54,8 @@ public class Gameresource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getGame() {
-        
-         ResponseData responseData = new ResponseData("Ocurrio un error", true);
+
+        ResponseData responseData = new ResponseData("Ocurrio un error", true);
 
         try {
             ArrayList<GameModel> data = gC.selectGame();
@@ -86,14 +87,14 @@ public class Gameresource {
         }
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
-    
+
     @Produces(MediaType.APPLICATION_JSON)
     @GET
     @Path("/getgamesbyactivities")
     @Consumes(MediaType.APPLICATION_JSON)
     // @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response getgamesbyactivities(@Context HttpHeaders headers, @QueryParam("activityid") int activityid) {
-        
+
         ResponseData responseData = new ResponseData("Ocurrio un error", true);
 
         try {
@@ -106,12 +107,12 @@ public class Gameresource {
             }
 
             if (!Authorization.isEmpty()) {
-               
+
                 Object[] Permt = AuC.VToken(Authorization);
                 if (Permt[0].equals(true)) {
-                    
-                     ArrayList<ClaveValorModel> data = gC.selectgamesbyactivities(activityid);
-                     
+
+                    ArrayList<ClaveValorModel> data = gC.selectgamesbyactivities(activityid);
+
                     if (data.size() > 0) {
 
                         responseData.setMessage("Información encontrada");
@@ -155,9 +156,7 @@ public class Gameresource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getGameAdmin")
     public Response getGameAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
-        
-        
-        
+
         if (Configuration.DEBUG) {
             System.out.println("Ingresando getActivitiestypeAdmin...");
         }
@@ -226,86 +225,127 @@ public class Gameresource {
     @Path("/getGamebyid")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getGamebyid(@Context HttpHeaders headers, @QueryParam("idgame") int idgame) {
-        String data = gC.selectGamebyid(idgame);
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
+
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando getactivitiesbyid...");
+        }
+
+        ResponseData responseData = new ResponseData("Ocurrio un error", true);
+
         try {
+
             //TOKENS
             String Authorization = headers.getHeaderString("Authorization");
             Authorization = Authorization == null ? "" : Authorization;
-            System.out.println("Authorization: " + Authorization);
+            if (Configuration.DEBUG) {
+                System.out.println("Authorization: " + Authorization);
+            }
+
             if (!Authorization.isEmpty()) {
                 Object[] Permt = AuC.VToken(Authorization);
                 if (Permt[0].equals(true)) {
-                    if (data.equals("{}")) {
-                        responseJson = Rapi.Response("Información no encontrada", false, data);
-                    } else {
-                        responseJson = Rapi.Response("Datos retornados correctamente", true, data);
+
+                    JsonObject data = Methods.stringToJSON(gC.selectGamebyid(idgame));
+
+                    if (data.size() > 0) {
+
+                        responseData.setMessage("Información encontrada");
+                        responseData.setData(data);
+
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+
                     }
-                } else {
-                    responseJson = Rapi.Response(String.valueOf(Permt[1]), false, data);
+                    responseData.setMessage("Información no encontrada");
+
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
+
                 }
-            } else {
-                responseJson = Rapi.Response("Tokén vacio", true, data);
+                responseData.setMessage(String.valueOf(Permt[1]));
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
             }
+            responseData.setMessage("Tokén vacio");
+
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
 
         } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, data);
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+
+                responseData.setMessage(e.getMessage());
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
         }
-
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
-
 
     @Produces(MediaType.APPLICATION_JSON)
     @POST
     @Path("/postGame")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response PostGame(@Context HttpHeaders headers, String data) {
-        String responseJson = "{\"status\":\"poken:" + data + "\"}";
-        System.out.println("Ingresando postGame...");
+
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando PostActivitiesType...");
+        }
+
+        ResponseData responseData = new ResponseData("Ocurrio un error", false);
+
+        gameModel = (GameModel) Methods.StringJsonToObject(data, GameModel.class);
+
         JsonObject Jso = Methods.stringToJSON(data);
         try {
             if (Jso.size() > 0) {
-                Object[] responsegC;
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                System.out.println("Authorization: " + Authorization);
-                if (!Authorization.isEmpty()) {
-                    Object[] Permt = AuC.VToken(Authorization);
-                    if (Permt[0].equals(true)) {
-                        responsegC = gC.InsertGameC(
-                                Methods.JsonToString(Jso.getAsJsonObject(), "idactivitiestype", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "idgametype", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "name", ""),
-                                Boolean.parseBoolean(Methods.JsonToString(Jso.getAsJsonObject(), "state", "")),
-                                Methods.JsonToInteger(Jso.getAsJsonObject(), "level", 0));
-                        if (responsegC[0].equals(true)) {
-                            responseJson = Rapi.Response(String.valueOf(responsegC[1]), Boolean.parseBoolean(responsegC[0].toString()), "{}");
-                        } else {
-                            responseJson = Rapi.Response(String.valueOf(responsegC[1]), Boolean.parseBoolean(responsegC[0].toString()), "{}");
-                        }
-                    } else {
-                        responseJson = Rapi.Response(String.valueOf(Permt[1]), false, "{}");
-                    }
-                } else {
-                    responseJson = Rapi.Response("Tokén vacio", true, data);
-                }
-            } else {
-                responseJson = Rapi.Response("Información no encontrada", false, "{}");
-            }
-        } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, "{}");
-        }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
-    }
 
+                if (Configuration.DEBUG) {
+                    System.out.println("Authorization: " + Authorization);
+                }
+
+                if (!Authorization.isEmpty()) {
+
+                    Object[] Permt = AuC.VToken(Authorization);
+
+                    if (Permt[0].equals(true)) {
+
+                        responseData = gC.InsertGameC(gameModel);
+
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+                    }
+                    responseData.setMessage(String.valueOf(Permt[1]));
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                }
+                responseData.setMessage("Tokén vacio");
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+            }
+            responseData.setMessage("Información no encontrada");
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+                responseData.setMessage(e.getMessage());
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
+        }
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
+    }
 
     @Produces(MediaType.APPLICATION_JSON)
     @PUT
@@ -313,47 +353,60 @@ public class Gameresource {
     public Response PutActivitiesType(@Context HttpHeaders headers, String data) {
         String responseJson = Rapi.Response("Ocurrió un error", false, data);
         System.out.println("Ingresando PutActivitiesType...");
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando PostActivitiesType...");
+        }
+
+        ResponseData responseData = new ResponseData("Ocurrio un error", false);
+
+        gameModel = (GameModel) Methods.StringJsonToObject(data, GameModel.class);
+
         JsonObject Jso = Methods.stringToJSON(data);
         try {
             if (Jso.size() > 0) {
-                Object[] responsegC;
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                System.out.println("Authorization: " + Authorization);
-                if (!Authorization.isEmpty()) {
-                    Object[] Permt = AuC.VToken(Authorization);
-                    if (Permt[0].equals(true)) {
-                        responsegC = gC.UpdateGameC(
-                                Methods.JsonToInteger(Jso.getAsJsonObject(), "idgame", 0),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "idactivitiestype", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "idgametype", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "name", ""),
-                                Boolean.parseBoolean(Methods.JsonToString(Jso.getAsJsonObject(), "state", "")),
-                                Methods.JsonToInteger(Jso.getAsJsonObject(), "level", 0));
-                                if (responsegC[0].equals(true)) {
-                                    responseJson = Rapi.Response(String.valueOf(responsegC[1]), Boolean.parseBoolean(responsegC[0].toString()), "{}");
-                                } else {
-                                    responseJson = Rapi.Response(String.valueOf(responsegC[1]), Boolean.parseBoolean(responsegC[0].toString()), "{}");
-                                }
-                            } else {
-                                responseJson = Rapi.Response(String.valueOf(Permt[1]), false, "{}");
-                            }
-                        } else {
-                            responseJson = Rapi.Response("Tokén vacio", true, data);
-                        }
-                    } else {
-                        responseJson = Rapi.Response("Información no encontrada", false, "{}");
-                    }
-                } catch (Exception e) {
-                    responseJson = Rapi.Response(e.getMessage(), false, "{}");
-                }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
-    }
 
+                if (Configuration.DEBUG) {
+                    System.out.println("Authorization: " + Authorization);
+                }
+
+                if (!Authorization.isEmpty()) {
+
+                    Object[] Permt = AuC.VToken(Authorization);
+
+                    if (Permt[0].equals(true)) {
+
+                        responseData = gC.UpdateGameC(gameModel);
+
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+                    }
+                    responseData.setMessage(String.valueOf(Permt[1]));
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                }
+                responseData.setMessage("Tokén vacio");
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+            }
+            responseData.setMessage("Información no encontrada");
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+                responseData.setMessage(e.getMessage());
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
+        }
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
+    }
 
     @Produces(MediaType.APPLICATION_JSON)
     @DELETE
@@ -361,45 +414,104 @@ public class Gameresource {
     public Response DeleteGame(@Context HttpHeaders headers, String data) {
         String responseJson = Rapi.Response("Ocurrió un error", false, data);
         System.out.println("Ingresando deleteGame...");
+
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando PostActivitiesType...");
+        }
+
+        ResponseData responseData = new ResponseData("Ocurrio un error", false);
+
+        gameModel = (GameModel) Methods.StringJsonToObject(data, GameModel.class);
+
         JsonObject Jso = Methods.stringToJSON(data);
-        System.out.println(responseJson);
         try {
             if (Jso.size() > 0) {
-                Object[] responseatC;
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                System.out.println("Authorization: " + Authorization);
-                if (!Authorization.isEmpty()) {
-                    Object[] Permt = AuC.VToken(Authorization);
-                    if (Permt[2].equals("Administrador")) {
-                        if (Permt[0].equals(true)) {
-                            responseatC = gC.DeleteGameC(
-                                 Methods.JsonToInteger(Jso.getAsJsonObject(), "idgame", 0));
-                            if (responseatC[0].equals(true)) {
-                                responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), data);
-                            } else {
-                                responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), data);
-                            }
-                        } else {
-                            responseJson = Rapi.Response(String.valueOf(Permt[1]), false, data);
-                        }
-                    } else {
-                        responseJson = Rapi.Response("Usuario sin privilegios para realizar esta actividad", false, data);
-                    }
-                } else {
-                    responseJson = Rapi.Response("Tokén vacio", true, data);
+
+                if (Configuration.DEBUG) {
+                    System.out.println("Authorization: " + Authorization);
                 }
-            } else {
-                responseJson = Rapi.Response("Información no encontrada", false, data);
+
+                if (!Authorization.isEmpty()) {
+
+                    Object[] Permt = AuC.VToken(Authorization);
+
+                    if (Permt[2].equals("Administrador")) {
+
+                        if (Permt[0].equals(true)) {
+
+                            responseData = gC.DeleteGameC(gameModel);
+
+                            return Response.ok(Methods.objectToJsonString(responseData)).build();
+                        }
+                        responseData.setMessage(String.valueOf(Permt[1]));
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+                    } 
+                     responseData.setMessage("Usuario sin privilegios para realizar esta actividad");
+                     return Response.ok(Methods.objectToJsonString(responseData)).build();
+                }
+                responseData.setMessage("Tokén vacio");
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
             }
+            responseData.setMessage("Información no encontrada");
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
         } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, data);
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+                responseData.setMessage(e.getMessage());
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
         }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
+//        JsonObject Jso = Methods.stringToJSON(data);
+//        System.out.println(responseJson);
+//        try {
+//            if (Jso.size() > 0) {
+//                Object[] responseatC;
+//                //TOKENS
+//                String Authorization = headers.getHeaderString("Authorization");
+//                Authorization = Authorization == null ? "" : Authorization;
+//                System.out.println("Authorization: " + Authorization);
+//                if (!Authorization.isEmpty()) {
+//                    Object[] Permt = AuC.VToken(Authorization);
+//                    if (Permt[2].equals("Administrador")) {
+//                        if (Permt[0].equals(true)) {
+//                            responseatC = gC.DeleteGameC(
+//                                    Methods.JsonToInteger(Jso.getAsJsonObject(), "idgame", 0));
+//                            if (responseatC[0].equals(true)) {
+//                                responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), data);
+//                            } else {
+//                                responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), data);
+//                            }
+//                        } else {
+//                            responseJson = Rapi.Response(String.valueOf(Permt[1]), false, data);
+//                        }
+//                    } else {
+//                        responseJson = Rapi.Response("Usuario sin privilegios para realizar esta actividad", false, data);
+//                    }
+//                } else {
+//                    responseJson = Rapi.Response("Tokén vacio", true, data);
+//                }
+//            } else {
+//                responseJson = Rapi.Response("Información no encontrada", false, data);
+//            }
+//        } catch (Exception e) {
+//            responseJson = Rapi.Response(e.getMessage(), false, data);
+//        }
+//        return Response.ok(responseJson)
+//                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+//                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
+//                .build();
+//    }
 
 }
