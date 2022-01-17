@@ -10,7 +10,7 @@
         :src="urlimagen"
         width="100"
         height="100"
-      />════════<br /><span>{{ tema }}</span>
+      />════════<br /><span style="font-size: 30px;">{{ tema }}</span>
     </div>
   </div>
 </template>

@@ -7,7 +7,7 @@ class ColoresService {
 
   getColor(colorid = 0) {
     return new Promise((resolve) => {
-      FetchMaster.get(`${this.#urlApi}/getcolorbyid${encodeQueryString({ 'colorid': colorid })}`,
+      FetchMaster.get(`${this.#urlApi}/getcolortypebyid${encodeQueryString({ 'idcolortype': colorid })}`,
         (data) => resolve(data), true);
     });
   }

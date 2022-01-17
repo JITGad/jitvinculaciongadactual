@@ -4,6 +4,7 @@
       <tr>
         <th scope="col">Id</th>
         <th scope="col">Nombre</th>
+        <th scope="col">Color</th>
         <th scope="col">Estado</th>
         <th scope="col">Editar</th>
         <my-autorization roles="Administrador">
@@ -13,10 +14,10 @@
     </thead>
     <tbody>
       <tr v-for="(Color, index) in Colores" :key="index">
-        <th scope="row">{{ Color.idcolor }}</th>
+        <th scope="row">{{ Color.idcolortype }}</th>
         <td>{{ Color.name }}</td>
         <td>
-
+            <input type="color" :value="Color.html" class="form-control form-control-color" disabled />
         </td>
         <td>{{ Color.state ? "Activo" : "Inactivo" }}</td>
         <td align="center">
@@ -94,7 +95,7 @@ export default {
     const EditarColor = (Color) => {
       Router.push({
         name: "EditarColor",
-        params: { id: Color["idactivitiestype"] },
+        params: { id: Color["idcolortype"] },
       });
     };
 

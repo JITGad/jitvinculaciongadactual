@@ -1,7 +1,7 @@
 <template>
   <form-color
     @submit="handleSubmit"
-    :idcolor="idcolor"
+    :idcolortype="idcolor"
     title="Editar color"
     :edit="true"
   />
