@@ -245,11 +245,11 @@ public class Activitiestyperesource {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                
+
                 if (Configuration.DEBUG) {
-                   System.out.println("Authorization: " + Authorization); 
+                    System.out.println("Authorization: " + Authorization);
                 }
-                
+
                 if (!Authorization.isEmpty()) {
 
                     Object[] Permt = AuC.VToken(Authorization);
@@ -291,26 +291,26 @@ public class Activitiestyperesource {
     @PUT
     @Path("/PutActivitiesType")
     public Response PutActivitiesType(@Context HttpHeaders headers, String data) {
-        
+
         if (Configuration.DEBUG) {
             System.out.println("Ingresando PutActivitiesType...");
         }
-        
+
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-        
+
         activitiestypeModel
                 = (ActivitiestypeModel) Methods.StringJsonToObject(data, ActivitiestypeModel.class);
-        
+
         JsonObject Jso = Methods.stringToJSON(data);
-        try {    
-            
+        try {
+
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                
+
                 if (Configuration.DEBUG) {
-                   System.out.println("Authorization: " + Authorization); 
+                    System.out.println("Authorization: " + Authorization);
                 }
                 if (!Authorization.isEmpty()) {
 
@@ -348,46 +348,49 @@ public class Activitiestyperesource {
         }
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
-        
+
     @Produces(MediaType.APPLICATION_JSON)
     @DELETE
     @Path("/DeleteActivitiesType")
     public Response DeleteActivitiesType(@Context HttpHeaders headers, String data) {
-        
+
         if (Configuration.DEBUG) {
             System.out.println("Ingresando DeleteActivitiesType...");
         }
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-        
-        activitiestypeModel = 
-                (ActivitiestypeModel) 
-                Methods.StringJsonToObject(data, ActivitiestypeModel.class);
-        
+
+        activitiestypeModel
+                = (ActivitiestypeModel) Methods.StringJsonToObject(data, ActivitiestypeModel.class);
+
         JsonObject Jso = Methods.stringToJSON(data);
-        try {    
-            
+        try {
+
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                
+
                 if (Configuration.DEBUG) {
-                    
-                   System.out.println("Authorization: " + Authorization); 
+
+                    System.out.println("Authorization: " + Authorization);
                 }
                 if (!Authorization.isEmpty()) {
 
                     Object[] Permt = AuC.VToken(Authorization);
 
-                    if (Permt[0].equals(true)) {
+                    if (Permt[2].equals("Administrador")) {
 
-                        responseData = atC.DeleteActividadestype(activitiestypeModel);
+                        if (Permt[0].equals(true)) {
 
+                            responseData = atC.DeleteActividadestype(activitiestypeModel);
+
+                            return Response.ok(Methods.objectToJsonString(responseData)).build();
+                        }
+                        responseData.setMessage(String.valueOf(Permt[1]));
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
-                    responseData.setMessage(String.valueOf(Permt[1]));
+                    responseData.setMessage("Usuario sin privilegios para realizar esta actividad");
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
-
                 }
                 responseData.setMessage("Tokén vacio");
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
@@ -395,7 +398,7 @@ public class Activitiestyperesource {
             }
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
-        
+
         } catch (Exception e) {
             responseData.setFlag(false);
 

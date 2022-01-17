@@ -50,12 +50,12 @@ public class Colortyperesource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getcolortypeAdmin")
     public Response getColortypeAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
-             
+
         if (Configuration.DEBUG) {
             System.out.println("Ingresando getcolortypeAdmin...");
         }
         ResponseDataPage responseDataPage = new ResponseDataPage("Ocurrió un error", page, true);
-        
+
         try {
             int responseCountingPage = 0;
             //TOKENS
@@ -115,14 +115,14 @@ public class Colortyperesource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getcolortypebyid")
     public Response getColortypebyid(@Context HttpHeaders headers, @QueryParam("idcolortype") int idcolortype) {
-        
+
         if (Configuration.DEBUG) {
             System.out.println("Ingresando getactivitiesbyid...");
         }
         ResponseData responseData = new ResponseData("Ocurrio un error", true);
-        
+
         try {
-            
+
             //TOKENS
             String Authorization = headers.getHeaderString("Authorization");
             Authorization = Authorization == null ? "" : Authorization;
@@ -180,28 +180,27 @@ public class Colortyperesource {
     @Path("/postColortype")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response PostColortype(@Context HttpHeaders headers, String data) {
-        
+
         if (Configuration.DEBUG) {
             System.out.println("Ingresando postColortype...");
         }
-        
+
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-        
-        colortypeModel = 
-                (ColortypeModel) 
-                Methods.StringJsonToObject(data, ColortypeModel.class);
-        
+
+        colortypeModel
+                = (ColortypeModel) Methods.StringJsonToObject(data, ColortypeModel.class);
+
         JsonObject Jso = Methods.stringToJSON(data);
-   
+
         try {
-            
+
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                
+
                 if (Configuration.DEBUG) {
-                   System.out.println("Authorization: " + Authorization); 
+                    System.out.println("Authorization: " + Authorization);
                 }
                 if (!Authorization.isEmpty()) {
 
@@ -239,7 +238,6 @@ public class Colortyperesource {
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
 
-
     @Produces(MediaType.APPLICATION_JSON)
     @PUT
     @Path("/putColortype")
@@ -248,24 +246,23 @@ public class Colortyperesource {
         if (Configuration.DEBUG) {
             System.out.println("Ingresando putColortype...");
         }
-        
+
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-        
-        colortypeModel = 
-                (ColortypeModel) 
-                Methods.StringJsonToObject(data, ColortypeModel.class);
-        
+
+        colortypeModel
+                = (ColortypeModel) Methods.StringJsonToObject(data, ColortypeModel.class);
+
         JsonObject Jso = Methods.stringToJSON(data);
-   
+
         try {
-            
+
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                
+
                 if (Configuration.DEBUG) {
-                   System.out.println("Authorization: " + Authorization); 
+                    System.out.println("Authorization: " + Authorization);
                 }
                 if (!Authorization.isEmpty()) {
 
@@ -307,42 +304,45 @@ public class Colortyperesource {
     @DELETE
     @Path("/deleteColortype")
     public Response DeleteActivitiesType(@Context HttpHeaders headers, String data) {
-     
+
         if (Configuration.DEBUG) {
             System.out.println("Ingresando deleteColortype...");
         }
-        
+
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-        
-        colortypeModel = 
-                (ColortypeModel) 
-                Methods.StringJsonToObject(data, ColortypeModel.class);
-        
+
+        colortypeModel
+                = (ColortypeModel) Methods.StringJsonToObject(data, ColortypeModel.class);
+
         JsonObject Jso = Methods.stringToJSON(data);
-   
+
         try {
-            
+
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                
+
                 if (Configuration.DEBUG) {
-                   System.out.println("Authorization: " + Authorization); 
+                    System.out.println("Authorization: " + Authorization);
                 }
                 if (!Authorization.isEmpty()) {
 
                     Object[] Permt = AuC.VToken(Authorization);
 
-                    if (Permt[0].equals(true)) {
+                    if (Permt[2].equals("Administrador")) {
 
-                        responseData = ctypeC.DeleteColortype(colortypeModel);
+                        if (Permt[0].equals(true)) {
 
+                            responseData = ctypeC.DeleteColortype(colortypeModel);
+
+                            return Response.ok(Methods.objectToJsonString(responseData)).build();
+                        }
+                        responseData.setMessage(String.valueOf(Permt[1]));
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
-                    responseData.setMessage(String.valueOf(Permt[1]));
+                    responseData.setMessage("Usuario sin privilegios para realizar esta actividad");
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
-
                 }
                 responseData.setMessage("Tokén vacio");
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
@@ -365,6 +365,5 @@ public class Colortyperesource {
         }
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
-
 
 }
