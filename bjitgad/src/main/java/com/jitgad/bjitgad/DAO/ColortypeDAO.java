@@ -45,7 +45,6 @@ public class ColortypeDAO {
         String structure = String.format(
                 "<colortype>"
                 + "<name>" + colortypeModel.getName()+ "</name>"
-                + "<rgb>" + colortypeModel.getRgb() + "</rgb>"
                 + "<html>" + colortypeModel.getHtml() + "</html>"
                 + "<creationdate>" + colortypeModel.getCreationdate() + "</creationdate>"
                 + "<updatedate>" + colortypeModel.getUpdatedate() + "</updatedate>"
@@ -60,7 +59,6 @@ public class ColortypeDAO {
                 "<colortype>"
                 + "<idcolortype>" + colortypeModel.getIdcolortype()+ "</idcolortype>"        
                 + "<name>" + colortypeModel.getName()+ "</name>"
-                + "<rgb>" + colortypeModel.getRgb() + "</rgb>"
                 + "<html>" + colortypeModel.getHtml() + "</html>"
                 + "<updatedate>" + colortypeModel.getUpdatedate() + "</updatedate>"
                 + "<state>" + colortypeModel.getState() + "</state>"

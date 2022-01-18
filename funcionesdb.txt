@@ -370,9 +370,8 @@ AS $BODY$
 DECLARE root_xpath TEXT = '/colortype/';
   resul integer = 0;
   BEGIN
-    INSERT INTO public.tblcolortype(name,rgb,html,creationdate,updatedate,state)values
+    INSERT INTO public.tblcolortype(name,html,creationdate,updatedate,state)values
 			((xpath(root_xpath|| 'name/text()', message_xml))[1],
-			 (xpath(root_xpath|| 'rgb/text()', message_xml))[1],
 			 (xpath(root_xpath|| 'html/text()', message_xml))[1],
 			 (xpath(root_xpath|| 'creationdate/text()', message_xml))[1]::text::date,
 			(xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
@@ -423,7 +422,6 @@ DECLARE root_xpath TEXT = '/colortype/';
 	UPDATE public.tblcolortype
 		SET 
 		name = (xpath(root_xpath|| 'name/text()', message_xml))[1],
-		rgb = (xpath(root_xpath|| 'rgb/text()', message_xml))[1],
 		html = (xpath(root_xpath|| 'html/text()', message_xml))[1],
 		updatedate = (xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
 		state = (xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean

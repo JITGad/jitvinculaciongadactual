@@ -66,23 +66,24 @@ public class UserController {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
-        // Imagen
-        Object[] FileImage = fc.createfile(request.getImage(),
-                "Users", request.getNames() + " "
-                + request.getLast_name(), realpath);
+        if (!udao.comprobeUniqueEmail(um)) {
 
-        if (Boolean.parseBoolean(FileImage[0].toString())) {
-            request.setImage(String.valueOf(FileImage[1].toString()
-                    + "/" + "Users" + "/" + FileImage[2].toString()));
-        } else {
-            request.setImage("");
-        }
+            // Imagen
+            Object[] FileImage = fc.createfile(request.getImage(),
+                    "Users", request.getNames() + " "
+                    + request.getLast_name(), realpath);
 
-        // fin imagen
-        request.setCreationdate("NOW()");
-        request.setUpdatedate("NOW()");
+            if (Boolean.parseBoolean(FileImage[0].toString())) {
+                request.setImage(String.valueOf(FileImage[1].toString()
+                        + "/" + "Users" + "/" + FileImage[2].toString()));
+            } else {
+                request.setImage("");
+            }
 
-        if (udao.comprobeUniqueEmail(um)) {
+            // fin imagen
+            request.setPassword(encriptPassword(request.getPassword()));
+            request.setCreationdate("NOW()");
+            request.setUpdatedate("NOW()");
 
             if (udao.insertUser(request)) {
                 responseData.setMessage("Registros insertados correctamente");
@@ -98,27 +99,39 @@ public class UserController {
     }
 
     public ResponseData PutUser(UserModel request,
-            String realpath) throws SQLException {
+            String realpath) throws SQLException, UnsupportedEncodingException {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
         boolean passband = false;
 
-        if (!request.getPassword().isEmpty()) {
-            request.setPassword(encriptPassword(request.getPassword()));
-        } else {
-            passband = true;
-        }
+        if (!udao.comprobeUniqueEmailUpdate(request)) {
 
-        request.setUpdatedate("NOW()");
+            // Imagen
+            Object[] FileImage = fc.createfile(request.getImage(),
+                    "Users", request.getNames() + " "
+                    + request.getLast_name(), realpath);
 
-        if (udao.comprobeUniqueEmailUpdate(request)) {
-            if (udao.updateUser(um, passband)) {
+            if (Boolean.parseBoolean(FileImage[0].toString())) {
+                request.setImage(String.valueOf(FileImage[1].toString()
+                        + "/" + "Users" + "/" + FileImage[2].toString()));
+            }
+
+            // fin imagen
+            if (request.getPassword().isEmpty()) {
+                request.setPassword(encriptPassword(request.getPassword()));
+            } else {
+                passband = true;
+            }
+
+            request.setUpdatedate("NOW()");
+            
+            if (udao.updateUser(request, passband)) {
                 responseData.setMessage("Registros actualizados correctamente");
                 responseData.setFlag(true);
                 return responseData;
             }
         }
-        responseData.setMessage("Registros actualizados correctamente");
+        responseData.setMessage("El correo ya se encuentra registrado");
         responseData.setFlag(true);
         return responseData;
     }
