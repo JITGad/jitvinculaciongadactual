@@ -5,10 +5,13 @@ import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.UserController;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
+import com.jitgad.bjitgad.Models.UserModel;
 import com.jitgad.bjitgad.Models.UserRequestModel;
 import com.jitgad.bjitgad.Models.UserTokenRModel;
 import com.jitgad.bjitgad.Resources.ResponseAPI;
 import com.jitgad.bjitgad.Utilities.ResponseData;
+import com.jitgad.bjitgad.Utilities.ResponseDataPage;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -22,6 +25,7 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
+import java.util.ArrayList;
 
 /**
  *
@@ -31,10 +35,11 @@ import jakarta.ws.rs.core.UriInfo;
 public class Userresource {
 
     @Context
-    private UriInfo context;
+    private HttpServletRequest request;
     private final UserController userC;
     private final ResponseAPI Rapi;
     private final AuthorizationController AuC;
+    private UserModel userModel;
 
     public Userresource() {
         userC = new UserController();
@@ -46,93 +51,143 @@ public class Userresource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getUsersAdmin")
     public Response getUsersAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
-        //TODO return proper representation object
-        String data = userC.selectUserspage(page);
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
-        int responseCountingPage = 0;
-        try {
-            //TOKENS
-            String Authorization = headers.getHeaderString("Authorization");
-            Authorization = Authorization == null ? "" : Authorization;
-            System.out.println("Authorization: " + Authorization);
-            Object[] Permt = AuC.VToken(Authorization);
-            if (!Authorization.isEmpty()) {
-                if (Permt[2].equals("Administrador")) {
-                    if (Permt[0].equals(true)) {
-                        responseCountingPage = userC.CountingPageUsers();
-                        if (data.equals("{}")) {
-                            responseJson = Rapi.AdminResponse("Información no encontrada", responseCountingPage, false, data);
-                        } else {
-                            responseJson = Rapi.AdminResponse("Datos retornados correctamente", responseCountingPage, true, data);
-                        }
-                    } else {
-                        responseJson = Rapi.AdminResponse(String.valueOf(Permt[1]), responseCountingPage, false, data);
-                    }
-                } else {
-                    responseJson = Rapi.Response("Usuario sin privilegios para realizar esta actividad", false, data);
-                }
-            } else {
-                responseJson = Rapi.AdminResponse("Token vacio", responseCountingPage, false, data);
-            }
 
-        } catch (Exception e) {
-            responseJson = Rapi.AdminResponse(e.getMessage(), responseCountingPage, false, responseJson);
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando getUsersAdmin...");
         }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/getUsersAdminbyid")
-    public Response getUsersAdminbyid(@Context HttpHeaders headers, @QueryParam("id") int id) {
-        //TODO return proper representation object
-        String data = userC.selectUsersbyid(id);
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
+        
+        ResponseDataPage responseDataPage = new ResponseDataPage("Ocurrió un error", page, true);
+         
         try {
+            int responseCountingPage = 0;
             //TOKENS
             String Authorization = headers.getHeaderString("Authorization");
             Authorization = Authorization == null ? "" : Authorization;
             if (Configuration.DEBUG) {
                 System.out.println("Authorization: " + Authorization);
             }
+
             if (!Authorization.isEmpty()) {
+                ArrayList<UserModel> data = userC.selectUserspage(page);
                 Object[] Permt = AuC.VToken(Authorization);
-                if (Permt[2].equals("Administrador")) {
-                    if (Permt[0].equals(true)) {
-                        if (data.equals("{}")) {
-                            responseJson = Rapi.Response("Información no encontrada", false, data);
-                            return Response.ok(responseJson).build();
-                        } 
-                        responseJson = Rapi.Response("Datos retornados correctamente", true, data);
-                    } else {
-                        responseJson = Rapi.Response(String.valueOf(Permt[1]), false, data);
+                if (Permt[0].equals(true)) {
+                    responseCountingPage = userC.CountingPageUsers();
+                    if (data.size() > 0) {
+
+                        responseDataPage.setMessage("Información encontrada");
+                        responseDataPage.setCountingpage(responseCountingPage);
+                        responseDataPage.setData(data);
+                        return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
                     }
-                } else {
-                    responseJson = Rapi.Response("Usuario sin privilegios para realizar esta actividad", false, data);
+
+                    responseDataPage.setMessage("Información no encontrada");
+                    responseDataPage.setCountingpage(responseCountingPage);
+                    responseDataPage.setData(data);
+                    return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
                 }
-            } else {
-                responseJson = Rapi.Response("Tokén vacio", true, data);
+
+                responseDataPage.setMessage(String.valueOf(Permt[1]));
+                responseDataPage.setCountingpage(responseCountingPage);
+                return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
+
             }
 
+            responseDataPage.setMessage("Token vacio");
+            responseDataPage.setCountingpage(responseCountingPage);
+            return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
+
         } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, data);
+            responseDataPage.setFlag(false);
+
+            if (Configuration.DEBUG) {
+
+                responseDataPage.setMessage(e.getMessage());
+
+                return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
+            }
+
+            responseDataPage.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
         }
-        return Response.ok(responseJson).build();
+        return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/getUsersAdminbyid")
+    public Response getUsersAdminbyid(@Context HttpHeaders headers, @QueryParam("id") int id) {
+        
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando getUsersAdminbyid...");
+        }
+        ResponseData responseData = new ResponseData("Ocurrio un error", true);
+           
+         try {
+
+            //TOKENS
+            String Authorization = headers.getHeaderString("Authorization");
+            Authorization = Authorization == null ? "" : Authorization;
+            if (Configuration.DEBUG) {
+                System.out.println("Authorization: " + Authorization);
+            }
+
+            if (!Authorization.isEmpty()) {
+                Object[] Permt = AuC.VToken(Authorization);
+                if (Permt[0].equals(true)) {
+
+                    JsonObject data = Methods.stringToJSON(userC.selectUsersbyid(id));
+
+                    if (data.size() > 0) {
+
+                        responseData.setMessage("Información encontrada");
+                        responseData.setData(data);
+
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                    }
+                    responseData.setMessage("Información no encontrada");
+
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                }
+                responseData.setMessage(String.valueOf(Permt[1]));
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+            }
+            responseData.setMessage("Tokén vacio");
+
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+
+                responseData.setMessage(e.getMessage());
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
+        }
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
 
     @Produces(MediaType.APPLICATION_JSON)
     @POST
     @Path("/logIn")
     @Consumes(MediaType.APPLICATION_JSON)
+    
     public Response logIn(String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
         UserRequestModel userRequest = (UserRequestModel) Methods.StringJsonToObject(data, UserRequestModel.class);
         try {
             responseData = userC.LogIn(userRequest);
-            responseData.setData(userC.BuildToken((UserTokenRModel)responseData.getData(), userRequest));
+            responseData.setData(userC.BuildToken((UserTokenRModel) responseData.getData(), userRequest));
 
             return Response.ok(Methods.objectToJsonString(responseData)).build();
         } catch (Exception e) {
@@ -155,141 +210,144 @@ public class Userresource {
     @Path("/PostUserRegistration")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response PostUserRegistration(String data) {
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
-        System.out.println("Ingresando PostUserRegistration...");
+
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando PostUserRegistration...");
+        }
+
+        ResponseData responseData = new ResponseData("Ocurrio un error", false);
+
+        userModel = (UserModel) Methods.StringJsonToObject(data, UserModel.class);
+
         JsonObject Jso = Methods.stringToJSON(data);
         try {
             if (Jso.size() > 0) {
-                Object[] responseUserRegistration;
-                responseUserRegistration
-                        = userC.UserRegistration(
-                                Methods.JsonToString(Jso.getAsJsonObject(), "name", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "last_name", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "email", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "password", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "image", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "birthday", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "rol", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
-                if (responseUserRegistration[0].equals(true)) {
-                    responseJson = Rapi.Response(String.valueOf(responseUserRegistration[1]),
-                            Boolean.parseBoolean(responseUserRegistration[0].toString()), "{}");
-                } else {
-                    responseJson = Rapi.Response(String.valueOf(responseUserRegistration[1]),
-                            Boolean.parseBoolean(responseUserRegistration[0].toString()), "{}");
-                }
-            } else {
-                responseJson = Rapi.Response("Información no encontrada", false, data);
-            }
-        } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, data);
-        }
+                responseData = userC.UserRegistration(userModel,
+                        request.getServletContext().getRealPath("/"));
 
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+            responseData.setMessage("Información no encontrada");
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+                responseData.setMessage(e.getMessage());
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
+        }
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
 
     @Produces(MediaType.APPLICATION_JSON)
     @PUT
     @Path("/putuser")
     public Response PutUser(@Context HttpHeaders headers, String data) {
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
-        System.out.println("Ingresando PutUser...");
+
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando PutUser...");
+        }
+
+        ResponseData responseData = new ResponseData("Ocurrio un error", false);
+
+        userModel = (UserModel) Methods.StringJsonToObject(data, UserModel.class);
+
         JsonObject Jso = Methods.stringToJSON(data);
         try {
             if (Jso.size() > 0) {
-                //TOKENS
-                String Authorization = headers.getHeaderString("Authorization");
-                Authorization = Authorization == null ? "" : Authorization;
-                System.out.println("Authorization: " + Authorization);
-                Object[] Permt = AuC.VToken(Authorization);
-                if (!Authorization.isEmpty()) {
-                    if (Permt[0].equals(true)) {
-                        Object[] responseUserUpdate = userC.PutUser(
-                                Methods.JsonToInteger(Jso.getAsJsonObject(), "iduser", 0),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "names", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "last_name", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "email", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "password", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "image", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "birthday", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "rol", ""),
-                                Methods.JsonToString(Jso.getAsJsonObject(), "state", ""));
-                        if (responseUserUpdate[0].equals(true)) {
-                            responseJson = Rapi.Response(String.valueOf(responseUserUpdate[1]),
-                                    Boolean.parseBoolean(responseUserUpdate[0].toString()), "{}");
-                        } else {
-                            responseJson = Rapi.Response(String.valueOf(responseUserUpdate[1]),
-                                    Boolean.parseBoolean(responseUserUpdate[0].toString()), "{}");
-                        }
-                    } else {
-                        responseJson = Rapi.Response(String.valueOf(Permt[1]), false, "{}");
-                    }
-                } else {
-                    responseJson = Rapi.Response("Tokén vacio", true, data);
-                }
+                responseData = userC.PutUser(userModel,
+                        request.getServletContext().getRealPath("/"));
 
-            } else {
-                responseJson = Rapi.Response("Información no encontrada", false, data);
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
             }
-        } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, data);
-        }
+            responseData.setMessage("Información no encontrada");
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
 
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+                responseData.setMessage(e.getMessage());
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
+        }
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
 
     @Produces(MediaType.APPLICATION_JSON)
     @DELETE
     @Path("/deleteuser")
-    public Response DeleteActivitiesType(@Context HttpHeaders headers, String data) {
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
-        System.out.println("Ingresando deleteuser...");
+    public Response deleteuser(@Context HttpHeaders headers, String data) {
+
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando deleteuser...");
+        }
+
+        ResponseData responseData = new ResponseData("Ocurrio un error", false);
+
+        userModel = (UserModel) Methods.StringJsonToObject(data, UserModel.class);
+
         JsonObject Jso = Methods.stringToJSON(data);
-        System.out.println(responseJson);
+
         try {
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
-                System.out.println("Authorization: " + Authorization);
-                Object[] Permt = AuC.VToken(Authorization);
-                if (!Authorization.isEmpty()) {
-                    if (Permt[2].equals("Administrador")) {
-                        if (Permt[0].equals(true)) {
-                            Object[] responseUserDelete = userC.DeleteUser(
-                                    Methods.JsonToInteger(Jso.getAsJsonObject(), "iduser", 0));
-                            if (responseUserDelete[0].equals(true)) {
-                                responseJson = Rapi.Response(String.valueOf(responseUserDelete[1]),
-                                        Boolean.parseBoolean(responseUserDelete[0].toString()), data);
-                            } else {
-                                responseJson = Rapi.Response(String.valueOf(responseUserDelete[1]),
-                                        Boolean.parseBoolean(responseUserDelete[0].toString()), data);
-                            }
-                        } else {
-                            responseJson = Rapi.Response(String.valueOf(Permt[1]), false, data);
-                        }
-                    } else {
-                        responseJson = Rapi.Response("Usuario sin privilegios para realizar esta actividad", false, data);
-                    }
-                } else {
-                    responseJson = Rapi.Response("Tokén vacio", true, data);
+
+                if (Configuration.DEBUG) {
+                    System.out.println("Authorization: " + Authorization);
                 }
 
-            } else {
-                responseJson = Rapi.Response("Información no encontrada", false, data);
+                if (!Authorization.isEmpty()) {
+
+                    Object[] Permt = AuC.VToken(Authorization);
+
+                    if (Permt[2].equals("Administrador")) {
+
+                        if (Permt[0].equals(true)) {
+
+                            responseData = userC.DeleteUser(userModel);
+
+                            return Response.ok(Methods.objectToJsonString(responseData)).build();
+                        }
+                        responseData.setMessage(String.valueOf(Permt[1]));
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                    }
+                    responseData.setMessage("Usuario sin privilegios para realizar esta actividad");
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                }
+                responseData.setMessage("Tokén vacio");
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
             }
+            responseData.setMessage("Información no encontrada");
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
         } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, data);
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+                responseData.setMessage(e.getMessage());
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
         }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
 }

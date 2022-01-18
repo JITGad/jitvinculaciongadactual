@@ -15,6 +15,7 @@ import com.jitgad.bjitgad.Models.UserTokenRModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,10 +30,12 @@ public class UserController {
 
     private final UserDAO udao;
     private final UserModel um;
+    private final FileController fc;
 
     public UserController() {
         udao = new UserDAO();
         um = new UserModel();
+        fc = new FileController();
     }
 
     /**
@@ -57,94 +60,87 @@ public class UserController {
         }
         return responseData;
     }
-    
-    public Object[] UserRegistration(String name, String last_name,
-            String email, String password, String image, String birthday,
-            String rol, String state) throws SQLException {
-        String message = "Correo inválido";
-        boolean status = false;
-        um.setNames(name);
-        um.setLast_name(last_name);
-        um.setEmail(email);
-        um.setPassword(encriptPassword(password));
-        um.setImage(image);
-        um.setBirthdate(birthday);
-        um.setRol(rol);
-        um.setCreationdate("NOW()");
-        um.setUpdatedate("NOW()");
-        um.setState(Boolean.parseBoolean(state));
+
+    public ResponseData UserRegistration(UserModel request,
+            String realpath) throws SQLException, UnsupportedEncodingException {
+
+        ResponseData responseData = new ResponseData("Ocurrió un error", false);
+
+        // Imagen
+        Object[] FileImage = fc.createfile(request.getImage(),
+                "Users", request.getNames() + " "
+                + request.getLast_name(), realpath);
+
+        if (Boolean.parseBoolean(FileImage[0].toString())) {
+            request.setImage(String.valueOf(FileImage[1].toString()
+                    + "/" + "Users" + "/" + FileImage[2].toString()));
+        } else {
+            request.setImage("");
+        }
+
+        // fin imagen
+        request.setCreationdate("NOW()");
+        request.setUpdatedate("NOW()");
+
         if (udao.comprobeUniqueEmail(um)) {
-            if (udao.insertUser(um)) {
-                message = "Usuario registrado";
-                status = true;
-            } else {
-                message = "Usuario no registrado";
-                status = false;
+
+            if (udao.insertUser(request)) {
+                responseData.setMessage("Registros insertados correctamente");
+                responseData.setFlag(true);
+                return responseData;
             }
-        } else {
-            message = "El correo ya se encuentra registrado";
-            status = false;
+
         }
-        return new Object[]{status, message};
+        responseData.setMessage("El correo ya se encuentra registrado");
+        responseData.setFlag(true);
+
+        return responseData;
     }
 
-    public Object[] PutUser(int iduser,String name, String last_name,
-            String email, String password, String image, String birthday,
-            String rol, String state) throws SQLException {
-        String message = "Correo inválido";
-        boolean status = false;
+    public ResponseData PutUser(UserModel request,
+            String realpath) throws SQLException {
+
+        ResponseData responseData = new ResponseData("Ocurrió un error", false);
         boolean passband = false;
-        um.setIduser(iduser);
-        um.setNames(name);
-        um.setLast_name(last_name);
-        um.setEmail(email);
-        if(!password.isEmpty())
-        {
-          um.setPassword(encriptPassword(password));
-        }
-        else{
-          passband = true;  
-        }
-        um.setImage(image);
-        um.setBirthdate(birthday);
-        um.setRol(rol);
-        um.setUpdatedate("NOW()");
-        um.setState(Boolean.parseBoolean(state));
-        if (udao.comprobeUniqueEmailUpdate(um)) {
-            if (udao.updateUser(um,passband)) {
-                message = "Usuario actualizado con éxito";
-                status = true;
-            } else {
-                message = "Usuario no actualizado, ocurrió un error";
-                status = false;
-            }
+
+        if (!request.getPassword().isEmpty()) {
+            request.setPassword(encriptPassword(request.getPassword()));
         } else {
-            message = "El correo ya se encuentra registrado";
-            status = false;
+            passband = true;
         }
-        return new Object[]{status, message};
+
+        request.setUpdatedate("NOW()");
+
+        if (udao.comprobeUniqueEmailUpdate(request)) {
+            if (udao.updateUser(um, passband)) {
+                responseData.setMessage("Registros actualizados correctamente");
+                responseData.setFlag(true);
+                return responseData;
+            }
+        }
+        responseData.setMessage("Registros actualizados correctamente");
+        responseData.setFlag(true);
+        return responseData;
     }
 
-    public Object[] DeleteUser(int iduser) throws SQLException{
-        String message = "";
-        boolean status = false;
-        um.setIduser(iduser);
-        
-        if (udao.deleteUser(um)) {
-            message = "Usuario eliminado correctamente";
-            status = true;
-        } else {
-            message = "El usuario no fué eliminado, ocurrió un error";
-            status = false;
+    public ResponseData DeleteUser(UserModel request) throws SQLException {
+
+        ResponseData responseData = new ResponseData("Ocurrió un error", false);
+
+        if (udao.deleteUser(request)) {
+
+            responseData.setMessage("Usuario eliminado correctamente");
+            responseData.setFlag(true);
+            return responseData;
         }
-        
-        return new Object[]{status, message};
+
+        return responseData;
     }
 
     public Object[] ValidateToken(String user_id, String email, String rol) {
         String message = "Correo inválido";
         boolean status = false;
-            
+
         if (!user_id.equals("")) {
             if (!udao.validatetoken(user_id, email)) {
                 status = true;
@@ -153,7 +149,7 @@ public class UserController {
                 status = false;
                 message = "Token inválido";
             }
-        }else{
+        } else {
             status = false;
             message = "Token inválido";
         }
@@ -164,14 +160,15 @@ public class UserController {
     public String encriptPassword(String pwd) {
         return DigestUtils.sha256Hex(pwd);
     }
-    
-    public String selectUserspage(int page) {
+
+    public ArrayList<UserModel> selectUserspage(int page) {
         return udao.selectUserspage(page);
     }
+
     public String selectUsersbyid(int id) {
         return udao.selectUsersbyid(id);
     }
-    
+
     public int CountingPageUsers() {
         return udao.CountingPageUsers();
     }

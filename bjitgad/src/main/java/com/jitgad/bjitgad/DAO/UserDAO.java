@@ -22,10 +22,10 @@ public class UserDAO {
         con = ConectionPoolDataSource.getConnection();
     }
 
-    public String selectUserspage(int page) {
+    public ArrayList<UserModel> selectUserspage(int page) {
         sentence = "select iduser,names,last_name, email,image, birthdate, rol, creationdate, updatedate, state from tbluser order by iduser asc limit 10 offset " + (page * 10 - 10);
         ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
-        return Methods.objectToJsonString(datos);
+        return datos;
     }
 
     public String selectUsersbyid(int id) {
