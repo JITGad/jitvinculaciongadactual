@@ -55,9 +55,9 @@ public class Userresource {
         if (Configuration.DEBUG) {
             System.out.println("Ingresando getUsersAdmin...");
         }
-        
+
         ResponseDataPage responseDataPage = new ResponseDataPage("Ocurrió un error", page, true);
-         
+
         try {
             int responseCountingPage = 0;
             //TOKENS
@@ -117,13 +117,13 @@ public class Userresource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getUsersAdminbyid")
     public Response getUsersAdminbyid(@Context HttpHeaders headers, @QueryParam("id") int id) {
-        
+
         if (Configuration.DEBUG) {
             System.out.println("Ingresando getUsersAdminbyid...");
         }
         ResponseData responseData = new ResponseData("Ocurrio un error", true);
-           
-         try {
+
+        try {
 
             //TOKENS
             String Authorization = headers.getHeaderString("Authorization");
@@ -181,7 +181,7 @@ public class Userresource {
     @POST
     @Path("/logIn")
     @Consumes(MediaType.APPLICATION_JSON)
-    
+
     public Response logIn(String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
         UserRequestModel userRequest = (UserRequestModel) Methods.StringJsonToObject(data, UserRequestModel.class);
@@ -209,7 +209,7 @@ public class Userresource {
     @POST
     @Path("/PostUserRegistration")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response PostUserRegistration(String data) {
+    public Response PostUserRegistration(@Context HttpHeaders headers, String data) {
 
         if (Configuration.DEBUG) {
             System.out.println("Ingresando PostUserRegistration...");
@@ -220,12 +220,35 @@ public class Userresource {
         userModel = (UserModel) Methods.StringJsonToObject(data, UserModel.class);
 
         JsonObject Jso = Methods.stringToJSON(data);
+
         try {
             if (Jso.size() > 0) {
-                responseData = userC.UserRegistration(userModel,
+                //TOKENS
+                String Authorization = headers.getHeaderString("Authorization");
+                Authorization = Authorization == null ? "" : Authorization;
+
+                if (Configuration.DEBUG) {
+                    System.out.println("Authorization: " + Authorization);
+                }
+
+                if (!Authorization.isEmpty()) {
+
+                    Object[] Permt = AuC.VToken(Authorization);
+
+                    if (Permt[0].equals(true)) {
+
+                        responseData = userC.UserRegistration(userModel,
                         request.getServletContext().getRealPath("/"));
 
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+                    }
+                    responseData.setMessage(String.valueOf(Permt[1]));
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                }
+                responseData.setMessage("Tokén vacio");
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
+
             }
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
@@ -259,12 +282,35 @@ public class Userresource {
         userModel = (UserModel) Methods.StringJsonToObject(data, UserModel.class);
 
         JsonObject Jso = Methods.stringToJSON(data);
+
         try {
             if (Jso.size() > 0) {
-                responseData = userC.PutUser(userModel,
+                //TOKENS
+                String Authorization = headers.getHeaderString("Authorization");
+                Authorization = Authorization == null ? "" : Authorization;
+
+                if (Configuration.DEBUG) {
+                    System.out.println("Authorization: " + Authorization);
+                }
+
+                if (!Authorization.isEmpty()) {
+
+                    Object[] Permt = AuC.VToken(Authorization);
+
+                    if (Permt[0].equals(true)) {
+
+                        responseData = userC.PutUser(userModel,
                         request.getServletContext().getRealPath("/"));
 
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+                    }
+                    responseData.setMessage(String.valueOf(Permt[1]));
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                }
+                responseData.setMessage("Tokén vacio");
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
+
             }
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
