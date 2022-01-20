@@ -22,10 +22,10 @@ public class UserDAO {
         con = ConectionPoolDataSource.getConnection();
     }
 
-    public String selectUserspage(int page) {
+    public ArrayList<UserModel> selectUserspage(int page) {
         sentence = "select iduser,names,last_name, email,image, birthdate, rol, creationdate, updatedate, state from tbluser order by iduser asc limit 10 offset " + (page * 10 - 10);
         ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
-        return Methods.objectToJsonString(datos);
+        return datos;
     }
 
     public String selectUsersbyid(int id) {
@@ -60,12 +60,14 @@ public class UserDAO {
     }
 
     public boolean comprobeUniqueEmail(UserModel usr) {
-        String sentency = String.format("select * from tbluser where email='%s';", usr.getEmail());
+        String sentency = String.format("select * from tbluser where email='%s';", usr.getEmail().trim());
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
 
     public boolean comprobeUniqueEmailUpdate(UserModel usr) {
-        String sentency = String.format("select * from tbluser where email='%s' and iduser != '%s';", usr.getEmail(), usr.getIduser());
+        System.out.println(usr.getEmail().trim());
+        System.out.println(usr.getIduser());
+        String sentency = String.format("select * from tbluser where email='%s' and iduser != '%s';", usr.getEmail().trim(), usr.getIduser());
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
 

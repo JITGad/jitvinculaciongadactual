@@ -8,7 +8,6 @@ public class ColortypeModel {
 
     private int idcolortype = 0;
     private String name = "";
-    private String rgb = "";
     private String html = "";
     private String creationdate = "";
     private String updatedate = "";
@@ -18,14 +17,12 @@ public class ColortypeModel {
     }
     
     public ColortypeModel(int _idcolortype,String _name,
-            String _rgb,
             String _html,
             String _creationdate,
             String _updatedate,
             boolean _state) {
         this.idcolortype = _idcolortype;
         this.name = _name;
-        this.rgb = _rgb;
         this.html = _html;
         this.creationdate = _creationdate;
         this.updatedate = _updatedate;
@@ -46,14 +43,6 @@ public class ColortypeModel {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getRgb() {
-        return rgb;
-    }
-
-    public void setRgb(String rgb) {
-        this.rgb = rgb;
     }
 
     public String getHtml() {
