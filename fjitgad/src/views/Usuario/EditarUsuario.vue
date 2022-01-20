@@ -20,7 +20,9 @@ export default {
   setup(props, context) {
     const route = useRoute();
     const handleSubmit = async (model, callback) => {
+      console.log(model);
       const Response = await UsuariosService.putUsuario(model);
+      console.log(Response);
       callback(Response);
     };
     const iduser = ref(parseInt(route.params["id"]));

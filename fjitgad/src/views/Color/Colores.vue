@@ -105,7 +105,7 @@ export default {
         `Esta seguro de eliminar la Color ${Color.name}`,
         async () => {
           const response = await ColoresService.deleteColor(
-            Color.idcolor
+            Color.idcolortype
           );
           if (!response.status.error) {
             message_info("Registro eliminado correctamente", async () => {

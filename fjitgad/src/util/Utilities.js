@@ -132,3 +132,37 @@ export async function readFilesToBase64(files, multiple = false) {
 export function formatDateInput(date = new Date()) {
     return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 }
+
+export function isBase64(str = ""){
+    if (str === null || str ==='' || str.trim() ===''){ return false; }
+    try {
+        const extension = str.split(',')[0];
+        if (extension == null || extension.length == 0) {
+            return false;
+        }
+
+        return extension.includes("base64");
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
+}
+
+// Convertir cadena Unicode a cadena donde cada
+// elemento 16-bit ocupe solo un byte
+export function toBinary(string) {
+    const codeUnits = new Uint16Array(string.length);
+    for (let i = 0; i < codeUnits.length; i++) {
+      codeUnits[i] = string.charCodeAt(i);
+    }
+    return String.fromCharCode(...new Uint8Array(codeUnits.buffer));
+  }
+  
+  // Recodificar cadena original
+export   function fromBinary(binary) {
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < bytes.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return String.fromCharCode(...new Uint16Array(bytes.buffer));
+  }

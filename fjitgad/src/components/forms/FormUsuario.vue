@@ -41,7 +41,7 @@
     />
     <my-input-file label="Imagen" v-model="model.image" type="image" />
     <my-input
-      v-model="model.birthday"
+      v-model="model.birthdate"
       type="date"
       label="Fecha de nacimiento"
       placeholder="Escriba la fecha de nacimiento"
@@ -98,7 +98,7 @@ export default {
       password: "",
       confirm_password: "",
       image: null,
-      birthday: formatDateInput(),
+      birthdate: formatDateInput(),
       rol: "",
       state: true,
     };

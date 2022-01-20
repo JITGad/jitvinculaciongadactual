@@ -50,7 +50,6 @@ export default {
   setup(props, context) {
     const InitialState = {
       idcolortype: 0,
-      rgb: "",
       name: "",
       html: "#000000",
       state: true,
