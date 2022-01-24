@@ -24,14 +24,7 @@
         />
       </div>
       <div class="col-4">
-        <img v-if="type == 'image'" ref="filePrev" class="responsive-image" />
-        <audio
-          v-if="type == 'audio'"
-          ref="filePrev"
-          controls="controls"
-        >
-          <source src="" type="audio/*" />
-        </audio>
+        <my-prev-file :type="type" v-model="filePrev" />
       </div>
     </div>
     <div v-show="error.state" class="validation-message">
@@ -109,10 +102,10 @@ export default {
       (value, prevValue) => {
         if (value == null || value.length == 0) {
           fileInput.value.value = "";
-          filePrev.value.src = "";
+          filePrev.value = "";
           return;
         }
-        filePrev.value.src = value;
+        filePrev.value = value;
       }
     );
     const executevalidation = function (_value) {
@@ -138,12 +131,12 @@ export default {
       loading.value = true;
       const archivos = event.target.files;
       if (!archivos || !archivos.length) {
-        filePrev.value.src = "";
+        filePrev.value = "";
         return;
       }
       const primerArchivo = archivos[0];
       const objectURL = URL.createObjectURL(primerArchivo);
-      filePrev.value.src = objectURL;
+      filePrev.value = objectURL;
       const fileBase64 = await readFilesToBase64(
         props.multiple ? archivos : primerArchivo,
         props.multiple
@@ -152,7 +145,7 @@ export default {
       loading.value = false;
     }
     onMounted(function () {
-      filePrev.value.src = props.modelValue ? props.modelValue : "";
+      filePrev.value = props.modelValue;
       form.bind({ validate, uid: instance.uid });
     });
     onBeforeUnmount(() => {

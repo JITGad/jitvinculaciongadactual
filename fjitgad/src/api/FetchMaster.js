@@ -142,7 +142,7 @@ class FetchMaster {
                     'conteo': paginacion ? data.CountingPage : undefined,
                     'totalPaginas': paginacion ? data.TotalPages : undefined,
                     'status': {
-                        error: false,
+                        error: !data.flag,
                         message: data.message
                     }
                 });
