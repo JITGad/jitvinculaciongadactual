@@ -3,6 +3,7 @@ package com.jitgad.bjitgad.DAO;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
+import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GametypeModel;
 import com.jitgad.bjitgad.Models.UserModel;
 import java.sql.SQLException;
@@ -24,6 +25,12 @@ public class GametypeDAO {
     public ArrayList<GametypeModel> selectGametypepage(int page) {
         sentence = "select * from tblgametype order by idgametype asc limit 10 offset " + (page * 10 - 10);
         ArrayList<GametypeModel> datos = con.getObjectDB(sentence, GametypeModel.class, 1);
+        return datos;
+    }
+    
+    public ArrayList<ClaveValorModel> selectgametypecv() {
+        sentence = "select idgametype as id, name as name from tblgametype order by idgametype";
+        ArrayList<ClaveValorModel> datos = con.getObjectDB(sentence, ClaveValorModel.class, 1);
         return datos;
     }
 
@@ -48,8 +55,8 @@ public class GametypeDAO {
                 + "<name>" + gametypeModel.getName() + "</name>"
                 + "<image>" + gametypeModel.getImage() + "</image>"
                 + "<audio_instructions>" + gametypeModel.getAudio_instructions() + "</audio_instructions>"
-                + "<text_instructions>" + gametypeModel.getAudio_instructions() + "</text_instructions>"
-                + "<video_instructions>" + gametypeModel.getAudio_instructions() + "</video_instructions>"
+                + "<text_instructions>" + gametypeModel.getText_instructions() + "</text_instructions>"
+                + "<video_instructions>" + gametypeModel.getVideo_instructions() + "</video_instructions>"
                 + "<shortname>" + gametypeModel.getShortname() + "</shortname>"
                 + "<creationdate>" + gametypeModel.getCreationdate() + "</creationdate>"
                 + "<updatedate>" + gametypeModel.getUpdatedate() + "</updatedate>"
@@ -63,11 +70,12 @@ public class GametypeDAO {
     public boolean updateGametype(GametypeModel gametypeModel) throws SQLException {
         String structure = String.format(
                 "<gametype>"
+                + "<idgametype>" + gametypeModel.getIdgametype()+ "</idgametype>"
                 + "<name>" + gametypeModel.getName() + "</name>"
                 + "<image>" + gametypeModel.getImage() + "</image>"
                 + "<audio_instructions>" + gametypeModel.getAudio_instructions() + "</audio_instructions>"
-                + "<text_instructions>" + gametypeModel.getAudio_instructions() + "</text_instructions>"
-                + "<video_instructions>" + gametypeModel.getAudio_instructions() + "</video_instructions>"
+                + "<text_instructions>" + gametypeModel.getText_instructions()+ "</text_instructions>"
+                + "<video_instructions>" + gametypeModel.getVideo_instructions() + "</video_instructions>"
                 + "<shortname>" + gametypeModel.getShortname() + "</shortname>"
                 + "<updatedate>" + gametypeModel.getUpdatedate() + "</updatedate>"
                 + "<state>" + gametypeModel.getState() + "</state>"

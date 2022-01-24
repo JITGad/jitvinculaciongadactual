@@ -4,6 +4,7 @@ import com.jitgad.bjitgad.DAO.ActivitiestypeDAO;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
+import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
@@ -26,17 +27,20 @@ public class ActivitiestypeController {
         atDAO = new ActivitiestypeDAO();
         fc = new FileController();
     }
+    
 
     public ResponseData InsertActivitiesTypeC(ActivitiestypeModel request,
             String realpath) throws UnsupportedEncodingException, SQLException {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
-
+        
+        request.setImage(request.getImage() == null ? "" : request.getImage());
+         
         Object[] CreateFile = fc.createfile(request.getImage(),
-                    "Activities", request.getName(), realpath);
+                    "activities", request.getName(), realpath);
             if (Boolean.parseBoolean(CreateFile[0].toString())) {
                 request.setImage(String.valueOf(CreateFile[1].toString()
-                        + "/" + "Activities" + "/" + CreateFile[2].toString()));
+                        + "/" + "activities" + "/" + CreateFile[2].toString()));
             } else {
                 request.setImage("");
             }
@@ -56,16 +60,17 @@ public class ActivitiestypeController {
             String realpath) throws UnsupportedEncodingException, SQLException {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
+        
+        request.setImage(request.getImage() == null ? "" : request.getImage());
+         
         Object[] CreateFile;
 
             CreateFile = fc.createfile(request.getImage(),
-                    "Activities", request.getName(), realpath);
+                    "activities", request.getName(), realpath);
             if (Boolean.parseBoolean(CreateFile[0].toString())) {
                 request.setImage(String.valueOf(CreateFile[1].toString()
-                        + "/" + "Activities" + "/" + CreateFile[2].toString()));
-            } else {
-                request.setImage("");
-            }
+                        + "/" + "activities" + "/" + CreateFile[2].toString()));
+            } 
 
             request.setUpdatedate("NOW()");
 
@@ -106,6 +111,11 @@ public class ActivitiestypeController {
 
     public String selectactivitiesbyid(int activityid) {
         return atDAO.selectactivitiesbyid(activityid);
+    }
+    
+    public ArrayList<ClaveValorModel> selectactivitiestypecv(){
+        
+        return atDAO.selectactivitiestypeclavevalor();
     }
 
 }

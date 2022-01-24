@@ -5,6 +5,7 @@ import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
+import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Utilities.InetAddressUtil;
 import com.jitgad.bjitgad.Utilities.UFile;
 import java.sql.SQLException;
@@ -32,18 +33,29 @@ public class ActivitiestypeDAO {
 
         sentence = "select * from tblactivitiestype where state = true order by idactivitiestype";
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
-        for (int i = 0; i < datos.size(); i++) {
-            datos.get(i).setImage((Configuration.ipdominioservidor + datos.get(i).getImage()).replace('\\', '/'));
-        }
+//        for (int i = 0; i < datos.size(); i++) {
+//            datos.get(i).setImage((Configuration.ipdominioservidor + datos.get(i).getImage()).replace('\\', '/'));
+//        }
         return datos;
     }
+    
+    
 
+    public ArrayList<ClaveValorModel> selectactivitiestypeclavevalor() {
+
+        sentence = "select idactivitiestype as id, name as name from tblactivitiestype order by idactivitiestype";
+        ArrayList<ClaveValorModel> datos = con.getObjectDB(sentence, ClaveValorModel.class, 1);
+        
+        return datos;
+    }
+    
+    
     public ArrayList<ActivitiestypeModel> selectActivitiestypepage(int page) {
         sentence = "select * from tblactivitiestype order by idactivitiestype asc limit 10 offset " + (page * 10 - 10);
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
-        for (int i = 0; i < datos.size(); i++) {
-            datos.get(i).setImage((Configuration.ipdominioservidor + datos.get(i).getImage()).replace('\\', '/'));
-        }
+//        for (int i = 0; i < datos.size(); i++) {
+//            datos.get(i).setImage((Configuration.ipdominioservidor + datos.get(i).getImage()).replace('\\', '/'));
+//        }
         return datos;
     }
 

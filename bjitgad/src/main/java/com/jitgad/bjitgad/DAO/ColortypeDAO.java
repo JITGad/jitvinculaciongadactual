@@ -4,6 +4,7 @@ import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.Models.ColortypeModel;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
+import com.jitgad.bjitgad.Models.ClaveValorColorModel;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -23,6 +24,13 @@ public class ColortypeDAO {
     public ArrayList<ColortypeModel> selectColortypepage(int page) {
         sentence = "select * from tblcolortype order by idcolortype asc limit 10 offset " + (page * 10 - 10);
         ArrayList<ColortypeModel> datos = con.getObjectDB(sentence, ColortypeModel.class, 1);
+        return datos;
+    }
+    
+    public ArrayList<ClaveValorColorModel> selectColortypecv() {
+        sentence = "select idcolortype as id, name as name, html as hexcode from tblcolortype order by idcolortype";
+        ArrayList<ClaveValorColorModel> datos = con.getObjectDB(sentence, ClaveValorColorModel.class, 1);
+        
         return datos;
     }
 
@@ -54,6 +62,7 @@ public class ColortypeDAO {
         String sentency = "Select * from insertcolortype('" + structure + "')";
         return con.modifyBD(sentency);
     }
+    
     public boolean updatecolortype(ColortypeModel colortypeModel) throws SQLException {
         String structure = String.format(
                 "<colortype>"
