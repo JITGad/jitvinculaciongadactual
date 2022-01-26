@@ -25,12 +25,18 @@ public class UserDAO {
     public ArrayList<UserModel> selectUserspage(int page) {
         sentence = "select iduser,names,last_name, email,image, birthdate, rol, creationdate, updatedate, state from tbluser order by iduser asc limit 10 offset " + (page * 10 - 10);
         ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
+//        for (int i = 0; i < datos.size(); i++) {
+//            datos.get(i).setImage((Configuration.ipdominioservidor + datos.get(i).getImage()).replace('\\', '/'));
+//        }
         return datos;
     }
 
     public String selectUsersbyid(int id) {
         sentence = "select iduser,names,last_name, email,image, birthdate, rol, state from tbluser where iduser =" + id;
         ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
+//        for (int i = 0; i < datos.size(); i++) {
+//            datos.get(i).setImage((Configuration.ipdominioservidor + datos.get(i).getImage()).replace('\\', '/'));
+//        }
         if (datos.size() > 0) {
             return Methods.objectToJsonString(datos.get(0));
         } else {
@@ -60,14 +66,18 @@ public class UserDAO {
     }
 
     public boolean comprobeUniqueEmail(UserModel usr) {
-        String sentency = String.format("select * from tbluser where email='%s';", usr.getEmail().trim());
+        String sentency = String.format("select * from tbluser where email='%s';", usr.getEmail());
+        System.out.println(sentency);
+        System.out.println("");
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
 
     public boolean comprobeUniqueEmailUpdate(UserModel usr) {
         System.out.println(usr.getEmail().trim());
         System.out.println(usr.getIduser());
-        String sentency = String.format("select * from tbluser where email='%s' and iduser != '%s';", usr.getEmail().trim(), usr.getIduser());
+        String sentency = String.format("select * from tbluser where email='%s' and iduser != '%s';", usr.getEmail(), usr.getIduser());
+        System.out.println(sentency);
+        System.out.println("");
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
 

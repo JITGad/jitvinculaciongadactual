@@ -66,16 +66,18 @@ public class UserController {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
-        if (!udao.comprobeUniqueEmail(um)) {
+        request.setImage(request.getImage() == null ? "" : request.getImage());
+
+        if (udao.comprobeUniqueEmail(request)) {
 
             // Imagen
             Object[] FileImage = fc.createfile(request.getImage(),
-                    "Users", request.getNames() + " "
+                    "users", request.getNames() + " "
                     + request.getLast_name(), realpath);
 
             if (Boolean.parseBoolean(FileImage[0].toString())) {
                 request.setImage(String.valueOf(FileImage[1].toString()
-                        + "/" + "Users" + "/" + FileImage[2].toString()));
+                        + "/" + "users" + "/" + FileImage[2].toString()));
             } else {
                 request.setImage("");
             }
@@ -93,7 +95,7 @@ public class UserController {
 
         }
         responseData.setMessage("El correo ya se encuentra registrado");
-        responseData.setFlag(true);
+        responseData.setFlag(false);
 
         return responseData;
     }
@@ -104,16 +106,18 @@ public class UserController {
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
         boolean passband = false;
 
-        if (!udao.comprobeUniqueEmailUpdate(request)) {
+        request.setImage(request.getImage() == null ? "" : request.getImage());
+
+        if (udao.comprobeUniqueEmailUpdate(request)) {
 
             // Imagen
             Object[] FileImage = fc.createfile(request.getImage(),
-                    "Users", request.getNames() + " "
+                    "users", request.getNames() + " "
                     + request.getLast_name(), realpath);
 
             if (Boolean.parseBoolean(FileImage[0].toString())) {
                 request.setImage(String.valueOf(FileImage[1].toString()
-                        + "/" + "Users" + "/" + FileImage[2].toString()));
+                        + "/" + "users" + "/" + FileImage[2].toString()));
             }
 
             // fin imagen
@@ -124,7 +128,7 @@ public class UserController {
             }
 
             request.setUpdatedate("NOW()");
-            
+
             if (udao.updateUser(request, passband)) {
                 responseData.setMessage("Registros actualizados correctamente");
                 responseData.setFlag(true);
@@ -132,7 +136,7 @@ public class UserController {
             }
         }
         responseData.setMessage("El correo ya se encuentra registrado");
-        responseData.setFlag(true);
+        responseData.setFlag(false);
         return responseData;
     }
 

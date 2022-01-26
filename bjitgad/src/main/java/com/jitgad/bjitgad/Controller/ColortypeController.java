@@ -4,6 +4,7 @@ import com.jitgad.bjitgad.DAO.ColortypeDAO;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
+import com.jitgad.bjitgad.Models.ClaveValorColorModel;
 import com.jitgad.bjitgad.Models.ColortypeModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import jakarta.ws.rs.core.Response;
@@ -34,6 +35,10 @@ public class ColortypeController {
 
     public String selectColortypebyid(int id) {
         return ctypDAO.selectColortypebyid(id);
+    }
+    
+    public ArrayList<ClaveValorColorModel> selectColortypecv(){
+        return ctypDAO.selectColortypecv();
     }
 
     public ResponseData InsertColortype(ColortypeModel colortypeModel) throws SQLException {

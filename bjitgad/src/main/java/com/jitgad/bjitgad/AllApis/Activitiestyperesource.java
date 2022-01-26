@@ -7,6 +7,7 @@ import com.jitgad.bjitgad.Controller.FileController;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
+import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Resources.ResponseAPI;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import com.jitgad.bjitgad.Utilities.ResponseDataPage;
@@ -221,6 +222,72 @@ public class Activitiestyperesource {
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
 
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/getactivitiestypecv")
+    public Response getactivitiestypecv(@Context HttpHeaders headers) {
+
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando getactivitiestypecv...");
+        }
+        ResponseData responseData = new ResponseData("Ocurrio un error", true);
+
+        try {
+
+            //TOKENS
+            String Authorization = headers.getHeaderString("Authorization");
+            Authorization = Authorization == null ? "" : Authorization;
+            if (Configuration.DEBUG) {
+                System.out.println("Authorization: " + Authorization);
+            }
+
+            if (!Authorization.isEmpty()) {
+                Object[] Permt = AuC.VToken(Authorization);
+                if (Permt[0].equals(true)) {
+
+                    ArrayList<ClaveValorModel> data = atC.selectactivitiestypecv();
+
+                    if (data.size() > 0) {
+
+                        responseData.setMessage("Información encontrada");
+                        responseData.setData(data);
+
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                    }
+                    responseData.setMessage("Información no encontrada");
+
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                }
+                responseData.setMessage(String.valueOf(Permt[1]));
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+            }
+            responseData.setMessage("Tokén vacio");
+
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+
+                responseData.setMessage(e.getMessage());
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
+        }
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
+    }
+    
+    
     /*
      add activities
      */

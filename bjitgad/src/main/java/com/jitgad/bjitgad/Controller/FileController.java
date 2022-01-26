@@ -42,42 +42,45 @@ public class FileController {
                 extension = "jpg";
                 ext = true;
                 break;
+            case "data:audio/mpeg;base64":
+                extension = "mpeg";
+                ext = true;
+                break;
             default:
                 extension = "";
                 break;
         }
         try {
-                String baserutarelativa = (realpath + "").replace('\\', '/');
-                //  String baseextraimage = "";
+            String baserutarelativa = (realpath + "").replace('\\', '/');
+            //  String baseextraimage = "";
 
-                Object[] Permt = validateformat(extension, baserutarelativa);
-                if (Boolean.parseBoolean(Permt[0].toString())) {
+            Object[] Permt = validateformat(extension, baserutarelativa);
+            if (Boolean.parseBoolean(Permt[0].toString())) {
 
-                    if (createfilebase(Permt[1].toString())) {
-                        String ruta = Permt[1].toString() + type + "/";
-                        //COMPROBAR SI EXISTEN LAS CARPETAS DE IMAGENES O VIDEOS
-                        if (!new File(ruta).exists()) {  //se comprueba si la ruta existe o no
-                            //  System.out.println("El directorio " + new File(ruta).getName() + " no existe");
-                            if (new File(ruta).mkdir()) { //se crea la ruta. Si se ha creado correctamente
-                                //   System.out.println("Directorio creado");
-                                band = uf.B64StringtoImageFile(strings[1], ruta + name + "." + extension);
-                                
-                                return new Object[]{band, Permt[2], name + "." + extension};
-                            } else {
-                                // System.out.println("No se ha podido crear " + new File(ruta).getName());
-                            }
-                        } else {
+                if (createfilebase(Permt[1].toString())) {
+                    String ruta = Permt[1].toString() + type + "/";
+                    //COMPROBAR SI EXISTEN LAS CARPETAS DE IMAGENES O VIDEOS
+                    if (!new File(ruta).exists()) {  //se comprueba si la ruta existe o no
+                        //  System.out.println("El directorio " + new File(ruta).getName() + " no existe");
+                        if (new File(ruta).mkdir()) { //se crea la ruta. Si se ha creado correctamente
+                            //   System.out.println("Directorio creado");
                             band = uf.B64StringtoImageFile(strings[1], ruta + name + "." + extension);
 
                             return new Object[]{band, Permt[2], name + "." + extension};
+                        } else {
+                            // System.out.println("No se ha podido crear " + new File(ruta).getName());
                         }
                     } else {
-                        //   System.out.println("No se ha podido crear archivo base " + new File(baseextraimage).getName());
+                        band = uf.B64StringtoImageFile(strings[1], ruta + name + "." + extension);
+
                         return new Object[]{band, Permt[2], name + "." + extension};
                     }
+                } else {
+                    //   System.out.println("No se ha podido crear archivo base " + new File(baseextraimage).getName());
+                    return new Object[]{band, Permt[2], name + "." + extension};
                 }
-                return new Object[]{band, Permt[2], name + "." + extension};
-           
+            }
+            return new Object[]{band, Permt[2], name + "." + extension};
 
         } catch (Exception e) {
             return new Object[]{ext, "", ""};
@@ -114,11 +117,16 @@ public class FileController {
             if (extension.equals("mp4")) {
                 return new Object[]{true, (baserutarelativa + "video/").replace('\\', '/'), "video"};
             } else {
-                if (Configuration.DEBUG) {
-                    System.out.println("NO EXISTE ESTA EXTENSIÓN");
+                if (extension.equals("mpeg")) {
+                    return new Object[]{true, (baserutarelativa + "audio/").replace('\\', '/'), "audio"};
+                } else {
+                    if (Configuration.DEBUG) {
+                        System.out.println("NO EXISTE ESTA EXTENSIÓN");
+                    }
+                    return new Object[]{false, ""};
                 }
-                return new Object[]{false, ""};
             }
+
         }
     }
 

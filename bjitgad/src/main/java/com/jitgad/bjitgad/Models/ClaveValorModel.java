@@ -6,9 +6,12 @@ package com.jitgad.bjitgad.Models;
  */
 public class ClaveValorModel {
     
-    private int id = 0;
-    private String name = "";
+    private int id;
+    private String name;
 
+    public ClaveValorModel() {
+    }
+        
     public ClaveValorModel(int _id, String _name) {
         this.id = _id;
         this.name = _name;

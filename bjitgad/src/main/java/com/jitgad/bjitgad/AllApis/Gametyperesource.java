@@ -5,6 +5,7 @@ import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.GametypeController;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
+import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GametypeModel;
 import com.jitgad.bjitgad.Resources.ResponseAPI;
 import com.jitgad.bjitgad.Utilities.ResponseData;
@@ -181,6 +182,73 @@ public class Gametyperesource {
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
 
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/getgametypecv")
+    public Response getgametypecv(@Context HttpHeaders headers) {
+
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando getgametypecv...");
+        }
+        ResponseData responseData = new ResponseData("Ocurrio un error", true);
+
+        try {
+
+            //TOKENS
+            String Authorization = headers.getHeaderString("Authorization");
+            Authorization = Authorization == null ? "" : Authorization;
+            if (Configuration.DEBUG) {
+                System.out.println("Authorization: " + Authorization);
+            }
+
+            if (!Authorization.isEmpty()) {
+                Object[] Permt = AuC.VToken(Authorization);
+                if (Permt[0].equals(true)) {
+
+                    ArrayList<ClaveValorModel> data = gtC.selectgametypecv();
+
+                    if (data.size() > 0) {
+
+                        responseData.setMessage("Información encontrada");
+                        responseData.setData(data);
+
+                        return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                    }
+                    responseData.setMessage("Información no encontrada");
+
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+                }
+                responseData.setMessage(String.valueOf(Permt[1]));
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+            }
+            responseData.setMessage("Tokén vacio");
+
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+
+                responseData.setMessage(e.getMessage());
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
+        }
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
+    }
+    
+    
+    
     @Produces(MediaType.APPLICATION_JSON)
     @POST
     @Path("/Postgametype")
