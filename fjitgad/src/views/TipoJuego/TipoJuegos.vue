@@ -5,9 +5,11 @@
         <th scope="col">Id</th>
         <th scope="col">Texto</th>
         <th scope="col">Nombre corto</th>
-        <th scope="col">Estado</th>
         <th scope="col">Imagen</th>
+        <th scope="col">Instrucciones</th>
         <th scope="col">Audio de instrucciones</th>
+        <th scope="col">Video de instrucciones</th>
+        <th scope="col">Estado</th>
         <th scope="col">Editar</th>
         <my-autorization roles="Administrador">
           <th scope="col">Eliminar</th>
@@ -19,20 +21,25 @@
         <th scope="row">{{ tipojuego.idgametype }}</th>
         <td>{{ tipojuego.name }}</td>
         <td>{{ tipojuego.shortname }}</td>
+        <td align="center">
+          <my-prev-file type="image" v-model="tipojuego.image" />
+        </td>
+        <td>
+          <textarea
+            class="form-control"
+            rows="3"
+            readonly
+            v-model="tipojuego.text_instructions"
+          >
+          </textarea>
+        </td>
+        <td align="center">
+          <my-prev-file type="audio" v-model="tipojuego.audio_instructions" />
+        </td>
+        <td align="center">
+          <my-prev-file type="video" v-model="tipojuego.video_instructions" />
+        </td>
         <td>{{ tipojuego.state ? "Activo" : "Inactivo" }}</td>
-        <td align="center">
-          <img
-            class="brand-image"
-            width="30"
-            height="24"
-            :src="tipojuego.image"
-          />
-        </td>
-        <td align="center">
-          <audio controls="controls" :src="tipojuego.audio_instructions">
-            <source src="" type="audio/*" />
-          </audio>
-        </td>
         <td align="center">
           <my-link-table
             :object="tipojuego"

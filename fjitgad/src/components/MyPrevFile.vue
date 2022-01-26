@@ -3,11 +3,15 @@
   <audio v-if="type == 'audio'" ref="filePrev" controls="controls">
     <source src="" type="audio/*" />
   </audio>
+  <video v-if="type == 'video'" style="width: 100%;" ref="filePrev" controls="controls">
+    <source src="" type="video/*" />
+    Your browser does not support HTML5 video.
+  </video>
 </template>
 
 <script>
 import { ref, watch, onMounted } from "vue";
-import { isBase64} from "../util/Utilities.js";
+import { isBase64 } from "../util/Utilities.js";
 
 export default {
   name: "MyPrevFile",
@@ -28,7 +32,7 @@ export default {
     watch(
       () => props.modelValue,
       (value, prevValue) => {
-          setPathFile(value);
+        setPathFile(value);
       }
     );
 

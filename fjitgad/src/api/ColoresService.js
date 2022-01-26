@@ -12,6 +12,20 @@ class ColoresService {
     });
   }
 
+  getColoresSelectMenu() {
+    return new Promise((resolve) => {
+      FetchMaster.get(`${this.#urlApi}/getcolortypecv`, (data) => {
+        const result = [];
+        if (Array.isArray(data.data)) {
+          for (const tipojuego of data.data) {
+            result.push(new ObjectSelect(tipojuego.id, tipojuego.name));
+          }
+        }
+        resolve(result);
+      }, true, false);
+    });
+  }
+
   getColoresAdministrador(page = 1) {
     return new Promise((resolve) => {
       FetchMaster.get(`${this.#urlApi}/getcolortypeAdmin${encodeQueryString({ 'page': page })}`,

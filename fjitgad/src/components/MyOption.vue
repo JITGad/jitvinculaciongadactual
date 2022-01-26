@@ -1,5 +1,5 @@
 <template>
-  <option v-if="IsActual" :value="value">
+  <option v-if="IsActual" :value="value" selected>
     {{ text }}
   </option>
   <option v-else :value="value">
@@ -13,7 +13,7 @@ export default {
   name: "MyOption",
   props: {
     value: {
-      type: String,
+      type: [String,Number],
       required: true,
     },
     text: {
@@ -21,7 +21,7 @@ export default {
       required: true,
     },
     actual: {
-      type: String,
+      type: [String,Number],
       required: true,
     },
   },

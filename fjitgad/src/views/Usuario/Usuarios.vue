@@ -22,12 +22,7 @@
         <td>{{ usuario.rol }}</td>
         <td>{{ usuario.state ? "Activo" : "Inactivo" }}</td>
         <td align="center">
-          <img
-            class="brand-image"
-            width="30"
-            height="24"
-            :src="usuario.image"
-          />
+          <my-prev-file type="image" v-model="usuario.image" />
         </td>
         <td align="center">
           <my-link-table

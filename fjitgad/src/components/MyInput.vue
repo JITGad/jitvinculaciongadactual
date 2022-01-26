@@ -1,7 +1,17 @@
 <template>
   <div :class="classContainer">
     <label class="form-label" v-show="type != 'checkbox'">{{ label }}</label>
+    <textarea
+      v-model="model"
+      v-if="multiple"
+      :class="classInput"
+      :disabled="disabled"
+      :placeholder="placeholder"
+      @blur="blurEventHandler($event)"
+      :rows="rows"
+    ></textarea>
     <input
+      v-else
       :type="type"
       :placeholder="placeholder"
       :class="classInput"
@@ -74,6 +84,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
+    rows: {
+      type: Number,
+      default: 4
+    }
   },
   setup(props, context) {
     const form = inject("my-form");

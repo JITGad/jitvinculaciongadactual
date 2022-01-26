@@ -2,7 +2,7 @@
   <div class="mb-3">
     <div class="row">
       <div class="col-8">
-        <label class="form-label">{{ label }}</label>
+        <label v-if="labelshow" class="form-label">{{ label }}</label>
         <input
           v-if="!multiple"
           @change="changeFiles"
@@ -27,7 +27,7 @@
         <my-prev-file :type="type" v-model="filePrev" />
       </div>
     </div>
-    <div v-show="error.state" class="validation-message">
+    <div v-if="labelshow" v-show="error.state" class="validation-message">
       {{ error.message }}
       <span v-show="loading" class="spinner-border spinner-border-sm"></span>
     </div>
@@ -62,6 +62,10 @@ export default {
       default: "",
       required: true,
     },
+    labelshow: {
+      type: Boolean,
+      default: true,
+    },
     validations: {
       type: String,
       default: "",
@@ -72,7 +76,7 @@ export default {
     },
     type: {
       type: String,
-      default: "pdf",
+      default: "image",
     },
   },
   setup(props, context) {

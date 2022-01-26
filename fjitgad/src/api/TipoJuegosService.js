@@ -1,5 +1,6 @@
 import FetchMaster from "./FetchMaster.js";
 import { encodeQueryString } from "../util/Utilities.js";
+import ObjectSelect from "../util/ObjectSelect.js";
 
 class TipoJuegosService {
 
@@ -7,21 +8,21 @@ class TipoJuegosService {
 
     getTipoJuego(idtipo = 0) {
         return new Promise((resolve) => {
-            FetchMaster.get(`${this.#urlApi}/getgametypeAdminbyid${encodeQueryString({ 'id': idtipo })}`,
+            FetchMaster.get(`${this.#urlApi}/getgametypebyid${encodeQueryString({ 'idgametype': idtipo })}`,
                 (data) => resolve(data), true);
         });
     }
 
     getTipoJuegosSelectMenu() {
         return new Promise((resolve) => {
-            FetchMaster.get(this.#urlApi, (data) => {
+            FetchMaster.get(`${this.#urlApi}/getgametypecv`, (data) => {
                 const result = [];
                 if (Array.isArray(data.data)) {
                     for (const tipojuego of data.data) {
                         result.push(new ObjectSelect(tipojuego.id, tipojuego.name));
                     }
                 }
-                resolve(data);
+                resolve(result);
             }, true, false);
         });
     }
