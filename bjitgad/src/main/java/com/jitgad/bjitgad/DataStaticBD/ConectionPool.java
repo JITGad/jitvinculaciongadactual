@@ -155,7 +155,7 @@ public class ConectionPool implements IConnectionPool {
                     }
                     int numer;
                     try {
-                        numer = Integer.parseInt(a) + 1;
+                        numer = Integer.parseInt(a);
                     } catch (NumberFormatException e) {
                         numer = 1;
                     }

@@ -22,16 +22,20 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.table.DefaultTableModel;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * * This java class contains the methods used within the back-end of the
  * application.
  */
 public final class Methods {
-    
+
 //    public static final GsonBuilder builder = new GsonBuilder().serializeNulls();
 //    public static final Gson gson = builder.create();
     
+    
+    public Methods() {
+    }
 
     public static String[] getDataToJwt(String jwt) {
         String[] response;
@@ -327,20 +331,28 @@ public final class Methods {
 
     public static String objectToJsonString(Object obj) {
         String result;
-        
+
         GsonBuilder builder = new GsonBuilder();
         builder.serializeNulls();
         Gson gson = builder.create();
-        
+
         result = gson.toJson(obj);
         System.out.println(result);
         return result;
     }
- public static Object StringJsonToObject(String json, Class objectClass) {
+
+    public static Object StringJsonToObject(String json, Class objectClass) {
         final Gson gson = new Gson();
-    
+
         Object res = gson.fromJson(json, objectClass);
-        
+
         return res;
     }
+
+    public static String removeQuotesAndUnescape(String uncleanJson) {
+        String noQuotes = uncleanJson.replaceAll("^\"|\"$", "");
+
+        return StringEscapeUtils.unescapeJava(noQuotes);
+    }
+
 }

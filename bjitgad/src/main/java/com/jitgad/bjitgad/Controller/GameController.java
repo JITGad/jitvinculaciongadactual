@@ -1,10 +1,12 @@
 package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.GameDAO;
+import com.jitgad.bjitgad.DAO.GameimageDAO;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GameModel;
+import com.jitgad.bjitgad.Models.GameimageModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import java.util.ArrayList;
 
@@ -16,11 +18,16 @@ public class GameController {
 
     private GameDAO gD;
     private GameModel gM;
+    private GameimageModel gameimageModel;
+    private GameimageController giC;
+    private GameimageDAO giD;
 
     public GameController() {
         gD = new GameDAO();
         gM = new GameModel();
-
+        giC = new GameimageController();
+        gameimageModel = new GameimageModel();
+        giD = new GameimageDAO();
     }
 
     public ArrayList<GameModel> selectGame() {
@@ -52,6 +59,14 @@ public class GameController {
             request.setUpdatedate("NOW()");
 
             if (gD.insertGame(request)) {
+
+                int id = Integer.parseInt(giD.last_id());
+                System.out.println(id);
+                for (GameimageModel object : request.getDetalles()) {
+                    object.setIdgame(id);
+                    responseData = giC.InsertGameimageC(object);
+                }
+
                 responseData.setMessage("Registros insertados correctamente");
                 responseData.setFlag(true);
                 return responseData;
@@ -85,21 +100,21 @@ public class GameController {
 
         try {
             if (gD.updateGame(request)) {
-                
+
                 responseData.setMessage("Registros actualizados correctamente");
                 responseData.setFlag(true);
-                
+
                 return responseData;
             }
-            
+
             responseData.setMessage("Registros no insertados,"
                     + "datos erróneos para enviar a la base de datos!");
             responseData.setFlag(false);
-            
+
             return responseData;
-            
+
         } catch (Exception e) {
-            
+
             responseData.setFlag(false);
 
             if (Configuration.DEBUG) {
@@ -116,7 +131,7 @@ public class GameController {
     }
 
     public ResponseData DeleteGameC(GameModel request) {
-        
+
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
         try {

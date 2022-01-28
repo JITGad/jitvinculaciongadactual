@@ -28,7 +28,7 @@ public class ColortypeDAO {
     }
     
     public ArrayList<ClaveValorColorModel> selectColortypecv() {
-        sentence = "select idcolortype as id, name as name, html as hexcode from tblcolortype order by idcolortype";
+        sentence = "select idcolortype as id, name as text, html as value from tblcolortype order by idcolortype";
         ArrayList<ClaveValorColorModel> datos = con.getObjectDB(sentence, ClaveValorColorModel.class, 1);
         
         return datos;
