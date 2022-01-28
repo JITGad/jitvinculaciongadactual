@@ -17,15 +17,23 @@
       placeholder="Escriba el nombre de la actividad"
       validations="requerido"
     />
-    <my-input-file
-      label="Imagen"
-      v-model="model.image"
-      type="image"
+    <my-input-file label="Imagen" v-model="model.image" type="image" />
+    <my-input
+      v-model="model.text_instructions"
+      type="text"
+      :multiple="true"
+      label="Instrucciones"
+      placeholder="Escriba la instrucciones del juego"
     />
     <my-input-file
       label="Audio de instrucciones"
       v-model="model.audio_instructions"
       type="audio"
+    />
+    <my-input-file
+      label="Video de instrucciones"
+      v-model="model.video_instructions"
+      type="video"
     />
     <my-select-boolean label="Estado" v-model="model.state" />
   </div>
@@ -68,6 +76,8 @@ export default {
       shortname: "",
       image: null,
       audio_instructions: null,
+      text_instructions: "",
+      video_instructions: null,
       state: true,
     };
     const HelpShortName = computed(() => {

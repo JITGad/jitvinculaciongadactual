@@ -9,7 +9,7 @@
       validations="requerido"
     />
     <my-input
-      v-model="model.levels"
+      v-model="model.level"
       type="number"
       label="Niveles"
       placeholder="Escriba los niveles del Juego"
@@ -32,6 +32,12 @@
       validations="requerido"
     />
     <my-select-boolean label="Estado" v-model="model.state" />
+
+    <div class="mb-3">
+      <label class="form-label">Detalle de juego</label>
+      <detalle-emparejar :list="model.detalles" v-if="TipoJuegoSelected == 'emparejar'"/>
+    </div>
+
   </div>
 </template>
 
@@ -46,8 +52,12 @@ import {
   onMounted,
   onBeforeUnmount,
   ref,
+  watch,
+  computed,
 } from "vue";
 import { message_error } from "../../util/Messages.js";
+import DetalleEmparejarObject from "../../util/DetalleEmparejarObject.js";
+import DetalleEmparejar from "../DetalleEmparejar.vue";
 
 export default {
   name: "FormJuego",
@@ -66,15 +76,20 @@ export default {
       default: false,
     },
   },
+  components: {
+    DetalleEmparejar
+  },
   setup(props, context) {
     const InitialState = {
       idgame: 0,
       idactivitiestype: 0,
       idgametype: 0,
-      levels: 0,
       name: "",
       state: true,
-      detail: {},
+      level: 1,
+      detalles: [
+
+      ]
     };
     const TipoActividades = ref([]);
     const TipoJuegos = ref([]);
@@ -105,6 +120,23 @@ export default {
         await ActividadesService.getActividadesSelectMenu();
       TipoJuegos.value = await TipoJuegosService.getTipoJuegosSelectMenu();
     });
+    watch(
+      () => model.idgametype,
+      (value, prevValue) => {
+        const tipojuego = TipoJuegos.value.find(el => el.id == value);
+        if(tipojuego && tipojuego.value == "emparejar"){
+          model.detalles.clear();
+          model.detalles.push(new DetalleEmparejarObject());
+        }
+      }
+    );
+    const TipoJuegoSelected = computed(() => {
+      const tipojuego = TipoJuegos.value.find(el => el.id == model.idgametype);
+        if(tipojuego && tipojuego.value == "emparejar"){
+          return "emparejar";
+        }
+        return "No se";
+    });
     onBeforeUnmount(() => {
       layout.unbind(instance.uid);
     });
@@ -125,6 +157,7 @@ export default {
       Loading,
       TipoActividades,
       TipoJuegos,
+      TipoJuegoSelected,
     };
   },
 };

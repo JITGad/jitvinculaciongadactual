@@ -41,7 +41,7 @@ const routes = [
         path: 'tipo-juegos',
         name: 'TipoJuegos',
         component: () => import('../views/TipoJuego/TipoJuegos.vue'),
-        meta: { authorize: [Role.Admin] },
+        meta: { authorize: [] },
       },
       {
         path: 'colors',

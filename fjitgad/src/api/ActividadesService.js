@@ -21,14 +21,14 @@ class ActividadesService {
 
   getActividadesSelectMenu() {
     return new Promise((resolve) => {
-      FetchMaster.get(this.#urlApi, (data) => {
+      FetchMaster.get(`${this.#urlApi}/getactivitiestypecv`, (data) => {
         const result = []
         if (Array.isArray(data.data)) {
           for (const tipojuego of data.data) {
             result.push(new ObjectSelect(tipojuego.id, tipojuego.name));
           }
         }
-        resolve(data);
+        resolve(result);
       },true, false);
     });
   }

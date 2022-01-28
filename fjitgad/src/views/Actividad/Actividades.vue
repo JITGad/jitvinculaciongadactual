@@ -18,12 +18,7 @@
         <td>{{ actividad.name }}</td>
         <td>{{ actividad.state ? "Activo" : "Inactivo" }}</td>
         <td align="center">
-          <img
-            class="brand-image"
-            width="30"
-            height="24"
-            :src="actividad.image"
-          />
+          <my-prev-file type="image" v-model="actividad.image" />
         </td>
         <td align="center">
           <my-link-table

@@ -1,6 +1,6 @@
 <template>
   <div class="mb-3">
-    <label class="form-label">{{ label }}</label>
+    <label v-if="labelshow" class="form-label">{{ label }}</label>
     <select
       :class="classSelect"
       v-model="selected"
@@ -15,7 +15,7 @@
         :key="index"
       />
     </select>
-    <div v-show="error.state" class="validation-message">
+    <div v-if="labelshow" v-show="error.state" class="validation-message">
       {{ error.message }}
     </div>
   </div>
@@ -58,6 +58,10 @@ export default {
       type: String,
       default: "",
       required: true,
+    },
+    labelshow: {
+      type: Boolean,
+      default: true,
     },
     data: {
       type: Array,
