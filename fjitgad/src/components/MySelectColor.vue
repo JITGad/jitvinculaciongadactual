@@ -2,14 +2,16 @@
   <div class="mb-3">
     <label v-if="labelshow" class="form-label">{{ label }}</label>
     <select
-      :class="classSelect"
-      v-model="selected"
-      @blur="blurEventHandler($event)"
+      ref="Model"
+      class="form-control form-select select-menu-color-jquery"
     >
-      <option value="0" selected hidden disabled>--{{ placeholder }}--</option>
-      <my-option
+      <option value="0" data-hexcode="#ffffff" hidden disabled selected>
+        Seleccione un color
+      </option>
+      <my-option-color
         v-for="(option, index) in data"
-        :value="option.id"
+        :id="option.id"
+        :value="option.value"
         :text="option.text"
         :actual="selected"
         :key="index"
@@ -22,7 +24,7 @@
 </template>
 
 <script>
-import MyOption from "./MyOption.vue";
+import MyOptionColor from "./MyOptionColor.vue";
 import * as Validate from "../util/ValidationTypes.js";
 import {
   inject,
@@ -34,11 +36,11 @@ import {
   reactive,
 } from "vue";
 export default {
-  name: "MySelect",
+  name: "MySelectColor",
   emits: ["update:modelValue"],
   inheritAttrs: false,
   components: {
-    MyOption,
+    MyOptionColor,
   },
   props: {
     placeholder: {
@@ -74,6 +76,7 @@ export default {
   },
   setup(props, context) {
     const form = inject("my-form");
+    const Model = ref(null);
     const instance = getCurrentInstance();
     const _arrValidations =
       props.validations.length > 0
@@ -90,7 +93,10 @@ export default {
       },
       set(value) {
         modified.value = true;
-        context.emit("update:modelValue", props.type == "int" ? parseInt(value) : value );
+        context.emit(
+          "update:modelValue",
+          props.type == "int" ? parseInt(value) : value
+        );
       },
     });
     const classSelect = computed(
@@ -117,6 +123,12 @@ export default {
 
     onMounted(function () {
       form.bind({ validate, uid: instance.uid });
+      $(Model.value).selectmenucolor({
+        width: "100%",
+        select: function (event, ui) {
+          selected.value = ui.item.value;
+        },
+      });
     });
 
     onBeforeUnmount(() => {
@@ -134,6 +146,7 @@ export default {
       classSelect,
       blurEventHandler,
       error,
+      Model,
     };
   },
 };

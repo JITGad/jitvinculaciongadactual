@@ -35,9 +35,13 @@
 
     <div class="mb-3">
       <label class="form-label">Detalle de juego</label>
-      <detalle-emparejar :list="model.detalles" v-if="TipoJuegoSelected == 'emparejar'"/>
+      <detalle-emparejar
+        :list="model.detalles"
+        v-if="TipoJuegoSelected == 'emparejar'"
+        @borrarItem="eliminarItemDetalle"
+        @nuevoItem="nuevoItemDetalle"
+      />
     </div>
-
   </div>
 </template>
 
@@ -56,7 +60,7 @@ import {
   computed,
 } from "vue";
 import { message_error } from "../../util/Messages.js";
-import DetalleEmparejarObject from "../../util/DetalleEmparejarObject.js";
+import DetalleJuegoObject from "../../util/DetalleJuegoObject.js";
 import DetalleEmparejar from "../DetalleEmparejar.vue";
 
 export default {
@@ -77,7 +81,7 @@ export default {
     },
   },
   components: {
-    DetalleEmparejar
+    DetalleEmparejar,
   },
   setup(props, context) {
     const InitialState = {
@@ -87,9 +91,7 @@ export default {
       name: "",
       state: true,
       level: 1,
-      detalles: [
-
-      ]
+      detalles: [],
     };
     const TipoActividades = ref([]);
     const TipoJuegos = ref([]);
@@ -123,19 +125,21 @@ export default {
     watch(
       () => model.idgametype,
       (value, prevValue) => {
-        const tipojuego = TipoJuegos.value.find(el => el.id == value);
-        if(tipojuego && tipojuego.value == "emparejar"){
+        const tipojuego = TipoJuegos.value.find((el) => el.id == value);
+        if (tipojuego && tipojuego.value == "emparejar") {
           model.detalles.clear();
-          model.detalles.push(new DetalleEmparejarObject());
+          model.detalles.push(DetalleJuegoObject.Emparejar(0, ""));
         }
       }
     );
     const TipoJuegoSelected = computed(() => {
-      const tipojuego = TipoJuegos.value.find(el => el.id == model.idgametype);
-        if(tipojuego && tipojuego.value == "emparejar"){
-          return "emparejar";
-        }
-        return "No se";
+      const tipojuego = TipoJuegos.value.find(
+        (el) => el.id == model.idgametype
+      );
+      if (tipojuego && tipojuego.value == "emparejar") {
+        return "emparejar";
+      }
+      return "No se";
     });
     onBeforeUnmount(() => {
       layout.unbind(instance.uid);
@@ -144,6 +148,14 @@ export default {
       return new Promise((resolve) => {
         context.emit("submit", model, (response) => resolve(response));
       });
+    }
+    function nuevoItemDetalle() {
+      if (TipoJuegoSelected.value == "emparejar") {
+        model.detalles.push(DetalleJuegoObject.Emparejar(0, ""));
+      }
+    }
+    function eliminarItemDetalle(index) {
+      model.detalles.splice(index, 1);
     }
     function setLoading(val) {
       Loading.value = val;
@@ -158,6 +170,8 @@ export default {
       TipoActividades,
       TipoJuegos,
       TipoJuegoSelected,
+      nuevoItemDetalle,
+      eliminarItemDetalle,
     };
   },
 };

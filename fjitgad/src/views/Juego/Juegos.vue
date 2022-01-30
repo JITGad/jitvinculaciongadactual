@@ -24,7 +24,7 @@
           <my-link-table
             :object="juego"
             icon="fas fa-pen"
-            @click="EditarJuego"
+            @click="Editarjuego"
           />
         </td>
         <my-autorization roles="Administrador">
@@ -32,7 +32,7 @@
             <my-link-table
               :object="juego"
               icon="fas fa-trash"
-              @click="EliminarJuego"
+              @click="Eliminarjuego"
             />
           </td>
         </my-autorization>
@@ -90,14 +90,14 @@ export default {
       }
     };
 
-    const Editarjuego = (juego) => {
+    function Editarjuego(juego) {
       Router.push({
         name: "EditarJuego",
         params: { id: juego["idgame"] },
       });
-    };
+    }
 
-    const Eliminarjuego = (juego) => {
+    function Eliminarjuego(juego) {
       confirm_action(
         "Confirmación",
         `Esta seguro de eliminar el juego ${juego.name}`,
@@ -115,7 +115,7 @@ export default {
         },
         () => {}
       );
-    };
+    }
 
     return {
       Juegos,

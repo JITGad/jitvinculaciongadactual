@@ -19,7 +19,7 @@ class TipoJuegosService {
                 const result = [];
                 if (Array.isArray(data.data)) {
                     for (const tipojuego of data.data) {
-                        result.push(new ObjectSelect(tipojuego.id, tipojuego.name));
+                        result.push(new ObjectSelect(tipojuego.id, tipojuego.text, tipojuego.value));
                     }
                 }
                 resolve(result);

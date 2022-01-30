@@ -1,6 +1,6 @@
 $.widget("ui.selectmenucolor", $.ui.selectmenu, {
     _renderButtonItem: function (item) {
-        var hexcode = $(item.element).data('hexcode');
+        var hexcode = $(item.element).data('value');
         var buttonItem = $("<span>", {
             "class": "ui-selectmenu-text"
         });
@@ -19,7 +19,7 @@ $.widget("ui.selectmenucolor", $.ui.selectmenu, {
         return buttonItem;
     },
     _renderItem: function (ul, item) {
-        var hexcode = $(item.element).data('hexcode');
+        var hexcode = $(item.element).data('value');
         var li = $("<li>");
             var wrapper = $("<div>");
 

@@ -1,5 +1,6 @@
 import FetchMaster from "./FetchMaster.js";
 import { encodeQueryString } from "../util/Utilities.js";
+import ObjectSelect from "../util/ObjectSelect.js";
 
 class ColoresService {
 
@@ -17,8 +18,8 @@ class ColoresService {
       FetchMaster.get(`${this.#urlApi}/getcolortypecv`, (data) => {
         const result = [];
         if (Array.isArray(data.data)) {
-          for (const tipojuego of data.data) {
-            result.push(new ObjectSelect(tipojuego.id, tipojuego.name));
+          for (const color of data.data) {
+            result.push(new ObjectSelect(color.id, color.text, color.value));
           }
         }
         resolve(result);
