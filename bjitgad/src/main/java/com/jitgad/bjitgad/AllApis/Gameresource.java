@@ -233,7 +233,7 @@ public class Gameresource {
     public Response getGamebyid(@Context HttpHeaders headers, @QueryParam("idgame") int idgame) {
 
         if (Configuration.DEBUG) {
-            System.out.println("Ingresando getactivitiesbyid...");
+            System.out.println("Ingresando getGamebyid...");
         }
 
         ResponseData responseData = new ResponseData("Ocurrio un error", true);

@@ -58,6 +58,7 @@ public class Activitiestyperesource {
         ResponseData responseData = new ResponseData("Ocurrio un error", true);
 
         try {
+            System.out.println(request.getServletContext().getRealPath("/"));
             ArrayList<ActivitiestypeModel> data = atC.selectActivitiestype(request.getServletContext().getRealPath("/"));
 
             if (data.size() > 0) {

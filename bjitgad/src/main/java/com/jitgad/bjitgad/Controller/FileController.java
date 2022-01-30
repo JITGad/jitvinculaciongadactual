@@ -52,9 +52,9 @@ public class FileController {
         }
         try {
             String baserutarelativa = (realpath + "").replace('\\', '/');
-            //  String baseextraimage = "";
+            String[] r = baserutarelativa.split("bjitgad/");
 
-            Object[] Permt = validateformat(extension, baserutarelativa);
+            Object[] Permt = validateformat(extension, r[0] + "jit/");
             if (Boolean.parseBoolean(Permt[0].toString())) {
 
                 if (createfilebase(Permt[1].toString())) {

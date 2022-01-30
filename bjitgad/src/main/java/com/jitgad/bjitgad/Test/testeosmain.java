@@ -23,7 +23,11 @@ public class testeosmain {
 
     public static void main(String[] args) throws UnsupportedEncodingException, IOException {
         ConectionPoolDataSource.getConnection().testConection();
-
+        
+        String ruta = "G:/Mi unidad/2021/Universidad/Vinculación/JIT_VINCULACION/jitvinculaciongadactual/jitvinculaciongadactual/bjitgad/target/bjitgad-1.0.0/";
+        String[] r = ruta.split("bjitgad/");
+        System.out.println(r[0]);
+        
 //       String ruta = "C:/Users/jorge/Downloads/WhatsApp Video 2022-01-23 at 14.22.50.mp4";
 //       UFile uf = new UFile();
 //       File f = new File(ruta);

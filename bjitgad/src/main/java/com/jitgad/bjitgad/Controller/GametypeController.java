@@ -58,10 +58,7 @@ public class GametypeController {
         
         request.setAudio_instructions(request.getAudio_instructions() == null ? "" : request.getAudio_instructions());
         
-        
-//        System.out.println("IMAGEN"+ " - " + request.getImage());
-//        System.out.println("VIDEO"+ " - " + request.getVideo_instructions());
-//        System.out.println("AUDIO"+ " - " + request.getAudio_instructions());
+       
 
         Object[] CFImage = fc.createfile(request.getImage(), "gametype", request.getName(), realpath);
 
