@@ -484,32 +484,32 @@ public class Activitiestyperesource {
     /*
      add activities
      */
-    @Produces(MediaType.APPLICATION_JSON)
-    @POST
-    @Path("/postActivitiesimage")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response postActivitiesimage(String data) {
-        String responseJson = "{\"status\":\"poken:" + data + "\"}";
-        System.out.println("Ingresando postActivitiesimage...");
-        JsonObject Jso = Methods.stringToJSON(data);
-        String contextx = request.getServletContext().getRealPath("/");
-        try {
-            if (Jso.size() > 0) {
-                String name = Methods.JsonToString(Jso.getAsJsonObject(), "name", "");
-                String base64 = Methods.JsonToString(Jso.getAsJsonObject(), "base64", "");
-                FileController fc = new FileController();
-                Object[] CreateFile = fc.createfile(base64, "Activities", name, contextx);
-                responseJson = Rapi.Response("Imagen creada con éxito", Boolean.parseBoolean(CreateFile[0].toString()), String.valueOf(CreateFile[1].toString() + "/" + name + "/" + CreateFile[2].toString()));
-
-            } else {
-                responseJson = Rapi.Response("Información no encontrada", false, data);
-            }
-        } catch (Exception e) {
-            responseJson = Rapi.Response(e.getMessage(), false, data);
-        }
-        return Response.ok(responseJson)
-                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-                .build();
-    }
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @POST
+//    @Path("/postActivitiesimage")
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public Response postActivitiesimage(String data) {
+//        String responseJson = "{\"status\":\"poken:" + data + "\"}";
+//        System.out.println("Ingresando postActivitiesimage...");
+//        JsonObject Jso = Methods.stringToJSON(data);
+//        String contextx = request.getServletContext().getRealPath("/");
+//        try {
+//            if (Jso.size() > 0) {
+//                String name = Methods.JsonToString(Jso.getAsJsonObject(), "name", "");
+//                String base64 = Methods.JsonToString(Jso.getAsJsonObject(), "base64", "");
+//                FileController fc = new FileController();
+//                Object[] CreateFile = fc.createfile(base64, "Activities", name, contextx);
+//                responseJson = Rapi.Response("Imagen creada con éxito", Boolean.parseBoolean(CreateFile[0].toString()), String.valueOf(CreateFile[1].toString() + "/" + name + "/" + CreateFile[2].toString()));
+//
+//            } else {
+//                responseJson = Rapi.Response("Información no encontrada", false, data);
+//            }
+//        } catch (Exception e) {
+//            responseJson = Rapi.Response(e.getMessage(), false, data);
+//        }
+//        return Response.ok(responseJson)
+//                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
+//                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
+//                .build();
+//    }
 }
