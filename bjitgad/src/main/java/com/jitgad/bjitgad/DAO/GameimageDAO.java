@@ -23,6 +23,12 @@ public class GameimageDAO {
         String json = con.getRecordsInJson(sentence);
         return json;
     }
+    
+    public String last_id() {
+        sentence = "select idgame from tblgame ORDER BY idgame DESC LIMIT 1";
+        String id = con.getNextID(sentence);
+        return id;
+    }
 
     public boolean insertGameimage(GameimageModel giM) throws SQLException {
         String structure = String.format(

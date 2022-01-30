@@ -3,10 +3,12 @@ package com.jitgad.bjitgad.AllApis;
 import com.google.gson.JsonObject;
 import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.GameController;
+import com.jitgad.bjitgad.Controller.GameimageController;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GameModel;
+import com.jitgad.bjitgad.Models.GameimageModel;
 import com.jitgad.bjitgad.Resources.ResponseAPI;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import com.jitgad.bjitgad.Utilities.ResponseDataPage;
@@ -39,11 +41,15 @@ public class Gameresource {
     private AuthorizationController AuC;
     private ResponseAPI Rapi;
     private GameModel gameModel;
+    private GameimageModel gameimageModel;
+    private GameimageController giC;
 
     public Gameresource() {
         gC = new GameController();
+        giC = new GameimageController();
         AuC = new AuthorizationController();
         Rapi = new ResponseAPI();
+        gameimageModel = new GameimageModel();
     }
 
     /**
@@ -158,7 +164,7 @@ public class Gameresource {
     public Response getGameAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
 
         if (Configuration.DEBUG) {
-            System.out.println("Ingresando getActivitiestypeAdmin...");
+            System.out.println("Ingresando getGameAdmin...");
         }
         ResponseDataPage responseDataPage = new ResponseDataPage("Ocurrió un error", page, true);
 
@@ -293,7 +299,7 @@ public class Gameresource {
     public Response PostGame(@Context HttpHeaders headers, String data) {
 
         if (Configuration.DEBUG) {
-            System.out.println("Ingresando PostActivitiesType...");
+            System.out.println("Ingresando PostGame...");
         }
 
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
@@ -318,6 +324,16 @@ public class Gameresource {
                     if (Permt[0].equals(true)) {
 
                         responseData = gC.InsertGameC(gameModel);
+                        
+//                        if(responseData.flag){
+//                                 
+//                            for (GameimageModel object : gameModel.getDetalles()) {
+//                                responseData = giC.InsertGameimageC(object); 
+//                            }
+//                            
+//                            return Response.ok(Methods.objectToJsonString(responseData)).build();
+//
+//                        }
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
@@ -351,10 +367,9 @@ public class Gameresource {
     @PUT
     @Path("/putGame")
     public Response PutActivitiesType(@Context HttpHeaders headers, String data) {
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
-        System.out.println("Ingresando PutActivitiesType...");
+
         if (Configuration.DEBUG) {
-            System.out.println("Ingresando PostActivitiesType...");
+            System.out.println("Ingresando putGame...");
         }
 
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
@@ -412,11 +427,10 @@ public class Gameresource {
     @DELETE
     @Path("/deleteGame")
     public Response DeleteGame(@Context HttpHeaders headers, String data) {
-        String responseJson = Rapi.Response("Ocurrió un error", false, data);
-        System.out.println("Ingresando deleteGame...");
+        
 
         if (Configuration.DEBUG) {
-            System.out.println("Ingresando PostActivitiesType...");
+            System.out.println("Ingresando DeleteGame...");
         }
 
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
@@ -473,45 +487,4 @@ public class Gameresource {
         }
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
-//        JsonObject Jso = Methods.stringToJSON(data);
-//        System.out.println(responseJson);
-//        try {
-//            if (Jso.size() > 0) {
-//                Object[] responseatC;
-//                //TOKENS
-//                String Authorization = headers.getHeaderString("Authorization");
-//                Authorization = Authorization == null ? "" : Authorization;
-//                System.out.println("Authorization: " + Authorization);
-//                if (!Authorization.isEmpty()) {
-//                    Object[] Permt = AuC.VToken(Authorization);
-//                    if (Permt[2].equals("Administrador")) {
-//                        if (Permt[0].equals(true)) {
-//                            responseatC = gC.DeleteGameC(
-//                                    Methods.JsonToInteger(Jso.getAsJsonObject(), "idgame", 0));
-//                            if (responseatC[0].equals(true)) {
-//                                responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), data);
-//                            } else {
-//                                responseJson = Rapi.Response(String.valueOf(responseatC[1]), Boolean.parseBoolean(responseatC[0].toString()), data);
-//                            }
-//                        } else {
-//                            responseJson = Rapi.Response(String.valueOf(Permt[1]), false, data);
-//                        }
-//                    } else {
-//                        responseJson = Rapi.Response("Usuario sin privilegios para realizar esta actividad", false, data);
-//                    }
-//                } else {
-//                    responseJson = Rapi.Response("Tokén vacio", true, data);
-//                }
-//            } else {
-//                responseJson = Rapi.Response("Información no encontrada", false, data);
-//            }
-//        } catch (Exception e) {
-//            responseJson = Rapi.Response(e.getMessage(), false, data);
-//        }
-//        return Response.ok(responseJson)
-//                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-//                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-//                .build();
-//    }
-
 }

@@ -7,52 +7,54 @@ package com.jitgad.bjitgad.Models;
  */
 public class GameimageModel {
     
-    private String idgame = "-2";
-    private String idcolortype = "-2";
-    private String image = "-2";
-    private String paragraph = "-2";
-    private String audio_parag = "-2";
-    private String video_parag = "-2";
-    private String creationdate = "-2";
-    private String updatedate = "-2";
-    private String state = "-2";
+    private int idgameimage;
+    private int idgame;
+    private int idcolortype;
+    private String image;
+    private String paragraph;
+    private String audio_parag;
+    private String video_parag;
+    private String creationdate;
+    private String updatedate;
+    private boolean state;
 
     public GameimageModel() {
     }
-    
-    public GameimageModel(String _idgame,
-            String _idcolortype,
-            String _image,
-            String _paragraph,
-            String _audio_parag,
-            String _video_parag,
-            String _creationdate,
-            String _updatedate,
-            String _state) {
-      this.idgame = _idgame;
-      this.idcolortype = _idcolortype;
-      this.image = _image;
-      this.paragraph = _paragraph;
-      this.audio_parag = _audio_parag;
-      this.video_parag = _video_parag;
-      this.creationdate = _creationdate;
-      this.updatedate = _updatedate;
-      this.state = _state;
-      
+
+    public GameimageModel(int idgameimage, int idgame, int idcolortype, String image, String paragraph, String audio_parag, String video_parag, String creationdate, String updatedate, boolean state) {
+        this.idgameimage = idgameimage;
+        this.idgame = idgame;
+        this.idcolortype = idcolortype;
+        this.image = image;
+        this.paragraph = paragraph;
+        this.audio_parag = audio_parag;
+        this.video_parag = video_parag;
+        this.creationdate = creationdate;
+        this.updatedate = updatedate;
+        this.state = state;
     }
-    public String getIdgame() {
+
+    public int getIdgameimage() {
+        return idgameimage;
+    }
+
+    public void setIdgameimage(int idgameimage) {
+        this.idgameimage = idgameimage;
+    }
+
+    public int getIdgame() {
         return idgame;
     }
 
-    public void setIdgame(String idgame) {
+    public void setIdgame(int idgame) {
         this.idgame = idgame;
     }
 
-    public String getIdcolortype() {
+    public int getIdcolortype() {
         return idcolortype;
     }
 
-    public void setIdcolortype(String idcolortype) {
+    public void setIdcolortype(int idcolortype) {
         this.idcolortype = idcolortype;
     }
 
@@ -104,11 +106,19 @@ public class GameimageModel {
         this.updatedate = updatedate;
     }
 
-    public String getState() {
+    public boolean getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(boolean state) {
         this.state = state;
-    } 
+    }
+
+    
+    
+    
+    
+    
+
+   
 }

@@ -5,7 +5,7 @@ import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.GametypeController;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
-import com.jitgad.bjitgad.Models.ClaveValorModel;
+import com.jitgad.bjitgad.Models.ClaveValorGameModel;
 import com.jitgad.bjitgad.Models.GametypeModel;
 import com.jitgad.bjitgad.Resources.ResponseAPI;
 import com.jitgad.bjitgad.Utilities.ResponseData;
@@ -206,7 +206,7 @@ public class Gametyperesource {
                 Object[] Permt = AuC.VToken(Authorization);
                 if (Permt[0].equals(true)) {
 
-                    ArrayList<ClaveValorModel> data = gtC.selectgametypecv();
+                    ArrayList<ClaveValorGameModel> data = gtC.selectgametypecv();
 
                     if (data.size() > 0) {
 

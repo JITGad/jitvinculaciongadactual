@@ -3,6 +3,7 @@ package com.jitgad.bjitgad.DAO;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
+import com.jitgad.bjitgad.Models.ClaveValorGameModel;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GametypeModel;
 import com.jitgad.bjitgad.Models.UserModel;
@@ -28,9 +29,9 @@ public class GametypeDAO {
         return datos;
     }
     
-    public ArrayList<ClaveValorModel> selectgametypecv() {
-        sentence = "select idgametype as id, name as name from tblgametype order by idgametype";
-        ArrayList<ClaveValorModel> datos = con.getObjectDB(sentence, ClaveValorModel.class, 1);
+    public ArrayList<ClaveValorGameModel> selectgametypecv() {
+        sentence = "select idgametype as id, name as text, shortname as value from tblgametype order by idgametype";
+        ArrayList<ClaveValorGameModel> datos = con.getObjectDB(sentence, ClaveValorGameModel.class, 1);
         return datos;
     }
 

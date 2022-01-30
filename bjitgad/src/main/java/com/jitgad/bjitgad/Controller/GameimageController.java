@@ -1,9 +1,9 @@
-
 package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.GameimageDAO;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.Models.GameimageModel;
+import com.jitgad.bjitgad.Utilities.ResponseData;
 import java.sql.SQLException;
 
 /**
@@ -11,7 +11,7 @@ import java.sql.SQLException;
  * @author jorge
  */
 public class GameimageController {
-    
+
     private GameimageDAO giD;
     private GameimageModel giM;
 
@@ -19,38 +19,25 @@ public class GameimageController {
         giD = new GameimageDAO();
         giM = new GameimageModel();
     }
-    
-    public String selectGameimage(){
+
+    public String selectGameimage() {
         return giD.selectGameimage();
     }
-    
-    public Object[] InsertGameimageC(String idgame, String idcolortype,
-            String image, String paragraph, String audio_parag,
-            String video_parag, String creationdate, String updatedate,
-            String state) throws SQLException {
-        String message = "";
-        boolean status = false;
-        giM.setIdgame(idgame);
-        giM.setIdcolortype(idcolortype);
-        giM.setImage(image);
-        giM.setParagraph(paragraph);
-        giM.setAudio_parag(audio_parag);
-        giM.setVideo_parag(video_parag);
-        giM.setCreationdate(creationdate);
-        giM.setUpdatedate(updatedate);
-        giM.setState(state);
-        
-        if(giD.insertGameimage(giM)){
-            message = "The Game image type was inserted.";
-            status = true;
-        }   else {
-                message = "The Game image type was not inserted";
-                status = false;
-            }
 
-        return new Object[]{status, message};
+    public ResponseData InsertGameimageC(GameimageModel request) throws SQLException {
+        System.out.println("");
+        ResponseData responseData = new ResponseData("Ocurrió un error", false);
+
+        request.setCreationdate("NOW()");
+        request.setUpdatedate("NOW()");
+
+        if (giD.insertGameimage(request)) {
+            responseData.setMessage("Registros insertados correctamente");
+            responseData.setFlag(true);
+            return responseData;
+        }
+
+        return responseData;
     }
-    
-    
-    
+
 }

@@ -2,6 +2,7 @@ package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.GametypeDAO;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
+import com.jitgad.bjitgad.Models.ClaveValorGameModel;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GametypeModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
@@ -37,7 +38,7 @@ public class GametypeController {
         return gtD.selectGametypebyid(id);
     }
             
-    public ArrayList<ClaveValorModel> selectgametypecv() {
+    public ArrayList<ClaveValorGameModel> selectgametypecv() {
         return gtD.selectgametypecv();
     }        
 

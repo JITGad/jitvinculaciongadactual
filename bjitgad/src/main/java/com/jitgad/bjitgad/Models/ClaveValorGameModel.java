@@ -4,16 +4,16 @@ package com.jitgad.bjitgad.Models;
  *
  * @author jorge
  */
-public class ClaveValorColorModel {
+public class ClaveValorGameModel {
     
     private int id;
     private String text;
     private String value;
 
-    public ClaveValorColorModel() {
+    public ClaveValorGameModel() {
     }
 
-    public ClaveValorColorModel(int id, String text, String value) {
+    public ClaveValorGameModel(int id, String text, String value) {
         this.id = id;
         this.text = text;
         this.value = value;
@@ -42,12 +42,6 @@ public class ClaveValorColorModel {
     public void setValue(String value) {
         this.value = value;
     }
-
-   
-
-    
-    
-    
     
     
     
