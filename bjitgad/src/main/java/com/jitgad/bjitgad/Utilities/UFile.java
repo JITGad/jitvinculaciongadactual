@@ -1,5 +1,6 @@
 package com.jitgad.bjitgad.Utilities;
 
+import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,17 +65,19 @@ public class UFile {
         return fe;
     }
 
-    public boolean B64StringtoImageFile(String base64, String fileurl) {
-        
+    public boolean B64StringtoImageFile(String base64, String fileurl) throws IOException {
         byte[] data = DatatypeConverter.parseBase64Binary(base64);
         File file = new File(fileurl);
+        
         try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
             outputStream.write(data);
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            if (Configuration.DEBUG) {
+                System.err.println(e.getMessage());
+            }
+            throw e;
         }
-        return false;
     }
 
     public String encodeFileToBase64Binary(File file) throws IOException {
