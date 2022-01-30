@@ -35,9 +35,11 @@ const validationsArray = [
             return "Este campo es requerido"
         },
         "validate": function (_value = "") {
+            console.log(_value);
             if (_value != null) {
                 if (_value != undefined) {
-                    if (_value.length > 0 || typeof (_value) == 'object') {
+                    if (_value.length > 0 || typeof (_value) == 'object' 
+                        || (typeof(_value) == 'number' && _value > 0)) {
                         return true;
                     }
                 }

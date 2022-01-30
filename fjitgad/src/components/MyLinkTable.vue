@@ -10,7 +10,7 @@ export default {
     emits:['click'],
     props: {
         object: {
-            type: Object,
+            type: [Object, Number],
             required: true
         },
         icon: {

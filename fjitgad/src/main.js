@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import store from "./store/Store.js";
 import router from './router';
+import "./util/Extensions.js";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -10,9 +11,8 @@ import '@fortawesome/fontawesome-free/js/all.js';
 
 import "jquery";
 import "jquery-confirm";
-import "jquery-ui";
-import "jquery-ui/ui/widgets/selectmenu.js";
-import "jquery-ui/themes/base/selectmenu.css";
+import 'jquery-ui-dist/jquery-ui'
+import 'jquery-ui-dist/jquery-ui.min.css'
 import "jquery-confirm/dist/jquery-confirm.min.css";
 import "./util/ExtendJquery.js";
 
