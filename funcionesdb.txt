@@ -504,6 +504,58 @@ ALTER FUNCTION public.insertgameimage(xml)
 
 
 ----------------DELETE----------------
+
+CREATE OR REPLACE FUNCTION public.deletegameimage(
+	message_xml xml)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE root_xpath TEXT = '/gameimage/';
+  resul integer = 0;
+  BEGIN
+  	
+	DELETE FROM public.tblcolortype
+	WHERE 
+	idgame = (xpath(root_xpath|| 'idgame/text()', message_xml))[1]::text::integer;
+	return resul;
+	
+  END;
+$BODY$;
+ALTER FUNCTION public.deletegameimage(xml)
+    OWNER TO fjdmwraxdzfdqi;
+
 ----------------UPDATE----------------
+
+CREATE OR REPLACE FUNCTION public.updategameimage(
+	message_xml xml)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE root_xpath TEXT = '/gameimage/';
+  resul integer = 0;
+  BEGIN
+  	
+	UPDATE public.tblgameimage
+		SET 
+		idgame = (xpath(root_xpath|| 'idgame/text()', message_xml))[1]::text::Integer,
+		idcolortype = (xpath(root_xpath|| 'idcolortype/text()', message_xml))[1]::text::Integer,
+		image = (xpath(root_xpath|| 'image/text()', message_xml))[1],
+		paragraph = (xpath(root_xpath|| 'paragraph/text()', message_xml))[1],
+		audio_parag = (xpath(root_xpath|| 'audio_parag/text()', message_xml))[1],
+		video_parag = (xpath(root_xpath|| 'video_parag/text()', message_xml))[1],
+		updatedate = (xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
+		state = (xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean
+	WHERE 
+	idgameimage = (xpath(root_xpath|| 'idgameimage/text()', message_xml))[1]::text::integer;
+	return resul;
+	
+  END;
+$BODY$;
+ALTER FUNCTION public.updategameimage(xml)
+    OWNER TO fjdmwraxdzfdqi;
 
 *************------------------------------------------------------------------------------*************

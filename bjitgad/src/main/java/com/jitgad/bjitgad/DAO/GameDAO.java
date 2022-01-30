@@ -27,30 +27,65 @@ public class GameDAO {
     }
 
     public ArrayList<GameModel> selectGame() {
-        sentence = "select * from tblgame";
+        sentence = "select game.idgame,\n"
+                + "game.idactivitiestype,\n"
+                + "actype.name as nameactivities,\n"
+                + "game.idgametype,\n"
+                + "game.name,\n"
+                + "game.creationdate,\n"
+                + "game.updatedate,\n"
+                + "game.state,\n"
+                + "game.level\n"
+                + "from tblgame as game \n"
+                + "inner join tblactivitiestype as actype \n"
+                + "on actype.idactivitiestype = game.idactivitiestype";
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
         return datos;
     }
-    
-    public ArrayList<GameModel> selectGamepage(int page){
-        sentence ="select * from tblgame order by idgame asc limit 10 offset "+ (page * 10 - 10);
+
+    public ArrayList<GameModel> selectGamepage(int page) {
+        sentence = "select game.idgame,\n"
+                + "game.idactivitiestype,\n"
+                + "actype.name as nameactivities,\n"
+                + "game.idgametype,\n"
+                + "game.name,\n"
+                + "game.creationdate,\n"
+                + "game.updatedate,\n"
+                + "game.state,\n"
+                + "game.level\n"
+                + "from tblgame as game \n"
+                + "inner join tblactivitiestype as actype \n"
+                + "on actype.idactivitiestype = game.idactivitiestype\n"
+                + "order by game.idgame asc limit 10 offset" + (page * 10 - 10);
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
         return datos;
     }
-    
-    public String selectGamebyid(int gameid){
-        sentence ="select * from tblgame where idgame="+gameid;
+
+    public String selectGamebyid(int gameid) {
+        sentence = "select game.idgame,\n"
+                + "game.idactivitiestype,\n"
+                + "actype.name as nameactivities,\n"
+                + "game.idgametype,\n"
+                + "game.name,\n"
+                + "game.creationdate,\n"
+                + "game.updatedate,\n"
+                + "game.state,\n"
+                + "game.level\n"
+                + "from tblgame as game \n"
+                + "inner join tblactivitiestype as actype \n"
+                + "on actype.idactivitiestype = game.idactivitiestype\n"
+                + "where game.idgame=" + gameid;
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
-       if (datos.size() > 0) {
+        if (datos.size() > 0) {
             return Methods.objectToJsonString(datos.get(0));
         } else {
             return "{}";
         }
     }
-    
-    public int CountingPageGame(){
-      sentence = String.format("select * from tblgame");
-      return  ((con.returnRecord(sentence)).getRowCount());
+
+    public int CountingPageGame() {
+        sentence = String.format("select * from tblgame");
+        return ((con.returnRecord(sentence)).getRowCount());
     }
 
     public ArrayList<ClaveValorModel> selectgamesbyactivities(int idactivity) {
@@ -71,7 +106,7 @@ public class GameDAO {
                 + "<creationdate>" + gameModel.getCreationdate() + "</creationdate>"
                 + "<updatedate>" + gameModel.getUpdatedate() + "</updatedate>"
                 + "<state>" + gameModel.getState() + "</state>"
-                + "<level>" + gameModel.getLevel() + "</level>"        
+                + "<level>" + gameModel.getLevel() + "</level>"
                 + "</game>");
 
         String sentency = "Select * from insertGame('" + structure + "')";
@@ -88,7 +123,7 @@ public class GameDAO {
                 + "<name>" + gameModel.getName() + "</name>"
                 + "<updatedate>" + gameModel.getUpdatedate() + "</updatedate>"
                 + "<state>" + gameModel.getState() + "</state>"
-                + "<level>" + gameModel.getLevel() + "</level>" 
+                + "<level>" + gameModel.getLevel() + "</level>"
                 + "</game>");
 
         String sentency = "Select * from updateGame('" + structure + "')";

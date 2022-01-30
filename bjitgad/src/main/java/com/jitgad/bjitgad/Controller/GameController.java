@@ -8,6 +8,7 @@ import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GameModel;
 import com.jitgad.bjitgad.Models.GameimageModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -50,18 +51,17 @@ public class GameController {
         return gD.selectgamesbyactivities(activityid);
     }
 
-    public ResponseData InsertGameC(GameModel request) {
+    public ResponseData InsertGameC(GameModel request) throws SQLException {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
-        try {
             request.setCreationdate("NOW()");
             request.setUpdatedate("NOW()");
 
             if (gD.insertGame(request)) {
 
                 int id = Integer.parseInt(giD.last_id());
-                System.out.println(id);
+               // System.out.println(id);
                 for (GameimageModel object : request.getDetalles()) {
                     object.setIdgame(id);
                     responseData = giC.InsertGameimageC(object);
@@ -70,95 +70,46 @@ public class GameController {
                 responseData.setMessage("Registros insertados correctamente");
                 responseData.setFlag(true);
                 return responseData;
-            }
-            responseData.setMessage("Registros no insertados,"
-                    + "datos erróneos para enviar a la base de datos!");
-            responseData.setFlag(false);
-            return responseData;
+                }
 
-        } catch (Exception e) {
-            responseData.setFlag(false);
-
-            if (Configuration.DEBUG) {
-                responseData.setMessage(e.getMessage());
-                return responseData;
-            }
-
-            responseData.setMessage("Ha ocurrido un error eliminando "
-                    + "un tipo de color, vuelva a intentarlo mas tarde");
-
-            System.err.println(e.getMessage());
-        }
         return responseData;
     }
 
-    public ResponseData UpdateGameC(GameModel request) {
+    public ResponseData UpdateGameC(GameModel request) throws SQLException {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
         request.setUpdatedate("NOW()");
 
-        try {
+     
             if (gD.updateGame(request)) {
-
+                
+                for (GameimageModel object : request.getDetalles()) {
+                    responseData = giC.UpdateGameimageC(object);
+                }
+                
                 responseData.setMessage("Registros actualizados correctamente");
                 responseData.setFlag(true);
 
                 return responseData;
-            }
+                }
 
-            responseData.setMessage("Registros no insertados,"
-                    + "datos erróneos para enviar a la base de datos!");
-            responseData.setFlag(false);
-
-            return responseData;
-
-        } catch (Exception e) {
-
-            responseData.setFlag(false);
-
-            if (Configuration.DEBUG) {
-                responseData.setMessage(e.getMessage());
-                return responseData;
-            }
-
-            responseData.setMessage("Ha ocurrido un error eliminando "
-                    + "un tipo de color, vuelva a intentarlo mas tarde");
-
-            System.err.println(e.getMessage());
-        }
         return responseData;
     }
 
-    public ResponseData DeleteGameC(GameModel request) {
+    public ResponseData DeleteGameC(GameModel request) throws SQLException {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
-        try {
             if (gD.deleteGame(request)) {
-
+                
+                giC.DeleteGameimageC(request);
+                
                 responseData.setMessage("Registro eliminado correctamente");
                 responseData.setFlag(true);
                 return responseData;
             }
-            responseData.setMessage("El registro no fue eliminado,"
-                    + "datos erróneos para enviar a la base de datos!");
-            responseData.setFlag(false);
 
             return responseData;
-        } catch (Exception e) {
-            responseData.setFlag(false);
-
-            if (Configuration.DEBUG) {
-                responseData.setMessage(e.getMessage());
-                return responseData;
-            }
-
-            responseData.setMessage("Ha ocurrido un error eliminando "
-                    + "un tipo de color, vuelva a intentarlo mas tarde");
-
-            System.err.println(e.getMessage());
-        }
-        return responseData;
     }
 }
