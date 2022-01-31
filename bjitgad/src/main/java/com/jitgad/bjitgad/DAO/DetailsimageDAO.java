@@ -11,7 +11,7 @@ import java.sql.SQLException;
  */
 public class DetailsimageDAO {
 
-    ConectionPool con;
+    private final ConectionPool con;
     String sentence;
 
     public DetailsimageDAO() {

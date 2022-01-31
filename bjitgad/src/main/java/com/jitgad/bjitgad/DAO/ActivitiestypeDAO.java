@@ -29,7 +29,7 @@ public class ActivitiestypeDAO {
         ipreal = new InetAddressUtil();
     }
 
-    public ArrayList<ActivitiestypeModel> selectActivitiestype(String path) {
+    public ArrayList<ActivitiestypeModel> selectActivitiestype() {
 
         sentence = "select * from tblactivitiestype where state = true order by idactivitiestype";
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
@@ -76,12 +76,6 @@ public class ActivitiestypeDAO {
             return "{}";
         }
 
-    }
-
-    public int selectIDActivitiestype() {
-        sentence = "";
-        String id = con.getNextID(sentence);
-        return 1;
     }
 
     public boolean insertActividadestype(ActivitiestypeModel activitiestypemodel) throws SQLException {

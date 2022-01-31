@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class ColortypeDAO {
 
-    ConectionPool con;
+    private final ConectionPool con;
     String sentence;
 
     public ColortypeDAO() {

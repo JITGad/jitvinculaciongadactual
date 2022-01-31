@@ -6,6 +6,7 @@ import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Utilities.ResponseCreateFile;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -15,12 +16,10 @@ import java.util.ArrayList;
  */
 public class ActivitiestypeController {
 
-    private ActivitiestypeDAO atDAO;
-    private ActivitiestypeModel atM;
-    private FileController fc;
+    private final ActivitiestypeDAO atDAO;
+    private final FileController fc;
 
     public ActivitiestypeController() {
-        atM = new ActivitiestypeModel();
         atDAO = new ActivitiestypeDAO();
         fc = new FileController();
     }
@@ -51,7 +50,7 @@ public class ActivitiestypeController {
     }
 
     public ResponseData UpdateActivitiesTypeC(ActivitiestypeModel request,
-            String realpath) throws Exception {
+            String realpath) throws IOException, SQLException {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
@@ -59,7 +58,7 @@ public class ActivitiestypeController {
 
         ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "activities", request.getName(), realpath);
         if (CreateFile.isState()) {
-            request.setImage(String.join(File.separator, new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
+            request.setImage(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
         } else {
             request.setImage("");
         }
@@ -89,8 +88,8 @@ public class ActivitiestypeController {
         return responseData;
     }
 
-    public ArrayList<ActivitiestypeModel> selectActivitiestype(String path) {
-        return atDAO.selectActivitiestype(path);
+    public ArrayList<ActivitiestypeModel> selectActivitiestype() {
+        return atDAO.selectActivitiestype();
     }
 
     public ArrayList<ActivitiestypeModel> selectActivitiestypepage(int page) {

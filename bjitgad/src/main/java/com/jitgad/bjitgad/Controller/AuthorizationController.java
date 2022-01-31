@@ -2,6 +2,7 @@
 package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DataStaticBD.Methods;
+import com.jitgad.bjitgad.Utilities.ResponseValidateToken;
 
 /**
  *
@@ -9,13 +10,13 @@ import com.jitgad.bjitgad.DataStaticBD.Methods;
  */
 public class AuthorizationController {
     
-    private UserController uc;
+    private final UserController uc;
 
     public AuthorizationController() {
         uc = new UserController();
     }
     
-    public Object[] VToken(String Authorization){
+    public ResponseValidateToken VToken(String Authorization){
         String[] clains = Methods.getDataToJwt(Authorization.split(" ")[1]);
         return uc.ValidateToken(clains[0], clains[1], clains[2]);
     }

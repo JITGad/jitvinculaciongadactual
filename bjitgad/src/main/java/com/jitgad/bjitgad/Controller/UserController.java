@@ -6,15 +6,17 @@
 package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.UserDAO;
-import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.UserModel;
 import com.jitgad.bjitgad.Models.UserRequestModel;
 import com.jitgad.bjitgad.Models.UserTokenRModel;
+import com.jitgad.bjitgad.Utilities.ResponseCreateFile;
 import com.jitgad.bjitgad.Utilities.ResponseData;
+import com.jitgad.bjitgad.Utilities.ResponseValidateToken;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,12 +31,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class UserController {
 
     private final UserDAO udao;
-    private final UserModel um;
     private final FileController fc;
 
     public UserController() {
         udao = new UserDAO();
-        um = new UserModel();
         fc = new FileController();
     }
 
@@ -62,7 +62,7 @@ public class UserController {
     }
 
     public ResponseData UserRegistration(UserModel request,
-            String realpath) throws SQLException, UnsupportedEncodingException {
+            String realpath) throws SQLException, UnsupportedEncodingException, Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
@@ -70,19 +70,11 @@ public class UserController {
 
         if (udao.comprobeUniqueEmail(request)) {
 
-            // Imagen
-            Object[] FileImage = fc.createfile(request.getImage(),
-                    "users", request.getNames() + " "
-                    + request.getLast_name(), realpath);
-
-            if (Boolean.parseBoolean(FileImage[0].toString())) {
-                request.setImage(String.valueOf(FileImage[1].toString()
-                        + "/" + "users" + "/" + FileImage[2].toString()));
-            } else {
-                request.setImage("");
+            ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "users", request.getNames(), realpath);
+            if (CreateFile.isState()) {
+                request.setImage(String.join(File.separator, new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
             }
 
-            // fin imagen
             request.setPassword(encriptPassword(request.getPassword()));
             request.setCreationdate("NOW()");
             request.setUpdatedate("NOW()");
@@ -101,7 +93,7 @@ public class UserController {
     }
 
     public ResponseData PutUser(UserModel request,
-            String realpath) throws SQLException, UnsupportedEncodingException {
+            String realpath) throws SQLException, UnsupportedEncodingException, Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
         boolean passband = false;
@@ -110,17 +102,11 @@ public class UserController {
 
         if (udao.comprobeUniqueEmailUpdate(request)) {
 
-            // Imagen
-            Object[] FileImage = fc.createfile(request.getImage(),
-                    "users", request.getNames() + " "
-                    + request.getLast_name(), realpath);
-
-            if (Boolean.parseBoolean(FileImage[0].toString())) {
-                request.setImage(String.valueOf(FileImage[1].toString()
-                        + "/" + "users" + "/" + FileImage[2].toString()));
+            ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "users", request.getNames(), realpath);
+            if (CreateFile.isState()) {
+                request.setImage(String.join(File.separator, new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
             }
 
-            // fin imagen
             if (request.getPassword().isEmpty()) {
                 request.setPassword(encriptPassword(request.getPassword()));
             } else {
@@ -154,24 +140,17 @@ public class UserController {
         return responseData;
     }
 
-    public Object[] ValidateToken(String user_id, String email, String rol) {
-        String message = "Correo inválido";
-        boolean status = false;
-
+    public ResponseValidateToken ValidateToken(String user_id, String email, String rol) {
+        ResponseValidateToken response = new ResponseValidateToken("Correo invalido", false, rol);
         if (!user_id.equals("")) {
             if (!udao.validatetoken(user_id, email)) {
-                status = true;
-                message = "Token válido";
-            } else {
-                status = false;
-                message = "Token inválido";
+                response.setStatus(true);
+                response.setMessage("Token válido");
+                return response;
             }
-        } else {
-            status = false;
-            message = "Token inválido";
         }
-
-        return new Object[]{status, message, rol};
+        response.setMessage("Token inválido");
+        return response;
     }
 
     public String encriptPassword(String pwd) {

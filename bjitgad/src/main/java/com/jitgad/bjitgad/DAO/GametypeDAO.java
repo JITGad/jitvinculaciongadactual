@@ -4,9 +4,7 @@ import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ClaveValorGameModel;
-import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GametypeModel;
-import com.jitgad.bjitgad.Models.UserModel;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -16,8 +14,8 @@ import java.util.ArrayList;
  */
 public class GametypeDAO {
 
-    ConectionPool con;
-    String sentence;
+    private final ConectionPool con;
+    private String sentence;
 
     public GametypeDAO() {
         con = ConectionPoolDataSource.getConnection();

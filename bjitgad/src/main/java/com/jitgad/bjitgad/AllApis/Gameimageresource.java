@@ -1,22 +1,12 @@
 
 package com.jitgad.bjitgad.AllApis;
 
-import com.google.gson.JsonObject;
-import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.GameimageController;
-import com.jitgad.bjitgad.DataStaticBD.Configuration;
-import com.jitgad.bjitgad.DataStaticBD.Methods;
-import com.jitgad.bjitgad.Models.GameimageModel;
-import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
 
 /**
  *
@@ -26,15 +16,9 @@ import jakarta.ws.rs.core.UriInfo;
 @Path("gameimage")
 public class Gameimageresource {
     
-   @Context
-   private UriInfo context;
-   private GameimageModel GiM;
-   private GameimageController giC;
-   private AuthorizationController AuC;
+   private final GameimageController giC;
 
     public Gameimageresource() {
-      AuC = new AuthorizationController();
-      GiM = new GameimageModel();
       giC = new GameimageController();
     }
    

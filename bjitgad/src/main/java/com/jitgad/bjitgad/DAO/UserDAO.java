@@ -15,7 +15,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class UserDAO {
 
-    ConectionPool con;
+    private final ConectionPool con;
     String sentence;
 
     public UserDAO() {

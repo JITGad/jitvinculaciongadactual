@@ -1,4 +1,3 @@
-
 package com.jitgad.bjitgad.DataStaticBD;
 
 import java.io.BufferedReader;
@@ -8,6 +7,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import javax.imageio.ImageIO;
 
 /**
@@ -18,50 +18,33 @@ public class FileAccess {
     }
 
     public String readFileText(String location) {
-        File archivo = null;
-        FileReader fr = null;
-        BufferedReader br = null;
         String result = "";
         try {
-            archivo = new File(location);
-            fr = new FileReader(archivo);
-            br = new BufferedReader(fr);
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                result += linea;
+            File archivo = new File(location);
+            try (FileReader fr = new FileReader(archivo)) {
+                try (BufferedReader br = new BufferedReader(fr)) {
+                    String linea;
+                    while ((linea = br.readLine()) != null) {
+                        result += linea;
+                    }
+                }
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             result = "";
             System.out.println("Error in read File project");
-        } finally {
-            try {
-                if (null != fr) {
-                    fr.close();
-                }
-            } catch (Exception e2) {
-                System.out.println("Error in ModelProjectController.readFileText.fr.close()");
-            }
         }
         return result;
     }
 
     public boolean writeFileText(String location, String structure) {
-        FileWriter fichero = null;
-        PrintWriter pw = null;
         try {
-            fichero = new FileWriter(location);
-            pw = new PrintWriter(fichero);
-            pw.println(structure);
-        } catch (Exception e) {
-            System.out.println("Error in save File project");
-        } finally {
-            try {
-                if (null != fichero) {
-                    fichero.close();
+            try(FileWriter fichero  = new FileWriter(location)){
+                try(PrintWriter pw = new PrintWriter(fichero)){
+                    pw.println(structure);
                 }
-            } catch (Exception e2) {
-                System.out.println("Error in ModelProjectController.writeFileText.fichero.close()");
             }
+        } catch (IOException e) {
+            System.out.println("Error in save File project");
         }
         return true;
     }
@@ -78,7 +61,7 @@ public class FileAccess {
             BufferedImage bufImg = ImageIO.read(new ByteArrayInputStream(imgBytes));
             ImageIO.write(bufImg, "png", outputStream);
             return true;
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Error creating image: " + e.getMessage());
             return false;
         }

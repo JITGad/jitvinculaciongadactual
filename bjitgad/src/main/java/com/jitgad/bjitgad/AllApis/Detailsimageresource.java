@@ -1,21 +1,11 @@
 package com.jitgad.bjitgad.AllApis;
 
-import com.google.gson.JsonObject;
-import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.DetailsimageController;
-import com.jitgad.bjitgad.DataStaticBD.Configuration;
-import com.jitgad.bjitgad.DataStaticBD.Methods;
-import com.jitgad.bjitgad.Models.DetailsimageModel;
-import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
 
 /**
  *
@@ -24,16 +14,10 @@ import jakarta.ws.rs.core.UriInfo;
 @Path("detailsimage")
 public class Detailsimageresource {
 
-    @Context
-    private UriInfo context;
-    private DetailsimageModel diM;
-    private DetailsimageController diC;
-    private AuthorizationController AuC;
+    private final DetailsimageController diC;
     
 
     public Detailsimageresource() {
-        AuC = new AuthorizationController();
-        diM = new DetailsimageModel();
         diC = new DetailsimageController();
     }
     

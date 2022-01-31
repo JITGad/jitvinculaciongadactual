@@ -3,15 +3,13 @@ package com.jitgad.bjitgad.AllApis;
 import com.google.gson.JsonObject;
 import com.jitgad.bjitgad.Controller.AuthorizationController;
 import com.jitgad.bjitgad.Controller.GameController;
-import com.jitgad.bjitgad.Controller.GameimageController;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GameModel;
-import com.jitgad.bjitgad.Models.GameimageModel;
-import com.jitgad.bjitgad.Resources.ResponseAPI;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import com.jitgad.bjitgad.Utilities.ResponseDataPage;
+import com.jitgad.bjitgad.Utilities.ResponseValidateToken;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -24,7 +22,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -35,21 +33,13 @@ import java.util.ArrayList;
 
 public class Gameresource {
 
-    @Context
-    private UriInfo context;
-    private GameController gC;
-    private AuthorizationController AuC;
-    private ResponseAPI Rapi;
+    private final GameController gC;
+    private final AuthorizationController AuC;
     private GameModel gameModel;
-    private GameimageModel gameimageModel;
-    private GameimageController giC;
 
     public Gameresource() {
         gC = new GameController();
-        giC = new GameimageController();
         AuC = new AuthorizationController();
-        Rapi = new ResponseAPI();
-        gameimageModel = new GameimageModel();
     }
 
     /**
@@ -114,8 +104,8 @@ public class Gameresource {
 
             if (!Authorization.isEmpty()) {
 
-                Object[] Permt = AuC.VToken(Authorization);
-                if (Permt[0].equals(true)) {
+                ResponseValidateToken validateToken = AuC.VToken(Authorization);
+                if (validateToken.isStatus()) {
 
                     ArrayList<ClaveValorModel> data = gC.selectgamesbyactivities(activityid);
 
@@ -132,7 +122,7 @@ public class Gameresource {
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
-                responseData.setMessage(String.valueOf(Permt[1]));
+                responseData.setMessage(validateToken.getMessage());
 
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
 
@@ -179,8 +169,8 @@ public class Gameresource {
 
             if (!Authorization.isEmpty()) {
                 ArrayList<GameModel> data = gC.selectGamepage(page);
-                Object[] Permt = AuC.VToken(Authorization);
-                if (Permt[0].equals(true)) {
+                ResponseValidateToken validateToken = AuC.VToken(Authorization);
+                if (validateToken.isStatus()) {
                     responseCountingPage = gC.CountingPageGame();
                     if (data.size() > 0) {
 
@@ -196,7 +186,7 @@ public class Gameresource {
                     return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
                 }
 
-                responseDataPage.setMessage(String.valueOf(Permt[1]));
+                responseDataPage.setMessage(validateToken.getMessage());
                 responseDataPage.setCountingpage(responseCountingPage);
                 return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
 
@@ -225,6 +215,9 @@ public class Gameresource {
 
     /**
      * juegos por ID
+     * @param headers
+     * @param idgame
+     * @return 
      */
     @Produces(MediaType.APPLICATION_JSON)
     @GET
@@ -248,8 +241,8 @@ public class Gameresource {
             }
 
             if (!Authorization.isEmpty()) {
-                Object[] Permt = AuC.VToken(Authorization);
-                if (Permt[0].equals(true)) {
+                ResponseValidateToken validateToken = AuC.VToken(Authorization);
+                if (validateToken.isStatus()) {
 
                     JsonObject data = Methods.stringToJSON(gC.selectGamebyid(idgame));
 
@@ -266,7 +259,7 @@ public class Gameresource {
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
-                responseData.setMessage(String.valueOf(Permt[1]));
+                responseData.setMessage(validateToken.getMessage());
 
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
 
@@ -319,9 +312,9 @@ public class Gameresource {
 
                 if (!Authorization.isEmpty()) {
 
-                    Object[] Permt = AuC.VToken(Authorization);
+                    ResponseValidateToken validateToken = AuC.VToken(Authorization);
 
-                    if (Permt[0].equals(true)) {
+                    if (validateToken.isStatus()) {
 
                         responseData = gC.InsertGameC(gameModel);
                         
@@ -337,7 +330,7 @@ public class Gameresource {
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
-                    responseData.setMessage(String.valueOf(Permt[1]));
+                    responseData.setMessage(validateToken.getMessage());
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
@@ -348,7 +341,7 @@ public class Gameresource {
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             responseData.setFlag(false);
 
             if (Configuration.DEBUG) {
@@ -389,15 +382,15 @@ public class Gameresource {
 
                 if (!Authorization.isEmpty()) {
 
-                    Object[] Permt = AuC.VToken(Authorization);
+                    ResponseValidateToken validateToken = AuC.VToken(Authorization);
 
-                    if (Permt[0].equals(true)) {
+                    if (validateToken.isStatus()) {
 
                         responseData = gC.UpdateGameC(gameModel);
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
-                    responseData.setMessage(String.valueOf(Permt[1]));
+                    responseData.setMessage(validateToken.getMessage());
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
@@ -408,7 +401,7 @@ public class Gameresource {
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             responseData.setFlag(false);
 
             if (Configuration.DEBUG) {
@@ -450,17 +443,17 @@ public class Gameresource {
 
                 if (!Authorization.isEmpty()) {
 
-                    Object[] Permt = AuC.VToken(Authorization);
+                    ResponseValidateToken validateToken = AuC.VToken(Authorization);
 
-                    if (Permt[2].equals("Administrador")) {
+                    if (validateToken.getRol().equals("Administrador")) {
 
-                        if (Permt[0].equals(true)) {
+                        if (validateToken.isStatus()) {
 
                             responseData = gC.DeleteGameC(gameModel);
 
                             return Response.ok(Methods.objectToJsonString(responseData)).build();
                         }
-                        responseData.setMessage(String.valueOf(Permt[1]));
+                        responseData.setMessage(validateToken.getMessage());
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     } 
                      responseData.setMessage("Usuario sin privilegios para realizar esta actividad");
@@ -473,7 +466,7 @@ public class Gameresource {
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             responseData.setFlag(false);
 
             if (Configuration.DEBUG) {

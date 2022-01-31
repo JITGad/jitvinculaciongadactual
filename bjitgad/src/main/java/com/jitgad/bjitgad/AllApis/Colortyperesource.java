@@ -7,9 +7,9 @@ import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ClaveValorColorModel;
 import com.jitgad.bjitgad.Models.ColortypeModel;
-import com.jitgad.bjitgad.Resources.ResponseAPI;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import com.jitgad.bjitgad.Utilities.ResponseDataPage;
+import com.jitgad.bjitgad.Utilities.ResponseValidateToken;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -22,7 +22,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -32,17 +32,13 @@ import java.util.ArrayList;
 @Path("colortype")
 public class Colortyperesource {
 
-    @Context
-    private UriInfo context;
-    private ColortypeController ctypeC;
-    private AuthorizationController AuC;
-    private ResponseAPI Rapi;
+    private final ColortypeController ctypeC;
+    private final AuthorizationController AuC;
     private ColortypeModel colortypeModel;
 
     public Colortyperesource() {
         ctypeC = new ColortypeController();
         AuC = new AuthorizationController();
-        Rapi = new ResponseAPI();
     }
 
     @GET
@@ -66,8 +62,8 @@ public class Colortyperesource {
 
             if (!Authorization.isEmpty()) {
                 ArrayList<ColortypeModel> data = ctypeC.selectColortypepage(page);
-                Object[] Permt = AuC.VToken(Authorization);
-                if (Permt[0].equals(true)) {
+                ResponseValidateToken validateToken = AuC.VToken(Authorization);
+                if (validateToken.isStatus()) {
                     responseCountingPage = ctypeC.CountingPageColortype();
                     if (data.size() > 0) {
 
@@ -83,7 +79,7 @@ public class Colortyperesource {
                     return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
                 }
 
-                responseDataPage.setMessage(String.valueOf(Permt[1]));
+                responseDataPage.setMessage(validateToken.getMessage());
                 responseDataPage.setCountingpage(responseCountingPage);
                 return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
 
@@ -130,8 +126,8 @@ public class Colortyperesource {
             }
 
             if (!Authorization.isEmpty()) {
-                Object[] Permt = AuC.VToken(Authorization);
-                if (Permt[0].equals(true)) {
+                ResponseValidateToken validateToken = AuC.VToken(Authorization);
+                if (validateToken.isStatus()) {
 
                     JsonObject data = Methods.stringToJSON(ctypeC.selectColortypebyid(idcolortype));
 
@@ -148,7 +144,7 @@ public class Colortyperesource {
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
-                responseData.setMessage(String.valueOf(Permt[1]));
+                responseData.setMessage(validateToken.getMessage());
 
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
 
@@ -194,8 +190,8 @@ public class Colortyperesource {
             }
 
             if (!Authorization.isEmpty()) {
-                Object[] Permt = AuC.VToken(Authorization);
-                if (Permt[0].equals(true)) {
+                ResponseValidateToken validateToken = AuC.VToken(Authorization);
+                if (validateToken.isStatus()) {
 
                     ArrayList<ClaveValorColorModel> data = ctypeC.selectColortypecv();
 
@@ -212,7 +208,7 @@ public class Colortyperesource {
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
-                responseData.setMessage(String.valueOf(Permt[1]));
+                responseData.setMessage(validateToken.getMessage());
 
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
 
@@ -267,15 +263,15 @@ public class Colortyperesource {
                 }
                 if (!Authorization.isEmpty()) {
 
-                    Object[] Permt = AuC.VToken(Authorization);
+                    ResponseValidateToken validateToken = AuC.VToken(Authorization);
 
-                    if (Permt[0].equals(true)) {
+                    if (validateToken.isStatus()) {
 
                         responseData = ctypeC.InsertColortype(colortypeModel);
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
-                    responseData.setMessage(String.valueOf(Permt[1]));
+                    responseData.setMessage(validateToken.getMessage());
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
@@ -286,7 +282,7 @@ public class Colortyperesource {
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             responseData.setFlag(false);
 
             if (Configuration.DEBUG) {
@@ -329,15 +325,15 @@ public class Colortyperesource {
                 }
                 if (!Authorization.isEmpty()) {
 
-                    Object[] Permt = AuC.VToken(Authorization);
+                    ResponseValidateToken validateToken = AuC.VToken(Authorization);
 
-                    if (Permt[0].equals(true)) {
+                    if (validateToken.isStatus()) {
 
                         responseData = ctypeC.UpdateColortype(colortypeModel);
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
-                    responseData.setMessage(String.valueOf(Permt[1]));
+                    responseData.setMessage(validateToken.getMessage());
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
@@ -348,7 +344,7 @@ public class Colortyperesource {
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             responseData.setFlag(false);
 
             if (Configuration.DEBUG) {
@@ -391,17 +387,17 @@ public class Colortyperesource {
                 }
                 if (!Authorization.isEmpty()) {
 
-                    Object[] Permt = AuC.VToken(Authorization);
+                    ResponseValidateToken validateToken = AuC.VToken(Authorization);
 
-                    if (Permt[2].equals("Administrador")) {
+                    if (validateToken.getRol().equals("Administrador")) {
 
-                        if (Permt[0].equals(true)) {
+                        if (validateToken.isStatus()) {
 
                             responseData = ctypeC.DeleteColortype(colortypeModel);
 
                             return Response.ok(Methods.objectToJsonString(responseData)).build();
                         }
-                        responseData.setMessage(String.valueOf(Permt[1]));
+                        responseData.setMessage(validateToken.getMessage());
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
                     responseData.setMessage("Usuario sin privilegios para realizar esta actividad");
@@ -414,7 +410,7 @@ public class Colortyperesource {
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             responseData.setFlag(false);
 
             if (Configuration.DEBUG) {

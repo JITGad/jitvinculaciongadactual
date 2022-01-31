@@ -7,9 +7,9 @@ import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ClaveValorGameModel;
 import com.jitgad.bjitgad.Models.GametypeModel;
-import com.jitgad.bjitgad.Resources.ResponseAPI;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import com.jitgad.bjitgad.Utilities.ResponseDataPage;
+import com.jitgad.bjitgad.Utilities.ResponseValidateToken;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -23,7 +23,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -35,20 +35,20 @@ public class Gametyperesource {
 
     @Context
     private HttpServletRequest request;
-    private AuthorizationController AuC;
-    private ResponseAPI Rapi;
-    private GametypeController gtC;
+    private final AuthorizationController AuC;
+    private final GametypeController gtC;
     private GametypeModel gametypeModel;
 
     public Gametyperesource() {
         gtC = new GametypeController();
-        Rapi = new ResponseAPI();
         AuC = new AuthorizationController();
     }
 
     /**
      * Retrieves representation of an instance of ini.CRUD
      *
+     * @param headers
+     * @param page
      * @return an instance of java.lang.String
      */
     @GET
@@ -73,8 +73,8 @@ public class Gametyperesource {
 
             if (!Authorization.isEmpty()) {
                 ArrayList<GametypeModel> data = gtC.selectGametypepage(page);
-                Object[] Permt = AuC.VToken(Authorization);
-                if (Permt[0].equals(true)) {
+                ResponseValidateToken validateToken = AuC.VToken(Authorization);
+                if (validateToken.isStatus()) {
                     responseCountingPage = gtC.CountingPageGametype();
                     if (data.size() > 0) {
 
@@ -90,7 +90,7 @@ public class Gametyperesource {
                     return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
                 }
 
-                responseDataPage.setMessage(String.valueOf(Permt[1]));
+                responseDataPage.setMessage(validateToken.getMessage());
                 responseDataPage.setCountingpage(responseCountingPage);
                 return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
 
@@ -138,8 +138,8 @@ public class Gametyperesource {
             }
 
             if (!Authorization.isEmpty()) {
-                Object[] Permt = AuC.VToken(Authorization);
-                if (Permt[0].equals(true)) {
+                ResponseValidateToken validateToken = AuC.VToken(Authorization);
+                if (validateToken.isStatus()) {
 
                     JsonObject data = Methods.stringToJSON(gtC.selectGametypebyid(idgametype));
 
@@ -156,7 +156,7 @@ public class Gametyperesource {
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
-                responseData.setMessage(String.valueOf(Permt[1]));
+                responseData.setMessage(validateToken.getMessage());
 
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
 
@@ -203,8 +203,8 @@ public class Gametyperesource {
             }
 
             if (!Authorization.isEmpty()) {
-                Object[] Permt = AuC.VToken(Authorization);
-                if (Permt[0].equals(true)) {
+                ResponseValidateToken validateToken = AuC.VToken(Authorization);
+                if (validateToken.isStatus()) {
 
                     ArrayList<ClaveValorGameModel> data = gtC.selectgametypecv();
 
@@ -221,7 +221,7 @@ public class Gametyperesource {
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
-                responseData.setMessage(String.valueOf(Permt[1]));
+                responseData.setMessage(validateToken.getMessage());
 
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
 
@@ -277,16 +277,16 @@ public class Gametyperesource {
 
                 if (!Authorization.isEmpty()) {
 
-                    Object[] Permt = AuC.VToken(Authorization);
+                    ResponseValidateToken validateToken = AuC.VToken(Authorization);
 
-                    if (Permt[0].equals(true)) {
+                    if (validateToken.isStatus()) {
 
                         responseData = gtC.InsertGametypeC(gametypeModel,
                                 request.getServletContext().getRealPath("/"));
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
-                    responseData.setMessage(String.valueOf(Permt[1]));
+                    responseData.setMessage(validateToken.getMessage());
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
@@ -339,16 +339,16 @@ public class Gametyperesource {
 
                 if (!Authorization.isEmpty()) {
 
-                    Object[] Permt = AuC.VToken(Authorization);
+                    ResponseValidateToken validateToken = AuC.VToken(Authorization);
 
-                    if (Permt[0].equals(true)) {
+                    if (validateToken.isStatus()) {
 
                         responseData = gtC.UpdateGametypeC(gametypeModel,
                                 request.getServletContext().getRealPath("/"));
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
-                    responseData.setMessage(String.valueOf(Permt[1]));
+                    responseData.setMessage(validateToken.getMessage());
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
@@ -400,17 +400,17 @@ public class Gametyperesource {
 
                 if (!Authorization.isEmpty()) {
 
-                    Object[] Permt = AuC.VToken(Authorization);
+                    ResponseValidateToken validateToken = AuC.VToken(Authorization);
 
-                    if (Permt[2].equals("Administrador")) {
+                    if (validateToken.getRol().equals("Administrador")) {
 
-                        if (Permt[0].equals(true)) {
+                        if (validateToken.isStatus()) {
 
                             responseData = gtC.DeleteGametypeC(gametypeModel);
 
                             return Response.ok(Methods.objectToJsonString(responseData)).build();
                         }
-                        responseData.setMessage(String.valueOf(Permt[1]));
+                        responseData.setMessage(validateToken.getMessage());
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
                     responseData.setMessage("Usuario sin privilegios para realizar esta actividad");
@@ -424,7 +424,7 @@ public class Gametyperesource {
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             responseData.setFlag(false);
 
             if (Configuration.DEBUG) {

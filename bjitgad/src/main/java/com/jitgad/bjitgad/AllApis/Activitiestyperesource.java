@@ -3,14 +3,13 @@ package com.jitgad.bjitgad.AllApis;
 import com.google.gson.JsonObject;
 import com.jitgad.bjitgad.Controller.ActivitiestypeController;
 import com.jitgad.bjitgad.Controller.AuthorizationController;
-import com.jitgad.bjitgad.Controller.FileController;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
-import com.jitgad.bjitgad.Resources.ResponseAPI;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import com.jitgad.bjitgad.Utilities.ResponseDataPage;
+import com.jitgad.bjitgad.Utilities.ResponseValidateToken;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -24,6 +23,9 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -35,16 +37,14 @@ public class Activitiestyperesource {
 
     @Context
     private HttpServletRequest request;
-    private ActivitiestypeController atC;
-    private AuthorizationController AuC;
-    private ResponseAPI Rapi;
+    private final ActivitiestypeController atC;
+    private final AuthorizationController AuC;
     private ActivitiestypeModel activitiestypeModel;
 
     public Activitiestyperesource() {
         atC = new ActivitiestypeController();
         // atM = new ActivitiestypeModel();
         AuC = new AuthorizationController();
-        Rapi = new ResponseAPI();
     }
 
     /**
@@ -58,8 +58,7 @@ public class Activitiestyperesource {
         ResponseData responseData = new ResponseData("Ocurrio un error", true);
 
         try {
-            System.out.println(request.getServletContext().getRealPath("/"));
-            ArrayList<ActivitiestypeModel> data = atC.selectActivitiestype(request.getServletContext().getRealPath("/"));
+            ArrayList<ActivitiestypeModel> data = atC.selectActivitiestype();
 
             if (data.size() > 0) {
 
@@ -105,14 +104,11 @@ public class Activitiestyperesource {
             //TOKENS
             String Authorization = headers.getHeaderString("Authorization");
             Authorization = Authorization == null ? "" : Authorization;
-            if (Configuration.DEBUG) {
-                System.out.println("Authorization: " + Authorization);
-            }
 
             if (!Authorization.isEmpty()) {
                 ArrayList<ActivitiestypeModel> data = atC.selectActivitiestypepage(page);
-                Object[] Permt = AuC.VToken(Authorization);
-                if (Permt[0].equals(true)) {
+                ResponseValidateToken validateToken = AuC.VToken(Authorization);
+                if (validateToken.isStatus()) {
                     responseCountingPage = atC.CountingPageActivitiesType();
                     if (data.size() > 0) {
 
@@ -128,7 +124,7 @@ public class Activitiestyperesource {
                     return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
                 }
 
-                responseDataPage.setMessage(String.valueOf(Permt[1]));
+                responseDataPage.setMessage(validateToken.getMessage());
                 responseDataPage.setCountingpage(responseCountingPage);
                 return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
 
@@ -157,6 +153,9 @@ public class Activitiestyperesource {
 
     /**
      * Actividades por ID
+     * @param headers
+     * @param activityid
+     * @return 
      */
     @Produces(MediaType.APPLICATION_JSON)
     @GET
@@ -174,13 +173,10 @@ public class Activitiestyperesource {
             //TOKENS
             String Authorization = headers.getHeaderString("Authorization");
             Authorization = Authorization == null ? "" : Authorization;
-            if (Configuration.DEBUG) {
-                System.out.println("Authorization: " + Authorization);
-            }
 
             if (!Authorization.isEmpty()) {
-                Object[] Permt = AuC.VToken(Authorization);
-                if (Permt[0].equals(true)) {
+                ResponseValidateToken validateToken = AuC.VToken(Authorization);
+                if (validateToken.isStatus()) {
 
                     JsonObject data = Methods.stringToJSON(atC.selectactivitiesbyid(activityid));
 
@@ -197,7 +193,7 @@ public class Activitiestyperesource {
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
-                responseData.setMessage(String.valueOf(Permt[1]));
+                responseData.setMessage(validateToken.getMessage());
 
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
 
@@ -244,8 +240,8 @@ public class Activitiestyperesource {
             }
 
             if (!Authorization.isEmpty()) {
-                Object[] Permt = AuC.VToken(Authorization);
-                if (Permt[0].equals(true)) {
+                ResponseValidateToken validateToken = AuC.VToken(Authorization);
+                if (validateToken.isStatus()) {
 
                     ArrayList<ClaveValorModel> data = atC.selectactivitiestypecv();
 
@@ -262,7 +258,7 @@ public class Activitiestyperesource {
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
-                responseData.setMessage(String.valueOf(Permt[1]));
+                responseData.setMessage(validateToken.getMessage());
 
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
 
@@ -313,22 +309,18 @@ public class Activitiestyperesource {
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
 
-                if (Configuration.DEBUG) {
-                    System.out.println("Authorization: " + Authorization);
-                }
-
                 if (!Authorization.isEmpty()) {
 
-                    Object[] Permt = AuC.VToken(Authorization);
+                    ResponseValidateToken validateToken = AuC.VToken(Authorization);
 
-                    if (Permt[0].equals(true)) {
+                    if (validateToken.isStatus()) {
 
                         responseData = atC.InsertActivitiesTypeC(activitiestypeModel,
                                 request.getServletContext().getRealPath("/"));
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
-                    responseData.setMessage(String.valueOf(Permt[1]));
+                    responseData.setMessage(validateToken.getMessage());
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
@@ -376,21 +368,18 @@ public class Activitiestyperesource {
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
 
-                if (Configuration.DEBUG) {
-                    System.out.println("Authorization: " + Authorization);
-                }
                 if (!Authorization.isEmpty()) {
 
-                    Object[] Permt = AuC.VToken(Authorization);
+                    ResponseValidateToken validateToken = AuC.VToken(Authorization);
 
-                    if (Permt[0].equals(true)) {
+                    if (validateToken.isStatus()) {
 
                         responseData = atC.UpdateActivitiesTypeC(activitiestypeModel,
                                 request.getServletContext().getRealPath("/"));
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
-                    responseData.setMessage(String.valueOf(Permt[1]));
+                    responseData.setMessage(validateToken.getMessage());
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
@@ -401,17 +390,17 @@ public class Activitiestyperesource {
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
 
-        } catch (Exception e) {
+        } catch (IOException | SQLException e) {
             responseData.setFlag(false);
 
             if (Configuration.DEBUG) {
-                responseData.setMessage(e.getMessage());
+                responseData.setMessage(e.getMessage() + e.getLocalizedMessage() + e.toString());
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
             }
 
             responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
 
-            System.err.println(e.getMessage());
+            System.err.println(e.getMessage()+ e.getLocalizedMessage() + e.toString() + e.getCause().toString());
         }
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
@@ -437,23 +426,19 @@ public class Activitiestyperesource {
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
 
-                if (Configuration.DEBUG) {
-
-                    System.out.println("Authorization: " + Authorization);
-                }
                 if (!Authorization.isEmpty()) {
 
-                    Object[] Permt = AuC.VToken(Authorization);
+                    ResponseValidateToken validateToken = AuC.VToken(Authorization);
 
-                    if (Permt[2].equals("Administrador")) {
+                    if (validateToken.getRol().equals("Administrador")) {
 
-                        if (Permt[0].equals(true)) {
+                        if (validateToken.isStatus()) {
 
                             responseData = atC.DeleteActividadestype(activitiestypeModel);
 
                             return Response.ok(Methods.objectToJsonString(responseData)).build();
                         }
-                        responseData.setMessage(String.valueOf(Permt[1]));
+                        responseData.setMessage(validateToken.getMessage());
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
                     responseData.setMessage("Usuario sin privilegios para realizar esta actividad");
@@ -466,7 +451,7 @@ public class Activitiestyperesource {
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             responseData.setFlag(false);
 
             if (Configuration.DEBUG) {

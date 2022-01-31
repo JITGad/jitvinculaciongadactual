@@ -74,6 +74,7 @@ public class ConectionPool implements IConnectionPool {
      *
      * @param sentecy This String variable, contains a query of a function.
      * @return Return a Boolean.
+     * @throws java.sql.SQLException
      */
     public boolean modifyBD(String sentecy) throws SQLException {
         try {

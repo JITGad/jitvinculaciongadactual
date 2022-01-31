@@ -12,7 +12,7 @@ import java.sql.SQLException;
  */
 public class GameimageDAO {
 
-    ConectionPool con;
+    private final ConectionPool con;
     String sentence;
 
     public GameimageDAO() {

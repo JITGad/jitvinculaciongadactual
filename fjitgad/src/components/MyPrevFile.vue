@@ -50,7 +50,7 @@ export default {
         return;
       }
 
-      filePrev.value.src = `${process.env.VUE_APP_BASE_URL_API}${_value}`;
+      filePrev.value.src = `${process.env.VUE_APP_BASE_URL}${_value}`;
     }
 
     return {

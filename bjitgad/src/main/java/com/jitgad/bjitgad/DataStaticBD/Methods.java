@@ -12,12 +12,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.jitgad.bjitgad.Models.UserTokenRModel;
+import com.google.gson.JsonSyntaxException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,8 +34,6 @@ public final class Methods {
 
 //    public static final GsonBuilder builder = new GsonBuilder().serializeNulls();
 //    public static final Gson gson = builder.create();
-    
-    
     public Methods() {
     }
 
@@ -45,7 +45,7 @@ public final class Methods {
                     .parseClaimsJws(jwt).getBody();
             response = new String[]{claims.get("sub").toString(),
                 claims.get("email").toString(), claims.get("rol").toString()};
-        } catch (Exception e) {
+        } catch (ExpiredJwtException | MalformedJwtException | SignatureException | UnsupportedJwtException | IllegalArgumentException e) {
             System.out.println("error JWT: " + e.getMessage());
             response = new String[]{"", "", e.getMessage()};
         }
@@ -81,13 +81,9 @@ public final class Methods {
      * @return a String, for the security request.
      */
     public static Boolean comprobeEmail(String email, String params) {
-        Pattern pat = Pattern.compile(params);//".*@uteq.edu.ec"
+        var pat = Pattern.compile(params);//".*@uteq.edu.ec"
         Matcher mat = pat.matcher(email);
-        if (mat.matches()) {
-            return true;
-        } else {
-            return false;
-        }
+        return mat.matches();
     }
 
     /**
@@ -101,7 +97,7 @@ public final class Methods {
             JsonParser parser = new JsonParser();
             JsonObject Jso = parser.parse(json).getAsJsonObject();
             return Jso;
-        } catch (Exception e) {
+        } catch (JsonSyntaxException e) {
             System.out.println(e.getMessage());
             return new JsonObject();
         }
@@ -324,7 +320,6 @@ public final class Methods {
     }
 
     public static boolean jsonrecordcountobject(String json) {
-        boolean var = false;
         JsonObject jsonObject = new JsonObject();
         return !jsonObject.keySet().isEmpty();
     }
@@ -337,7 +332,6 @@ public final class Methods {
         Gson gson = builder.create();
 
         result = gson.toJson(obj);
-        System.out.println(result);
         return result;
     }
 

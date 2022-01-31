@@ -2,8 +2,6 @@ package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.GameDAO;
 import com.jitgad.bjitgad.DAO.GameimageDAO;
-import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
-import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GameModel;
 import com.jitgad.bjitgad.Models.GameimageModel;
@@ -17,17 +15,13 @@ import java.util.ArrayList;
  */
 public class GameController {
 
-    private GameDAO gD;
-    private GameModel gM;
-    private GameimageModel gameimageModel;
-    private GameimageController giC;
-    private GameimageDAO giD;
+    private final GameDAO gD;
+    private final GameimageController giC;
+    private final GameimageDAO giD;
 
     public GameController() {
         gD = new GameDAO();
-        gM = new GameModel();
         giC = new GameimageController();
-        gameimageModel = new GameimageModel();
         giD = new GameimageDAO();
     }
 
@@ -55,22 +49,22 @@ public class GameController {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
-            request.setCreationdate("NOW()");
-            request.setUpdatedate("NOW()");
+        request.setCreationdate("NOW()");
+        request.setUpdatedate("NOW()");
 
-            if (gD.insertGame(request)) {
+        if (gD.insertGame(request)) {
 
-                int id = Integer.parseInt(giD.last_id());
-               // System.out.println(id);
-                for (GameimageModel object : request.getDetalles()) {
-                    object.setIdgame(id);
-                    responseData = giC.InsertGameimageC(object);
-                }
+            int id = Integer.parseInt(giD.last_id());
+            // System.out.println(id);
+            for (GameimageModel object : request.getDetalles()) {
+                object.setIdgame(id);
+                responseData = giC.InsertGameimageC(object);
+            }
 
-                responseData.setMessage("Registros insertados correctamente");
-                responseData.setFlag(true);
-                return responseData;
-                }
+            responseData.setMessage("Registros insertados correctamente");
+            responseData.setFlag(true);
+            return responseData;
+        }
 
         return responseData;
     }
@@ -81,18 +75,17 @@ public class GameController {
 
         request.setUpdatedate("NOW()");
 
-     
-            if (gD.updateGame(request)) {
-                
-                for (GameimageModel object : request.getDetalles()) {
-                    responseData = giC.UpdateGameimageC(object);
-                }
-                
-                responseData.setMessage("Registros actualizados correctamente");
-                responseData.setFlag(true);
+        if (gD.updateGame(request)) {
 
-                return responseData;
-                }
+            for (GameimageModel object : request.getDetalles()) {
+                responseData = giC.UpdateGameimageC(object);
+            }
+
+            responseData.setMessage("Registros actualizados correctamente");
+            responseData.setFlag(true);
+
+            return responseData;
+        }
 
         return responseData;
     }
@@ -101,15 +94,15 @@ public class GameController {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
-            if (gD.deleteGame(request)) {
-                
-                giC.DeleteGameimageC(request);
-                
-                responseData.setMessage("Registro eliminado correctamente");
-                responseData.setFlag(true);
-                return responseData;
-            }
+        if (gD.deleteGame(request)) {
 
+            giC.DeleteGameimageC(request);
+
+            responseData.setMessage("Registro eliminado correctamente");
+            responseData.setFlag(true);
             return responseData;
+        }
+
+        return responseData;
     }
 }

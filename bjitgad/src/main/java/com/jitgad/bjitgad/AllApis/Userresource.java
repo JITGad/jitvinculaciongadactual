@@ -8,9 +8,9 @@ import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.UserModel;
 import com.jitgad.bjitgad.Models.UserRequestModel;
 import com.jitgad.bjitgad.Models.UserTokenRModel;
-import com.jitgad.bjitgad.Resources.ResponseAPI;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import com.jitgad.bjitgad.Utilities.ResponseDataPage;
+import com.jitgad.bjitgad.Utilities.ResponseValidateToken;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -24,7 +24,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -37,13 +37,11 @@ public class Userresource {
     @Context
     private HttpServletRequest request;
     private final UserController userC;
-    private final ResponseAPI Rapi;
     private final AuthorizationController AuC;
     private UserModel userModel;
 
     public Userresource() {
         userC = new UserController();
-        Rapi = new ResponseAPI();
         AuC = new AuthorizationController();
     }
 
@@ -69,8 +67,8 @@ public class Userresource {
 
             if (!Authorization.isEmpty()) {
                 ArrayList<UserModel> data = userC.selectUserspage(page);
-                Object[] Permt = AuC.VToken(Authorization);
-                if (Permt[0].equals(true)) {
+                ResponseValidateToken ValdiateToken = AuC.VToken(Authorization);
+                if (ValdiateToken.isStatus()) {
                     responseCountingPage = userC.CountingPageUsers();
                     if (data.size() > 0) {
 
@@ -86,7 +84,7 @@ public class Userresource {
                     return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
                 }
 
-                responseDataPage.setMessage(String.valueOf(Permt[1]));
+                responseDataPage.setMessage(ValdiateToken.getMessage());
                 responseDataPage.setCountingpage(responseCountingPage);
                 return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
 
@@ -133,9 +131,8 @@ public class Userresource {
             }
 
             if (!Authorization.isEmpty()) {
-                Object[] Permt = AuC.VToken(Authorization);
-                if (Permt[0].equals(true)) {
-
+                ResponseValidateToken ValidateTOken = AuC.VToken(Authorization);
+                if (ValidateTOken.isStatus()) {
                     JsonObject data = Methods.stringToJSON(userC.selectUsersbyid(id));
 
                     if (data.size() > 0) {
@@ -151,7 +148,7 @@ public class Userresource {
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
-                responseData.setMessage(String.valueOf(Permt[1]));
+                responseData.setMessage(ValidateTOken.getMessage());
 
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
 
@@ -233,16 +230,16 @@ public class Userresource {
 
                 if (!Authorization.isEmpty()) {
 
-                    Object[] Permt = AuC.VToken(Authorization);
+                    ResponseValidateToken ValidateToken = AuC.VToken(Authorization);
 
-                    if (Permt[0].equals(true)) {
+                    if (ValidateToken.isStatus()) {
 
                         responseData = userC.UserRegistration(userModel,
                         request.getServletContext().getRealPath("/"));
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
-                    responseData.setMessage(String.valueOf(Permt[1]));
+                    responseData.setMessage(ValidateToken.getMessage());
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
@@ -295,16 +292,16 @@ public class Userresource {
 
                 if (!Authorization.isEmpty()) {
 
-                    Object[] Permt = AuC.VToken(Authorization);
+                    ResponseValidateToken ValidateToken = AuC.VToken(Authorization);
 
-                    if (Permt[0].equals(true)) {
+                    if (ValidateToken.isStatus()) {
 
                         responseData = userC.PutUser(userModel,
                         request.getServletContext().getRealPath("/"));
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
-                    responseData.setMessage(String.valueOf(Permt[1]));
+                    responseData.setMessage(String.valueOf(ValidateToken.getMessage()));
                     return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                 }
@@ -357,17 +354,17 @@ public class Userresource {
 
                 if (!Authorization.isEmpty()) {
 
-                    Object[] Permt = AuC.VToken(Authorization);
+                    ResponseValidateToken validateToken = AuC.VToken(Authorization);
 
-                    if (Permt[2].equals("Administrador")) {
+                    if (validateToken.getRol().equals("Administrador")) {
 
-                        if (Permt[0].equals(true)) {
+                        if (validateToken.isStatus()) {
 
                             responseData = userC.DeleteUser(userModel);
 
                             return Response.ok(Methods.objectToJsonString(responseData)).build();
                         }
-                        responseData.setMessage(String.valueOf(Permt[1]));
+                        responseData.setMessage(validateToken.getMessage());
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
 
                     }
@@ -382,7 +379,7 @@ public class Userresource {
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             responseData.setFlag(false);
 
             if (Configuration.DEBUG) {

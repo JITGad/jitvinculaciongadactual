@@ -7,9 +7,9 @@ import com.jitgad.bjitgad.Utilities.UFile;
 import com.jitgad.bjitgad.Utilities.ValidateFormat;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *
@@ -20,26 +20,26 @@ public class FileController {
     public FileController() {
     }
 
-    public ResponseCreateFile createfile(String base64String, String type, String name, String realpath) throws Exception {
+    public ResponseCreateFile createfile(String base64String, String type, String name, String realpath) throws IOException {
         UFile uf = new UFile();
-        File rutaPadre = new File(realpath).getParentFile();
-        String RutaRelativa = String.join(File.separator, new String[]{"jit", "images"});
-        File RutaBaseGuardar = new File(String.join(File.separator, new String[]{rutaPadre.getAbsolutePath(), RutaRelativa}));
-        if (!RutaBaseGuardar.exists()) {
-            RutaBaseGuardar.mkdirs();
+        Path rutaPadre = Paths.get(realpath).getParent();
+        String RutaRelativa = String.join(File.separator, new String[]{"jit", "static"});
+        Path RutaBaseGuardar = Paths.get(String.join(File.separator, new String[]{rutaPadre.toAbsolutePath().toString(), RutaRelativa}));
+        if (Files.notExists(RutaBaseGuardar)) {
+            Files.createDirectories(RutaBaseGuardar);
         }
         String[] strings = base64String.split(",");
         ExtensionFile extension = getExtension(strings[0]);
-        ValidateFormat format = validateformat(extension.getExtension(), RutaBaseGuardar, RutaRelativa);
+        ValidateFormat format = validateformat(extension.getExtension(), RutaBaseGuardar, RutaRelativa, type);
         if (format.isFormatValid()) {
             if (createfilebase(format.getRutaAbsoluta())) {
-                File RutaGuardar = new File(String.join(File.separator, new String[]{format.getRutaAbsoluta(), type}));
+                Path RutaGuardar = Paths.get(String.join(File.separator, new String[]{format.getRutaAbsoluta(), type}));
                 //COMPROBAR SI EXISTEN LAS CARPETAS DE IMAGENES O VIDEOS
-                if (!RutaGuardar.exists()) {  //se comprueba si la ruta existe o no
-                    RutaGuardar.mkdirs();
+                if (Files.notExists(RutaGuardar)) {  //se comprueba si la ruta existe o no
+                    Files.createDirectories(RutaGuardar);
                 }
-                String NombreArchivo = String.join(".", new String[]{name, extension.getExtension()});
-                String rutaArchivo = String.join(File.separator, new String[]{RutaGuardar.getAbsolutePath(), NombreArchivo});
+                String NombreArchivo = String.join(".", new String[]{name + System.currentTimeMillis() , extension.getExtension()});
+                String rutaArchivo = String.join(File.separator, new String[]{RutaGuardar.toAbsolutePath().toString(), NombreArchivo});
                 return new ResponseCreateFile(uf.B64StringtoImageFile(strings[1], rutaArchivo), format.getRutaRelativa(), NombreArchivo);
             }
         }
@@ -72,33 +72,34 @@ public class FileController {
         return extension;
     }
 
-    public boolean createfilebase(String rutabase) {
+    public boolean createfilebase(String rutabase) throws IOException {
         // SI SON VARIAS CARPETAS, SE SEPARA LOS NOMBRES DE CADA CARPETA CON UN 
         // String[] carpetas = rutabase.split("/");
-        File RutaBaseFile = new File(rutabase);
-        if (!RutaBaseFile.exists()) {
-            return RutaBaseFile.mkdirs();
+        Path RutaBaseFile = Paths.get(rutabase);
+        if (Files.notExists(RutaBaseFile)) {
+            Path result = Files.createDirectories(RutaBaseFile);
+            return Files.exists(result);
         }
         return true;
     }
 
-    public ValidateFormat validateformat(String extension, File RutaBase, String RutaRelativa) {
+    public ValidateFormat validateformat(String extension, Path RutaBase, String RutaRelativa, String type) {
         ValidateFormat format = new ValidateFormat(true);
         if (extension.equals("jpeg") || extension.equals("png") || extension.equals("jpg")) {
-            format.setRutaAbsoluta(String.join(File.separator, new String[]{RutaBase.getAbsolutePath(), "images"}));
-            format.setRutaRelativa(String.join(File.separator, new String[]{RutaRelativa, "images"}));
+            format.setRutaAbsoluta(String.join(File.separator, new String[]{RutaBase.toAbsolutePath().toString(), "images"}));
+            format.setRutaRelativa(String.join("/", new String[]{RutaRelativa.replace("\\", "/"), "images", type}));
             return format;
         }
 
         if (extension.equals("mp4")) {
-            format.setRutaAbsoluta(String.join(File.separator, new String[]{RutaBase.getAbsolutePath(), "video"}));
-            format.setRutaRelativa(String.join(File.separator, new String[]{RutaRelativa, "video"}));
+            format.setRutaAbsoluta(String.join(File.separator, new String[]{RutaBase.toAbsolutePath().toString(), "video"}));
+            format.setRutaRelativa(String.join(File.separator, new String[]{RutaRelativa.replace("\\", "/"), "video", type}));
             return format;
         }
 
         if (extension.equals("mpeg")) {
-            format.setRutaAbsoluta(String.join(File.separator, new String[]{RutaBase.getAbsolutePath(), "audio"}));
-            format.setRutaRelativa(String.join(File.separator, new String[]{RutaRelativa, "audio"}));
+            format.setRutaAbsoluta(String.join(File.separator, new String[]{RutaBase.toAbsolutePath().toString(), "audio"}));
+            format.setRutaRelativa(String.join(File.separator, new String[]{RutaRelativa.replace("\\", "/"), "audio", type}));
             return format;
         }
 

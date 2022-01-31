@@ -7,6 +7,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.Enumeration;
 
 /**
@@ -33,7 +34,7 @@ public class InetAddressUtil {
             realIp = address.getHostAddress();
 
             return address.getHostAddress();
-        } catch (Exception e) {
+        } catch (SocketException | UnknownHostException e) {
             if (Configuration.DEBUG) {
                 System.err.println(e.getMessage());
             }

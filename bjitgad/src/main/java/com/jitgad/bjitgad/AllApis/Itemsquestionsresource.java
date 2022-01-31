@@ -17,10 +17,8 @@ import jakarta.ws.rs.core.UriInfo;
  */
 @Path("itemsquestions")
 public class Itemsquestionsresource {
-    @Context
-    private UriInfo context;
-    private ItemsquestionsDAO itemsquestionsdao;
-    private ItemsquestionsModel itemsquestionsmodel;
+    
+    private final ItemsquestionsDAO itemsquestionsdao;
 
     public Itemsquestionsresource() {
         itemsquestionsdao = new ItemsquestionsDAO();

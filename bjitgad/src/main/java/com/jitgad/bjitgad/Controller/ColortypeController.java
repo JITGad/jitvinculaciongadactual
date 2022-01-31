@@ -1,13 +1,9 @@
 package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.ColortypeDAO;
-import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
-import com.jitgad.bjitgad.DataStaticBD.Configuration;
-import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ClaveValorColorModel;
 import com.jitgad.bjitgad.Models.ColortypeModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
-import jakarta.ws.rs.core.Response;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -17,11 +13,9 @@ import java.util.ArrayList;
  */
 public class ColortypeController {
 
-    private ColortypeModel ctModel;
-    private ColortypeDAO ctypDAO;
+    private final ColortypeDAO ctypDAO;
 
     public ColortypeController() {
-        ctModel = new ColortypeModel();
         ctypDAO = new ColortypeDAO();
     }
 

@@ -4,7 +4,6 @@ import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,7 +11,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -31,9 +29,8 @@ public class UFile {
         System.out.println(pathArr[0]);
         fullPath = pathArr[0];
 
-        String reponsePath = "";
+        String reponsePath = new File(fullPath).getPath() + File.separatorChar;
         // to read a file from webcontent
-        reponsePath = new File(fullPath).getPath() + File.separatorChar;
         return reponsePath;
     }
 
@@ -41,11 +38,11 @@ public class UFile {
         String[] parts = base64.split(",");
         try {
             byte[] dataBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(parts[1]);
-            FileOutputStream out = new FileOutputStream(fileurl);
-            out.write(dataBytes);
-            out.close();
+            try (FileOutputStream out = new FileOutputStream(fileurl)) {
+                out.write(dataBytes);
+            }
             return true;
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Error creating image:" + e.getMessage());
             return false;
         }
@@ -53,8 +50,9 @@ public class UFile {
 
     /**
      * Obtain the extension.
+     *
      * @param filename
-     * @return 
+     * @return
      */
     public String extensionfile(String filename) {
         String fe = "";
@@ -81,21 +79,12 @@ public class UFile {
     }
 
     public String encodeFileToBase64Binary(File file) throws IOException {
-        String encodedfile = null;
-        try {
-            FileInputStream fileInputStreamReader = new FileInputStream(file);
-            byte[] bytes = new byte[(int)file.length()];
-            fileInputStreamReader.read(bytes);
-            encodedfile = new String(Base64.encodeBase64(bytes));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        
+        String encodedfile;
+        FileInputStream fileInputStreamReader = new FileInputStream(file);
+        byte[] bytes = new byte[(int) file.length()];
+        fileInputStreamReader.read(bytes);
+        encodedfile = new String(Base64.encodeBase64(bytes));
         return encodedfile;
     }
 
 }
-

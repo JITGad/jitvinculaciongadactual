@@ -49,5 +49,10 @@ public class ValidateFormat {
     public void setRutaRelativa(String RutaRelativa) {
         this.RutaRelativa = RutaRelativa;
     }
+
+    @Override
+    public String toString() {
+        return "ValidateFormat{" + "FormatValid=" + FormatValid + ", RutaAbsoluta=" + RutaAbsoluta + ", RutaRelativa=" + RutaRelativa + '}';
+    }
     
 }

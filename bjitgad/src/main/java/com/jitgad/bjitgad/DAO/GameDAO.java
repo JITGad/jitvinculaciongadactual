@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 public class GameDAO {
 
-    ConectionPool con;
+    private final ConectionPool con;
     String sentence;
 
     public GameDAO() {

@@ -7,15 +7,13 @@ package com.jitgad.bjitgad.DataStaticBD;
 
 import org.apache.commons.codec.binary.Base64;
 
-import static java.util.stream.Collectors.joining;
-import java.util.stream.Stream;
 
 /**
  * In this java class, there are the text and number validation methods, also there are the encryption methods for passwords
  */
 public class CodeDJA {
 
-    private static final String staticKey = "HHolis";
+    private static final String KEY = "HHolis";
     //1-->00000000001
     private static final String[][] bufferLetters = new String[][]{
         {"zyC", "pLd", "aFo", "Jre", "Klc", "oMy", "qnP", "kfI", "iSz", "Gcu"},
@@ -87,7 +85,7 @@ public class CodeDJA {
     public static String encodeDJA(String texto) {
         if (isNumeric(texto)) {
             texto = transform(texto);
-            texto = cifradoCesar(texto, letterToInteger(staticKey));
+            texto = cifradoCesar(texto, letterToInteger(CodeDJA.KEY));
             texto = cifradoCesar(texto, 1204);
             byte[] bytesEncoded = Base64.encodeBase64(texto.getBytes());
             return new String(bytesEncoded);
@@ -99,7 +97,7 @@ public class CodeDJA {
     public static String decodeDJA(String texto) {
         byte[] valueDecoded = Base64.decodeBase64(texto);
         texto = descifradoCesar(new String(valueDecoded), 1204);
-        texto = descifradoCesar(texto, letterToInteger(staticKey));
+        texto = descifradoCesar(texto, letterToInteger(CodeDJA.KEY));
         texto = untransform(texto);
         return texto;
     }
@@ -109,14 +107,13 @@ public class CodeDJA {
         for (int i = 0; i < formato.length() / 3; i++) {
             Boolean Rowflag = false;
             String part = formato.substring((i * 3), (i * 3) + 3);
-            for (int bffRow = 0; bffRow < bufferLetters.length; bffRow++) {
+            for (String[] bufferLetter : bufferLetters) {
                 for (int bffCol = 0; bffCol < bufferLetters[0].length; bffCol++) {
-                    if (part.equals(bufferLetters[bffRow][bffCol])) {
+                    if (part.equals(bufferLetter[bffCol])) {
                         texto += bffCol;
                         Rowflag = true;
                     }
                 }
-
             }
             if (Rowflag == false) {
                 texto += "ñ";

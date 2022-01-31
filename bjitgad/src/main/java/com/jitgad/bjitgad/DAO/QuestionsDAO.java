@@ -10,7 +10,7 @@ import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
  */
 public class QuestionsDAO {
     
-    ConectionPool con;
+    private final ConectionPool con;
     String sentence;
 
     public QuestionsDAO() {

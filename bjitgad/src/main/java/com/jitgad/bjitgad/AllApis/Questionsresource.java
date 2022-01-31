@@ -1,14 +1,11 @@
 package com.jitgad.bjitgad.AllApis;
 
 import com.jitgad.bjitgad.DAO.QuestionsDAO;
-import com.jitgad.bjitgad.Models.QuestionsModel;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
 
 /**
  *
@@ -17,10 +14,7 @@ import jakarta.ws.rs.core.UriInfo;
 @Path("questions")
 public class Questionsresource {
 
-    @Context
-    private UriInfo context;
-    private QuestionsDAO questionsDAO;
-    private QuestionsModel questionsModel;
+    private final QuestionsDAO questionsDAO;
 
     public Questionsresource() {
         questionsDAO = new QuestionsDAO();
