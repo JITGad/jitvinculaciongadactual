@@ -127,6 +127,7 @@ export default {
       (value, prevValue) => {
         const tipojuego = TipoJuegos.value.find((el) => el.id == value);
         if (tipojuego && tipojuego.value == "emparejar") {
+          if (props.edit && prevValue === 0) return;
           model.detalles.clear();
           model.detalles.push(DetalleJuegoObject.Emparejar(0, ""));
         }

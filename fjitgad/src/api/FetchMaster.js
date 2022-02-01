@@ -139,8 +139,8 @@ class FetchMaster {
             .then(data => {
                 callback({
                     'data': data.data,
-                    'conteo': paginacion ? data.CountingPage : undefined,
-                    'totalPaginas': paginacion ? data.TotalPages : undefined,
+                    'conteo': paginacion ? data.countingpage : undefined,
+                    'totalPaginas': paginacion ? data.totalpages : undefined,
                     'status': {
                         error: !data.flag,
                         message: data.message

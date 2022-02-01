@@ -7,7 +7,7 @@
   >
     <div class="tema">
       <img
-        :src="urlimagen"
+        :src="RutaImagenCompleta"
         width="150"
         height="150"
       />════════<br /><span style="font-size: 30px;">{{ tema }}</span>
@@ -17,6 +17,8 @@
 
 <script>
 import { useRouter } from "vue-router";
+import { computed } from "vue";
+import { isBase64 } from "../util/Utilities.js";
 
 export default {
   name: "Actividad",
@@ -36,12 +38,22 @@ export default {
   },
   setup(props, context) {
     const Router = useRouter();
+    const RutaImagenCompleta = computed(() => {
+      if (props.urlimagen == null || props.urlimagen.length == 0) {
+        return "";
+      }
+      if (isBase64(props.urlimagen)) {
+        return props.urlimagen;
+      }
+      return `${process.env.VUE_APP_BASE_URL}${props.urlimagen}`;
+    });
     const verActividad = function () {
       Router.push({ name: "ActividadJuego", params: { id: props.idactividad } });
     };
 
     return {
       verActividad,
+      RutaImagenCompleta,
     };
   },
 };

@@ -18,8 +18,8 @@
         <th scope="row">{{ juego.idgame }}</th>
         <td>{{ juego.name }}</td>
         <td>{{ juego.state ? "Activo" : "Inactivo" }}</td>
-        <td align="center">{{ juego.tipoactividad }}</td>
-        <td align="center">{{ juego.tipojuego }}</td>
+        <td align="center">{{ juego.nameactivities }}</td>
+        <td align="center">{{ juego.namegametype }}</td>
         <td align="center">
           <my-link-table
             :object="juego"

@@ -126,7 +126,7 @@ const routes = [
         meta: { authorize: [] },
       },
       {
-        path: 'juego',
+        path: 'juego/:id',
         name: 'EditarJuego',
         component: () => import('../views/Juego/EditarJuego.vue'),
         meta: { authorize: [] },
