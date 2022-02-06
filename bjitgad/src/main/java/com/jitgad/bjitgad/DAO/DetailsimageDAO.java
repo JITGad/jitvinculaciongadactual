@@ -18,7 +18,7 @@ public class DetailsimageDAO {
         con = ConectionPoolDataSource.getConnection();
     }
 
-    public String selectDetailsimage() {
+    public String selectDetailsimage() throws SQLException {
         sentence = "select * from tbldetailsimage";
         String json = con.getRecordsInJson(sentence);
         return json;

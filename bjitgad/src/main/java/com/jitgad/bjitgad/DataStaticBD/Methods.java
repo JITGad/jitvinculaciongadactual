@@ -37,7 +37,7 @@ public final class Methods {
     public Methods() {
     }
 
-    public static String[] getDataToJwt(String jwt) {
+    public static String[] getDataToJwt(String jwt) throws Exception{
         String[] response;
         try {
             Claims claims = Jwts.parser()
@@ -46,8 +46,7 @@ public final class Methods {
             response = new String[]{claims.get("sub").toString(),
                 claims.get("email").toString(), claims.get("rol").toString()};
         } catch (ExpiredJwtException | MalformedJwtException | SignatureException | UnsupportedJwtException | IllegalArgumentException e) {
-            System.out.println("error JWT: " + e.getMessage());
-            response = new String[]{"", "", e.getMessage()};
+            throw e;
         }
         return response;
     }
@@ -98,8 +97,7 @@ public final class Methods {
             JsonObject Jso = parser.parse(json).getAsJsonObject();
             return Jso;
         } catch (JsonSyntaxException e) {
-            System.out.println(e.getMessage());
-            return new JsonObject();
+            throw e;
         }
     }
 
@@ -117,7 +115,7 @@ public final class Methods {
             //Jso =  (JsonObject) parser.p(json);
             return parser;
         } catch (Exception e) {
-            return new JsonObject();
+            throw e;
         }
     }
 
@@ -134,7 +132,7 @@ public final class Methods {
             JsonElement res = jso.get(param);//request.getParameter(param);
             return res;
         } catch (Exception e) {
-            return null;
+            throw e;
         }
     }
 
@@ -156,8 +154,7 @@ public final class Methods {
                 return defaulx;
             }
         } catch (Exception e) {
-//            System.out.println("erro json a string");
-            return defaulx;
+        throw e;
         }
     }
 
@@ -179,8 +176,7 @@ public final class Methods {
                 return defaulx;
             }
         } catch (Exception e) {
-//            System.out.println("erro json a string");
-            return defaulx;
+throw e;
         }
     }
 
@@ -199,7 +195,7 @@ public final class Methods {
                 return defaulx;
             }
         } catch (Exception e) {
-            return defaulx;
+            throw e;
         }
     }
 
@@ -221,7 +217,7 @@ public final class Methods {
                 return defaulx;
             }
         } catch (Exception e) {
-            return defaulx;
+            throw e;
         }
     }
 
@@ -243,7 +239,7 @@ public final class Methods {
                 return defaulx;
             }
         } catch (Exception e) {
-            return defaulx;
+            throw e;
         }
     }
 

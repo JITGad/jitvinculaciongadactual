@@ -3,6 +3,7 @@ package com.jitgad.bjitgad.DAO;
 
 import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
+import java.sql.SQLException;
 
 /**
  *
@@ -17,7 +18,7 @@ public class ItemsquestionsDAO {
         con = ConectionPoolDataSource.getConnection();
     }
     
-    public String selectItemsquestions(){
+    public String selectItemsquestions() throws SQLException{
         sentence = "select * from tblitemsquestions";
         String json = con.getRecordsInJson(sentence);
         return json;

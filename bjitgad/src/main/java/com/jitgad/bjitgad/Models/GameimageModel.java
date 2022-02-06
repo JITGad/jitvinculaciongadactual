@@ -63,7 +63,7 @@ public class GameimageModel {
     }
 
     public void setImage(String image) {
-        this.image = image.replace("\\", "/");
+        this.image = image != null ? image.replace("\\", "/") : image;
     }
 
     public String getParagraph() {
@@ -79,7 +79,7 @@ public class GameimageModel {
     }
 
     public void setAudio_parag(String audio_parag) {
-        this.audio_parag = audio_parag.replace("\\", "/");
+        this.audio_parag = audio_parag != null ? audio_parag.replace("\\", "/") : audio_parag;
     }
 
     public String getVideo_parag() {
@@ -87,7 +87,7 @@ public class GameimageModel {
     }
 
     public void setVideo_parag(String video_parag) {
-        this.video_parag = video_parag.replace("\\", "/");
+        this.video_parag = video_parag != null ? video_parag.replace("\\", "/") : video_parag;
     }
 
     public String getCreationdate() {

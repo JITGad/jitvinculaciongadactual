@@ -43,7 +43,7 @@ public class GametypeDAO {
         }
     }
 
-    public int CountingPageGametype() {
+    public int CountingPageGametype() throws SQLException {
         sentence = String.format("select * from tblgametype");
         return ((con.returnRecord(sentence)).getRowCount());
     }

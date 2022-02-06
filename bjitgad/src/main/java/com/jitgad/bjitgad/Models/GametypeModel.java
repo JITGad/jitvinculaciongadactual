@@ -54,7 +54,7 @@ public class GametypeModel {
     }
 
     public void setImage(String image) {
-        this.image = image.replace("\\", "/");
+        this.image = image != null ? image.replace("\\", "/") : image;
     }
 
     public String getAudio_instructions() {
@@ -62,7 +62,7 @@ public class GametypeModel {
     }
 
     public void setAudio_instructions(String audio_instructions) {
-        this.audio_instructions = audio_instructions.replace("\\", "/");
+        this.audio_instructions = audio_instructions != null ? audio_instructions.replace("\\", "/") : audio_instructions;
     }
 
     public String getText_instructions() {
@@ -78,7 +78,7 @@ public class GametypeModel {
     }
 
     public void setVideo_instructions(String video_instructions) {
-        this.video_instructions = video_instructions.replace("\\", "/");
+        this.video_instructions = video_instructions != null ? video_instructions.replace("\\", "/") : video_instructions;
     }
 
     public String getShortname() {

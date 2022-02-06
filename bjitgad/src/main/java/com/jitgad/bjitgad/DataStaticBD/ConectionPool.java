@@ -30,8 +30,6 @@ public class ConectionPool implements IConnectionPool {
     private final List<Connection> connectionPool;
     private final List<Connection> usedConnections = new ArrayList<>();
 
-    
-
     Connection conex;
     
     /**
@@ -39,8 +37,9 @@ public class ConectionPool implements IConnectionPool {
      *
      * @param sentecy This String variable contains the query.
      * @return Returns a table with the data loaded from the query
+     * @throws java.sql.SQLException
      */
-    public DefaultTableModel returnRecord(String sentecy) {
+    public DefaultTableModel returnRecord(String sentecy) throws SQLException {
         try {
             conex = getConnection();
             try (Statement st = conex.createStatement()) {
@@ -62,8 +61,7 @@ public class ConectionPool implements IConnectionPool {
                 }
             }
         } catch (SQLException exc) {
-            System.out.println("Error return Record:" + exc.getMessage());
-            return null;
+            throw exc;
         } finally {
             releaseConnection(conex);
         }
@@ -84,7 +82,6 @@ public class ConectionPool implements IConnectionPool {
                 return true;
             } 
         } catch (SQLException exc) {
-           // System.out.println("Error ModifyBD:" + exc.getMessage());
             throw exc;
         } finally {
             releaseConnection(conex);
@@ -96,8 +93,9 @@ public class ConectionPool implements IConnectionPool {
      *
      * @param sentecy This String variable, contains a query of a function.
      * @return an integer, amount of updates.
+     * @throws java.sql.SQLException
      */
-    public int updateDB(String sentecy) {
+    public int updateDB(String sentecy) throws SQLException {
         int counts = 0;
         try {
             conex = getConnection();
@@ -105,7 +103,7 @@ public class ConectionPool implements IConnectionPool {
                 counts = st.executeUpdate(sentecy);
             }
         } catch (SQLException exc) {
-            System.out.println("Error UpdateBD:" + exc.getMessage());
+            throw exc;
         } finally {
             releaseConnection(conex);
         }
@@ -118,8 +116,9 @@ public class ConectionPool implements IConnectionPool {
      * @param sentecy this variable contains the sentence that will be executed
      * in the database
      * @return the value obtained when the sentence is executed in the database.
+     * @throws java.sql.SQLException
      */
-    public String fillString(String sentecy) {
+    public String fillString(String sentecy) throws SQLException {
         String a = "";
         try {
             conex = getConnection();
@@ -132,7 +131,7 @@ public class ConectionPool implements IConnectionPool {
             }
         } catch (SQLException exc) {
             System.out.println("Error fill string:" + exc.getMessage());
-            return "";
+            throw exc;
         } finally {
             releaseConnection(conex);
         }
@@ -144,8 +143,9 @@ public class ConectionPool implements IConnectionPool {
      *
      * @param sentecy This String variable, contains a query of a function.
      * @return a string, with the following identifier.
+     * @throws java.sql.SQLException
      */
-    public String getNextID(String sentecy) {
+    public String getNextID(String sentecy) throws SQLException {
         String a = "-1";
         try {
             conex = getConnection();
@@ -166,6 +166,7 @@ public class ConectionPool implements IConnectionPool {
         } catch (SQLException exc) {
             System.out.println("No next id:" + exc.getMessage());
             a = "1";
+            throw  exc;
         } finally {
             releaseConnection(conex);
         }
@@ -177,8 +178,9 @@ public class ConectionPool implements IConnectionPool {
      *
      * @param sentency This String variable, contains a query of a function.
      * @return a string, containing json.
+     * @throws java.sql.SQLException
      */
-    public String getRecordsInJson(String sentency) {
+    public String getRecordsInJson(String sentency) throws SQLException {
         String resul = "[";
         DefaultTableModel table = returnRecord(sentency);
         if (table != null) {
@@ -230,6 +232,7 @@ public class ConectionPool implements IConnectionPool {
      * @param obj cast resultset
      * @param structure 0 = kamelycasestructure, 1 dabaseestructure
      * @return ArrayList object
+     * @throws java.lang.Exception
      */
     public <T> ArrayList<T> getObjectDB(String sql, Class<T> obj, int structure) throws Exception {
         ArrayList<T> datos = new ArrayList();
@@ -237,31 +240,36 @@ public class ConectionPool implements IConnectionPool {
             conex = getConnection();
             try (Statement stm = conex.createStatement()) {
                 try (ResultSet rs = stm.executeQuery(sql)) {
-                    //ArrayList<Users> putResult = ResultSetPropertiesSimplifyHelps.putResult(rs, Users.class);
                     datos = ReflectToClass.putResult(rs, obj, structure);
                 }
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw e;
         } finally {
             releaseConnection(conex);
         }
         return datos;
     }
     
+    /**
+     *Function mapping data to connection 
+     * @param <T> Is Class Mapping data result
+     * @param sql Sql query to execute db
+     * @param obj Is Class Mapping data result
+     * @param structure structure de format data
+     * @param conex conexion opened
+     * @return list data return T
+     * @throws Exception
+     */
     public <T> ArrayList<T> getObjectDBCon(String sql, Class<T> obj, int structure, Connection conex) throws Exception {
         ArrayList<T> datos = new ArrayList();
-        
         try {
-           // conex = getConnection();
             try (Statement stm = conex.createStatement()) {
                 try (ResultSet rs = stm.executeQuery(sql)) {
-                    //ArrayList<Users> putResult = ResultSetPropertiesSimplifyHelps.putResult(rs, Users.class);
                     datos = ReflectToClass.putResult(rs, obj, structure);
                 }
             }
         } catch (SQLException e) {
-           // System.out.println(e.getMessage());
             throw e;
         } 
         return datos;

@@ -1,13 +1,9 @@
 package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.GameDAO;
-import com.jitgad.bjitgad.DAO.GameimageDAO;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GameModel;
-import com.jitgad.bjitgad.Models.GameimageModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -17,13 +13,9 @@ import java.util.ArrayList;
 public class GameController {
 
     private final GameDAO gD;
-    private final GameimageController giC;
-    private final GameimageDAO giD;
 
     public GameController() {
         gD = new GameDAO();
-        giC = new GameimageController();
-        giD = new GameimageDAO();
     }
  
     public ArrayList<GameModel> selectGame() throws Exception {
@@ -87,8 +79,6 @@ public class GameController {
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
         if (gD.deleteGame(request)) {
-
-           // giC.DeleteGameimageC(request);
 
             responseData.setMessage("Registro eliminado correctamente");
             responseData.setFlag(true);

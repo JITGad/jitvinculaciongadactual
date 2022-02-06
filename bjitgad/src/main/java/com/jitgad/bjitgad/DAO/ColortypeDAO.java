@@ -34,7 +34,7 @@ public class ColortypeDAO {
         return datos;
     }
 
-    public int CountingPageColortype() {
+    public int CountingPageColortype() throws SQLException {
         sentence = String.format("select * from tblcolortype");
         return ((con.returnRecord(sentence)).getRowCount());
     }

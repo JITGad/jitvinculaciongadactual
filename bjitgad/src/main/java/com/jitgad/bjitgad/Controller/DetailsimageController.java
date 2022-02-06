@@ -18,7 +18,7 @@ public class DetailsimageController {
         dim = new DetailsimageModel();
     }
 
-    public String selectDetailsimage() {
+    public String selectDetailsimage() throws SQLException {
         return dio.selectDetailsimage();
     }
 

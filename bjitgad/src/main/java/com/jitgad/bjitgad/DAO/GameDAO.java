@@ -26,7 +26,6 @@ public class GameDAO {
     private final ConectionPool con;
     private final GameimageController giC;
     String sentence;
-    String sentence2;
     Connection conex;
 
     public GameDAO() {
@@ -48,9 +47,10 @@ public class GameDAO {
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
 
         for (int i = 0; i < datos.size(); i++) {
-            sentence2 = "select * from tblgameimage where idgame =" + datos.get(i).getIdgame();
-
-            datos.get(i).setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
+            sentence = "select * from tblgameimage where idgame =" + datos.get(i).getIdgame();
+            GameModel JuegoActual = datos.get(i);
+            JuegoActual.setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
+            datos.set(i, JuegoActual);
         }
         return datos;
     }
@@ -61,20 +61,15 @@ public class GameDAO {
                 + "inner join tblgametype on tblgametype.idgametype = game.idgametype where game.idgame=" + gameid;
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
 
-        for (int i = 0; i < datos.size(); i++) {
-            sentence2 = "select * from tblgameimage where idgame =" + datos.get(i).getIdgame();
+        GameModel JuegoSeleccionado = datos.get(0);
 
-            datos.get(i).setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
-        }
+        sentence = "select * from tblgameimage where idgame =" + JuegoSeleccionado.getIdgame();
+        JuegoSeleccionado.setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
 
-        if (datos.size() > 0) {
-            return Methods.objectToJsonString(datos.get(0));
-        } else {
-            return "{}";
-        }
+        return Methods.objectToJsonString(JuegoSeleccionado);
     }
 
-    public int CountingPageGame() {
+    public int CountingPageGame() throws SQLException {
         sentence = String.format("select * from tblgame");
         return ((con.returnRecord(sentence)).getRowCount());
     }
@@ -108,11 +103,11 @@ public class GameDAO {
             conex.setAutoCommit(false);
 
             try (Statement st = conex.createStatement()) {
-                
+
                 ArrayList<GameModel> datagameModel = con.getObjectDBCon(sentency, GameModel.class, 1, conex);
-                
+
                 int id = datagameModel.get(0).getIdgame();
-                
+
                 for (GameimageModel object : gameModel.getDetalles()) {
                     object.setIdgame(id);
                     st.execute(giC.InsertGameimageCF(object, realpath));

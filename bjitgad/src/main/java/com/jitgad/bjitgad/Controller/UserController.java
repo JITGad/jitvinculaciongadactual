@@ -16,9 +16,6 @@ import com.jitgad.bjitgad.Utilities.ResponseData;
 import com.jitgad.bjitgad.Utilities.ResponseValidateToken;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -46,6 +43,7 @@ public class UserController {
      * variables for user access
      * @param request It is a String variable, this variable will contain the
      * user's mail
+     * @throws java.lang.Exception
      */
     public ResponseData LogIn(UserRequestModel request)  throws Exception{
         UserModel userDB = udao.getUserEmail(request.getEmail());

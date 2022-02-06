@@ -25,9 +25,6 @@ public class UserDAO {
     public ArrayList<UserModel> selectUserspage(int page) throws Exception {
         sentence = "select iduser,names,last_name, email,image, birthdate, rol, creationdate, updatedate, state from tbluser order by iduser asc limit 10 offset " + (page * 10 - 10);
         ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
-//        for (int i = 0; i < datos.size(); i++) {
-//            datos.get(i).setImage((Configuration.ipdominioservidor + datos.get(i).getImage()).replace('\\', '/'));
-//        }
         return datos;
     }
 
@@ -65,14 +62,14 @@ public class UserDAO {
         return usr;
     }
 
-    public boolean comprobeUniqueEmail(UserModel usr) {
+    public boolean comprobeUniqueEmail(UserModel usr) throws SQLException {
         String sentency = String.format("select * from tbluser where email='%s';", usr.getEmail());
         System.out.println(sentency);
         System.out.println("");
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
 
-    public boolean comprobeUniqueEmailUpdate(UserModel usr) {
+    public boolean comprobeUniqueEmailUpdate(UserModel usr) throws SQLException {
         System.out.println(usr.getEmail().trim());
         System.out.println(usr.getIduser());
         String sentency = String.format("select * from tbluser where email='%s' and iduser != '%s';", usr.getEmail(), usr.getIduser());
@@ -81,7 +78,7 @@ public class UserDAO {
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
 
-    public boolean validatetoken(String iduser, String email) {
+    public boolean validatetoken(String iduser, String email) throws SQLException {
         String sentency = String.format("select * from tbluser where email='%s' and iduser='%s';", email, iduser);
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }

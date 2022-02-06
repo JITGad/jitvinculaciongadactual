@@ -1,15 +1,11 @@
 package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.GametypeDAO;
-import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.Models.ClaveValorGameModel;
-import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GametypeModel;
 import com.jitgad.bjitgad.Utilities.ResponseCreateFile;
 import com.jitgad.bjitgad.Utilities.ResponseData;
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -18,13 +14,11 @@ import java.util.ArrayList;
  */
 public class GametypeController {
 
-    private GametypeDAO gtD;
-    private GametypeModel gtM;
-    private FileController fc;
+    private final GametypeDAO gtD;
+    private final FileController fc;
 
     public GametypeController() {
         gtD = new GametypeDAO();
-        gtM = new GametypeModel();
         fc = new FileController();
     }
 
@@ -49,29 +43,7 @@ public class GametypeController {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
-        request.setImage(request.getImage() == null
-                ? ""
-                : request.getImage());
-
-        request.setVideo_instructions(request.getVideo_instructions() == null ? ""
-                : request.getVideo_instructions());
-
-        request.setAudio_instructions(request.getAudio_instructions() == null ? "" : request.getAudio_instructions());
-
-        ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "gametype", request.getName(), realpath);
-        if (CreateFile.isState()) {
-            request.setImage(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-        }
-
-        CreateFile = fc.createfile(request.getVideo_instructions(), "gametype", request.getName(), realpath);
-        if (CreateFile.isState()) {
-            request.setVideo_instructions(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-        }
-
-        CreateFile = fc.createfile(request.getAudio_instructions(), "gametype", request.getName(), realpath);
-        if (CreateFile.isState()) {
-            request.setAudio_instructions(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-        }
+        request = UpdateGameTypeModel(request, realpath);
        
         request.setShortname(request.getShortname()
                 .trim()
@@ -96,30 +68,8 @@ public class GametypeController {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
-        request.setImage(request.getImage() == null ? "" : request.getImage());
-        request.setVideo_instructions(request.getVideo_instructions() == null
-                ? "" : request.getVideo_instructions());
-        request.setAudio_instructions(request.getAudio_instructions() == null ? "" : request.getAudio_instructions());
-
-        ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "gametype", request.getName(), realpath);
-        if (CreateFile.isState()) {
-            request.setImage(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-        }
-
-        CreateFile = fc.createfile(request.getVideo_instructions(), "gametype", request.getName(), realpath);
-        if (CreateFile.isState()) {
-            request.setVideo_instructions(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-        }
-
-        CreateFile = fc.createfile(request.getAudio_instructions(), "gametype", request.getName(), realpath);
-        if (CreateFile.isState()) {
-            request.setAudio_instructions(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-        }
-
-        request.setShortname(request.getShortname()
-                .trim()
-                .replaceAll("\\s+", "")
-                .toLowerCase());
+        request = UpdateGameTypeModel(request, realpath);
+        
         request.setUpdatedate("NOW()");
 
         if (gtD.updateGametype(request)) {
@@ -146,6 +96,30 @@ public class GametypeController {
         }
 
         return responseData;
+    }
+    
+    private GametypeModel UpdateGameTypeModel(GametypeModel request, String realpath) throws IOException{
+        request.setImage(request.getImage() == null ? "" : request.getImage());
+        request.setVideo_instructions(request.getVideo_instructions() == null
+                ? "" : request.getVideo_instructions());
+        request.setAudio_instructions(request.getAudio_instructions() == null ? "" : request.getAudio_instructions());
+
+        ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "gametype", request.getName(), realpath);
+        if (CreateFile.isState()) {
+            request.setImage(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
+        }
+
+        CreateFile = fc.createfile(request.getVideo_instructions(), "gametype", request.getName(), realpath);
+        if (CreateFile.isState()) {
+            request.setVideo_instructions(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
+        }
+
+        CreateFile = fc.createfile(request.getAudio_instructions(), "gametype", request.getName(), realpath);
+        if (CreateFile.isState()) {
+            request.setAudio_instructions(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
+        }
+        
+        return request;
     }
 
 }

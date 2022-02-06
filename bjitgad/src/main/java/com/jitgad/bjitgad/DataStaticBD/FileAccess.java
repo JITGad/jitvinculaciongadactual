@@ -17,7 +17,7 @@ public class FileAccess {
     public FileAccess() {
     }
 
-    public String readFileText(String location) {
+    public String readFileText(String location) throws IOException {
         String result = "";
         try {
             File archivo = new File(location);
@@ -30,13 +30,12 @@ public class FileAccess {
                 }
             }
         } catch (IOException e) {
-            result = "";
-            System.out.println("Error in read File project");
+            throw e;
         }
         return result;
     }
 
-    public boolean writeFileText(String location, String structure) {
+    public boolean writeFileText(String location, String structure) throws IOException {
         try {
             try(FileWriter fichero  = new FileWriter(location)){
                 try(PrintWriter pw = new PrintWriter(fichero)){
@@ -44,17 +43,17 @@ public class FileAccess {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error in save File project");
+            throw e;
         }
         return true;
     }
 
-    public boolean SaveImg(String base64, String rutaImagen) {
+    public boolean SaveImg(String base64, String rutaImagen) throws IOException {
         File file = new File(rutaImagen);
         return writeOutputStream(base64, file);
     }
 
-    private boolean writeOutputStream(String value, File outputStream) {
+    private boolean writeOutputStream(String value, File outputStream) throws IOException {
         String[] partes = value.split(",");
         try {
             byte[] imgBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(partes[1]);
@@ -62,8 +61,7 @@ public class FileAccess {
             ImageIO.write(bufImg, "png", outputStream);
             return true;
         } catch (IOException e) {
-            System.out.println("Error creating image: " + e.getMessage());
-            return false;
+            throw e;
         }
     }
 }

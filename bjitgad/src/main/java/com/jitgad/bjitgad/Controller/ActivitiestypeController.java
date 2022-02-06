@@ -5,8 +5,6 @@ import com.jitgad.bjitgad.Models.ActivitiestypeModel;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Utilities.ResponseCreateFile;
 import com.jitgad.bjitgad.Utilities.ResponseData;
-import java.io.File;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 

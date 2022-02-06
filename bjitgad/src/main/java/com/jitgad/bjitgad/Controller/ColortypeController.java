@@ -4,7 +4,6 @@ import com.jitgad.bjitgad.DAO.ColortypeDAO;
 import com.jitgad.bjitgad.Models.ClaveValorColorModel;
 import com.jitgad.bjitgad.Models.ColortypeModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**

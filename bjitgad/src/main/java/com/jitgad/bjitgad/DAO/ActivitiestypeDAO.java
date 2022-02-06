@@ -59,7 +59,7 @@ public class ActivitiestypeDAO {
         return datos;
     }
 
-    public int CountingPageActivitiestype() {
+    public int CountingPageActivitiestype() throws SQLException {
         sentence = String.format("select idactivitiestype as id,name as tema,image as urlimagen from tblactivitiestype");
         return ((con.returnRecord(sentence)).getRowCount());
     }

@@ -34,7 +34,7 @@ public class UFile {
         return reponsePath;
     }
 
-    public boolean saveFile(String base64, String fileurl) {
+    public boolean saveFile(String base64, String fileurl) throws IOException {
         String[] parts = base64.split(",");
         try {
             byte[] dataBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(parts[1]);
@@ -43,8 +43,7 @@ public class UFile {
             }
             return true;
         } catch (IOException e) {
-            System.out.println("Error creating image:" + e.getMessage());
-            return false;
+            throw e;
         }
     }
 

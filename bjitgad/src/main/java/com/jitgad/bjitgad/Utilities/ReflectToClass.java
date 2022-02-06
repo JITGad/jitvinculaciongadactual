@@ -30,6 +30,7 @@ public class ReflectToClass {
      * @param obj java Class of class
      * @param estructure KAMELYCASESTRUCTURE|DATABASEESTRUCTURE
      * @return
+     * @throws java.lang.Exception
      */
     public static <T> ArrayList<T> putResult(ResultSet rs, Class<T> obj, int estructure) throws Exception {
         try {
@@ -55,7 +56,7 @@ public class ReflectToClass {
                     }
                     String substring = name.substring(0, 1);// title case
                     String replace = name.replaceFirst(substring, substring.toUpperCase());
-                    Class<?> type = null;
+                    Class<?> type;
                     try {
                         type = obj.getDeclaredField(name).getType();// Get field type
                         //type = fields.stream().filter(field -> field.getName().equals(name)).findAny().orElse(null).getType();
