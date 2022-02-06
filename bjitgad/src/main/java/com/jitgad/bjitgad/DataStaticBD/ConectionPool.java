@@ -295,6 +295,7 @@ public class ConectionPool implements IConnectionPool {
                 .remove(connectionPool.size() - 1);
 
         if (!connection.isValid(Configuration.MAX_TIMEOUT)) {
+            connection.close();
             connection = createConnection(url, user, password);
         }
 
