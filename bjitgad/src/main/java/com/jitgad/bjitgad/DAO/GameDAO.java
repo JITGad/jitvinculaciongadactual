@@ -49,8 +49,8 @@ public class GameDAO {
 
         for (int i = 0; i < datos.size(); i++) {
             sentence2 = "select * from tblgameimage where idgame =" + datos.get(i).getIdgame();
-
-            datos.get(i).setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
+            ArrayList<GameimageModel> datos2 = con.getObjectDB(sentence2, GameimageModel.class, 1);
+            datos.get(i).setDetalles(datos2);
         }
         return datos;
     }
@@ -61,11 +61,11 @@ public class GameDAO {
                 + "inner join tblgametype on tblgametype.idgametype = game.idgametype where game.idgame=" + gameid;
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
 
-        for (int i = 0; i < datos.size(); i++) {
-            sentence2 = "select * from tblgameimage where idgame =" + datos.get(i).getIdgame();
-
-            datos.get(i).setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
-        }
+        
+        sentence2 = "select * from tblgameimage where idgame =" + datos.get(0).getIdgame();
+        ArrayList<GameimageModel> datos2 = con.getObjectDB(sentence2, GameimageModel.class, 1);
+        datos.get(0).setDetalles(datos2);
+        
 
         if (datos.size() > 0) {
             return Methods.objectToJsonString(datos.get(0));

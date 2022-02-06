@@ -74,9 +74,9 @@ ALTER FUNCTION public.updateActividadestype(xml)
 ------------------------------------------------------------------------------
 ---------------------------JUEGO-------------------------------------
 --------------INSERT-----------------------------
-CREATE OR REPLACE FUNCTION public.insertGame(
+CREATE OR REPLACE FUNCTION public.insertgame(
 	message_xml xml)
-    RETURNS text
+    RETURNS SETOF public.tblgame
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
@@ -84,19 +84,18 @@ AS $BODY$
 DECLARE root_xpath TEXT = '/game/';
   resul integer = 0;
   BEGIN
-    INSERT INTO public.tblgame(idactivitiestype,idgametype,name,creationdate,updatedate,state,level)values
+   return query INSERT INTO public.tblgame(idactivitiestype,idgametype,name,creationdate,updatedate,state,level)values
 			((xpath(root_xpath|| 'idactivitiestype/text()', message_xml))[1]::text::integer,
 			 (xpath(root_xpath|| 'idgametype/text()', message_xml))[1]::text::integer,
 			 (xpath(root_xpath|| 'name/text()', message_xml))[1],
 			 (xpath(root_xpath|| 'creationdate/text()', message_xml))[1]::text::date,
 			(xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
 			(xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean,
-			(xpath(root_xpath|| 'level/text()', message_xml))[1]::text::integer);
-	return resul;																			 
+			(xpath(root_xpath|| 'level/text()', message_xml))[1]::text::integer) RETURNING *;																			 
   END;
 $BODY$;
 
-ALTER FUNCTION public.insertGame(xml)
+ALTER FUNCTION public.insertgame(xml)
     OWNER TO fjdmwraxdzfdqi;
 ----------------DELETE----------------
 
