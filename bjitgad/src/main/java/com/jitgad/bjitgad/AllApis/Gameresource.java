@@ -10,6 +10,7 @@ import com.jitgad.bjitgad.Models.GameModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import com.jitgad.bjitgad.Utilities.ResponseDataPage;
 import com.jitgad.bjitgad.Utilities.ResponseValidateToken;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -32,7 +33,9 @@ import java.util.ArrayList;
 @Path("game")
 
 public class Gameresource {
-
+    
+    @Context
+    private HttpServletRequest request;
     private final GameController gC;
     private final AuthorizationController AuC;
     private GameModel gameModel;
@@ -316,17 +319,9 @@ public class Gameresource {
 
                     if (validateToken.isStatus()) {
 
-                        responseData = gC.InsertGameC(gameModel);
+                        responseData = gC.InsertGameC(gameModel,
+                                request.getServletContext().getRealPath("/"));
                         
-//                        if(responseData.flag){
-//                                 
-//                            for (GameimageModel object : gameModel.getDetalles()) {
-//                                responseData = giC.InsertGameimageC(object); 
-//                            }
-//                            
-//                            return Response.ok(Methods.objectToJsonString(responseData)).build();
-//
-//                        }
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
@@ -341,7 +336,7 @@ public class Gameresource {
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             responseData.setFlag(false);
 
             if (Configuration.DEBUG) {
@@ -359,7 +354,7 @@ public class Gameresource {
     @Produces(MediaType.APPLICATION_JSON)
     @PUT
     @Path("/putGame")
-    public Response PutActivitiesType(@Context HttpHeaders headers, String data) {
+    public Response putGame(@Context HttpHeaders headers, String data) {
 
         if (Configuration.DEBUG) {
             System.out.println("Ingresando putGame...");
@@ -371,7 +366,7 @@ public class Gameresource {
 
         JsonObject Jso = Methods.stringToJSON(data);
         try {
-            if (Jso.size() > 0) {
+                if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
@@ -386,7 +381,8 @@ public class Gameresource {
 
                     if (validateToken.isStatus()) {
 
-                        responseData = gC.UpdateGameC(gameModel);
+                        responseData = gC.UpdateGameC(gameModel,
+                                request.getServletContext().getRealPath("/"));
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
@@ -401,7 +397,7 @@ public class Gameresource {
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             responseData.setFlag(false);
 
             if (Configuration.DEBUG) {

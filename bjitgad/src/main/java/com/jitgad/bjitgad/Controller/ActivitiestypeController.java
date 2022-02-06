@@ -33,7 +33,7 @@ public class ActivitiestypeController {
 
         ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "activities", request.getName(), realpath);
         if (CreateFile.isState()) {
-            request.setImage(String.join(File.separator, new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
+            request.setImage(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
         } else {
             request.setImage("");
         }

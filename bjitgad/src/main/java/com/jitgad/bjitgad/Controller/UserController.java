@@ -72,7 +72,7 @@ public class UserController {
 
             ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "users", request.getNames(), realpath);
             if (CreateFile.isState()) {
-                request.setImage(String.join(File.separator, new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
+                request.setImage(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
             }
 
             request.setPassword(encriptPassword(request.getPassword()));
@@ -104,7 +104,7 @@ public class UserController {
 
             ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "users", request.getNames(), realpath);
             if (CreateFile.isState()) {
-                request.setImage(String.join(File.separator, new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
+                request.setImage(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
             }
 
             if (request.getPassword().isEmpty()) {

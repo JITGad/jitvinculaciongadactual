@@ -5,12 +5,16 @@
  */
 package com.jitgad.bjitgad.DAO;
 
+import com.jitgad.bjitgad.Controller.GameimageController;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.GameModel;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
+import com.jitgad.bjitgad.Models.GameimageModel;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -20,62 +24,49 @@ import java.util.ArrayList;
 public class GameDAO {
 
     private final ConectionPool con;
+    private final GameimageController giC;
     String sentence;
+    String sentence2;
+    Connection conex;
 
     public GameDAO() {
         con = ConectionPoolDataSource.getConnection();
+        giC = new GameimageController();
     }
 
     public ArrayList<GameModel> selectGame() {
-        sentence = "select game.idgame,\n"
-                + "game.idactivitiestype,\n"
-                + "actype.name as nameactivities,\n"
-                + "game.idgametype,\n"
-                + "game.name,\n"
-                + "game.creationdate,\n"
-                + "game.updatedate,\n"
-                + "game.state,\n"
-                + "game.level\n"
-                + "from tblgame as game \n"
-                + "inner join tblactivitiestype as actype \n"
-                + "on actype.idactivitiestype = game.idactivitiestype";
+        sentence = "select game.idgame,game.idactivitiestype,actype.name as nameactivities,game.idgametype,game.name,game.creationdate,game.updatedate,game.state,game.level\n"
+                + "from tblgame as game inner join tblactivitiestype as actype on actype.idactivitiestype = game.idactivitiestype";
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
         return datos;
     }
 
     public ArrayList<GameModel> selectGamepage(int page) {
-        sentence = "select game.idgame,\n"
-                + "game.idactivitiestype,\n"
-                + "actype.name as nameactivities,\n"
-                + "game.idgametype,\n"
-                + "game.name,\n"
-                + "game.creationdate,\n"
-                + "game.updatedate,\n"
-                + "game.state,\n"
-                + "game.level\n"
-                + "from tblgame as game \n"
-                + "inner join tblactivitiestype as actype \n"
-                + "on actype.idactivitiestype = game.idactivitiestype\n"
-                + "order by game.idgame asc limit 10 offset" + (page * 10 - 10);
+        sentence = "select game.idgame,game.idactivitiestype,actype.name as nameactivities,tblgametype.name as namegametype,game.idgametype,game.name,game.creationdate,game.updatedate,game.state,game.level\n"
+                + "from tblgame as game inner join tblactivitiestype as actype on actype.idactivitiestype = game.idactivitiestype \n"
+                + "inner join tblgametype on tblgametype.idgametype = game.idgametype order by game.idgame asc limit 10 offset " + (page * 10 - 10);
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
+
+        for (int i = 0; i < datos.size(); i++) {
+            sentence2 = "select * from tblgameimage where idgame =" + datos.get(i).getIdgame();
+
+            datos.get(i).setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
+        }
         return datos;
     }
 
     public String selectGamebyid(int gameid) {
-        sentence = "select game.idgame,\n"
-                + "game.idactivitiestype,\n"
-                + "actype.name as nameactivities,\n"
-                + "game.idgametype,\n"
-                + "game.name,\n"
-                + "game.creationdate,\n"
-                + "game.updatedate,\n"
-                + "game.state,\n"
-                + "game.level\n"
-                + "from tblgame as game \n"
-                + "inner join tblactivitiestype as actype \n"
-                + "on actype.idactivitiestype = game.idactivitiestype\n"
-                + "where game.idgame=" + gameid;
+        sentence = "select game.idgame,game.idactivitiestype,actype.name as nameactivities,tblgametype.name as namegametype,game.idgametype,game.name,game.creationdate,game.updatedate,game.state,game.level\n"
+                + "from tblgame as game inner join tblactivitiestype as actype on actype.idactivitiestype = game.idactivitiestype \n"
+                + "inner join tblgametype on tblgametype.idgametype = game.idgametype where game.idgame=" + gameid;
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
+
+        for (int i = 0; i < datos.size(); i++) {
+            sentence2 = "select * from tblgameimage where idgame =" + datos.get(i).getIdgame();
+
+            datos.get(i).setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
+        }
+
         if (datos.size() > 0) {
             return Methods.objectToJsonString(datos.get(0));
         } else {
@@ -97,7 +88,7 @@ public class GameDAO {
         return datos;
     }
 
-    public boolean insertGame(GameModel gameModel) throws SQLException {
+    public boolean insertGame(GameModel gameModel, String realpath) throws SQLException, Exception {
         String structure = String.format(
                 "<game>"
                 + "<idactivitiestype>" + gameModel.getIdactivitiestype() + "</idactivitiestype>"
@@ -111,10 +102,35 @@ public class GameDAO {
 
         String sentency = "Select * from insertGame('" + structure + "')";
         System.out.println(structure);
-        return con.modifyBD(sentency);
+        try {
+            conex = con.getConnection();
+            conex.setAutoCommit(false);
+
+            try (Statement st = conex.createStatement()) {
+                st.execute(sentency);
+                int id = Integer.parseInt(giC.last_id());
+                for (GameimageModel object : gameModel.getDetalles()) {
+                    object.setIdgame(id);
+                    st.execute(giC.InsertGameimageCF(object, realpath));
+                }
+
+            }
+            conex.commit();
+            return true;
+        } catch (SQLException exc) {
+            // System.out.println("Error ModifyBD:" + exc.getMessage());
+            conex.rollback();
+            throw exc;
+
+        } finally {
+            con.releaseConnection(conex);
+        }
+        //  return con.modifyBD(sentency);
     }
 
-    public boolean updateGame(GameModel gameModel) throws SQLException {
+    public boolean updateGame(GameModel gameModel, String realpath)
+            throws SQLException, Exception {
+
         String structure = String.format(
                 "<game>"
                 + "<idgame>" + gameModel.getIdgame() + "</idgame>"
@@ -128,7 +144,58 @@ public class GameDAO {
 
         String sentency = "Select * from updateGame('" + structure + "')";
         System.out.println(structure);
-        return con.modifyBD(sentency);
+        try {
+            conex = con.getConnection();
+            conex.setAutoCommit(false);
+
+            try (Statement st = conex.createStatement()) {
+                st.execute(sentency);
+
+                sentence = "select idgameimage from tblgameimage where idgame = " + gameModel.getIdgame();
+                ArrayList<GameimageModel> dataid = con.getObjectDBCon(sentence, GameimageModel.class, 1, conex);
+
+                for (int i = 0; i < dataid.size(); i++) {
+
+                    GameimageModel gimx = dataid.get(i);
+                    GameimageModel gim = gameModel.getDetalles().stream().
+                            filter(gameim -> gimx.getIdgameimage()
+                            == gameim.getIdgameimage()).findAny().orElse(null);
+
+                    if (gim == null) {
+                        String dgic = giC.DeleteGameimageC(gimx);
+                        System.out.println(dgic);
+
+                        st.execute(dgic);
+                    }
+                }
+
+                for (GameimageModel object : gameModel.getDetalles()) {
+
+                    GameimageModel gim = dataid.stream().
+                            filter(gameim -> object.getIdgameimage()
+                            == gameim.getIdgameimage()).findAny().orElse(null);
+
+                    if (gim == null) {
+
+                        st.execute(giC.InsertGameimageCF(object, realpath));
+                        continue;
+                    }
+
+                    st.execute(giC.UpdateGameimageC(object, realpath));
+                }
+
+            }
+            conex.commit();
+            return true;
+        } catch (SQLException exc) {
+            // System.out.println("Error ModifyBD:" + exc.getMessage());
+            conex.rollback();
+            throw exc;
+
+        } finally {
+            con.releaseConnection(conex);
+        }
+        //  return con.modifyBD(sentency);
     }
 
     public boolean deleteGame(GameModel gameModel) throws SQLException {

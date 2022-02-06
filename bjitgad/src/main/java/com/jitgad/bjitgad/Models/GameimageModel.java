@@ -63,7 +63,7 @@ public class GameimageModel {
     }
 
     public void setImage(String image) {
-        this.image = image;
+        this.image = image.replace("\\", "/");
     }
 
     public String getParagraph() {
@@ -79,7 +79,7 @@ public class GameimageModel {
     }
 
     public void setAudio_parag(String audio_parag) {
-        this.audio_parag = audio_parag;
+        this.audio_parag = audio_parag.replace("\\", "/");
     }
 
     public String getVideo_parag() {
@@ -87,7 +87,7 @@ public class GameimageModel {
     }
 
     public void setVideo_parag(String video_parag) {
-        this.video_parag = video_parag;
+        this.video_parag = video_parag.replace("\\", "/");
     }
 
     public String getCreationdate() {

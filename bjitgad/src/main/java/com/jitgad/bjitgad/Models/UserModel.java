@@ -92,7 +92,7 @@ public class UserModel {
     }
 
     public void setImage(String image) {
-        this.image = image;
+        this.image = image.replace("\\", "/");
     }
 
     public String getBirthdate() {

@@ -60,17 +60,17 @@ public class GametypeController {
 
         ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "gametype", request.getName(), realpath);
         if (CreateFile.isState()) {
-            request.setImage(String.join(File.separator, new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
+            request.setImage(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
         }
 
         CreateFile = fc.createfile(request.getVideo_instructions(), "gametype", request.getName(), realpath);
         if (CreateFile.isState()) {
-            request.setVideo_instructions(String.join(File.separator, new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
+            request.setVideo_instructions(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
         }
 
         CreateFile = fc.createfile(request.getAudio_instructions(), "gametype", request.getName(), realpath);
         if (CreateFile.isState()) {
-            request.setAudio_instructions(String.join(File.separator, new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
+            request.setAudio_instructions(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
         }
        
         request.setShortname(request.getShortname()
@@ -103,17 +103,17 @@ public class GametypeController {
 
         ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "gametype", request.getName(), realpath);
         if (CreateFile.isState()) {
-            request.setImage(String.join(File.separator, new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
+            request.setImage(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
         }
 
         CreateFile = fc.createfile(request.getVideo_instructions(), "gametype", request.getName(), realpath);
         if (CreateFile.isState()) {
-            request.setVideo_instructions(String.join(File.separator, new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
+            request.setVideo_instructions(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
         }
 
         CreateFile = fc.createfile(request.getAudio_instructions(), "gametype", request.getName(), realpath);
         if (CreateFile.isState()) {
-            request.setAudio_instructions(String.join(File.separator, new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
+            request.setAudio_instructions(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
         }
 
         request.setShortname(request.getShortname()

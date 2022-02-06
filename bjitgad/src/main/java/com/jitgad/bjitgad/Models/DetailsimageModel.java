@@ -51,7 +51,7 @@ public class DetailsimageModel {
     }
 
     public void setImage(String image) {
-        this.image = image;
+        this.image = image.replace("\\", "/");
     }
 
     public String getCreationdate() {

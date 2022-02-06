@@ -21,6 +21,10 @@ public class FileController {
     }
 
     public ResponseCreateFile createfile(String base64String, String type, String name, String realpath) throws IOException {
+        
+        if(base64String == null || base64String.isEmpty()){
+            return new ResponseCreateFile(false, "", "");
+        }
         UFile uf = new UFile();
         Path rutaPadre = Paths.get(realpath).getParent();
         String RutaRelativa = String.join(File.separator, new String[]{"jit", "static"});

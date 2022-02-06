@@ -14,7 +14,7 @@ public class ResponseDataPage {
     
     public Object data;
     
-    public int TotalPages = (countingpage / 10) + 1;
+    public int totalpages = (countingpage / 10) + 1;
 
     public ResponseDataPage() {
     }
@@ -44,8 +44,8 @@ public class ResponseDataPage {
         return countingpage;
     }
 
-    public void setCountingpage(int countingpage) {
-        this.countingpage = countingpage;
+    public void setCountingpage(int CountingPage) {
+        this.countingpage = CountingPage;
     }
 
     public Boolean getFlag() {
@@ -65,11 +65,11 @@ public class ResponseDataPage {
     }
 
     public int getTotalPages() {
-        return TotalPages;
+        return totalpages;
     }
 
-    public void setTotalPages(int TotalPages) {
-        this.TotalPages = TotalPages;
+    public void setTotalPages(int totalpages) {
+        this.totalpages = totalpages;
     }
     
     

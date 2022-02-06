@@ -9,6 +9,7 @@ import com.jitgad.bjitgad.Controller.FileController;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.Utilities.UFile;
+import com.jitgad.bjitgad.Utilities.UniqueName;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -24,9 +25,12 @@ public class testeosmain {
     public static void main(String[] args) throws UnsupportedEncodingException, IOException {
         ConectionPoolDataSource.getConnection().testConection();
         
-        String ruta = "G:/Mi unidad/2021/Universidad/Vinculación/JIT_VINCULACION/jitvinculaciongadactual/jitvinculaciongadactual/bjitgad/target/bjitgad-1.0.0/";
-        String[] r = ruta.split("bjitgad/");
-        System.out.println(r[0]);
+//        String ruta = "G:/Mi unidad/2021/Universidad/Vinculación/JIT_VINCULACION/jitvinculaciongadactual/jitvinculaciongadactual/bjitgad/target/bjitgad-1.0.0/";
+//        String[] r = ruta.split("bjitgad/");
+//        System.out.println(r[0]);
+
+        UniqueName un = new UniqueName();
+        System.out.println(un.nunique());
         
 //       String ruta = "C:/Users/jorge/Downloads/WhatsApp Video 2022-01-23 at 14.22.50.mp4";
 //       UFile uf = new UFile();

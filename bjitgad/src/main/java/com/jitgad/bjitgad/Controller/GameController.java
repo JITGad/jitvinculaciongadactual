@@ -6,6 +6,7 @@ import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GameModel;
 import com.jitgad.bjitgad.Models.GameimageModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -45,21 +46,15 @@ public class GameController {
         return gD.selectgamesbyactivities(activityid);
     }
 
-    public ResponseData InsertGameC(GameModel request) throws SQLException {
+    public ResponseData InsertGameC(GameModel request, 
+            String realpath) throws SQLException, Exception, IOException {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
         request.setCreationdate("NOW()");
         request.setUpdatedate("NOW()");
 
-        if (gD.insertGame(request)) {
-
-            int id = Integer.parseInt(giD.last_id());
-            // System.out.println(id);
-            for (GameimageModel object : request.getDetalles()) {
-                object.setIdgame(id);
-                responseData = giC.InsertGameimageC(object);
-            }
+        if (gD.insertGame(request, realpath)) {
 
             responseData.setMessage("Registros insertados correctamente");
             responseData.setFlag(true);
@@ -69,18 +64,15 @@ public class GameController {
         return responseData;
     }
 
-    public ResponseData UpdateGameC(GameModel request) throws SQLException {
-
+    public ResponseData UpdateGameC(GameModel request, 
+            String realpath) throws SQLException, Exception, IOException  {
+        System.out.println("");
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
         request.setUpdatedate("NOW()");
 
-        if (gD.updateGame(request)) {
-
-            for (GameimageModel object : request.getDetalles()) {
-                responseData = giC.UpdateGameimageC(object);
-            }
-
+        if (gD.updateGame(request,realpath)) {
+            
             responseData.setMessage("Registros actualizados correctamente");
             responseData.setFlag(true);
 
@@ -96,7 +88,7 @@ public class GameController {
 
         if (gD.deleteGame(request)) {
 
-            giC.DeleteGameimageC(request);
+           // giC.DeleteGameimageC(request);
 
             responseData.setMessage("Registro eliminado correctamente");
             responseData.setFlag(true);

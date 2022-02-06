@@ -248,6 +248,24 @@ public class ConectionPool implements IConnectionPool {
         }
         return datos;
     }
+    
+    public <T> ArrayList<T> getObjectDBCon(String sql, Class<T> obj, int structure, Connection conex) throws SQLException {
+        ArrayList<T> datos = new ArrayList();
+        
+        try {
+           // conex = getConnection();
+            try (Statement stm = conex.createStatement()) {
+                try (ResultSet rs = stm.executeQuery(sql)) {
+                    //ArrayList<Users> putResult = ResultSetPropertiesSimplifyHelps.putResult(rs, Users.class);
+                    datos = ReflectToClass.putResult(rs, obj, structure);
+                }
+            }
+        } catch (SQLException e) {
+           // System.out.println(e.getMessage());
+            throw e;
+        } 
+        return datos;
+    }
 
     @Override
     public void shutdown() throws SQLException {
