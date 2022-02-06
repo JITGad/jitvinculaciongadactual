@@ -6,6 +6,9 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,7 +27,12 @@ public class Questionsresource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getQuestions() {
         //TODO return proper representation object
-        String responseJson = questionsDAO.selectQuestions();
+        String responseJson = "";
+        try {
+            responseJson = questionsDAO.selectQuestions();
+        } catch (SQLException ex) {
+            Logger.getLogger(Questionsresource.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return Response.ok(responseJson)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
