@@ -19,23 +19,23 @@ public class ColortypeController {
         ctypDAO = new ColortypeDAO();
     }
 
-    public ArrayList<ColortypeModel> selectColortypepage(int page) {
+    public ArrayList<ColortypeModel> selectColortypepage(int page) throws Exception {
         return ctypDAO.selectColortypepage(page);
     }
 
-    public int CountingPageColortype() {
+    public int CountingPageColortype() throws Exception {
         return ctypDAO.CountingPageColortype();
     }
 
-    public String selectColortypebyid(int id) {
+    public String selectColortypebyid(int id) throws Exception {
         return ctypDAO.selectColortypebyid(id);
     }
     
-    public ArrayList<ClaveValorColorModel> selectColortypecv(){
+    public ArrayList<ClaveValorColorModel> selectColortypecv() throws Exception{
         return ctypDAO.selectColortypecv();
     }
 
-    public ResponseData InsertColortype(ColortypeModel colortypeModel) throws SQLException {
+    public ResponseData InsertColortype(ColortypeModel colortypeModel) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
@@ -51,7 +51,7 @@ public class ColortypeController {
         return responseData;
     }
 
-    public ResponseData UpdateColortype(ColortypeModel colortypeModel) throws SQLException {
+    public ResponseData UpdateColortype(ColortypeModel colortypeModel) throws Exception {
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
         colortypeModel.setUpdatedate("NOW()");
@@ -65,7 +65,7 @@ public class ColortypeController {
         return responseData;
     }
 
-    public ResponseData DeleteColortype(ColortypeModel colortypeModel) throws SQLException {
+    public ResponseData DeleteColortype(ColortypeModel colortypeModel) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 

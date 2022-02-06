@@ -27,7 +27,7 @@ public class GameimageDAO {
     }
     
 
-    public ArrayList<GameimageModel> selectGameimageid() {
+    public ArrayList<GameimageModel> selectGameimageid() throws Exception {
         sentence  = "select idgameimage from tblgameimage";
         ArrayList<GameimageModel> datos = con.getObjectDB(sentence, GameimageModel.class, 1);
         return datos;
@@ -39,7 +39,7 @@ public class GameimageDAO {
         return id;
     }
 
-    public boolean insertGameimage(GameimageModel giM) throws SQLException {
+    public boolean insertGameimage(GameimageModel giM) throws Exception {
         String structure = String.format(
                 "<gameimage>"
                 + "<idgame>" + giM.getIdgame() + "</idgame>"
@@ -58,7 +58,7 @@ public class GameimageDAO {
         return con.modifyBD(sentency);
     }
     
-    public String insertGameimagef(GameimageModel giM) throws SQLException {
+    public String insertGameimagef(GameimageModel giM) throws Exception {
         String structure = String.format(
                 "<gameimage>"
                 + "<idgame>" + giM.getIdgame() + "</idgame>"
@@ -77,7 +77,7 @@ public class GameimageDAO {
         return sentency;
     }
 
-    public String updateGameimagef(GameimageModel giM) throws SQLException {
+    public String updateGameimagef(GameimageModel giM) throws Exception {
         System.out.println("");
         String structure = String.format(
                 "<gameimage>"
@@ -97,7 +97,7 @@ public class GameimageDAO {
         return sentency;
     }
 
-    public String deleteGameimagef(GameimageModel gM) throws SQLException {
+    public String deleteGameimagef(GameimageModel gM) throws Exception {
         String structure = String.format(
                 "<gameimage>"
                 + "<idgameimage>" + gM.getIdgameimage() + "</idgameimage>"

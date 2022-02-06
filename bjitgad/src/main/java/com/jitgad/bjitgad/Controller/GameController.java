@@ -25,29 +25,29 @@ public class GameController {
         giC = new GameimageController();
         giD = new GameimageDAO();
     }
-
-    public ArrayList<GameModel> selectGame() {
+ 
+    public ArrayList<GameModel> selectGame() throws Exception {
         return gD.selectGame();
     }
 
-    public ArrayList<GameModel> selectGamepage(int page) {
+    public ArrayList<GameModel> selectGamepage(int page) throws Exception {
         return gD.selectGamepage(page);
     }
 
-    public int CountingPageGame() {
+    public int CountingPageGame() throws Exception {
         return gD.CountingPageGame();
     }
 
-    public String selectGamebyid(int gameid) {
+    public String selectGamebyid(int gameid) throws Exception {
         return gD.selectGamebyid(gameid);
     }
 
-    public ArrayList<ClaveValorModel> selectgamesbyactivities(int activityid) {
+    public ArrayList<ClaveValorModel> selectgamesbyactivities(int activityid) throws Exception {
         return gD.selectgamesbyactivities(activityid);
     }
 
     public ResponseData InsertGameC(GameModel request, 
-            String realpath) throws SQLException, Exception, IOException {
+            String realpath) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
@@ -65,7 +65,7 @@ public class GameController {
     }
 
     public ResponseData UpdateGameC(GameModel request, 
-            String realpath) throws SQLException, Exception, IOException  {
+            String realpath) throws Exception  {
         System.out.println("");
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
@@ -82,7 +82,7 @@ public class GameController {
         return responseData;
     }
 
-    public ResponseData DeleteGameC(GameModel request) throws SQLException {
+    public ResponseData DeleteGameC(GameModel request) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 

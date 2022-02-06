@@ -16,7 +16,7 @@ public class AuthorizationController {
         uc = new UserController();
     }
     
-    public ResponseValidateToken VToken(String Authorization){
+    public ResponseValidateToken VToken(String Authorization) throws Exception{
         String[] clains = Methods.getDataToJwt(Authorization.split(" ")[1]);
         return uc.ValidateToken(clains[0], clains[1], clains[2]);
     }

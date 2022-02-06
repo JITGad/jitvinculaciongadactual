@@ -23,7 +23,7 @@ public class DetailsimageController {
     }
 
     public Object[] InsertDetailsimageC(String idgameimage, String clipping_type_,
-            String image, String creationdate, String updatedate, String state) throws SQLException {
+            String image, String creationdate, String updatedate, String state) throws Exception {
         String message = "The Details image type was not inserted";
         boolean status = false;
         dim.setIdgameimage(idgameimage);

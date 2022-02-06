@@ -24,7 +24,7 @@ public class DetailsimageDAO {
         return json;
     }
 
-    public boolean insertDetailsimage(DetailsimageModel detailsimageModel) throws SQLException {
+    public boolean insertDetailsimage(DetailsimageModel detailsimageModel) throws Exception{
         String structure = String.format(
                 "<detailsimag>"
                 + "<idgameimage>" + detailsimageModel.getIdgameimage() + "</idgameimage>"

@@ -29,7 +29,7 @@ public class Gameimageresource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getGameimage() {
+    public Response getGameimage() throws Exception {
         String responseJson = giC.selectGameimage();
         return Response.ok(responseJson)
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")

@@ -22,7 +22,7 @@ public class UserDAO {
         con = ConectionPoolDataSource.getConnection();
     }
 
-    public ArrayList<UserModel> selectUserspage(int page) {
+    public ArrayList<UserModel> selectUserspage(int page) throws Exception {
         sentence = "select iduser,names,last_name, email,image, birthdate, rol, creationdate, updatedate, state from tbluser order by iduser asc limit 10 offset " + (page * 10 - 10);
         ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
 //        for (int i = 0; i < datos.size(); i++) {
@@ -31,7 +31,7 @@ public class UserDAO {
         return datos;
     }
 
-    public String selectUsersbyid(int id) {
+    public String selectUsersbyid(int id) throws Exception {
         sentence = "select iduser,names,last_name, email,image, birthdate, rol, state from tbluser where iduser =" + id;
         ArrayList<UserModel> datos = con.getObjectDB(sentence, UserModel.class, 1);
 //        for (int i = 0; i < datos.size(); i++) {
@@ -44,7 +44,7 @@ public class UserDAO {
         }
     }
 
-    public int CountingPageUsers() {
+    public int CountingPageUsers() throws Exception {
         sentence = String.format("select * from tbluser");
         return ((con.returnRecord(sentence)).getRowCount());
     }
@@ -142,7 +142,7 @@ public class UserDAO {
         return con.modifyBD(sentency);
     }
 
-    public UserModel getUserEmail(String email) {
+    public UserModel getUserEmail(String email) throws Exception {
         ArrayList<UserModel> datos = con.getObjectDB("select * from tbluser where email='" + email + "'", UserModel.class, 1);
         if (datos.size() > 0) {
             return datos.get(0);

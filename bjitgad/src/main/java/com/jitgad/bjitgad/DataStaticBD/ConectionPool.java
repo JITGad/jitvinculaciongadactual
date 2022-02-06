@@ -152,7 +152,7 @@ public class ConectionPool implements IConnectionPool {
             try (Statement st = conex.createStatement()) {
                 try (ResultSet result = st.executeQuery(sentecy)) {
                     while (result.next()) {
-                        a = result.getString(1);
+                        a = result.getString(1) + 1;
                     }
                     int numer;
                     try {
@@ -231,7 +231,7 @@ public class ConectionPool implements IConnectionPool {
      * @param structure 0 = kamelycasestructure, 1 dabaseestructure
      * @return ArrayList object
      */
-    public <T> ArrayList<T> getObjectDB(String sql, Class<T> obj, int structure) {
+    public <T> ArrayList<T> getObjectDB(String sql, Class<T> obj, int structure) throws Exception {
         ArrayList<T> datos = new ArrayList();
         try {
             conex = getConnection();
@@ -249,7 +249,7 @@ public class ConectionPool implements IConnectionPool {
         return datos;
     }
     
-    public <T> ArrayList<T> getObjectDBCon(String sql, Class<T> obj, int structure, Connection conex) throws SQLException {
+    public <T> ArrayList<T> getObjectDBCon(String sql, Class<T> obj, int structure, Connection conex) throws Exception {
         ArrayList<T> datos = new ArrayList();
         
         try {

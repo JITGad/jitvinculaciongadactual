@@ -28,15 +28,15 @@ public class GameimageController {
         un = new UniqueName();
     }
 
-    public String selectGameimage() {
+    public String selectGameimage() throws Exception {
         return giD.selectGameimage();
     }
     
-    public ArrayList<GameimageModel> selectGameimageid(){
+    public ArrayList<GameimageModel> selectGameimageid() throws Exception{
         return giD.selectGameimageid();
     }
     
-    public String last_id(){
+    public String last_id() throws Exception{
         return giD.last_id();
     }
 
@@ -110,7 +110,9 @@ public class GameimageController {
             request.setAudio_parag(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
         }
         
-
+        request.setCreationdate("NOW()");
+        request.setUpdatedate("NOW()");
+        
         return giD.insertGameimagef(request);
     }
 
@@ -145,7 +147,7 @@ public class GameimageController {
         return giD.updateGameimagef(request);
     }
 
-    public String DeleteGameimageC(GameimageModel request) throws SQLException {
+    public String DeleteGameimageC(GameimageModel request) throws Exception {
         return giD.deleteGameimagef(request);
     }
 

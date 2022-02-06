@@ -21,13 +21,13 @@ public class ColortypeDAO {
         con = ConectionPoolDataSource.getConnection();
     }
     
-    public ArrayList<ColortypeModel> selectColortypepage(int page) {
+    public ArrayList<ColortypeModel> selectColortypepage(int page) throws Exception {
         sentence = "select * from tblcolortype order by idcolortype asc limit 10 offset " + (page * 10 - 10);
         ArrayList<ColortypeModel> datos = con.getObjectDB(sentence, ColortypeModel.class, 1);
         return datos;
     }
     
-    public ArrayList<ClaveValorColorModel> selectColortypecv() {
+    public ArrayList<ClaveValorColorModel> selectColortypecv() throws Exception {
         sentence = "select idcolortype as id, name as text, html as value from tblcolortype order by idcolortype";
         ArrayList<ClaveValorColorModel> datos = con.getObjectDB(sentence, ClaveValorColorModel.class, 1);
         
@@ -39,7 +39,7 @@ public class ColortypeDAO {
         return ((con.returnRecord(sentence)).getRowCount());
     }
 
-    public String selectColortypebyid(int idcolortype) {
+    public String selectColortypebyid(int idcolortype) throws Exception {
         sentence = "select * from tblcolortype where idcolortype =" + idcolortype;
         ArrayList<ColortypeModel> datos = con.getObjectDB(sentence, ColortypeModel.class, 1);
         if (datos.size() > 0) {
@@ -49,7 +49,7 @@ public class ColortypeDAO {
         }
     }
 
-    public boolean insertColortype(ColortypeModel colortypeModel) throws SQLException {
+    public boolean insertColortype(ColortypeModel colortypeModel) throws Exception {
         String structure = String.format(
                 "<colortype>"
                 + "<name>" + colortypeModel.getName()+ "</name>"
@@ -63,7 +63,7 @@ public class ColortypeDAO {
         return con.modifyBD(sentency);
     }
     
-    public boolean updatecolortype(ColortypeModel colortypeModel) throws SQLException {
+    public boolean updatecolortype(ColortypeModel colortypeModel) throws Exception {
         String structure = String.format(
                 "<colortype>"
                 + "<idcolortype>" + colortypeModel.getIdcolortype()+ "</idcolortype>"        
@@ -78,7 +78,7 @@ public class ColortypeDAO {
         return con.modifyBD(sentency);
     }
     
-    public boolean deletecolortype(ColortypeModel colortypeModel) throws SQLException {
+    public boolean deletecolortype(ColortypeModel colortypeModel) throws Exception {
         String structure = String.format(
                 "<colortype>"
                 + "<idcolortype>" + colortypeModel.getIdcolortype()+ "</idcolortype>"        

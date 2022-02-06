@@ -50,7 +50,7 @@ public class ActivitiestypeController {
     }
 
     public ResponseData UpdateActivitiesTypeC(ActivitiestypeModel request,
-            String realpath) throws IOException, SQLException {
+            String realpath) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
@@ -88,23 +88,23 @@ public class ActivitiestypeController {
         return responseData;
     }
 
-    public ArrayList<ActivitiestypeModel> selectActivitiestype() {
+    public ArrayList<ActivitiestypeModel> selectActivitiestype() throws Exception {
         return atDAO.selectActivitiestype();
     }
 
-    public ArrayList<ActivitiestypeModel> selectActivitiestypepage(int page) {
+    public ArrayList<ActivitiestypeModel> selectActivitiestypepage(int page) throws Exception {
         return atDAO.selectActivitiestypepage(page);
     }
 
-    public int CountingPageActivitiesType() {
+    public int CountingPageActivitiesType() throws Exception {
         return atDAO.CountingPageActivitiestype();
     }
 
-    public String selectactivitiesbyid(int activityid) {
+    public String selectactivitiesbyid(int activityid) throws Exception {
         return atDAO.selectactivitiesbyid(activityid);
     }
 
-    public ArrayList<ClaveValorModel> selectactivitiestypecv() {
+    public ArrayList<ClaveValorModel> selectactivitiestypecv() throws Exception {
 
         return atDAO.selectactivitiestypeclavevalor();
     }

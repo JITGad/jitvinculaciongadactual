@@ -379,7 +379,7 @@ public class Userresource {
             responseData.setMessage("Información no encontrada");
             return Response.ok(Methods.objectToJsonString(responseData)).build();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             responseData.setFlag(false);
 
             if (Configuration.DEBUG) {

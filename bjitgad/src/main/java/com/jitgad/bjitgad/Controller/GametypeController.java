@@ -28,24 +28,24 @@ public class GametypeController {
         fc = new FileController();
     }
 
-    public ArrayList<GametypeModel> selectGametypepage(int page) {
+    public ArrayList<GametypeModel> selectGametypepage(int page) throws Exception{
         return gtD.selectGametypepage(page);
     }
 
-    public int CountingPageGametype() {
+    public int CountingPageGametype() throws Exception {
         return gtD.CountingPageGametype();
     }
 
-    public String selectGametypebyid(int id) {
+    public String selectGametypebyid(int id) throws Exception {
         return gtD.selectGametypebyid(id);
     }
 
-    public ArrayList<ClaveValorGameModel> selectgametypecv() {
+    public ArrayList<ClaveValorGameModel> selectgametypecv() throws Exception {
         return gtD.selectgametypecv();
     }
 
     public ResponseData InsertGametypeC(GametypeModel request,
-            String realpath) throws SQLException, UnsupportedEncodingException, Exception {
+            String realpath) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
@@ -92,7 +92,7 @@ public class GametypeController {
     }
 
     public ResponseData UpdateGametypeC(GametypeModel request,
-            String realpath) throws SQLException, UnsupportedEncodingException, Exception {
+            String realpath) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
@@ -133,7 +133,7 @@ public class GametypeController {
         return responseData;
     }
 
-    public ResponseData DeleteGametypeC(GametypeModel request) throws SQLException {
+    public ResponseData DeleteGametypeC(GametypeModel request) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 

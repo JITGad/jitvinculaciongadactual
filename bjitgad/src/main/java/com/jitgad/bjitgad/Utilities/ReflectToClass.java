@@ -31,7 +31,7 @@ public class ReflectToClass {
      * @param estructure KAMELYCASESTRUCTURE|DATABASEESTRUCTURE
      * @return
      */
-    public static <T> ArrayList<T> putResult(ResultSet rs, Class<T> obj, int estructure) {
+    public static <T> ArrayList<T> putResult(ResultSet rs, Class<T> obj, int estructure) throws Exception {
         try {
             ArrayList<T> arrayList = new ArrayList<>();
             ResultSetMetaData metaData = rs.getMetaData();
@@ -98,9 +98,8 @@ public class ReflectToClass {
                 | InvocationTargetException e) {
             // TODO Auto-generated catch block
             System.out.println("Reflect error: " + e);
+            throw e;
         }
-
-        return null;
     }
 
     /**

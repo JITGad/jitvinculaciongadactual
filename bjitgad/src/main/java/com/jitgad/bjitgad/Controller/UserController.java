@@ -47,7 +47,7 @@ public class UserController {
      * @param request It is a String variable, this variable will contain the
      * user's mail
      */
-    public ResponseData LogIn(UserRequestModel request) {
+    public ResponseData LogIn(UserRequestModel request)  throws Exception{
         UserModel userDB = udao.getUserEmail(request.getEmail());
         ResponseData responseData = new ResponseData("Usuario no encontrado", false);
         if (userDB != null) {
@@ -62,7 +62,7 @@ public class UserController {
     }
 
     public ResponseData UserRegistration(UserModel request,
-            String realpath) throws SQLException, UnsupportedEncodingException, Exception {
+            String realpath) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
@@ -93,7 +93,7 @@ public class UserController {
     }
 
     public ResponseData PutUser(UserModel request,
-            String realpath) throws SQLException, UnsupportedEncodingException, Exception {
+            String realpath) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
         boolean passband = false;
@@ -126,7 +126,7 @@ public class UserController {
         return responseData;
     }
 
-    public ResponseData DeleteUser(UserModel request) throws SQLException {
+    public ResponseData DeleteUser(UserModel request) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
@@ -140,7 +140,7 @@ public class UserController {
         return responseData;
     }
 
-    public ResponseValidateToken ValidateToken(String user_id, String email, String rol) {
+    public ResponseValidateToken ValidateToken(String user_id, String email, String rol) throws Exception {
         ResponseValidateToken response = new ResponseValidateToken("Correo invalido", false, rol);
         if (!user_id.equals("")) {
             if (!udao.validatetoken(user_id, email)) {
@@ -153,23 +153,24 @@ public class UserController {
         return response;
     }
 
-    public String encriptPassword(String pwd) {
+    public String encriptPassword(String pwd) throws Exception {
         return DigestUtils.sha256Hex(pwd);
     }
 
-    public ArrayList<UserModel> selectUserspage(int page) {
+    public ArrayList<UserModel> selectUserspage(int page) throws Exception {
         return udao.selectUserspage(page);
     }
 
-    public String selectUsersbyid(int id) {
+    public String selectUsersbyid(int id) throws Exception {
         return udao.selectUsersbyid(id);
     }
 
-    public int CountingPageUsers() {
+    public int CountingPageUsers() throws Exception {
         return udao.CountingPageUsers();
     }
 
-    public UserTokenRModel BuildToken(UserTokenRModel userTokenRModel, UserRequestModel userRequest) {
+    public UserTokenRModel BuildToken(UserTokenRModel userTokenRModel, 
+            UserRequestModel userRequest) throws Exception {
         String key = Configuration.dbprivatekey;
         long tiempo = System.currentTimeMillis();
         long tiempoext;

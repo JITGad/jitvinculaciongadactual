@@ -21,19 +21,19 @@ public class GametypeDAO {
         con = ConectionPoolDataSource.getConnection();
     }
 
-    public ArrayList<GametypeModel> selectGametypepage(int page) {
+    public ArrayList<GametypeModel> selectGametypepage(int page) throws Exception {
         sentence = "select * from tblgametype order by idgametype asc limit 10 offset " + (page * 10 - 10);
         ArrayList<GametypeModel> datos = con.getObjectDB(sentence, GametypeModel.class, 1);
         return datos;
     }
     
-    public ArrayList<ClaveValorGameModel> selectgametypecv() {
+    public ArrayList<ClaveValorGameModel> selectgametypecv() throws Exception {
         sentence = "select idgametype as id, name as text, shortname as value from tblgametype order by idgametype";
         ArrayList<ClaveValorGameModel> datos = con.getObjectDB(sentence, ClaveValorGameModel.class, 1);
         return datos;
     }
 
-    public String selectGametypebyid(int id) {
+    public String selectGametypebyid(int id) throws Exception{
         sentence = "select * from tblgametype where idgametype=" + id;
         ArrayList<GametypeModel> datos = con.getObjectDB(sentence, GametypeModel.class, 1);
         if (datos.size() > 0) {
@@ -48,7 +48,7 @@ public class GametypeDAO {
         return ((con.returnRecord(sentence)).getRowCount());
     }
 
-    public boolean insertGametype(GametypeModel gametypeModel) throws SQLException {
+    public boolean insertGametype(GametypeModel gametypeModel) throws Exception {
         String structure = String.format(
                 "<gametype>"
                 + "<name>" + gametypeModel.getName() + "</name>"
@@ -66,7 +66,7 @@ public class GametypeDAO {
         return con.modifyBD(sentency);
     }
 
-    public boolean updateGametype(GametypeModel gametypeModel) throws SQLException {
+    public boolean updateGametype(GametypeModel gametypeModel) throws Exception {
         String structure = String.format(
                 "<gametype>"
                 + "<idgametype>" + gametypeModel.getIdgametype()+ "</idgametype>"
@@ -84,7 +84,7 @@ public class GametypeDAO {
         return con.modifyBD(sentency);
     }
 
-    public boolean DeleteGametype(GametypeModel gametypeModel) throws SQLException {
+    public boolean DeleteGametype(GametypeModel gametypeModel) throws Exception {
         String structure = String.format(
                 "<gametype>"
                 + "<idgametype>" + gametypeModel.getIdgametype() + "</idgametype>"

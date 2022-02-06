@@ -29,7 +29,7 @@ public class ActivitiestypeDAO {
         ipreal = new InetAddressUtil();
     }
 
-    public ArrayList<ActivitiestypeModel> selectActivitiestype() {
+    public ArrayList<ActivitiestypeModel> selectActivitiestype() throws Exception {
 
         sentence = "select * from tblactivitiestype where state = true order by idactivitiestype";
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
@@ -41,7 +41,7 @@ public class ActivitiestypeDAO {
     
     
 
-    public ArrayList<ClaveValorModel> selectactivitiestypeclavevalor() {
+    public ArrayList<ClaveValorModel> selectactivitiestypeclavevalor() throws Exception {
 
         sentence = "select idactivitiestype as id, name as name from tblactivitiestype order by idactivitiestype";
         ArrayList<ClaveValorModel> datos = con.getObjectDB(sentence, ClaveValorModel.class, 1);
@@ -50,7 +50,7 @@ public class ActivitiestypeDAO {
     }
     
     
-    public ArrayList<ActivitiestypeModel> selectActivitiestypepage(int page) {
+    public ArrayList<ActivitiestypeModel> selectActivitiestypepage(int page) throws Exception {
         sentence = "select * from tblactivitiestype order by idactivitiestype asc limit 10 offset " + (page * 10 - 10);
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
 //        for (int i = 0; i < datos.size(); i++) {
@@ -64,7 +64,7 @@ public class ActivitiestypeDAO {
         return ((con.returnRecord(sentence)).getRowCount());
     }
 
-    public String selectactivitiesbyid(int idactivity) {
+    public String selectactivitiesbyid(int idactivity) throws Exception {
         sentence = "select * from tblactivitiestype where idactivitiestype =" + idactivity;
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
         for (int i = 0; i < datos.size(); i++) {

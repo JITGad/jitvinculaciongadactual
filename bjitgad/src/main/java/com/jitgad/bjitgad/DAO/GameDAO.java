@@ -34,14 +34,14 @@ public class GameDAO {
         giC = new GameimageController();
     }
 
-    public ArrayList<GameModel> selectGame() {
+    public ArrayList<GameModel> selectGame() throws Exception {
         sentence = "select game.idgame,game.idactivitiestype,actype.name as nameactivities,game.idgametype,game.name,game.creationdate,game.updatedate,game.state,game.level\n"
                 + "from tblgame as game inner join tblactivitiestype as actype on actype.idactivitiestype = game.idactivitiestype";
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
         return datos;
     }
 
-    public ArrayList<GameModel> selectGamepage(int page) {
+    public ArrayList<GameModel> selectGamepage(int page) throws Exception {
         sentence = "select game.idgame,game.idactivitiestype,actype.name as nameactivities,tblgametype.name as namegametype,game.idgametype,game.name,game.creationdate,game.updatedate,game.state,game.level\n"
                 + "from tblgame as game inner join tblactivitiestype as actype on actype.idactivitiestype = game.idactivitiestype \n"
                 + "inner join tblgametype on tblgametype.idgametype = game.idgametype order by game.idgame asc limit 10 offset " + (page * 10 - 10);
@@ -55,7 +55,7 @@ public class GameDAO {
         return datos;
     }
 
-    public String selectGamebyid(int gameid) {
+    public String selectGamebyid(int gameid) throws Exception {
         sentence = "select game.idgame,game.idactivitiestype,actype.name as nameactivities,tblgametype.name as namegametype,game.idgametype,game.name,game.creationdate,game.updatedate,game.state,game.level\n"
                 + "from tblgame as game inner join tblactivitiestype as actype on actype.idactivitiestype = game.idactivitiestype \n"
                 + "inner join tblgametype on tblgametype.idgametype = game.idgametype where game.idgame=" + gameid;
@@ -79,7 +79,7 @@ public class GameDAO {
         return ((con.returnRecord(sentence)).getRowCount());
     }
 
-    public ArrayList<ClaveValorModel> selectgamesbyactivities(int idactivity) {
+    public ArrayList<ClaveValorModel> selectgamesbyactivities(int idactivity) throws Exception {
         sentence = "select tblgame.idgame as id, tblgame.name as name from tblgametype "
                 + "inner join tblgame on tblgame.idgametype = tblgametype.idgametype "
                 + "inner join tblactivitiestype "
@@ -89,6 +89,7 @@ public class GameDAO {
     }
 
     public boolean insertGame(GameModel gameModel, String realpath) throws SQLException, Exception {
+        System.out.println("");
         String structure = String.format(
                 "<game>"
                 + "<idactivitiestype>" + gameModel.getIdactivitiestype() + "</idactivitiestype>"
@@ -107,8 +108,11 @@ public class GameDAO {
             conex.setAutoCommit(false);
 
             try (Statement st = conex.createStatement()) {
-                st.execute(sentency);
-                int id = Integer.parseInt(giC.last_id());
+                
+                ArrayList<GameModel> datagameModel = con.getObjectDBCon(sentency, GameModel.class, 1, conex);
+                
+                int id = datagameModel.get(0).getIdgame();
+                
                 for (GameimageModel object : gameModel.getDetalles()) {
                     object.setIdgame(id);
                     st.execute(giC.InsertGameimageCF(object, realpath));
