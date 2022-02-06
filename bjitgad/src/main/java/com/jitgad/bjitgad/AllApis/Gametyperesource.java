@@ -247,6 +247,55 @@ public class Gametyperesource {
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
     
+     /**
+     * Retrieves representation of an instance of ini.CRUD
+     *
+     * @return an instance of java.lang.String
+     */
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/getgametypewithgames")
+    public Response getgametypewithgames() {
+        
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando getgametypewithgames...");
+        }
+        
+        ResponseData responseData = new ResponseData("Ocurrio un error", true);
+
+        try {
+            
+            ArrayList<GametypeModel> data = gtC.selectGametypewithgames();
+
+            if (data.size() > 0) {
+
+                responseData.setMessage("Información encontrada");
+                responseData.setData(data);
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+            responseData.setMessage("Información no encontrada");
+
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+
+                responseData.setMessage(e.getMessage());
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
+        }
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
+    }
+    
     
     
     @Produces(MediaType.APPLICATION_JSON)

@@ -1,26 +1,29 @@
 package com.jitgad.bjitgad.Models;
 
+import java.util.List;
+
 /**
  *
  * @author jorge
  */
 public class GametypeModel {
-    
+
     private int idgametype = 0;
     private String name = "";
-    private String image= "";
-    private String audio_instructions= "";
-    private String text_instructions= "";
-    private String video_instructions= "";
-    private String shortname= "";
-    private String creationdate= "";
-    private String updatedate= "";
+    private String image = "";
+    private String audio_instructions = "";
+    private String text_instructions = "";
+    private String video_instructions = "";
+    private String shortname = "";
+    private String creationdate = "";
+    private String updatedate = "";
     private boolean state = true;
+    public List<GameModel> detalles;
 
     public GametypeModel() {
     }
 
-    public GametypeModel(int idgametype, String name, String image, String audio_instructions, String text_instructions, String video_instructions, String shortname, String creationdate, String updatedate, boolean state) {
+    public GametypeModel(int idgametype, String name, String image, String audio_instructions, String text_instructions, String video_instructions, String shortname, String creationdate, String updatedate, boolean state, List<GameModel> detalles) {
         this.idgametype = idgametype;
         this.name = name;
         this.image = image;
@@ -31,6 +34,7 @@ public class GametypeModel {
         this.creationdate = creationdate;
         this.updatedate = updatedate;
         this.state = state;
+        this.detalles = detalles;
     }
 
     public int getIdgametype() {
@@ -112,16 +116,15 @@ public class GametypeModel {
     public void setState(boolean state) {
         this.state = state;
     }
+
+    public List<GameModel> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<GameModel> detalles) {
+        this.detalles = detalles;
+    }
     
-    
-    
-          
-   
     
 
-    
-    
-    
-    
-    
-}
+}   

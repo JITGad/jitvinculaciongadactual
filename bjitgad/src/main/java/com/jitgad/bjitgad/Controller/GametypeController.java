@@ -25,6 +25,12 @@ public class GametypeController {
     public ArrayList<GametypeModel> selectGametypepage(int page) throws Exception{
         return gtD.selectGametypepage(page);
     }
+    
+    
+    public ArrayList<GametypeModel> selectGametypewithgames() throws Exception{
+        return gtD.selectGametypewithgames();
+    }        
+            
 
     public int CountingPageGametype() throws Exception {
         return gtD.CountingPageGametype();
