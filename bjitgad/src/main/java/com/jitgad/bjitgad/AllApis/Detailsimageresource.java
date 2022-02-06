@@ -6,6 +6,9 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -30,7 +33,12 @@ public class Detailsimageresource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDetailsimage() {
-        String responseJson = diC.selectDetailsimage();
+        String responseJson = "";
+        try {
+            responseJson = diC.selectDetailsimage();
+        } catch (SQLException ex) {
+            Logger.getLogger(Detailsimageresource.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return Response.ok(responseJson)
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
                 .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with, Access-Control-Allow-Origin")

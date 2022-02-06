@@ -2,14 +2,14 @@
 package com.jitgad.bjitgad.AllApis;
 
 import com.jitgad.bjitgad.DAO.ItemsquestionsDAO;
-import com.jitgad.bjitgad.Models.ItemsquestionsModel;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -33,7 +33,12 @@ public class Itemsquestionsresource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getItemsquestions() {
         //TODO return proper representation object
-        String responseJson = itemsquestionsdao.selectItemsquestions();
+        String responseJson = "";
+        try {
+            responseJson = itemsquestionsdao.selectItemsquestions();
+        } catch (SQLException ex) {
+            Logger.getLogger(Itemsquestionsresource.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return Response.ok(responseJson)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
