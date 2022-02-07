@@ -23,5 +23,5 @@ public class ConectionPoolDataSource {
         return conection;
     }
     
-    private ConectionPoolDataSource(){}
+    public ConectionPoolDataSource(){}
 }

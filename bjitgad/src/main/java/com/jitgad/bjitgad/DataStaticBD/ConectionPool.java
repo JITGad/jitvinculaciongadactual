@@ -290,6 +290,7 @@ public class ConectionPool implements IConnectionPool {
      */
     @Override
     public Connection getConnection() throws SQLException {
+        System.out.println("Conexiones actuales: " + connectionPool.size() + "libres y " + usedConnections.size() + " en uso" );
         if (connectionPool.isEmpty()) {
             if (usedConnections.size() < Configuration.MAX_POOL_SIZE) {
                 connectionPool.add(createConnection(url, user, password));
@@ -323,6 +324,7 @@ public class ConectionPool implements IConnectionPool {
 
     @Override
     public boolean releaseConnection(Connection connection) {
+        System.out.println("Liberando conexion");
         connectionPool.add(connection);
         return usedConnections.remove(connection);
     }
@@ -345,13 +347,14 @@ public class ConectionPool implements IConnectionPool {
     public static ConectionPool create(
             String url, String user,
             String password) throws SQLException, ClassNotFoundException {
-        
+        System.out.println("Creando conexiones");
         Class.forName("org.postgresql.Driver");
         
         List<Connection> pool = new ArrayList<>(Configuration.INITIAL_POOL_SIZE);
         for (int i = 0; i < Configuration.INITIAL_POOL_SIZE; i++) {
             pool.add(createConnection(url, user, password));
         }
+        System.out.println("Conexiones creadas" + pool.size());
         return new ConectionPool(url, user, password, pool);
     }
 

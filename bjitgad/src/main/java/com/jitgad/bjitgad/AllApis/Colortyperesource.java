@@ -22,7 +22,6 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -45,20 +44,15 @@ public class Colortyperesource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getcolortypeAdmin")
     public Response getColortypeAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
-
-        if (Configuration.DEBUG) {
-            System.out.println("Ingresando getcolortypeAdmin...");
-        }
         ResponseDataPage responseDataPage = new ResponseDataPage("Ocurrió un error", page, true);
-
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando a getcolortypeAdmin");
+        }
         try {
             int responseCountingPage = 0;
             //TOKENS
             String Authorization = headers.getHeaderString("Authorization");
             Authorization = Authorization == null ? "" : Authorization;
-            if (Configuration.DEBUG) {
-                System.out.println("Authorization: " + Authorization);
-            }
 
             if (!Authorization.isEmpty()) {
                 ArrayList<ColortypeModel> data = ctypeC.selectColortypepage(page);
@@ -110,20 +104,15 @@ public class Colortyperesource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getcolortypebyid")
     public Response getColortypebyid(@Context HttpHeaders headers, @QueryParam("idcolortype") int idcolortype) {
-
-        if (Configuration.DEBUG) {
-            System.out.println("Ingresando getactivitiesbyid...");
-        }
         ResponseData responseData = new ResponseData("Ocurrio un error", true);
-
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando a getcolortypebyid " + idcolortype);
+        }
         try {
 
             //TOKENS
             String Authorization = headers.getHeaderString("Authorization");
             Authorization = Authorization == null ? "" : Authorization;
-            if (Configuration.DEBUG) {
-                System.out.println("Authorization: " + Authorization);
-            }
 
             if (!Authorization.isEmpty()) {
                 ResponseValidateToken validateToken = AuC.VToken(Authorization);
@@ -169,15 +158,11 @@ public class Colortyperesource {
         }
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getcolortypecv")
     public Response getcolortypecv(@Context HttpHeaders headers) {
-
-        if (Configuration.DEBUG) {
-            System.out.println("Ingresando getcolortypecv...");
-        }
         ResponseData responseData = new ResponseData("Ocurrio un error", true);
 
         try {
@@ -185,9 +170,6 @@ public class Colortyperesource {
             //TOKENS
             String Authorization = headers.getHeaderString("Authorization");
             Authorization = Authorization == null ? "" : Authorization;
-            if (Configuration.DEBUG) {
-                System.out.println("Authorization: " + Authorization);
-            }
 
             if (!Authorization.isEmpty()) {
                 ResponseValidateToken validateToken = AuC.VToken(Authorization);
@@ -239,11 +221,6 @@ public class Colortyperesource {
     @Path("/postColortype")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response PostColortype(@Context HttpHeaders headers, String data) {
-
-        if (Configuration.DEBUG) {
-            System.out.println("Ingresando postColortype...");
-        }
-
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
         colortypeModel
@@ -258,9 +235,6 @@ public class Colortyperesource {
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
 
-                if (Configuration.DEBUG) {
-                    System.out.println("Authorization: " + Authorization);
-                }
                 if (!Authorization.isEmpty()) {
 
                     ResponseValidateToken validateToken = AuC.VToken(Authorization);
@@ -301,11 +275,6 @@ public class Colortyperesource {
     @PUT
     @Path("/putColortype")
     public Response PutColortype(@Context HttpHeaders headers, String data) {
-
-        if (Configuration.DEBUG) {
-            System.out.println("Ingresando putColortype...");
-        }
-
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
         colortypeModel
@@ -320,9 +289,6 @@ public class Colortyperesource {
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
 
-                if (Configuration.DEBUG) {
-                    System.out.println("Authorization: " + Authorization);
-                }
                 if (!Authorization.isEmpty()) {
 
                     ResponseValidateToken validateToken = AuC.VToken(Authorization);
@@ -363,11 +329,6 @@ public class Colortyperesource {
     @DELETE
     @Path("/deleteColortype")
     public Response DeleteActivitiesType(@Context HttpHeaders headers, String data) {
-
-        if (Configuration.DEBUG) {
-            System.out.println("Ingresando deleteColortype...");
-        }
-
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
         colortypeModel
@@ -382,9 +343,6 @@ public class Colortyperesource {
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
 
-                if (Configuration.DEBUG) {
-                    System.out.println("Authorization: " + Authorization);
-                }
                 if (!Authorization.isEmpty()) {
 
                     ResponseValidateToken validateToken = AuC.VToken(Authorization);

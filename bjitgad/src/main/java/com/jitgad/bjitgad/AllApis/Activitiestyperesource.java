@@ -93,10 +93,6 @@ public class Activitiestyperesource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getActivitiestypeAdmin")
     public Response getActivitiestypeAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
-
-        if (Configuration.DEBUG) {
-            System.out.println("Ingresando getActivitiestypeAdmin...");
-        }
         ResponseDataPage responseDataPage = new ResponseDataPage("Ocurrió un error", page, true);
 
         try {
@@ -162,10 +158,6 @@ public class Activitiestyperesource {
     @Path("/getactivitiesbyid")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getactivitiesbyid(@Context HttpHeaders headers, @QueryParam("activityid") int activityid) {
-
-        if (Configuration.DEBUG) {
-            System.out.println("Ingresando getactivitiesbyid...");
-        }
         ResponseData responseData = new ResponseData("Ocurrio un error", true);
 
         try {
@@ -224,10 +216,6 @@ public class Activitiestyperesource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getactivitiestypecv")
     public Response getactivitiestypecv(@Context HttpHeaders headers) {
-
-        if (Configuration.DEBUG) {
-            System.out.println("Ingresando getactivitiestypecv...");
-        }
         ResponseData responseData = new ResponseData("Ocurrio un error", true);
 
         try {
@@ -235,9 +223,6 @@ public class Activitiestyperesource {
             //TOKENS
             String Authorization = headers.getHeaderString("Authorization");
             Authorization = Authorization == null ? "" : Authorization;
-            if (Configuration.DEBUG) {
-                System.out.println("Authorization: " + Authorization);
-            }
 
             if (!Authorization.isEmpty()) {
                 ResponseValidateToken validateToken = AuC.VToken(Authorization);
@@ -293,10 +278,6 @@ public class Activitiestyperesource {
     @Path("/postActivitiesType")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response PostActivitiesType(@Context HttpHeaders headers, String data) {
-
-        if (Configuration.DEBUG) {
-            System.out.println("Ingresando PostActivitiesType...");
-        }
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
         activitiestypeModel
@@ -350,11 +331,6 @@ public class Activitiestyperesource {
     @PUT
     @Path("/PutActivitiesType")
     public Response PutActivitiesType(@Context HttpHeaders headers, String data) {
-
-        if (Configuration.DEBUG) {
-            System.out.println("Ingresando PutActivitiesType...");
-        }
-
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
         activitiestypeModel
@@ -409,10 +385,6 @@ public class Activitiestyperesource {
     @DELETE
     @Path("/DeleteActivitiesType")
     public Response DeleteActivitiesType(@Context HttpHeaders headers, String data) {
-
-        if (Configuration.DEBUG) {
-            System.out.println("Ingresando DeleteActivitiesType...");
-        }
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
         activitiestypeModel
