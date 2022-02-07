@@ -15,6 +15,7 @@
         :text="option.text"
         :actual="selected"
         :key="index"
+        @mounted="MountedChilds"
       />
     </select>
     <div v-if="labelshow" v-show="error.state" class="validation-message">
@@ -34,6 +35,7 @@ import {
   onBeforeUnmount,
   ref,
   reactive,
+  nextTick,
 } from "vue";
 export default {
   name: "MySelectColor",
@@ -121,15 +123,22 @@ export default {
       return !error.state;
     };
 
-    onMounted(function () {
+    onMounted(async function () {
       form.bind({ validate, uid: instance.uid });
       $(Model.value).selectmenucolor({
-        width: "100%",
-        select: function (event, ui) {
-          selected.value = ui.item.value;
-        },
-      });
+          width: "100%",
+          select: function (event, ui) {
+            selected.value = ui.item.value;
+          },
+        });
+        console.log(instance);
     });
+
+    function MountedChilds() {
+      if($(Model.value).selectmenucolor("instance")){
+        $(Model.value).selectmenucolor("refresh");
+      }
+    }
 
     onBeforeUnmount(() => {
       form.unbind(instance.uid);
@@ -147,6 +156,7 @@ export default {
       blurEventHandler,
       error,
       Model,
+      MountedChilds,
     };
   },
 };

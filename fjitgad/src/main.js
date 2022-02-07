@@ -11,8 +11,8 @@ import '@fortawesome/fontawesome-free/js/all.js';
 
 import "jquery";
 import "jquery-confirm";
-import 'jquery-ui-dist/jquery-ui'
-import 'jquery-ui-dist/jquery-ui.min.css'
+import 'jquery-ui-dist/jquery-ui';
+import 'jquery-ui-dist/jquery-ui.min.css';
 import "jquery-confirm/dist/jquery-confirm.min.css";
 import "./util/ExtendJquery.js";
 

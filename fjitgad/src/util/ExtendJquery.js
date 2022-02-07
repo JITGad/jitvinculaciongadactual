@@ -4,7 +4,6 @@ $.widget("ui.selectmenucolor", $.ui.selectmenu, {
         var buttonItem = $("<span>", {
             "class": "ui-selectmenu-text"
         });
-
         var inputcolor = $('<div>', {
             "class": "form-control form-control-color",
             "disabled": true

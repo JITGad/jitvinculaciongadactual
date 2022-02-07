@@ -1,6 +1,6 @@
 <template>
   <div :class="classContainer">
-    <label class="form-label" v-show="type != 'checkbox'">{{ label }}</label>
+    <label class="form-label" v-show="type != 'checkbox' && labelshow">{{ label }}</label>
     <textarea
       v-model="model"
       v-if="multiple"
@@ -19,11 +19,11 @@
       :disabled="disabled"
       @blur="blurEventHandler($event)"
     />
-    <label class="form-check-label" v-if="type == 'checkbox'">{{
+    <label class="form-check-label" v-if="type == 'checkbox' && labelshow">{{
       label
     }}</label>
     <div v-show="help.length > 0" class="form-text">{{ help }}</div>
-    <div v-show="error.state" class="validation-message">
+    <div v-show="error.state && labelshow" class="validation-message">
       {{ error.message }}
     </div>
   </div>
@@ -62,7 +62,10 @@ export default {
     label: {
       type: String,
       default: "",
-      required: true,
+    },
+    labelshow: {
+      type: Boolean,
+      default: true,
     },
     help: {
       type: String,

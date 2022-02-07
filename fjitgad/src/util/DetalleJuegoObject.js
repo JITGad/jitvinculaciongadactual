@@ -7,7 +7,7 @@ export default class DetalleJuegoObject {
     paragraph = "";
     audio_parag = "";
     video_parag = "";
-    state = true
+    state = true;
 
     constructor(_colorid = 0, _imagen = "", _paragraph = "", _audio_parag = "", _video_parag = "") {
         this.idcolortype = _colorid;
@@ -21,7 +21,15 @@ export default class DetalleJuegoObject {
         return new DetalleJuegoObject(_colorid, _imagen, undefined,undefined,undefined);
     }
 
-    static Cuento(_paragraph, _audio_parag, _video_parag){
-        return new DetalleJuegoObject(undefined,undefined,_paragraph, _audio_parag, _video_parag);
+    static Rompecabezas(_imagen){
+        return new DetalleJuegoObject(undefined, _imagen, undefined,undefined,undefined);
+    }
+
+    static Memoria(_imagen){
+        return new DetalleJuegoObject(undefined, _imagen, undefined,undefined,undefined);
+    }
+    
+    static Cuento(_imagen, _paragraph, _audio_parag, _video_parag){
+        return new DetalleJuegoObject(undefined,_imagen,_paragraph, _audio_parag, _video_parag);
     }
 }

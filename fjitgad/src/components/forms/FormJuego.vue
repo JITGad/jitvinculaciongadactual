@@ -35,9 +35,9 @@
 
     <div class="mb-3">
       <label class="form-label">Detalle de juego</label>
-      <detalle-emparejar
+      <detalle-juego
         :list="model.detalles"
-        v-if="TipoJuegoSelected == 'emparejar'"
+        :type="TipoJuegoSelected"
         @borrarItem="eliminarItemDetalle"
         @nuevoItem="nuevoItemDetalle"
       />
@@ -61,7 +61,7 @@ import {
 } from "vue";
 import { message_error } from "../../util/Messages.js";
 import DetalleJuegoObject from "../../util/DetalleJuegoObject.js";
-import DetalleEmparejar from "../DetalleEmparejar.vue";
+import DetalleJuego from "../DetalleJuego.vue";
 
 export default {
   name: "FormJuego",
@@ -81,7 +81,7 @@ export default {
     },
   },
   components: {
-    DetalleEmparejar,
+    DetalleJuego,
   },
   setup(props, context) {
     const InitialState = {
@@ -125,20 +125,17 @@ export default {
     watch(
       () => model.idgametype,
       (value, prevValue) => {
-        const tipojuego = TipoJuegos.value.find((el) => el.id == value);
-        if (tipojuego && tipojuego.value == "emparejar") {
-          if (props.edit && prevValue === 0) return;
-          model.detalles.clear();
-          model.detalles.push(DetalleJuegoObject.Emparejar(0, ""));
-        }
+        if (props.edit && prevValue === 0) return;
+        model.detalles.clear();
+        nuevoItemDetalle();
       }
     );
     const TipoJuegoSelected = computed(() => {
       const tipojuego = TipoJuegos.value.find(
         (el) => el.id == model.idgametype
       );
-      if (tipojuego && tipojuego.value == "emparejar") {
-        return "emparejar";
+      if (tipojuego) {
+        return tipojuego.value;
       }
       return "No se";
     });
@@ -151,8 +148,21 @@ export default {
       });
     }
     function nuevoItemDetalle() {
-      if (TipoJuegoSelected.value == "emparejar") {
-        model.detalles.push(DetalleJuegoObject.Emparejar(0, ""));
+      switch (TipoJuegoSelected.value) {
+        case "emparejar":
+          model.detalles.push(DetalleJuegoObject.Emparejar(0, ""));
+          break;
+        case "rompecabezas":
+          model.detalles.push(DetalleJuegoObject.Rompecabezas(""));
+          break;
+        case "memoria":
+          model.detalles.push(DetalleJuegoObject.Memoria(""));
+          break;
+        case "cuento":
+          model.detalles.push(DetalleJuegoObject.Cuento("", "", "", ""));
+          break;
+        default:
+          break;
       }
     }
     function eliminarItemDetalle(index) {
