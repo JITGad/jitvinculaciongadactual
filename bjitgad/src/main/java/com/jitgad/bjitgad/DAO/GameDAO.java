@@ -129,7 +129,7 @@ public class GameDAO {
 
     public boolean updateGame(GameModel gameModel, String realpath)
             throws SQLException, Exception {
-
+        System.out.println("");
         String structure = String.format(
                 "<game>"
                 + "<idgame>" + gameModel.getIdgame() + "</idgame>"
@@ -175,7 +175,7 @@ public class GameDAO {
                             == gameim.getIdgameimage()).findAny().orElse(null);
 
                     if (gim == null) {
-
+                        object.setIdgame(gameModel.getIdgame());
                         st.execute(giC.InsertGameimageCF(object, realpath));
                         continue;
                     }
