@@ -277,10 +277,13 @@ public class ConectionPool implements IConnectionPool {
 
     @Override
     public void shutdown() throws SQLException {
-        usedConnections.forEach(this::releaseConnection);
-        for (Connection c : connectionPool) {
+        usedConnections.forEach(conn -> this.releaseConnection(conn));
+        
+        for (int i = 0; i < connectionPool.size(); i++) {
+            Connection c = connectionPool.get(i);
             c.close();
         }
+        System.out.println("Estado actual: " + connectionPool.size() + " libres y " + usedConnections.size() + " en uso " );
         connectionPool.clear();
     }
 
@@ -326,7 +329,9 @@ public class ConectionPool implements IConnectionPool {
     public boolean releaseConnection(Connection connection) {
         System.out.println("Liberando conexion");
         connectionPool.add(connection);
-        return usedConnections.remove(connection);
+        var result = usedConnections.remove(connection);
+        System.out.println("Estado actual: " + connectionPool.size() + " libres y " + usedConnections.size() + " en uso " + result );
+        return result;
     }
 
     @Override

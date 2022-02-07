@@ -164,7 +164,9 @@ public class Colortyperesource {
     @Path("/getcolortypecv")
     public Response getcolortypecv(@Context HttpHeaders headers) {
         ResponseData responseData = new ResponseData("Ocurrio un error", true);
-
+if (Configuration.DEBUG) {
+            System.out.println("Ingresando a getcolortypecv ");
+        }
         try {
 
             //TOKENS
@@ -222,7 +224,9 @@ public class Colortyperesource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response PostColortype(@Context HttpHeaders headers, String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-
+if (Configuration.DEBUG) {
+            System.out.println("Ingresando a postColortype ");
+        }
         colortypeModel
                 = (ColortypeModel) Methods.StringJsonToObject(data, ColortypeModel.class);
 
@@ -276,7 +280,9 @@ public class Colortyperesource {
     @Path("/putColortype")
     public Response PutColortype(@Context HttpHeaders headers, String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-
+if (Configuration.DEBUG) {
+            System.out.println("Ingresando a putColortype ");
+        }
         colortypeModel
                 = (ColortypeModel) Methods.StringJsonToObject(data, ColortypeModel.class);
 
@@ -330,7 +336,9 @@ public class Colortyperesource {
     @Path("/deleteColortype")
     public Response DeleteActivitiesType(@Context HttpHeaders headers, String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando a deleteColortype ");
+        }
         colortypeModel
                 = (ColortypeModel) Methods.StringJsonToObject(data, ColortypeModel.class);
 

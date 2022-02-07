@@ -56,7 +56,9 @@ public class Activitiestyperesource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getActivitiestype() {
         ResponseData responseData = new ResponseData("Ocurrio un error", true);
-
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando a getActivitiestype ");
+        }
         try {
             ArrayList<ActivitiestypeModel> data = atC.selectActivitiestype();
 
@@ -94,7 +96,9 @@ public class Activitiestyperesource {
     @Path("/getActivitiestypeAdmin")
     public Response getActivitiestypeAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
         ResponseDataPage responseDataPage = new ResponseDataPage("Ocurrió un error", page, true);
-
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando a getActivitiestypeAdmin ");
+        }
         try {
             int responseCountingPage = 0;
             //TOKENS
@@ -149,9 +153,10 @@ public class Activitiestyperesource {
 
     /**
      * Actividades por ID
+     *
      * @param headers
      * @param activityid
-     * @return 
+     * @return
      */
     @Produces(MediaType.APPLICATION_JSON)
     @GET
@@ -159,7 +164,9 @@ public class Activitiestyperesource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getactivitiesbyid(@Context HttpHeaders headers, @QueryParam("activityid") int activityid) {
         ResponseData responseData = new ResponseData("Ocurrio un error", true);
-
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando a getactivitiesbyid ");
+        }
         try {
 
             //TOKENS
@@ -211,13 +218,14 @@ public class Activitiestyperesource {
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
 
-    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getactivitiestypecv")
     public Response getactivitiestypecv(@Context HttpHeaders headers) {
         ResponseData responseData = new ResponseData("Ocurrio un error", true);
-
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando a getactivitiestypecv ");
+        }
         try {
 
             //TOKENS
@@ -268,8 +276,7 @@ public class Activitiestyperesource {
         }
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
-    
-    
+
     /*
      add activities
      */
@@ -279,7 +286,9 @@ public class Activitiestyperesource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response PostActivitiesType(@Context HttpHeaders headers, String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-
+if (Configuration.DEBUG) {
+            System.out.println("Ingresando a PostActivitiesType ");
+        }
         activitiestypeModel
                 = (ActivitiestypeModel) Methods.StringJsonToObject(data, ActivitiestypeModel.class);
 
@@ -332,7 +341,9 @@ public class Activitiestyperesource {
     @Path("/PutActivitiesType")
     public Response PutActivitiesType(@Context HttpHeaders headers, String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-
+if (Configuration.DEBUG) {
+            System.out.println("Ingresando a PutActivitiesType ");
+        }
         activitiestypeModel
                 = (ActivitiestypeModel) Methods.StringJsonToObject(data, ActivitiestypeModel.class);
 
@@ -376,7 +387,7 @@ public class Activitiestyperesource {
 
             responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
 
-            System.err.println(e.getMessage()+ e.getLocalizedMessage() + e.toString() + e.getCause().toString());
+            System.err.println(e.getMessage() + e.getLocalizedMessage() + e.toString() + e.getCause().toString());
         }
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
@@ -386,7 +397,9 @@ public class Activitiestyperesource {
     @Path("/DeleteActivitiesType")
     public Response DeleteActivitiesType(@Context HttpHeaders headers, String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-
+if (Configuration.DEBUG) {
+            System.out.println("Ingresando a DeleteActivitiesType ");
+        }
         activitiestypeModel
                 = (ActivitiestypeModel) Methods.StringJsonToObject(data, ActivitiestypeModel.class);
 
