@@ -1,9 +1,6 @@
 
 package com.jitgad.bjitgad.DataStaticBD;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * 
  * @author jorge
@@ -14,7 +11,7 @@ public class ConectionPoolDataSource {
     
     static {
         try {
-            conection = ConectionPool.create(Configuration.dburl, Configuration.dbUser, Configuration.dbPassword);
+            conection = ConectionPool.create(Configuration.DATABASEURL, Configuration.DATABASEUSER, Configuration.DATABASEPASSWORD);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

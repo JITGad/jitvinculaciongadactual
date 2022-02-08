@@ -169,7 +169,7 @@ public class UserController {
 
     public UserTokenRModel BuildToken(UserTokenRModel userTokenRModel, 
             UserRequestModel userRequest) throws Exception {
-        String key = Configuration.dbprivatekey;
+        String key = Configuration.JWTKEY;
         long tiempo = System.currentTimeMillis();
         long tiempoext;
         if (userRequest.getRecuerdame()) {

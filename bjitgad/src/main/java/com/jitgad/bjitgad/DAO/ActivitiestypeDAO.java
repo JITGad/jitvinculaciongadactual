@@ -68,7 +68,7 @@ public class ActivitiestypeDAO {
         sentence = "select * from tblactivitiestype where idactivitiestype =" + idactivity;
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
         for (int i = 0; i < datos.size(); i++) {
-            datos.get(i).setImage((Configuration.ipdominioservidor + datos.get(i).getImage()).replace('\\', '/'));
+            datos.get(i).setImage((Configuration.IPDOMINIOSERVIDOR + datos.get(i).getImage()).replace('\\', '/'));
         }
         if (datos.size() > 0) {
             return Methods.objectToJsonString(datos.get(0));
