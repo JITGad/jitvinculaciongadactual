@@ -7,14 +7,14 @@ package com.jitgad.bjitgad.DataStaticBD;
 
 import com.jitgad.bjitgad.Utilities.ReflectToClass;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import org.apache.tomcat.jdbc.pool.DataSource;
+import org.apache.tomcat.jdbc.pool.PoolProperties;
 
 /**
  *
@@ -27,11 +27,8 @@ public class ConectionPool implements IConnectionPool {
     private final String password;
     private final String url;
 
-    private final List<Connection> connectionPool;
-    private final List<Connection> usedConnections = new ArrayList<>();
+    private final DataSource datasource;
 
-    Connection conex;
-    
     /**
      * Receives a query and saves it in a table
      *
@@ -40,6 +37,7 @@ public class ConectionPool implements IConnectionPool {
      * @throws java.sql.SQLException
      */
     public DefaultTableModel returnRecord(String sentecy) throws SQLException {
+        Connection conex = null;
         try {
             conex = getConnection();
             try (Statement st = conex.createStatement()) {
@@ -75,12 +73,13 @@ public class ConectionPool implements IConnectionPool {
      * @throws java.sql.SQLException
      */
     public boolean modifyBD(String sentecy) throws SQLException {
+        Connection conex = null;
         try {
             conex = getConnection();
             try (Statement st = conex.createStatement()) {
                 st.execute(sentecy);
                 return true;
-            } 
+            }
         } catch (SQLException exc) {
             throw exc;
         } finally {
@@ -97,6 +96,7 @@ public class ConectionPool implements IConnectionPool {
      */
     public int updateDB(String sentecy) throws SQLException {
         int counts = 0;
+        Connection conex = null;
         try {
             conex = getConnection();
             try (Statement st = conex.createStatement()) {
@@ -120,6 +120,7 @@ public class ConectionPool implements IConnectionPool {
      */
     public String fillString(String sentecy) throws SQLException {
         String a = "";
+        Connection conex = null;
         try {
             conex = getConnection();
             try (Statement st = conex.createStatement()) {
@@ -147,6 +148,7 @@ public class ConectionPool implements IConnectionPool {
      */
     public String getNextID(String sentecy) throws SQLException {
         String a = "-1";
+        Connection conex = null;
         try {
             conex = getConnection();
             try (Statement st = conex.createStatement()) {
@@ -166,7 +168,7 @@ public class ConectionPool implements IConnectionPool {
         } catch (SQLException exc) {
             System.out.println("No next id:" + exc.getMessage());
             a = "1";
-            throw  exc;
+            throw exc;
         } finally {
             releaseConnection(conex);
         }
@@ -213,15 +215,7 @@ public class ConectionPool implements IConnectionPool {
      * @return a Boolean
      */
     public boolean testConection() {
-        boolean test = true;
-        try {
-            conex = getConnection();
-            test = releaseConnection(conex);
-        } catch (SQLException ex) {
-            System.out.println("error test conection:" + ex.getMessage());
-        }
-        System.out.println("test:" + test);
-        return test;
+        return datasource.isTestOnConnect();
     }
 
     /**
@@ -236,6 +230,7 @@ public class ConectionPool implements IConnectionPool {
      */
     public <T> ArrayList<T> getObjectDB(String sql, Class<T> obj, int structure) throws Exception {
         ArrayList<T> datos = new ArrayList();
+        Connection conex = null;
         try {
             conex = getConnection();
             try (Statement stm = conex.createStatement()) {
@@ -250,9 +245,10 @@ public class ConectionPool implements IConnectionPool {
         }
         return datos;
     }
-    
+
     /**
-     *Function mapping data to connection 
+     * Function mapping data to connection
+     *
      * @param <T> Is Class Mapping data result
      * @param sql Sql query to execute db
      * @param obj Is Class Mapping data result
@@ -271,20 +267,14 @@ public class ConectionPool implements IConnectionPool {
             }
         } catch (SQLException e) {
             throw e;
-        } 
+        }
         return datos;
     }
 
     @Override
     public void shutdown() throws SQLException {
-        usedConnections.forEach(conn -> this.releaseConnection(conn));
-        
-        for (int i = 0; i < connectionPool.size(); i++) {
-            Connection c = connectionPool.get(i);
-            c.close();
-        }
-        System.out.println("Estado actual: " + connectionPool.size() + " libres y " + usedConnections.size() + " en uso " );
-        connectionPool.clear();
+        datasource.close(true);
+        datasource.purge();
     }
 
     /**
@@ -292,46 +282,20 @@ public class ConectionPool implements IConnectionPool {
      * @return @throws SQLException
      */
     @Override
-    public Connection getConnection() throws SQLException {
-        System.out.println("Conexiones actuales: " + connectionPool.size() + "libres y " + usedConnections.size() + " en uso" );
-        if (connectionPool.isEmpty()) {
-            if (usedConnections.size() < Configuration.MAX_POOL_SIZE) {
-                connectionPool.add(createConnection(url, user, password));
-            } else {
-                throw new RuntimeException(
-                        "Maximum pool size reached, no available connections!");
-            }
-        }
-
-        Connection connection = connectionPool
-                .remove(connectionPool.size() - 1);
-
-        if (!connection.isValid(Configuration.MAX_TIMEOUT)) {
-            connection.close();
-         //   connection = createConnection(url, user, password);
-           connection = getConnection();
-        }
-
-        usedConnections.add(connection);
-        return connection;
-    }
-
-    private static Connection createConnection(String url, String user, String password) throws SQLException {
-        return DriverManager.getConnection(url, user, password);
+    public synchronized Connection getConnection() throws SQLException {
+        return datasource.getConnection();
     }
 
     @Override
     public int getSize() {
-        return connectionPool.size() + usedConnections.size();
+        return datasource.getSize();
     }
 
     @Override
-    public boolean releaseConnection(Connection connection) {
-        System.out.println("Liberando conexion");
-        connectionPool.add(connection);
-        var result = usedConnections.remove(connection);
-        System.out.println("Estado actual: " + connectionPool.size() + " libres y " + usedConnections.size() + " en uso " + result );
-        return result;
+    public void releaseConnection(Connection connection) throws SQLException {
+        if (connection != null) {
+            connection.close();
+        }
     }
 
     @Override
@@ -351,28 +315,48 @@ public class ConectionPool implements IConnectionPool {
 
     public static ConectionPool create(
             String url, String user,
-            String password) throws SQLException, ClassNotFoundException {
-        System.out.println("Creando conexiones");
-        Class.forName("org.postgresql.Driver");
-        
-        List<Connection> pool = new ArrayList<>(Configuration.INITIAL_POOL_SIZE);
-        for (int i = 0; i < Configuration.INITIAL_POOL_SIZE; i++) {
-            pool.add(createConnection(url, user, password));
-        }
-        System.out.println("Conexiones creadas" + pool.size());
-        return new ConectionPool(url, user, password, pool);
+            String password) throws Exception {
+
+        PoolProperties p = new PoolProperties();
+        p.setDriverClassName("org.postgresql.Driver");
+        p.setUrl(url);
+        p.setUsername(user);
+        p.setPassword(password);
+        p.setJmxEnabled(true);
+        p.setTestWhileIdle(false);
+        p.setTestOnBorrow(true);
+        p.setValidationQuery("SELECT 1");
+        p.setTestOnReturn(false);
+        p.setValidationInterval(30000);
+        p.setTimeBetweenEvictionRunsMillis(30000);
+        p.setMaxActive(100);
+        p.setInitialSize(1);
+        p.setMaxWait(10000);
+        p.setRemoveAbandonedTimeout(60);
+        p.setMinEvictableIdleTimeMillis(30000);
+        p.setMinIdle(10);
+        p.setLogAbandoned(true);
+        p.setRemoveAbandoned(true);
+        p.setJdbcInterceptors(
+                "org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;"
+                + "org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer");
+
+        DataSource datasource = new DataSource();
+        datasource.setPoolProperties(p);
+
+        return new ConectionPool(url, user, password, datasource);
     }
 
-    private ConectionPool(String url, String user, String password, List<Connection> connectionPool){        
+    private ConectionPool(String url, String user, String password, DataSource source) {
         this.url = url;
         this.user = user;
         this.password = password;
-        this.connectionPool = connectionPool;
+        this.datasource = source;
     }
 
     @Override
-    public List<Connection> getConnectionPool() {
-        return connectionPool;
+    public DataSource getConnectionPool() {
+        return datasource;
     }
 
 }

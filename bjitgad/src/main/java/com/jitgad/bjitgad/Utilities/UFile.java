@@ -1,6 +1,7 @@
 package com.jitgad.bjitgad.Utilities;
 
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
+import jakarta.xml.bind.DatatypeConverter;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,7 +10,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.codec.binary.Base64;
 
 /**
@@ -37,7 +37,7 @@ public class UFile {
     public boolean saveFile(String base64, String fileurl) throws IOException {
         String[] parts = base64.split(",");
         try {
-            byte[] dataBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(parts[1]);
+            byte[] dataBytes = DatatypeConverter.parseBase64Binary(parts[1]);
             try (FileOutputStream out = new FileOutputStream(fileurl)) {
                 out.write(dataBytes);
             }

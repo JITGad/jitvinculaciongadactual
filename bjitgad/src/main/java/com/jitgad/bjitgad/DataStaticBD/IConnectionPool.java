@@ -3,6 +3,7 @@ package com.jitgad.bjitgad.DataStaticBD;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import org.apache.tomcat.jdbc.pool.DataSource;
 
 /**
  *
@@ -11,9 +12,9 @@ import java.util.List;
 public interface IConnectionPool {
     Connection getConnection() throws SQLException;
     
-    boolean releaseConnection(Connection connection);
+    void releaseConnection(Connection connection) throws SQLException;
     
-    List<Connection> getConnectionPool();
+    DataSource getConnectionPool();
     
     int getSize();
     

@@ -1,7 +1,8 @@
 
 package com.jitgad.bjitgad.DataStaticBD;
 
-import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * 
@@ -14,8 +15,8 @@ public class ConectionPoolDataSource {
     static {
         try {
             conection = ConectionPool.create(Configuration.dburl, Configuration.dbUser, Configuration.dbPassword);
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println(e.getMessage());
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
     }
     

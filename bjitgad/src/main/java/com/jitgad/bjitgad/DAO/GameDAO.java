@@ -84,7 +84,6 @@ public class GameDAO {
     }
 
     public boolean insertGame(GameModel gameModel, String realpath) throws SQLException, Exception {
-        System.out.println("");
         String structure = String.format(
                 "<game>"
                 + "<idactivitiestype>" + gameModel.getIdactivitiestype() + "</idactivitiestype>"
@@ -97,7 +96,6 @@ public class GameDAO {
                 + "</game>");
 
         String sentency = "Select * from insertGame('" + structure + "')";
-        System.out.println(structure);
         try {
             conex = con.getConnection();
             conex.setAutoCommit(false);
@@ -129,7 +127,6 @@ public class GameDAO {
 
     public boolean updateGame(GameModel gameModel, String realpath)
             throws SQLException, Exception {
-        System.out.println("");
         String structure = String.format(
                 "<game>"
                 + "<idgame>" + gameModel.getIdgame() + "</idgame>"
@@ -142,7 +139,6 @@ public class GameDAO {
                 + "</game>");
 
         String sentency = "Select * from updateGame('" + structure + "')";
-        System.out.println(structure);
         try {
             conex = con.getConnection();
             conex.setAutoCommit(false);
@@ -194,7 +190,6 @@ public class GameDAO {
         } finally {
             con.releaseConnection(conex);
         }
-        //  return con.modifyBD(sentency);
     }
 
     public boolean deleteGame(GameModel gameModel) throws SQLException {
@@ -204,7 +199,6 @@ public class GameDAO {
                 + "</game>");
 
         String sentency = "Select * from deleteGame('" + structure + "')";
-        System.out.println(structure);
         return con.modifyBD(sentency);
     }
 
