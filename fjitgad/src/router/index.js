@@ -148,6 +148,11 @@ const routes = [
     name: 'Logout',
     component: () => import('../views/Logout.vue')
   },
+  {
+    path: '/juegos-por-actividad',
+    name: "JuegosPorActividad",
+    component: () => import('../views/JuegosPorActividad.vue')
+  },
   // otherwise redirect to home
   { path: "/:catchAll(.*)", redirect: '/' }
 ]

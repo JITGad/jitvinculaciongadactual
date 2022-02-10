@@ -46,6 +46,8 @@ import MainLayoutJuego from "./components/MainLayoutJuego.vue";
 import MyFooter from "./components/MyFooter.vue";
 import Paginacion from "./components/Paginacion.vue";
 import MyAutorization from "./components/MyAutorization.vue";
+import MyLoading from "./components/Loading.vue";
+import EncabezadoJuego from './components/EncabezadoJuego.vue';
 
 const app = createApp(App);
 
@@ -69,5 +71,7 @@ app.component("main-layout-juego", MainLayoutJuego);
 app.component("my-footer", MyFooter);
 app.component("my-paginacion", Paginacion);
 app.component("my-autorization", MyAutorization);
+app.component("my-loading", MyLoading);
+app.component('encabezado-juego', EncabezadoJuego);
 
 app.mount('#app');

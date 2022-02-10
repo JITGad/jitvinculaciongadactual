@@ -1,22 +1,14 @@
 <template>
   <div class="page-header-juego">
-    <button
-      type="button"
-      onclick="location.href='index.jsp'"
-      class="btn btn-info btn-lg"
-    >
+    <button type="button" @click="IrInicio" class="btn btn-info btn-lg">
       <i class="fa fa-home" aria-hidden="true">&nbsp;</i>
     </button>
-    <span class="h4" id="spanNombreTema" name="spanNombreTema"
-      >Espacialidad</span
-    ><span class="h4 m-0" style="font-family: Times New Roman, Times, serif">
-      / Actividades</span
-    >
-    <span class="h4 m-2" style="font-family: Times New Roman, Times, serif"
-      >/ Rompecabeza:</span
-    ><span class="h4" id="spanNombreActividad" name="spanNombreActividad"
-      >Derecha</span
-    >
+    <template v-for="(value, index) in routes" :key="index">
+      <span class="h4 m-0" style="font-family: Times New Roman, Times, serif">
+        {{ value }}
+      </span>
+      <template v-if="index < routes.length"> / </template>
+    </template>
     <hr
       style="width: 100%; height: 2px; color: black; background-color: black"
       class="m-1"
@@ -36,14 +28,23 @@ import { useRouter } from "vue-router";
 
 export default {
   name: "EncabezadoJuego",
+  props: {
+    routes: {
+      type: Array,
+      required: true,
+    },
+  },
   setup(props, context) {
     const router = useRouter();
     const HandleClickBack = () => {
       router.go(-1);
     };
-
+    function IrInicio() {
+      router.push("/");
+    }
     return {
       HandleClickBack,
+      IrInicio,
     };
   },
 };

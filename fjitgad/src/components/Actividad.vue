@@ -10,7 +10,7 @@
         :src="RutaImagenCompleta"
         width="150"
         height="150"
-      />════════<br /><span style="font-size: 30px;">{{ tema }}</span>
+      />════════<br /><span style="font-size: 30px">{{ tema }}</span>
     </div>
   </div>
 </template>
@@ -48,7 +48,10 @@ export default {
       return `${process.env.VUE_APP_BASE_URL}${props.urlimagen}`;
     });
     const verActividad = function () {
-      Router.push({ name: "ActividadJuego", params: { id: props.idactividad } });
+      Router.push({
+        name: "JuegosPorActividad",
+        params: { id: props.idactividad, nombre: props.tema },
+      });
     };
 
     return {

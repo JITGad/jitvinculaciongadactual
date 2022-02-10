@@ -13,6 +13,13 @@ class TipoJuegosService {
         });
     }
 
+    getTipoJuegoPorActividad(idactividad = 0){
+        return new Promise((resolve) => {
+            FetchMaster.get(`${this.#urlApi}/getgametypewithgames${encodeQueryString({ 'idactivitiestype': idactividad })}`,
+                (data) => resolve(data), true);
+        });
+    }
+
     getTipoJuegosSelectMenu() {
         return new Promise((resolve) => {
             FetchMaster.get(`${this.#urlApi}/getgametypecv`, (data) => {

@@ -11,7 +11,7 @@
 
 <script>
 import { ref, watch, onMounted } from "vue";
-import { isBase64 } from "../util/Utilities.js";
+import { setPathFile } from "../util/Utilities.js";
 
 export default {
   name: "MyPrevFile",
@@ -32,26 +32,13 @@ export default {
     watch(
       () => props.modelValue,
       (value, prevValue) => {
-        setPathFile(value);
+        filePrev.value.src = setPathFile(value);
       }
     );
 
     onMounted(function () {
       setPathFile(props.modelValue);
     });
-
-    function setPathFile(_value) {
-      if (_value == null || _value.length == 0) {
-        filePrev.value.src = "";
-        return;
-      }
-      if (isBase64(_value)) {
-        filePrev.value.src = _value;
-        return;
-      }
-
-      filePrev.value.src = `${process.env.VUE_APP_BASE_URL}${_value}`;
-    }
 
     return {
       filePrev,

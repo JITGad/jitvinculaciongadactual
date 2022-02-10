@@ -1,7 +1,7 @@
 <template>
   <main-layout-juego>
   <div class="temas">
-    <Loading v-if="loading" />
+    <my-loading v-if="loading" />
     <div v-else>
       <Actividad
         v-for="(value, index) in actividades"
@@ -9,7 +9,7 @@
         :urlimagen="value.image"
         :key="index"
         :idactividad="value.idactivitiestype"
-      ></Actividad>
+      />
     </div>
   </div>
   </main-layout-juego>
@@ -17,7 +17,6 @@
 
 <script>
 import Actividad from "@/components/Actividad.vue";
-import Loading from "@/components/Loading.vue";
 import ActividadesService from "../api/ActividadesService";
 import { ref, onMounted } from "vue";
 import { message_error } from "@/util/Messages";
@@ -26,7 +25,6 @@ export default {
   name: "Home",
   components: {
     Actividad,
-    Loading
   },
   setup(props,context){
     const actividades = ref([]);

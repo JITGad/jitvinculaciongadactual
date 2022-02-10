@@ -148,6 +148,17 @@ export function isBase64(str = ""){
     }
 }
 
+export function setPathFile(_value) {
+    if (_value == null || _value.length == 0) {
+      return "";
+    }
+    if (isBase64(_value)) {
+      return _value;
+    }
+
+    return `${process.env.VUE_APP_BASE_URL}${_value}`;
+  }
+
 // Convertir cadena Unicode a cadena donde cada
 // elemento 16-bit ocupe solo un byte
 export function toBinary(string) {
