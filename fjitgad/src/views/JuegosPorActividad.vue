@@ -1,8 +1,18 @@
 <template>
-  <main-layout-juego>
+  <main-layout-juego :backgroundBlanc="true">
     <my-loading v-if="Loading" />
-    <div v-else class="container">
-        <encabezado-juego :routes="RoutesEncabezadoJuego"/>
+    <div v-else class="container" style="margin-top: 10vh">
+      <encabezado-juego :routes="RoutesEncabezadoJuego" />
+      <template v-for="(tipojuego, i) in JuegosPorActividad" :key="i">
+        <tipo-juego-actividad
+          :image="tipojuego.image"
+          :index="i"
+          :label="tipojuego.name"
+        />
+        <template v-for="(juego, j) in tipojuego.detalles" :key="j">
+          <juego-tipo-juego-actividad :idgame="juego.idgame" :image="juego.image"/>
+        </template>
+      </template>
     </div>
   </main-layout-juego>
 </template>
@@ -12,8 +22,14 @@ import { useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
 import TipoJuegosService from "../api/TipoJuegosService.js";
 import { message_error } from "../util/Messages.js";
+import JuegoTipoJuegoActividad from "../components/JuegoTipoJuegoActividad.vue";
+import TipoJuegoActividad from "../components/TipoJuegoActividad.vue";
 export default {
   name: "JuegosPorActividad",
+  components: {
+    JuegoTipoJuegoActividad,
+    TipoJuegoActividad,
+  },
   setup(props, context) {
     const JuegosPorActividad = ref([]);
     const route = useRoute();

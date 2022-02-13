@@ -20,7 +20,7 @@
           class="m-1"
         />
         <h4 class="card-title my-3" style="text-align: center">
-          {{label}}
+          {{ label }}
         </h4>
       </div>
     </div>
@@ -34,8 +34,8 @@ import { setPathFile } from "../util/Utilities";
 
 export default {
   name: "JuegoTipoJuegoActividad",
-  props:{
-      image: {
+  props: {
+    image: {
       type: String,
       default: "",
     },
@@ -43,22 +43,22 @@ export default {
       type: String,
       default: "",
     },
-    idJuego: {
+    idgame: {
       type: Number,
       default: 0,
     },
   },
   setup(props, context) {
-      const Router = useRouter();
-      const MyImage = computed(() => setPathFile(props.image));
-      
-      function Jugar() {
-          Router.push({ name: "NivelesJuego", params: { id: props.idJuego } });
-      }
-      return {
-          MyImage,
-          Jugar,
-      }
+    const Router = useRouter();
+    const MyImage = computed(() => setPathFile(props.image));
+
+    function Jugar() {
+      Router.push({ name: "NivelesJuego", params: { id: props.idgame } });
+    }
+    return {
+      MyImage,
+      Jugar,
+    };
   },
 };
 </script>
