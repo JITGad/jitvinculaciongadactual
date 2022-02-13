@@ -17,7 +17,7 @@
       style="width: 100%; height: 1px; color: gray; background-color: black"
       class="m-1"
     />
-    <a @click="HandleClickBack" class="float">
+    <a @click="HandleClickBack" class="float" style="cursor: pointer;">
       <i class="fas fa-arrow-left my-float"></i>
     </a>
   </div>

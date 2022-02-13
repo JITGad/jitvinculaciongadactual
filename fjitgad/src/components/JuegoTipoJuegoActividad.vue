@@ -5,7 +5,7 @@
       @click="Jugar"
       onmouseover="this.style.background='#f2f0f0'"
       onmouseout="this.style.background=''"
-      style=""
+      style="cursor: pointer;"
     >
       <div class="card-body">
         <div class="col text-center">

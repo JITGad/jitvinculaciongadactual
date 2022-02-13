@@ -9,9 +9,15 @@
           :index="i"
           :label="tipojuego.name"
         />
-        <template v-for="(juego, j) in tipojuego.detalles" :key="j">
-          <juego-tipo-juego-actividad :idgame="juego.idgame" :image="juego.image"/>
-        </template>
+        <div class="row">
+          <template v-for="(juego, j) in tipojuego.detalles" :key="j">
+            <juego-tipo-juego-actividad
+              :idgame="juego.idgame"
+              :image="juego.image"
+              :label="juego.name"
+            />
+          </template>
+        </div>
       </template>
     </div>
   </main-layout-juego>

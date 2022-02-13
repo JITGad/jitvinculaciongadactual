@@ -7,7 +7,6 @@
         <th v-if="type == 'cuento'" scope="col">Audio Parrafo</th>
         <th v-if="type == 'cuento'" scope="col">Video Parrafo</th>
         <th v-if="type == 'emparejar'" scope="col">Color</th>
-        <th scope="col">Nuevo</th>
         <th scope="col">Eliminar</th>
       </tr>
     </thead>
@@ -55,13 +54,6 @@
         <td>
           <my-link-table
             :object="index"
-            icon="fas fa-plus-circle"
-            @click="AgregarItem"
-          />
-        </td>
-        <td>
-          <my-link-table
-            :object="index"
             icon="fas fa-trash"
             @click="EliminarItem"
           />
@@ -85,7 +77,7 @@ import { message_error } from "../util/Messages.js";
 
 export default {
   name: "DetalleJuego",
-  emits: ["nuevoItem", "borrarItem"],
+  emits: ["borrarItem"],
   components: {
     MySelectColor,
   },
@@ -107,10 +99,6 @@ export default {
       Colores.value = await ColoresService.getColoresSelectMenu();
       form.bind({ validate, uid: instance.uid });
     });
-
-    function AgregarItem() {
-      context.emit("nuevoItem");
-    }
 
     function EliminarItem(index) {
       context.emit("borrarItem", index);
@@ -179,7 +167,6 @@ export default {
 
     return {
       Colores,
-      AgregarItem,
       EliminarItem,
     };
   },
