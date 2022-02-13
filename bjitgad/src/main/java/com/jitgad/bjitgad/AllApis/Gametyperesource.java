@@ -256,7 +256,7 @@ public class Gametyperesource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getgametypewithgames")
-    public Response getgametypewithgames() {
+    public Response getgametypewithgames(@QueryParam("idactivitiestype") int idactivitiestype) {
         
         if (Configuration.DEBUG) {
             System.out.println("Ingresando getgametypewithgames...");
@@ -266,7 +266,7 @@ public class Gametyperesource {
 
         try {
             
-            ArrayList<GametypeModel> data = gtC.selectGametypewithgames();
+            ArrayList<GametypeModel> data = gtC.selectGametypewithgames(idactivitiestype);
 
             if (data.size() > 0) {
 

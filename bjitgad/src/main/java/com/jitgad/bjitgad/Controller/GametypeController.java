@@ -27,8 +27,8 @@ public class GametypeController {
     }
     
     
-    public ArrayList<GametypeModel> selectGametypewithgames() throws Exception{
-        return gtD.selectGametypewithgames();
+    public ArrayList<GametypeModel> selectGametypewithgames(int idactivitiestype) throws Exception{
+        return gtD.selectGametypewithgames(idactivitiestype);
     }        
             
 
