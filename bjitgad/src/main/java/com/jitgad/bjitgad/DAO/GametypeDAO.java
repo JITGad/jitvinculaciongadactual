@@ -41,14 +41,14 @@ public class GametypeDAO {
 
             ArrayList<GameModel> datosgame = con.getObjectDB(sentence2, GameModel.class, 1);
 
-            for (int j = 0; j < datosgame.size(); j++) {
-
-                sentence3 = "select * from tblgameimage where idgame =" + datosgame.get(j).getIdgame();
-                GameModel Juegoactual = datosgame.get(j);
-                Juegoactual.setDetalles(con.getObjectDB(sentence3, GameimageModel.class, 1));
-                datosgame.set(j, Juegoactual);
-
-            }
+//            for (int j = 0; j < datosgame.size(); j++) {
+//
+//                sentence3 = "select * from tblgameimage where idgame =" + datosgame.get(j).getIdgame();
+//                GameModel Juegoactual = datosgame.get(j);
+//                Juegoactual.setDetalles(con.getObjectDB(sentence3, GameimageModel.class, 1));
+//                datosgame.set(j, Juegoactual);
+//
+//            }
 
             GametypeModel Tipojuegoactual = datos.get(i);
             Tipojuegoactual.setDetalles(datosgame);
