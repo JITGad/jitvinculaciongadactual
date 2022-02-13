@@ -11,7 +11,6 @@ import com.jitgad.bjitgad.Utilities.UFile;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
 /**
  *
  * @author jorge
@@ -31,25 +30,22 @@ public class ActivitiestypeDAO {
 
     public ArrayList<ActivitiestypeModel> selectActivitiestype() throws Exception {
 
-        sentence = "select * from tblactivitiestype where state = true order by idactivitiestype";
+        sentence = "select DISTINCT tblactivitiestype.idactivitiestype, tblactivitiestype.name, tblactivitiestype.image, tblactivitiestype.creationdate, tblactivitiestype.updatedate, tblactivitiestype.state from tblactivitiestype inner join tblgame on tblactivitiestype.idactivitiestype = tblgame.idactivitiestype where tblactivitiestype.state = true order by tblactivitiestype.idactivitiestype";
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
 //        for (int i = 0; i < datos.size(); i++) {
 //            datos.get(i).setImage((Configuration.ipdominioservidor + datos.get(i).getImage()).replace('\\', '/'));
 //        }
         return datos;
     }
-    
-    
 
     public ArrayList<ClaveValorModel> selectactivitiestypeclavevalor() throws Exception {
 
         sentence = "select idactivitiestype as id, name as name from tblactivitiestype order by idactivitiestype";
         ArrayList<ClaveValorModel> datos = con.getObjectDB(sentence, ClaveValorModel.class, 1);
-        
+
         return datos;
     }
-    
-    
+
     public ArrayList<ActivitiestypeModel> selectActivitiestypepage(int page) throws Exception {
         sentence = "select * from tblactivitiestype order by idactivitiestype asc limit 10 offset " + (page * 10 - 10);
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
