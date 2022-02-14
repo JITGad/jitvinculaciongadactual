@@ -15,6 +15,7 @@
       placeholder="Escriba los niveles del Juego"
       validations="requerido"
     />
+    <my-input-file label="Portada" v-model="model.image" type="image" />
     <my-select
       placeholder="Seleccione un tipo de actividad"
       v-model="model.idactivitiestype"
@@ -34,12 +35,16 @@
     <my-select-boolean label="Estado" v-model="model.state" />
 
     <div class="mb-3">
-      <label class="form-label">Detalle de juego</label>
+      <div style="display: flex; justify-content: space-between;">
+        <label class="form-label">Detalle de juego</label>
+        <a @click="nuevoItemDetalle" style="cursor: pointer">
+          <i class="fas fa-plus-circle"></i>
+        </a>
+      </div>
       <detalle-juego
         :list="model.detalles"
         :type="TipoJuegoSelected"
         @borrarItem="eliminarItemDetalle"
-        @nuevoItem="nuevoItemDetalle"
       />
     </div>
   </div>
@@ -91,6 +96,7 @@ export default {
       name: "",
       state: true,
       level: 1,
+      image: null,
       detalles: [],
     };
     const TipoActividades = ref([]);

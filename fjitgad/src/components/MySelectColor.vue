@@ -131,7 +131,6 @@ export default {
             selected.value = ui.item.value;
           },
         });
-        console.log(instance);
     });
 
     function MountedChilds() {

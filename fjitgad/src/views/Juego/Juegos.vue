@@ -5,6 +5,7 @@
         <th scope="col">Id</th>
         <th scope="col">Nombre</th>
         <th scope="col">Estado</th>
+        <th scope="col">Portada</th>
         <th scope="col">Tipo de actividad</th>
         <th scope="col">Tipo de juego</th>
         <th scope="col">Editar</th>
@@ -18,6 +19,9 @@
         <th scope="row">{{ juego.idgame }}</th>
         <td>{{ juego.name }}</td>
         <td>{{ juego.state ? "Activo" : "Inactivo" }}</td>
+        <td align="center">
+          <my-prev-file type="image" v-model="juego.image" />
+        </td>
         <td align="center">{{ juego.nameactivities }}</td>
         <td align="center">{{ juego.namegametype }}</td>
         <td align="center">
