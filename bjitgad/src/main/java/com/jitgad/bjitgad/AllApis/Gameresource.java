@@ -170,9 +170,9 @@ public class Gameresource {
             }
 
             if (!Authorization.isEmpty()) {
-                ArrayList<GameModel> data = gC.selectGamepage(page);
                 ResponseValidateToken validateToken = AuC.VToken(Authorization);
                 if (validateToken.isStatus()) {
+                    ArrayList<GameModel> data = gC.selectGamepage(page);
                     responseCountingPage = gC.CountingPageGame();
                     if (data.size() > 0) {
 

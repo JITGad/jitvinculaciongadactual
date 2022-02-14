@@ -37,7 +37,7 @@ export default {
     );
 
     onMounted(function () {
-      setPathFile(props.modelValue);
+      filePrev.value.src = setPathFile(props.modelValue);
     });
 
     return {

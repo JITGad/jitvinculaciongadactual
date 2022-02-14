@@ -41,9 +41,22 @@ public class GameDAO {
     }
 
     public ArrayList<GameModel> selectGamepage(int page) throws Exception {
-        sentence = "select game.idgame,game.idactivitiestype,actype.name as nameactivities,tblgametype.name as namegametype,game.idgametype,game.name,game.creationdate,game.updatedate,game.state,game.level, game.image\n"
-                + "from tblgame as game inner join tblactivitiestype as actype on actype.idactivitiestype = game.idactivitiestype \n"
-                + "inner join tblgametype on tblgametype.idgametype = game.idgametype order by game.idgame asc limit 10 offset " + (page * 10 - 10);
+        sentence = "select "
+                + "game.idgame, "
+                + "game.idactivitiestype, "
+                + "actype.name as nameactivities, "
+                + "tblgametype.name as namegametype, "
+                + "game.idgametype, "
+                + "game.name, "
+                + "game.creationdate, "
+                + "game.updatedate, "
+                + "game.state, "
+                + "game.level, "
+                + "game.image "
+                + "from tblgame as game "
+                + "inner join tblactivitiestype as actype on actype.idactivitiestype = game.idactivitiestype "
+                + "inner join tblgametype on tblgametype.idgametype = game.idgametype "
+                + "order by game.idgame asc limit 10 offset " + (page * 10 - 10);
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
 
 //        for (int i = 0; i < datos.size(); i++) {
@@ -56,9 +69,22 @@ public class GameDAO {
     }
 
     public String selectGamebyid(int gameid) throws Exception {
-        sentence = "select game.idgame,game.idactivitiestype,actype.name as nameactivities,tblgametype.name as namegametype,game.idgametype,game.name,game.creationdate,game.updatedate,game.state,game.level\n"
-                + "from tblgame as game inner join tblactivitiestype as actype on actype.idactivitiestype = game.idactivitiestype \n"
-                + "inner join tblgametype on tblgametype.idgametype = game.idgametype where game.idgame=" + gameid;
+        sentence = "select "
+                + "game.idgame, "
+                + "game.idactivitiestype, "
+                + "actype.name as nameactivities, "
+                + "tblgametype.name as namegametype, "
+                + "game.idgametype, "
+                + "game.name, "
+                + "game.creationdate, "
+                + "game.updatedate, "
+                + "game.state, "
+                + "game.level, "
+                + "game.image "
+                + "from tblgame as game "
+                + "inner join tblactivitiestype as actype on actype.idactivitiestype = game.idactivitiestype "
+                + "inner join tblgametype on tblgametype.idgametype = game.idgametype "
+                + "where game.idgame=" + gameid;
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
 
         GameModel JuegoSeleccionado = datos.get(0);
@@ -75,10 +101,13 @@ public class GameDAO {
     }
 
     public ArrayList<ClaveValorModel> selectgamesbyactivities(int idactivity) throws Exception {
-        sentence = "select tblgame.idgame as id, tblgame.name as name from tblgametype "
+        sentence = "select "
+                + "tblgame.idgame as id, "
+                + "tblgame.name as name "
+                + "from tblgametype "
                 + "inner join tblgame on tblgame.idgametype = tblgametype.idgametype "
-                + "inner join tblactivitiestype "
-                + "on tblgame.idactivitiestype = tblactivitiestype.idactivitiestypewhere tblactivitiestype.idactivitiestype =" + idactivity;
+                + "inner join tblactivitiestype on tblgame.idactivitiestype = tblactivitiestype.idactivitiestypewhere "
+                + "where tblactivitiestype.idactivitiestype =" + idactivity;
         ArrayList<ClaveValorModel> datos = con.getObjectDB(sentence, ClaveValorModel.class, 1);
         return datos;
     }
