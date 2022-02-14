@@ -34,24 +34,24 @@ public class GameDAO {
     }
 
     public ArrayList<GameModel> selectGame() throws Exception {
-        sentence = "select game.idgame,game.idactivitiestype,actype.name as nameactivities,game.idgametype,game.name,game.creationdate,game.updatedate,game.state,game.level\n"
+        sentence = "select game.idgame,game.idactivitiestype,actype.name as nameactivities,game.idgametype,game.name,game.creationdate,game.updatedate,game.state,game.level,game.image\n"
                 + "from tblgame as game inner join tblactivitiestype as actype on actype.idactivitiestype = game.idactivitiestype";
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
         return datos;
     }
 
     public ArrayList<GameModel> selectGamepage(int page) throws Exception {
-        sentence = "select game.idgame,game.idactivitiestype,actype.name as nameactivities,tblgametype.name as namegametype,game.idgametype,game.name,game.creationdate,game.updatedate,game.state,game.level\n"
+        sentence = "select game.idgame,game.idactivitiestype,actype.name as nameactivities,tblgametype.name as namegametype,game.idgametype,game.name,game.creationdate,game.updatedate,game.state,game.level, game.image\n"
                 + "from tblgame as game inner join tblactivitiestype as actype on actype.idactivitiestype = game.idactivitiestype \n"
                 + "inner join tblgametype on tblgametype.idgametype = game.idgametype order by game.idgame asc limit 10 offset " + (page * 10 - 10);
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
 
-        for (int i = 0; i < datos.size(); i++) {
-            sentence = "select * from tblgameimage where idgame =" + datos.get(i).getIdgame();
-            GameModel JuegoActual = datos.get(i);
-            JuegoActual.setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
-            datos.set(i, JuegoActual);
-        }
+//        for (int i = 0; i < datos.size(); i++) {
+//            sentence = "select * from tblgameimage where idgame =" + datos.get(i).getIdgame();
+//            GameModel JuegoActual = datos.get(i);
+//            JuegoActual.setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
+//            datos.set(i, JuegoActual);
+//        }
         return datos;
     }
 
