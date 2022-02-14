@@ -84,6 +84,7 @@ public class GameDAO {
     }
 
     public boolean insertGame(GameModel gameModel, String realpath) throws SQLException, Exception {
+        System.out.println("");
         String structure = String.format(
                 "<game>"
                 + "<idactivitiestype>" + gameModel.getIdactivitiestype() + "</idactivitiestype>"
@@ -93,6 +94,7 @@ public class GameDAO {
                 + "<updatedate>" + gameModel.getUpdatedate() + "</updatedate>"
                 + "<state>" + gameModel.getState() + "</state>"
                 + "<level>" + gameModel.getLevel() + "</level>"
+                + "<image>" + gameModel.getImage() + "</image>"       
                 + "</game>");
 
         String sentency = "Select * from insertGame('" + structure + "')";
@@ -136,6 +138,7 @@ public class GameDAO {
                 + "<updatedate>" + gameModel.getUpdatedate() + "</updatedate>"
                 + "<state>" + gameModel.getState() + "</state>"
                 + "<level>" + gameModel.getLevel() + "</level>"
+                + "<image>" + gameModel.getImage() + "</image>"         
                 + "</game>");
 
         String sentency = "Select * from updateGame('" + structure + "')";
