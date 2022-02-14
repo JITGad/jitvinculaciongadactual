@@ -249,10 +249,9 @@ public class Gametyperesource {
     
      /**
      * Retrieves representation of an instance of ini.CRUD
-     *
+     * @param idactivitiestype
      * @return an instance of java.lang.String
      */
-    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getgametypewithgames")
@@ -271,6 +270,7 @@ public class Gametyperesource {
             if (data.size() > 0) {
 
                 responseData.setMessage("Información encontrada");
+                
                 responseData.setData(data);
 
                 return Response.ok(Methods.objectToJsonString(responseData)).build();

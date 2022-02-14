@@ -40,7 +40,6 @@ public class Activitiestyperesource {
 
     public Activitiestyperesource() {
         atC = new ActivitiestypeController();
-        // atM = new ActivitiestypeModel();
         AuC = new AuthorizationController();
     }
 
@@ -92,7 +91,7 @@ public class Activitiestyperesource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getActivitiestypeAdmin")
     public Response getActivitiestypeAdmin(@Context HttpHeaders headers, @QueryParam("page") int page) {
-        ResponseDataPage responseDataPage = new ResponseDataPage("Ocurrió un error", page, true);
+        ResponseDataPage responseDataPage = new ResponseDataPage("Ocurrió un error", page, false);
         if (Configuration.DEBUG) {
             System.out.println("Ingresando a getActivitiestypeAdmin ");
         }
@@ -103,37 +102,25 @@ public class Activitiestyperesource {
             Authorization = Authorization == null ? "" : Authorization;
 
             if (!Authorization.isEmpty()) {
-                ArrayList<ActivitiestypeModel> data = atC.selectActivitiestypepage(page);
                 ResponseValidateToken validateToken = AuC.VToken(Authorization);
                 if (validateToken.isStatus()) {
-                    responseCountingPage = atC.CountingPageActivitiesType();
-                    if (data.size() > 0) {
-
-                        responseDataPage.setMessage("Información encontrada");
-                        responseDataPage.setCountingpage(responseCountingPage);
-                        responseDataPage.setData(data);
-                        return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
-                    }
-
-                    responseDataPage.setMessage("Información no encontrada");
-                    responseDataPage.setCountingpage(responseCountingPage);
+                    ArrayList<ActivitiestypeModel> data = atC.selectActivitiestypepage(page);
+                    responseDataPage.setMessage("Información encontrada");
+                    responseDataPage.setCountingpage(atC.CountingPageActivitiesType());
                     responseDataPage.setData(data);
+                    responseDataPage.setFlag(true);
                     return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
                 }
-
                 responseDataPage.setMessage(validateToken.getMessage());
                 responseDataPage.setCountingpage(responseCountingPage);
                 return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
 
             }
-
             responseDataPage.setMessage("Token vacio");
             responseDataPage.setCountingpage(responseCountingPage);
             return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
 
         } catch (Exception e) {
-            responseDataPage.setFlag(false);
-
             if (Configuration.DEBUG) {
 
                 responseDataPage.setMessage(e.getMessage());
@@ -283,7 +270,7 @@ public class Activitiestyperesource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response PostActivitiesType(@Context HttpHeaders headers, String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-if (Configuration.DEBUG) {
+        if (Configuration.DEBUG) {
             System.out.println("Ingresando a PostActivitiesType ");
         }
         activitiestypeModel
@@ -338,7 +325,7 @@ if (Configuration.DEBUG) {
     @Path("/PutActivitiesType")
     public Response PutActivitiesType(@Context HttpHeaders headers, String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-if (Configuration.DEBUG) {
+        if (Configuration.DEBUG) {
             System.out.println("Ingresando a PutActivitiesType ");
         }
         activitiestypeModel
@@ -394,7 +381,7 @@ if (Configuration.DEBUG) {
     @Path("/DeleteActivitiesType")
     public Response DeleteActivitiesType(@Context HttpHeaders headers, String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-if (Configuration.DEBUG) {
+        if (Configuration.DEBUG) {
             System.out.println("Ingresando a DeleteActivitiesType ");
         }
         activitiestypeModel
