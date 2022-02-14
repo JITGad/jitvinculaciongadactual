@@ -84,14 +84,15 @@ AS $BODY$
 DECLARE root_xpath TEXT = '/game/';
   resul integer = 0;
   BEGIN
-   return query INSERT INTO public.tblgame(idactivitiestype,idgametype,name,creationdate,updatedate,state,level)values
+   return query INSERT INTO public.tblgame(idactivitiestype,idgametype,name,creationdate,updatedate,state,level,image)values
 			((xpath(root_xpath|| 'idactivitiestype/text()', message_xml))[1]::text::integer,
 			 (xpath(root_xpath|| 'idgametype/text()', message_xml))[1]::text::integer,
 			 (xpath(root_xpath|| 'name/text()', message_xml))[1],
 			 (xpath(root_xpath|| 'creationdate/text()', message_xml))[1]::text::date,
 			(xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
 			(xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean,
-			(xpath(root_xpath|| 'level/text()', message_xml))[1]::text::integer) RETURNING *;																			 
+			(xpath(root_xpath|| 'level/text()', message_xml))[1]::text::integer,
+			(xpath(root_xpath|| 'image/text()', message_xml))[1]) RETURNING *;																			 
   END;
 $BODY$;
 
@@ -145,13 +146,15 @@ DECLARE root_xpath TEXT = '/game/';
 		name = (xpath(root_xpath|| 'name/text()', message_xml))[1],
 		updatedate = (xpath(root_xpath|| 'updatedate/text()', message_xml))[1]::text::date,
 		state = (xpath(root_xpath|| 'state/text()', message_xml))[1]::text::boolean,
-		level = (xpath(root_xpath|| 'level/text()', message_xml))[1]::text::integer
+		level = (xpath(root_xpath|| 'level/text()', message_xml))[1]::text::integer,
+		image = (xpath(root_xpath|| 'image/text()', message_xml))[1]
 	WHERE 
 	idgame = (xpath(root_xpath|| 'idgame/text()', message_xml))[1]::text::integer;
 	return resul;
 	
   END;
-$BODY$;
+$BODY$;	
+	
 
 ALTER FUNCTION public.updateGame(xml)
     OWNER TO fjdmwraxdzfdqi;
