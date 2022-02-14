@@ -5,7 +5,6 @@ import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ClaveValorGameModel;
 import com.jitgad.bjitgad.Models.GameModel;
-import com.jitgad.bjitgad.Models.GameimageModel;
 import com.jitgad.bjitgad.Models.GametypeModel;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,62 +16,68 @@ import java.util.ArrayList;
 public class GametypeDAO {
 
     private final ConectionPool con;
-    private String sentence;
-    private String sentence2;
-    private String sentence3;
 
     public GametypeDAO() {
         con = ConectionPoolDataSource.getConnection();
     }
 
     public ArrayList<GametypeModel> selectGametypepage(int page) throws Exception {
-        sentence = "select * from tblgametype order by idgametype asc limit 10 offset " + (page * 10 - 10);
+        String sentence = "select * from tblgametype "
+                + "order by idgametype asc limit 10 offset " + (page * 10 - 10);
         ArrayList<GametypeModel> datos = con.getObjectDB(sentence, GametypeModel.class, 1);
         return datos;
     }
 
     public ArrayList<GametypeModel> selectGametypewithgames(int idactivitiestype) throws Exception {
-        sentence = "select * from tblgametype where state = true order by idgametype asc";
+        String sentence = "select distinct tt.* "
+                + "from tblgametype tt "
+                + "inner join tblgame t on t.idgametype = tt.idgametype "
+                + "where tt.state = true "
+                + "and t.idactivitiestype = " + idactivitiestype + " "
+                + "order by tt.idgametype asc";
         ArrayList<GametypeModel> datos = con.getObjectDB(sentence, GametypeModel.class, 1);
 
         for (int i = 0; i < datos.size(); i++) {
-            sentence2 = "select tblgame.idgame, tblgame.idactivitiestype, tblgame.idgametype, tblgame.name, tblgame.creationdate, tblgame.updatedate, tblgame.state, tblgame.level from tblgame inner join tblgametype on tblgame.idgametype = tblgametype.idgametype  where tblgametype.idgametype =" + datos.get(i).getIdgametype() + " and tblgametype.state = true \n"
-                    + "and tblgame.state = true and tblgame.idactivitiestype = " + idactivitiestype + " order by idgame asc ";
+            String sql = "select "
+                    + "tblgame.idgame, "
+                    + "tblgame.idactivitiestype, "
+                    + "tblgame.idgametype, "
+                    + "tblgame.name, "
+                    + "tblgame.creationdate, "
+                    + "tblgame.updatedate, "
+                    + "tblgame.state, "
+                    + "tblgame.level, "
+                    + "tblgame.image "
+                    + "from tblgame "
+                    + "inner join tblgametype on tblgame.idgametype = tblgametype.idgametype  "
+                    + "where tblgametype.idgametype =" + datos.get(i).getIdgametype() + " "
+                    + "and tblgametype.state = true "
+                    + "and tblgame.state = true "
+                    + "and tblgame.idactivitiestype = " + idactivitiestype + " "
+                    + "order by idgame asc ";
 
-            ArrayList<GameModel> datosgame = con.getObjectDB(sentence2, GameModel.class, 1);
-
-//            for (int j = 0; j < datosgame.size(); j++) {
-//
-//                sentence3 = "select * from tblgameimage where idgame =" + datosgame.get(j).getIdgame();
-//                GameModel Juegoactual = datosgame.get(j);
-//                Juegoactual.setDetalles(con.getObjectDB(sentence3, GameimageModel.class, 1));
-//                datosgame.set(j, Juegoactual);
-//
-//            }
-
+            ArrayList<GameModel> datosgame = con.getObjectDB(sql, GameModel.class, 1);
             GametypeModel Tipojuegoactual = datos.get(i);
             Tipojuegoactual.setDetalles(datosgame);
             datos.set(i, Tipojuegoactual);
-
-            if (datos.get(i).getDetalles().size() <= 0) {
-
-                datos.remove(datos.get(i));
-                i--;
-            }
-
         }
 
         return datos;
     }
 
     public ArrayList<ClaveValorGameModel> selectgametypecv() throws Exception {
-        sentence = "select idgametype as id, name as text, shortname as value from tblgametype order by idgametype";
+        String sentence = "select idgametype as id, "
+                + "name as text, "
+                + "shortname as value "
+                + "from tblgametype "
+                + "order by idgametype";
         ArrayList<ClaveValorGameModel> datos = con.getObjectDB(sentence, ClaveValorGameModel.class, 1);
         return datos;
     }
 
     public String selectGametypebyid(int id) throws Exception {
-        sentence = "select * from tblgametype where idgametype=" + id;
+        String sentence = "select * from tblgametype "
+                + "where idgametype=" + id;
         ArrayList<GametypeModel> datos = con.getObjectDB(sentence, GametypeModel.class, 1);
         if (datos.size() > 0) {
             return Methods.objectToJsonString(datos.get(0));
@@ -82,7 +87,7 @@ public class GametypeDAO {
     }
 
     public int CountingPageGametype() throws SQLException {
-        sentence = String.format("select * from tblgametype");
+        String sentence = String.format("select * from tblgametype");
         return ((con.returnRecord(sentence)).getRowCount());
     }
 
