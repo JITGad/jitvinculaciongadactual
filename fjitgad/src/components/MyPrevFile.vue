@@ -1,6 +1,6 @@
 <template>
   <img v-if="type == 'image'" ref="filePrev" class="responsive-image" />
-  <audio v-if="type == 'audio'" ref="filePrev" controls="controls">
+  <audio style="width: 100%;" v-if="type == 'audio'" ref="filePrev" controls="controls">
     <source src="" type="audio/*" />
   </audio>
   <video v-if="type == 'video'" style="width: 100%;" ref="filePrev" controls="controls">
