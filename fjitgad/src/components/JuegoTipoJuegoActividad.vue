@@ -47,13 +47,21 @@ export default {
       type: Number,
       default: 0,
     },
+    levels: {
+      type: Number,
+      default: 1,
+    }
   },
   setup(props, context) {
     const Router = useRouter();
     const MyImage = computed(() => setPathFile(props.image));
 
     function Jugar() {
-      Router.push({ name: "NivelesJuego", params: { id: props.idgame } });
+      if (props.levels > 1) {
+        Router.push({ name: "NivelesJuego", params: { id: props.idgame } });
+        return;
+      }
+      Router.push({ name: "JugarJuego", params: { id: props.idgame } });
     }
     return {
       MyImage,

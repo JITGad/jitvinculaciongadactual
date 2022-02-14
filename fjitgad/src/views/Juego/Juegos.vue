@@ -6,6 +6,7 @@
         <th scope="col">Nombre</th>
         <th scope="col">Estado</th>
         <th scope="col">Portada</th>
+        <th scope="col">Niveles</th>
         <th scope="col">Tipo de actividad</th>
         <th scope="col">Tipo de juego</th>
         <th scope="col">Editar</th>
@@ -22,6 +23,7 @@
         <td align="center">
           <my-prev-file type="image" v-model="juego.image" />
         </td>
+        <td align="center">{{ juego.level }}</td>
         <td align="center">{{ juego.nameactivities }}</td>
         <td align="center">{{ juego.namegametype }}</td>
         <td align="center">
