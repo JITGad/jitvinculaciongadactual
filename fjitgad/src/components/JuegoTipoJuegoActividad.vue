@@ -57,6 +57,7 @@ export default {
     const MyImage = computed(() => setPathFile(props.image));
 
     function Jugar() {
+      console.log(props);
       if (props.levels > 1) {
         Router.push({ name: "NivelesJuego", params: { id: props.idgame } });
         return;

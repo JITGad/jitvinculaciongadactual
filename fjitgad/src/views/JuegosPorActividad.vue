@@ -15,6 +15,7 @@
               :idgame="juego.idgame"
               :image="juego.image"
               :label="juego.name"
+              :levels="juego.level"
             />
           </template>
         </div>

@@ -153,6 +153,11 @@ const routes = [
     name: "JuegosPorActividad",
     component: () => import('../views/JuegosPorActividad.vue')
   },
+  {
+    path: '/niveles-Juego/:id',
+    name: "NivelesJuego",
+    component: () => import('../views/NivelesJuego.vue')
+  },
   // otherwise redirect to home
   { path: "/:catchAll(.*)", redirect: '/' }
 ]
