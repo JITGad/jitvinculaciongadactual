@@ -50,7 +50,7 @@ export default {
     function Jugar() {
       Router.push({
         name: "JugarJuego",
-        params: { id: props.idgame, nivel: props.level },
+        params: { id: props.game.idgame, nivel: props.level },
       });
     }
 

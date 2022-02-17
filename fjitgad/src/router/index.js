@@ -135,7 +135,7 @@ const routes = [
   },
   {
     path: '/jugar/:id/:nivel',
-    name: 'Jugar',
+    name: 'JugarJuego',
     component: () => import('../views/Jugar.vue')
   },
   {
@@ -149,7 +149,7 @@ const routes = [
     component: () => import('../views/Logout.vue')
   },
   {
-    path: '/juegos-por-actividad',
+    path: '/juegos-por-actividad/:id',
     name: "JuegosPorActividad",
     component: () => import('../views/JuegosPorActividad.vue')
   },
