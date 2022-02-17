@@ -134,7 +134,7 @@ const routes = [
     ]
   },
   {
-    path: '/jugar/:id',
+    path: '/jugar/:id/:nivel',
     name: 'Jugar',
     component: () => import('../views/Jugar.vue')
   },
