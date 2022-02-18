@@ -26,11 +26,12 @@
 
 <script>
 import { useRoute } from "vue-router";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import TipoJuegosService from "../api/TipoJuegosService.js";
 import { message_error } from "../util/Messages.js";
 import JuegoTipoJuegoActividad from "../components/JuegoTipoJuegoActividad.vue";
 import TipoJuegoActividad from "../components/TipoJuegoActividad.vue";
+import ActividadesService from "../api/ActividadesService.js";
 export default {
   name: "JuegosPorActividad",
   components: {
@@ -38,22 +39,37 @@ export default {
     TipoJuegoActividad,
   },
   setup(props, context) {
+    const InitialState = {
+      idactivitiestype: 0,
+      name: "",
+      image: null,
+      state: true,
+    };
     const JuegosPorActividad = ref([]);
     const route = useRoute();
     const Loading = ref(true);
-    const Actividad = route.params;
-    console.log(Actividad);
-    const RoutesEncabezadoJuego = ref(["Actividad", Actividad.nombre]);
+    const ActividadId = route.params["id"];
+    const Actividad = reactive({ ...InitialState });
+    const RoutesEncabezadoJuego = ref(["Actividad"]);
     onMounted(async () => {
-      const response = await TipoJuegosService.getTipoJuegoPorActividad(
-        Actividad.id
+      Loading.value = true;
+      const ActividadResponse = await ActividadesService.getActividad(
+        ActividadId
       );
-      Loading.value = false;
-      if (!response.status.error) {
-        JuegosPorActividad.value = response.data;
-        console.log(JuegosPorActividad.value);
+      if (!ActividadResponse.status.error) {
+        Object.assign(Actividad, ActividadResponse.data);
+        RoutesEncabezadoJuego.value = ["Actividad", Actividad.name];
+        const response = await TipoJuegosService.getTipoJuegoPorActividad(
+          ActividadId
+        );
+        Loading.value = false;
+        if (!response.status.error) {
+          JuegosPorActividad.value = response.data;
+        } else {
+          message_error(response.status.message);
+        }
       } else {
-        message_error(response.status.message);
+        message_error(ActividadResponse.status.message);
       }
     });
 

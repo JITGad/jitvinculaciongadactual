@@ -5,7 +5,7 @@
       @click="Jugar"
       onmouseover="this.style.background='#f2f0f0'"
       onmouseout="this.style.background=''"
-      style="cursor: pointer;"
+      style="cursor: pointer"
     >
       <div class="card-body">
         <div class="col text-center">
@@ -20,7 +20,7 @@
           class="m-1"
         />
         <h4 class="card-title my-3" style="text-align: center">
-          {{ label }}
+          Nivel {{ level }}
         </h4>
       </div>
     </div>
@@ -33,39 +33,35 @@ import { computed } from "vue";
 import { setPathFile } from "../util/Utilities";
 
 export default {
-  name: "JuegoTipoJuegoActividad",
+  name: "NivelJuego",
   props: {
-    image: {
-      type: String,
-      default: "",
+    game: {
+        type: Object,
+        required: true,
     },
-    label: {
-      type: String,
-      default: "",
-    },
-    idgame: {
+    level: {
       type: Number,
       default: 0,
     },
-    levels: {
-      type: Number,
-      default: 1,
-    }
   },
   setup(props, context) {
     const Router = useRouter();
     const MyImage = computed(() => setPathFile(props.image));
-
     function Jugar() {
-      if (props.levels > 1) {
-        Router.push({ name: "NivelesJuego", params: { id: props.idgame } });
-        return;
-      }
-      Router.push({ name: "JugarJuego", params: { id: props.idgame, nivel: 1 } });
+      Router.push({
+        name: "JugarJuego",
+        params: { id: props.game.idgame, nivel: props.level },
+      });
     }
+
+    const GetRamdomImage = computed(() => {
+      return Juego.detalles[(props.level + 1) % Juego.detalles.length].image;
+    });
+
     return {
-      MyImage,
       Jugar,
+      MyImage,
+      GetRamdomImage,
     };
   },
 };
