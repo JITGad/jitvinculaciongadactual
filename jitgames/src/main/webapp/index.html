@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Memory game</title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <script src="js/librarys/jquery.min.js" type="text/javascript"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: inherit;
+        }
+
+        html {
+            box-sizing: border-box;
+        }
+
+        body {
+            /* Patrón de fondo de Patrones Sutiles */
+            background: url('img/ignasi_pattern_s.png');
+            font-family: "Open Sans", sans-serif;
+            /*una Em aproximadamente diez píxeles (16 x 62,5% = 10)*/
+            font-size: 62.5%;
+            letter-spacing: 1.5px;
+            margin: 0;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 0.5em;
+        }
+
+        ul>li {
+            list-style: none;
+        }
+
+        .card,
+        .reset-btn,
+        .start-btn {
+            cursor: pointer;
+        }
+
+        .btn {
+            border-radius: 1em;
+            border: none;
+            color: #fff;
+            box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
+            padding: 0.8em;
+        }
+
+        /*----------------------------------  
+Header
+------------------------------------*/
+        h1 {
+            font-size: 3em;
+            font-weight: 400;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 1.6em;
+        }
+
+        h3 {
+            font-weight: 400;
+        }
+
+        /*----------------------------------  
+Sección - Panel de puntuación
+------------------------------------*/
+        .score-panel {
+            font-size: 1.4em;
+            padding: 1em 0 2em;
+        }
+
+        .star-rating>li {
+            display: inline-block;
+            padding: 0.5em;
+        }
+
+        .moves-counter {
+            padding: 0.5em;
+        }
+
+
+
+        .reset-btn,
+        .start-btn {
+            background: #000;
+        }
+
+        .timer-container {
+            background: #fff;
+            border-radius: 0.5em;
+            color: #000;
+            margin: 0.5em;
+            padding: 0.5em;
+        }
+
+        .timer {
+            font-size: 1em;
+        }
+
+        /*----------------------------------  
+Sección - Modal
+------------------------------------*/
+        /* Modal (background) */
+        .modal {
+            /*Ocultos por defecto */
+            display: none;
+            position: fixed;
+            z-index: 99;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            /* Color de reserva */
+            background-color: rgb(46, 61, 73);
+            /* Con opacidad */
+            background-color: rgba(46, 61, 73, 0.6);
+        }
+
+        /* Contenido Modal/Caja */
+        .modal-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            /* 5% desde la parte superior y centrado */
+            margin: 5% auto;
+            border: 0.8em solid #fc4;
+            padding-right: 2em;
+            width: 80%;
+        }
+
+        /* El botón de cierre */
+        .close {
+            align-self: flex-end;
+            color: #28e;
+            font-size: 5em;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #5cf;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Imagen modal*/
+        .modal-img {
+            display: inline-block;
+            margin: 1em 0 1em;
+            width: 20em;
+        }
+
+        p.stats {
+            font-weight: 600;
+        }
+
+        p.stats:last-child {
+            margin-bottom: 1em;
+        }
+
+        .play-again-btn {
+            background: #33ffd1;
+            margin-bottom: 1em;
+        }
+
+        /*----------------------------------  
+Baraja de cards
+------------------------------------*/
+        /*Movil - responsive */
+        .deck {
+            background: linear-gradient(to bottom, #5cf, #33ffd1);
+            border-radius: 1.5em;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            height: 35em;
+            margin-bottom: 6em;
+            padding: 0.5em;
+            width: 35em;
+        }
+
+        .deck,
+        .card {
+            box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
+        }
+
+        .card {
+            background: #fc4;
+            border-radius: 0.5em;
+            height: 7em;
+            width: 7em;
+        }
+
+
+        img {
+            user-select: none;
+            width: 6em;
+        }
+
+        .deck img {
+            visibility: hidden;
+        }
+
+        .deck .card.flip {
+            background: #fff;
+            cursor: default;
+            transform: rotateY(180deg);
+            transition: transform 0.3s linear;
+            pointer-events: none;
+        }
+
+        .flip img {
+            background: #fff;
+            visibility: visible;
+        }
+
+        .deck .card.match {
+            background: #39d;
+            visibility: visible;
+            cursor: default;
+            animation: pulse 1s;
+        }
+
+        .match img {
+            background: #39d;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            80% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @media screen and (min-width: 550px) {
+            .deck {
+                height: 50em;
+                padding: 2em;
+                width: 50em;
+            }
+
+            .card {
+                height: 10em;
+                width: 10em;
+            }
+
+            .deck img {
+                width: 9em;
+            }
+
+            .modal-content h2 {
+                font-size: 4em;
+            }
+
+            .play-again-btn {
+                font-size: 1.8em;
+            }
+        }
+
+        /*---------------------------------- 
+        Escritorio - responsive
+        ------------------------------------*/
+        @media screen and (min-width: 800px) {
+
+            h1 {
+                font-size: 6em;
+            }
+
+            p {
+                font-size: 2.3em;
+            }
+
+            .deck {
+                height: 70em;
+                width: 70em;
+            }
+
+            .card {
+                height: 15em;
+                width: 15em;
+            }
+
+            .deck img {
+                width: 13em;
+            }
+
+            .reset-btn {
+                font-size: 0.8em;
+            }
+
+            .footer {
+                font-size: 1.2em;
+            }
+
+            .modal-content h2 {
+                font-size: 5em;
+            }
+
+            /* Imagen modal*/
+            .modal-img {
+                width: 30em;
+            }
+
+            .play-again-btn {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Juego de memoria</h1>
+        </header>
+        <section class="score-panel">
+            <h3>Panel de puntuación</h3>
+            <ul id="star-rating" class="star-rating">
+                <li class="star"><i class="fa fa-star"></i></li>
+                <li class="star"><i class="fa fa-star"></i></li>
+                <li class="star"><i class="fa fa-star"></i></li>
+            </ul>
+            <span class="moves-counter">0</span> Movimientos
+            <div class="timer-container">
+                <span class="timer"> <i class="fa fa-hourglass-start"></i> Tiempo: 00:00</span>
+            </div>
+            <div class="buttonse" style="display: flex;">
+                <div class="start">
+                    <button class="btn start-btn">Empezar <i class="fa fa-play"></i></button>
+                </div>
+                <div class="reset">
+                    <button class="btn reset-btn">Reiniciar <i class="fa fa-repeat"></i></button>
+                </div>
+            </div>
+
+        </section>
+        <ul class="deck"></ul>
+    </div>
+
+    <!-- Modal -->
+    <section class="win-game-modal">
+        <div id="modal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Enhorabuena.</h2>
+                <p>Has ganado el juego y has encontrado todas las parejas de cartas.</p>
+                <img class="modal-img" src="img/ganaste.png">
+                <button class="btn play-again-btn">¿Volver a jugar?</button>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/FetchMaster.js" type="text/javascript"></script>
+    <script src="js/Memory_Card.js" type="text/javascript"></script>
+    <script src="js/0_global.js" type="text/javascript"></script>
+
+</body>
+
+</html>
