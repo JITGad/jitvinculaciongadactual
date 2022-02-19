@@ -50,11 +50,11 @@ function process() {
     let timeStart = false;
     const totalDraggableItems = brands.length;
     const totalMatchingPairs = brands.length; // Should be <= totalDraggableItems
-
+    const reset = document.querySelector(".reset-btn");
     const scoreSection = document.querySelector(".score");
     const correctSpan = scoreSection.querySelector(".correct");
     const totalSpan = scoreSection.querySelector(".total");
-    const playAgainBtn = scoreSection.querySelector("#play-again-btn");
+    const playAgainBtn = document.querySelector(".play-again-btn");
 
     const draggableItems = document.querySelector(".draggable-items");
     const matchingPairs = document.querySelector(".matching-pairs");
@@ -164,8 +164,14 @@ function process() {
 
     function drop(event) {
         event.preventDefault();
+
+        if (timeStart === false) {
+            timeStart = true; 
+            timer();
+          }
+
         event.target.classList.remove("droppable-hover");
-        timer();
+       // timer();
         const draggableElementBrand = event.dataTransfer.getData("text");
         const droppableElementBrand = event.target.getAttribute("data-brand");
         const isCorrectMatching = draggableElementBrand === droppableElementBrand;
@@ -188,7 +194,7 @@ function process() {
         console.log(correct);
         if (correct === Math.min(totalMatchingPairs, totalDraggableItems)) { // Game Over!!
             playAgainBtn.style.display = "block";
-            resetEverything();
+            winGame();
             setTimeout(() => {
                 playAgainBtn.classList.add("play-again-btn-entrance");
             }, 200);
@@ -196,7 +202,16 @@ function process() {
     }
 
     // Other Event Listeners
-    playAgainBtn.addEventListener("click", playAgainBtnClick);
+   // playAgainBtn.addEventListener("click", playAgainBtnClick);
+    playAgainBtn.addEventListener('click',function() {
+        modal.style.display = "none";
+        playAgainBtnClick();
+      });
+
+      reset.addEventListener('click',function() {
+        playAgainBtnClick();
+      });
+
     function playAgainBtnClick() {
         playAgainBtn.classList.remove("play-again-btn-entrance");
         correct = 0;
@@ -207,16 +222,21 @@ function process() {
             scoreSection.style.opacity = 0;
         }, 100);
         setTimeout(() => {
-            playAgainBtn.style.display = "none";
+            rein();
+        }, 500);
+    }
+
+    function rein(){
+        playAgainBtn.style.display = "none";
             while (draggableItems.firstChild) draggableItems.removeChild(draggableItems.firstChild);
             while (matchingPairs.firstChild) matchingPairs.removeChild(matchingPairs.firstChild);
+            resetEverything();
             initiateGame();
             correctSpan.textContent = correct;
             totalSpan.textContent = total;
             draggableItems.style.opacity = 1;
             matchingPairs.style.opacity = 1;
             scoreSection.style.opacity = 1;
-        }, 500);
     }
 
     // Auxiliary functions
@@ -249,11 +269,10 @@ function process() {
         }
         // Seleccione todas las etiquetas p con la clase de estadísticas y actualice el contenido
         let p = stats.querySelectorAll("p.stats");
-            // Establecer el nuevo <p> para tener el contenido de las estadísticas (tiempo, movimientos y calificación de estrellas)
+            // Establecer el nuevo <p> para tener el contenido de las estadísticas (tiempo, movimientos)
           
           p[0].innerHTML = "Tiempo en completar: " + minutes + " Minutos y " + seconds + " Segundos";
-          p[1].innerHTML = "Movimientos realizados: " + moves;
-          p[2].innerHTML = "Su clasificación por estrellas es:  " + starCount + " de 3";
+          p[1].innerHTML = "Puntuación: " + correct + "/" + total;
       }
 
     function displayModal() {
@@ -273,6 +292,12 @@ function process() {
         }
         };
     }
+
+    function winGame() {
+          stopTime();
+          AddEstadisticas();
+          displayModal();
+      }
 }
 
 getdata();
