@@ -89,7 +89,9 @@ public class GameDAO {
 
         GameModel JuegoSeleccionado = datos.get(0);
 
-        sentence = "select * from tblgameimage where idgame =" + JuegoSeleccionado.getIdgame();
+        sentence = "select tblgameimage.idgameimage, tblgameimage.idgame, tblgameimage.idcolortype,tblcolortype.name as color, tblcolortype.html, tblgameimage.image,\n"
+                + "tblgameimage.paragraph, tblgameimage.audio_parag, tblgameimage.video_parag, tblgameimage.creationdate, tblgameimage.updatedate, tblgameimage.state\n"
+                + "from tblgameimage inner join tblcolortype on tblcolortype.idcolortype = tblgameimage.idcolortype where idgame =" + JuegoSeleccionado.getIdgame();
         JuegoSeleccionado.setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
 
         return Methods.objectToJsonString(JuegoSeleccionado);
@@ -123,7 +125,7 @@ public class GameDAO {
                 + "<updatedate>" + gameModel.getUpdatedate() + "</updatedate>"
                 + "<state>" + gameModel.getState() + "</state>"
                 + "<level>" + gameModel.getLevel() + "</level>"
-                + "<image>" + gameModel.getImage() + "</image>"       
+                + "<image>" + gameModel.getImage() + "</image>"
                 + "</game>");
 
         String sentency = "Select * from insertGame('" + structure + "')";
@@ -167,7 +169,7 @@ public class GameDAO {
                 + "<updatedate>" + gameModel.getUpdatedate() + "</updatedate>"
                 + "<state>" + gameModel.getState() + "</state>"
                 + "<level>" + gameModel.getLevel() + "</level>"
-                + "<image>" + gameModel.getImage() + "</image>"         
+                + "<image>" + gameModel.getImage() + "</image>"
                 + "</game>");
 
         String sentency = "Select * from updateGame('" + structure + "')";

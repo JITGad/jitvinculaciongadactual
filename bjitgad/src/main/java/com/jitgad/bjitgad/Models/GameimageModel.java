@@ -1,4 +1,3 @@
-
 package com.jitgad.bjitgad.Models;
 
 /**
@@ -6,10 +5,12 @@ package com.jitgad.bjitgad.Models;
  * @author jorge
  */
 public class GameimageModel {
-    
+
     private int idgameimage;
     private int idgame;
     private int idcolortype;
+    private String color;
+    private String html;
     private String image;
     private String paragraph;
     private String audio_parag;
@@ -21,10 +22,12 @@ public class GameimageModel {
     public GameimageModel() {
     }
 
-    public GameimageModel(int idgameimage, int idgame, int idcolortype, String image, String paragraph, String audio_parag, String video_parag, String creationdate, String updatedate, boolean state) {
+    public GameimageModel(int idgameimage, int idgame, int idcolortype, String color, String html, String image, String paragraph, String audio_parag, String video_parag, String creationdate, String updatedate, boolean state) {
         this.idgameimage = idgameimage;
         this.idgame = idgame;
         this.idcolortype = idcolortype;
+        this.color = color;
+        this.html = html;
         this.image = image;
         this.paragraph = paragraph;
         this.audio_parag = audio_parag;
@@ -33,6 +36,7 @@ public class GameimageModel {
         this.updatedate = updatedate;
         this.state = state;
     }
+    
 
     public int getIdgameimage() {
         return idgameimage;
@@ -56,6 +60,22 @@ public class GameimageModel {
 
     public void setIdcolortype(int idcolortype) {
         this.idcolortype = idcolortype;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getHtml() {
+        return html;
+    }
+
+    public void setHtml(String html) {
+        this.html = html;
     }
 
     public String getImage() {
@@ -114,11 +134,4 @@ public class GameimageModel {
         this.state = state;
     }
 
-    
-    
-    
-    
-    
-
-   
 }
