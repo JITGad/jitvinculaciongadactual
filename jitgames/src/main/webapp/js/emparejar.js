@@ -94,21 +94,39 @@ function process() {
         const randomDroppableBrands = totalMatchingPairs < totalDraggableItems ? generateRandomItemsArray(totalMatchingPairs, randomDraggableBrands) : randomDraggableBrands;
         const alphabeticallySortedRandomDroppableBrands = [...randomDroppableBrands].sort((a, b) => a.brandName.toLowerCase().localeCompare(b.brandName.toLowerCase()));
 
-        // Create "draggable-items" and append to DOM
+       /*  // Create "draggable-items" and append to DOM
         for (let i = 0; i < randomDraggableBrands.length; i++) {
             draggableItems.insertAdjacentHTML("beforeend", `
             <img src="${randomDraggableBrands[i].iconName}" style="color: ${randomDraggableBrands[i].color}; width:100px; " id="${randomDraggableBrands[i].iconName}"></img>`);
+        } */
+
+        for (let i = 0; i < randomDraggableBrands.length; i++) {
+            draggableItems.insertAdjacentHTML("beforeend", `
+            <div class="draggable" draggable="true" style="background-color:${randomDraggableBrands[i].color}; width:100px; height:100px;" id="${randomDraggableBrands[i].color}"></div>`);
         }
 
-        // Create "matching-pairs" and append to DOM
-        for (let i = 0; i < alphabeticallySortedRandomDroppableBrands.length; i++) {
+
+        /*  // Create "matching-pairs" and append to DOM
+         for (let i = 0; i < alphabeticallySortedRandomDroppableBrands.length; i++) {
             matchingPairs.insertAdjacentHTML("beforeend", `
             <div class="matching-pair">
               <span class="label">${alphabeticallySortedRandomDroppableBrands[i].brandName}</span>
               <span class="droppable" data-brand="${alphabeticallySortedRandomDroppableBrands[i].iconName}"></span>
             </div>
           `);
+        } */
+
+
+        // Create "matching-pairs" and append to DOM
+        for (let i = 0; i < alphabeticallySortedRandomDroppableBrands.length; i++) {
+            matchingPairs.insertAdjacentHTML("beforeend", `
+            <div class="matching-pair">
+              <span class="label"><img draggable="false" src="${alphabeticallySortedRandomDroppableBrands[i].iconName}" style="color: ${randomDraggableBrands[i].color}; width:100px; "></img></span>
+              <span class="droppable"data-brand="${alphabeticallySortedRandomDroppableBrands[i].color}"></span>
+            </div>
+          `);
         }
+
 
         draggableElements = document.querySelectorAll(".draggable");
         droppableElements = document.querySelectorAll(".droppable");
@@ -132,7 +150,9 @@ function process() {
     //Events fired on the drag target
 
     function dragStart(event) {
+        // transfiere texto que en este caso es el html del color (ID)
         event.dataTransfer.setData("text", event.target.id); // or "text/plain"
+       // console.log("que será estoxd");
         
     }
 
@@ -141,11 +161,13 @@ function process() {
     function dragEnter(event) {
         if (event.target.classList && event.target.classList.contains("droppable") && !event.target.classList.contains("dropped")) {
             event.target.classList.add("droppable-hover");
+            
         }
     }
 
     function dragOver(event) {
         if (event.target.classList && event.target.classList.contains("droppable") && !event.target.classList.contains("dropped")) {
+          //  console.log("arrastrando");
             event.preventDefault();
             
         }
@@ -160,6 +182,8 @@ function process() {
     function drop(event) {
         event.preventDefault();
 
+        console.log("llegaste al drop");
+
         if (timeStart === false) {
             timeStart = true; 
             timer();
@@ -167,16 +191,23 @@ function process() {
 
         event.target.classList.remove("droppable-hover");
        // timer();
+       // transfiere texto que en este caso es el html del color
         const draggableElementBrand = event.dataTransfer.getData("text");
+        console.log(draggableElementBrand);
         const droppableElementBrand = event.target.getAttribute("data-brand");
         const isCorrectMatching = draggableElementBrand === droppableElementBrand;
+        console.log(droppableElementBrand);
+        console.log(isCorrectMatching);
         total++;
         if (isCorrectMatching) {
             const draggableElement = document.getElementById(draggableElementBrand);
             event.target.classList.add("dropped");
              draggableElement.classList.add("dragged");
            /* draggableElement.setAttribute("draggable", "false"); */
-            event.target.innerHTML = `<img src="${draggableElementBrand}" style="width:100px;"></img>`;
+           console.log(draggableElementBrand);
+           
+           event.target.innerHTML = `<div style="background-color:${draggableElementBrand}; width:100px; height:100px;"></div>`;
+           // event.target.innerHTML = `<img src="${draggableElementBrand}" style="width:100px;"></img>`;
             correct++;
         }
         scoreSection.style.opacity = 0;

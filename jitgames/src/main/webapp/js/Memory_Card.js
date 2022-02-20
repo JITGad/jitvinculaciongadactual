@@ -12,6 +12,8 @@ const encodeQueryString = (params = {}) => {
         : "";
 };
 
+
+
 async function getdata() { 
     const response = await getJuego(80);
     if (!response.status.error) {

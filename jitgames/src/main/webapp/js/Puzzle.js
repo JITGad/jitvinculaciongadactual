@@ -188,7 +188,7 @@ function buildPieces() {
             yPos += _pieceHeight;
         }
     }
-    document.onmousedown = shufflePuzzle;
+    shufflePuzzle();
 }
 
 
