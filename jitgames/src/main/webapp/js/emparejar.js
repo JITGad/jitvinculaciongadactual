@@ -102,7 +102,7 @@ function process() {
 
         for (let i = 0; i < randomDraggableBrands.length; i++) {
             draggableItems.insertAdjacentHTML("beforeend", `
-            <div class="draggable" draggable="true" style="background-color:${randomDraggableBrands[i].color}; width:100px; height:100px;" id="${randomDraggableBrands[i].color}"></div>`);
+            <div class="draggable" draggable="true" style="background-color:${randomDraggableBrands[i].color}; width:100px; height:100px;font-size: 20px;" id="${randomDraggableBrands[i].color}">${randomDraggableBrands[i].brandName}</div>`);
         }
 
 
