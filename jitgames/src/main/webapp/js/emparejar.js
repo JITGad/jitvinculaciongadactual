@@ -1,6 +1,5 @@
 const fm = new FetchMaster();
 const brands = [];
-var credenciales = JSON.stringify({ idgame: "77" });
 var urlApi = "webresources/game";
 
 
@@ -83,7 +82,6 @@ function process() {
 
       function resetEverything() {
         // Detener el tiempo, restablecer los minutos y los segundos actualizar la hora interna HTML
-        //console.log(deckCards);
         stopTime();
         timeStart = false;
         seconds = 0;

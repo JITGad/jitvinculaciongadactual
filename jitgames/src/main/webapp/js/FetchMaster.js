@@ -10,7 +10,7 @@ class FetchMaster {
     #RESPONSESTATUSNOTMODIFIED = "notmodified";
     #RESPONSESTATUSTIMEOUT = "timeout";
     #RESPONSESTATUSERROR = "error";
-    #baseUrl = "http://localhost:8080/bjitgad/";
+    #baseUrl = "http://192.241.152.203:8080/bjitgad/";
 
     constructor() {
     }
@@ -30,7 +30,7 @@ class FetchMaster {
 //        let user = JSON.parse(localStorage.getItem('user'));
 //
 //        if (user && user.user_token) {
-            return 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQ1MTIzOTk3LCJleHAiOjE2NDU5ODc5OTcsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIn0.4r7xDUinRPlrWm4eOy5cb9eJbMfyITMcsDztOIC4b8c';
+            return 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQ1MzI5ODIxLCJleHAiOjE2NDYxOTM4MjEsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIn0.w_OAwYPRfH0y2vXFQMMt4sdxPFFDOS0rLWcBFt3w9GU';
 //        } else {
 //            return '';
 //        }

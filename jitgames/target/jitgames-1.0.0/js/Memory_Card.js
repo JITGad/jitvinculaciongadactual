@@ -1,6 +1,5 @@
 const fm = new FetchMaster();
 const deckCards=[];
-var credenciales = JSON.stringify({idgame: "52"});
 var urlApi = "webresources/game";
 
 const encodeQueryString = (params = {}) => {
@@ -14,18 +13,23 @@ const encodeQueryString = (params = {}) => {
 };
 
 async function getdata() { 
-    const response = await getJuego(52);
+    const response = await getJuego(80);
     if (!response.status.error) {
-    console.log(response.data.detalles);
-     // setLoading(false);
-     for(i in response.data.detalles)
-        deckCards.push(GlobalImageLocation+response.data.detalles[i].image);
-        deckCards.push(GlobalImageLocation+response.data.detalles[i].image);
+    console.log(response.data);
+
+      for(i in response.data.detalles)
+          deckCards.push(GlobalImageLocation+response.data.detalles[i].image);
+      console.log(deckCards)
     } else {
         alert("ERROR");
     }
+
+    for(i in deckCards)
+       deckCards.push(deckCards[i])
    
 }
+
+
 
 function getJuego(gameid = 0) {
     return new Promise((resolve) => {
@@ -65,7 +69,15 @@ function getJuego(gameid = 0) {
     return array;
   }
 
+  
+
   function startGame() {
+
+    // repetir las cartas de deckCards
+
+    
+
+
     // Invocar la función de store y almacenar en la variable
     const shuffledDeck = shuffle(deckCards); 
     // Iterar sobre deck (baraja de cartas)

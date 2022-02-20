@@ -20,8 +20,8 @@ public class testeosmain {
 
     public static void main(String[] args) throws UnsupportedEncodingException, IOException {
         ConectionPoolDataSource.getConnection().testConection();
-        UniqueName un = new UniqueName();
-        System.out.println(un.nunique());
+//        UniqueName un = new UniqueName();
+//        System.out.println(un.nunique());
     }
 
     public static void prueba1() {
