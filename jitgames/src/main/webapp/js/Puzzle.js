@@ -16,8 +16,9 @@ async function getdata() {
     const response = await getJuego(77);
     if (!response.status.error) {
         console.log(GlobalImageLocation + response.data.image);
-        for(i in response.data.detalles)
-            init(GlobalImageLocation+response.data.detalles[i].image, response.data.level);
+        init(GlobalImageLocation+response.data.detalles[0].image, response.data.level);
+        /* for(i in response.data.detalles)
+            init(GlobalImageLocation+response.data.detalles[i].image, response.data.level); */
     } else {
         alert("ERROR");
     }
@@ -101,26 +102,30 @@ function timer() {
 
 
 function init(img,lvl) {
-   
+    _img = new Image();
     _con=document.getElementById('containercan');
     _canvas = document.getElementById('canvas');
     _stage = _canvas.getContext('2d');
     hcv = parseInt(getComputedStyle(_con).getPropertyValue('height'));
     wcv =parseInt( getComputedStyle(_con).getPropertyValue('width'));
+    _img.height=hcv;
+    _img.width=wcv;
+    //console.log(_img.height+ " - " + _img.width);
+    
     PUZZLE_DIFFICULTY = lvl;
-    _img = new Image();
+    
     _img.addEventListener('load', onImage, false);
     _img.src = img;
 
     idim.src = img;
-    
-    _img.height=hcv;
-    _img.width=wcv;
+    console.log(idim.height + " - " + idim.width);
+  
 }
 
 
 function onImage(e) {
     console.log('onimage')
+    console.log(_img.height+ " - " + _img.width);
     _pieceWidth = Math.floor(_img.width / PUZZLE_DIFFICULTY)
     _pieceHeight = Math.floor(_img.height / PUZZLE_DIFFICULTY)
     _puzzleWidth = _pieceWidth * PUZZLE_DIFFICULTY;
@@ -130,8 +135,8 @@ function onImage(e) {
 }
 
 function setCanvas() {
-     _canvas.width = wcv;
-     _canvas.height = hcv; 
+     _canvas.width = _puzzleWidth;
+     _canvas.height = _puzzleHeight ; 
    // _canvas.style.border = "1px solid black";
 }
 
@@ -141,7 +146,7 @@ function initPuzzle() {
     _currentPiece = null;
     _currentDropPiece = null;
     
-    _stage.drawImage(_img, 0, 0, wcv, hcv);
+    _stage.drawImage(_img, 0, 0, _puzzleWidth, _puzzleHeight);
 
     if (timeStart === false) {
         timeStart = true; 
@@ -193,6 +198,7 @@ function buildPieces() {
 
 
 function shufflePuzzle() {
+    
     _pieces = shuffleArray(_pieces);
     //aqui
     _stage.clearRect(0, 0, _puzzleWidth, _puzzleHeight);

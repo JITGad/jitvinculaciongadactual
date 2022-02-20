@@ -75,6 +75,7 @@ public class GameDAO {
                 + "actype.name as nameactivities, "
                 + "tblgametype.name as namegametype, "
                 + "game.idgametype, "
+                + "tblgametype.shortname, "
                 + "game.name, "
                 + "game.creationdate, "
                 + "game.updatedate, "
@@ -89,9 +90,15 @@ public class GameDAO {
 
         GameModel JuegoSeleccionado = datos.get(0);
 
-        sentence = "select tblgameimage.idgameimage, tblgameimage.idgame, tblgameimage.idcolortype,tblcolortype.name as color, tblcolortype.html, tblgameimage.image,\n"
-                + "tblgameimage.paragraph, tblgameimage.audio_parag, tblgameimage.video_parag, tblgameimage.creationdate, tblgameimage.updatedate, tblgameimage.state\n"
-                + "from tblgameimage inner join tblcolortype on tblcolortype.idcolortype = tblgameimage.idcolortype where idgame =" + JuegoSeleccionado.getIdgame();
+        if (JuegoSeleccionado.getShortname().equals("emparejar")) {
+            sentence = "select tblgameimage.idgameimage, tblgameimage.idgame, tblgameimage.idcolortype,tblcolortype.name as color, tblcolortype.html, tblgameimage.image,\n"
+                    + "tblgameimage.paragraph, tblgameimage.audio_parag, tblgameimage.video_parag, tblgameimage.creationdate, tblgameimage.updatedate, tblgameimage.state\n"
+                    + "from tblgameimage inner join tblcolortype on tblcolortype.idcolortype = tblgameimage.idcolortype where idgame =" + JuegoSeleccionado.getIdgame();
+            JuegoSeleccionado.setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
+            return Methods.objectToJsonString(JuegoSeleccionado);
+        }
+        
+        sentence = "select * from tblgameimage where idgame =" + JuegoSeleccionado.getIdgame();
         JuegoSeleccionado.setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
 
         return Methods.objectToJsonString(JuegoSeleccionado);

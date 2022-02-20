@@ -13,6 +13,7 @@ public class GameModel {
     private String nameactivities;
     private String namegametype;
     private int idgametype;
+    private String shortname;
     private String name;
     private String creationdate;
     private String updatedate;
@@ -24,12 +25,13 @@ public class GameModel {
     public GameModel() {
     }
 
-    public GameModel(int idgame, int idactivitiestype, String nameactivities, String namegametype, int idgametype, String name, String creationdate, String updatedate, boolean state, int level, String image, List<GameimageModel> detalles) {
+    public GameModel(int idgame, int idactivitiestype, String nameactivities, String namegametype, int idgametype, String shortname, String name, String creationdate, String updatedate, boolean state, int level, String image, List<GameimageModel> detalles) {
         this.idgame = idgame;
         this.idactivitiestype = idactivitiestype;
         this.nameactivities = nameactivities;
         this.namegametype = namegametype;
         this.idgametype = idgametype;
+        this.shortname = shortname;
         this.name = name;
         this.creationdate = creationdate;
         this.updatedate = updatedate;
@@ -38,7 +40,6 @@ public class GameModel {
         this.image = image;
         this.detalles = detalles;
     }
-
 
     public int getIdgame() {
         return idgame;
@@ -79,6 +80,16 @@ public class GameModel {
     public void setIdgametype(int idgametype) {
         this.idgametype = idgametype;
     }
+
+    public String getShortname() {
+        return shortname;
+    }
+
+    public void setShortname(String shortname) {
+        this.shortname = shortname;
+    }
+    
+    
 
     public String getName() {
         return name;
