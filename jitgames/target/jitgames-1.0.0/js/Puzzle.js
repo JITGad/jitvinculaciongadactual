@@ -13,7 +13,7 @@ const encodeQueryString = (params = {}) => {
 };
 
 async function getdata() {
-    const response = await getJuego(77);
+    const response = await getJuego(79);
     if (!response.status.error) {
         console.log(GlobalImageLocation + response.data.image);
         init(GlobalImageLocation+response.data.detalles[0].image, response.data.level);
@@ -112,12 +112,13 @@ function init(img,lvl) {
     _img.width=wcv;
     //console.log(_img.height+ " - " + _img.width);
     
-    PUZZLE_DIFFICULTY = lvl;
+    PUZZLE_DIFFICULTY = lvl + 1;
     
     _img.addEventListener('load', onImage, false);
     _img.src = img;
 
     idim.src = img;
+    console.log(idim)
     console.log(idim.height + " - " + idim.width);
   
 }
@@ -193,13 +194,14 @@ function buildPieces() {
             yPos += _pieceHeight;
         }
     }
+    console.log(_pieces);
     shufflePuzzle();
 }
 
 
 function shufflePuzzle() {
-    
-    _pieces = shuffleArray(_pieces);
+    console.log(_stage, _img);
+    //_pieces = shuffleArray(_pieces);
     //aqui
     _stage.clearRect(0, 0, _puzzleWidth, _puzzleHeight);
     var i;
@@ -210,6 +212,7 @@ function shufflePuzzle() {
         piece = _pieces[i];
         piece.xPos = xPos;
         piece.yPos = yPos;
+        console.log(_img, piece.sx, piece.sy, _pieceWidth, _pieceHeight, xPos, yPos, _pieceWidth, _pieceHeight);
         _stage.drawImage(_img, piece.sx, piece.sy, _pieceWidth, _pieceHeight, xPos, yPos, _pieceWidth, _pieceHeight);
         _stage.strokeRect(xPos, yPos, _pieceWidth, _pieceHeight);
         xPos += _pieceWidth;
