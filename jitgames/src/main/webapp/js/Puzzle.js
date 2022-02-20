@@ -5,20 +5,20 @@ var urlApi = "webresources/game";
 const encodeQueryString = (params = {}) => {
     const keys = Object.keys(params);
     return keys.length
-        ? "?" + keys
+            ? "?" + keys
             .map(key => encodeURIComponent(key)
-                + "=" + encodeURIComponent(params[key]))
+                        + "=" + encodeURIComponent(params[key]))
             .join("&")
-        : "";
+            : "";
 };
 
 async function getdata() {
-    const response = await getJuego(77);
+    const response = await getJuego(79);
     if (!response.status.error) {
         console.log(GlobalImageLocation + response.data.image);
-        init(GlobalImageLocation+response.data.detalles[0].image, response.data.level);
+        init(GlobalImageLocation + response.data.detalles[0].image, response.data.level);
         /* for(i in response.data.detalles)
-            init(GlobalImageLocation+response.data.detalles[i].image, response.data.level); */
+         init(GlobalImageLocation+response.data.detalles[i].image, response.data.level); */
     } else {
         alert("ERROR");
     }
@@ -27,8 +27,8 @@ async function getdata() {
 
 function getJuego(gameid = 0) {
     return new Promise((resolve) => {
-        fm.get(`${urlApi}/getGamebyid${encodeQueryString({ 'idgame': gameid })}`,
-            (data) => resolve(data), true);
+        fm.get(`${urlApi}/getGamebyid${encodeQueryString({'idgame': gameid})}`,
+                (data) => resolve(data), true);
     });
 }
 
@@ -56,9 +56,9 @@ var _puzzleWidth;
 var _puzzleHeight;
 var _pieceWidth;
 var _pieceHeight;
-var _pieceWidthD;
-var _pieceHeightD;
 
+var _dimImageOrigen = {width: 0, height: 0};
+var _dimPieceOrigen = {width: 0, height: 0};
 var _currentPiece;
 var _currentDropPiece;
 var dimenrealWidth;
@@ -67,28 +67,28 @@ var dimenrealHeight;
 var _mouse;
 var _con;
 var _canvas;
-var _stage ;
-var hcv ;
-var wcv ;
+var _stage;
+var hcv;
+var wcv;
 
 function timer() {
     // Actualizar el recuento cada 1 segundo
-    time = setInterval(function() {
-      seconds++;
+    time = setInterval(function () {
+        seconds++;
         if (seconds === 60) {
-          minutes++;
-          seconds = 0;
+            minutes++;
+            seconds = 0;
         }
-      // Actualizar el temporizador en HTML con el tiempo que tarda el usuario en jugar.
-      timeCounter.innerHTML = "<i class='fa fa-hourglass-start'></i>" + " Timer: " + minutes + " Mins " + seconds + " Secs" ;
+        // Actualizar el temporizador en HTML con el tiempo que tarda el usuario en jugar.
+        timeCounter.innerHTML = "<i class='fa fa-hourglass-start'></i>" + " Timer: " + minutes + " Mins " + seconds + " Secs";
     }, 1000);
-  }
+}
 
-  function stopTime() {
+function stopTime() {
     clearInterval(time);
-  }
+}
 
-  function resetEverything() {
+function resetEverything() {
     // Detener el tiempo, restablecer los minutos y los segundos actualizar la hora interna HTML
     stopTime();
     timeStart = false;
@@ -96,95 +96,83 @@ function timer() {
     minutes = 0;
     timeCounter.innerHTML = "<i class='fa fa-hourglass-start'></i>" + " Timer: 00:00";
     movesCount.innerHTML = 0;
-  }
+}
 
-  function movesCounter() {
+function movesCounter() {
     // Actualizar el html del contador de movimientos
-    movesCount.innerHTML ++;
+    movesCount.innerHTML++;
     // Lleva la cuenta del número de movimientos de cada par comprobado
     movimientos++;
-  }
+}
 
 
-function init(img,lvl) {
+function init(img, lvl) {
     _img = new Image();
-    _con=document.getElementById('containercan');
+
+    _con = document.getElementById('containercan');
     _canvas = document.getElementById('canvas');
     _stage = _canvas.getContext('2d');
-    hcv = parseInt(getComputedStyle(_con).getPropertyValue('height'));
-    wcv =parseInt( getComputedStyle(_con).getPropertyValue('width'));
 
-    PUZZLE_DIFFICULTY = lvl;
-    _img.addEventListener('load', onImage, false);
+    PUZZLE_DIFFICULTY = lvl + 1;
+
     _img.src = img;
-
-    dimenrealWidth = _img.width;
-    dimenrealHeight = _img.height;
-
-    _img.height=hcv;
-    _img.width=wcv;
-    //console.log(_img.height+ " - " + _img.width);
-    
-    
-
-    
-
     idim.src = img;
-    console.log(idim.height + " - " + idim.width);
-  
+
+    _img.addEventListener('load', onImage, false);
 }
 
 
 function onImage(e) {
-    console.log('onimage')
-    console.log(_img.height+ " - " + _img.width);
+    _dimImageOrigen.width = _img.width;
+    _dimImageOrigen.height = _img.height;
 
-    _pieceWidth = Math.floor(dimenrealWidth / PUZZLE_DIFFICULTY);
-    _pieceHeight = Math.floor(dimenrealHeight / PUZZLE_DIFFICULTY);
+    _dimPieceOrigen.width = Math.floor(_dimImageOrigen.width / PUZZLE_DIFFICULTY);
+    _dimPieceOrigen.height = Math.floor(_dimImageOrigen.height / PUZZLE_DIFFICULTY);
 
-    _pieceWidthD = Math.floor(_img.width / PUZZLE_DIFFICULTY);
-    _pieceHeightD = Math.floor(_img.height / PUZZLE_DIFFICULTY)
+    _img.height = parseInt(getComputedStyle(_con).getPropertyValue('height'));
+    _img.width = parseInt(getComputedStyle(_con).getPropertyValue('width'));
 
+    _pieceWidth = Math.floor(_img.width / PUZZLE_DIFFICULTY);
+    _pieceHeight = Math.floor(_img.height / PUZZLE_DIFFICULTY);
 
-    _puzzleWidth = _pieceWidthD * PUZZLE_DIFFICULTY;
-    _puzzleHeight = _pieceHeightD * PUZZLE_DIFFICULTY;
-
-
+    _puzzleWidth = _pieceWidth * PUZZLE_DIFFICULTY;
+    _puzzleHeight = _pieceHeight * PUZZLE_DIFFICULTY;
 
     setCanvas();
     initPuzzle();
 }
 
+
 function setCanvas() {
-     _canvas.width = _puzzleWidth;
-     _canvas.height = _puzzleHeight; 
-   // _canvas.style.border = "1px solid black";
+    _canvas.width = _puzzleWidth;
+    _canvas.height = _puzzleHeight;
+    // _canvas.style.border = "1px solid black";
 }
 
 function initPuzzle() {
     _pieces = [];
-    _mouse = { x: 0, y: 0 };
+    _mouse = {x: 0, y: 0};
     _currentPiece = null;
     _currentDropPiece = null;
-    
+
     _stage.drawImage(_img, 0, 0, _puzzleWidth, _puzzleHeight);
 
     if (timeStart === false) {
-        timeStart = true; 
+        timeStart = true;
         timer();
-      }
-   // createTitle("Click to Start Puzzle");
+    }
+    // createTitle("Click to Start Puzzle");
     buildPieces();
 }
 
-playAgainBtn.addEventListener('click',function() {
+playAgainBtn.addEventListener('click', function () {
     modal.style.display = "none";
     initPuzzle();
-  });
+});
 
-  reset.addEventListener('click',function() {
+reset.addEventListener('click', function () {
     initPuzzle();
-  });
+});
 
 function createTitle(msg) {
     _stage.fillStyle = "#000000";
@@ -199,60 +187,45 @@ function createTitle(msg) {
 }
 
 function buildPieces() {
-    var i;
-    var piece;
     var sxPos = 0;
     var syPos = 0;
     var dxPos = 0;
     var dyPos = 0;
-
-    for (i = 0; i < PUZZLE_DIFFICULTY * PUZZLE_DIFFICULTY; i++) {
-        piece = {};
+    for (var i = 0; i < PUZZLE_DIFFICULTY * PUZZLE_DIFFICULTY; i++) {
+        var piece = {};
         piece.sx = sxPos;
-        piece.dx = dxPos;
         piece.sy = syPos;
+        piece.dx = dxPos;
         piece.dy = dyPos;
-
         _pieces.push(piece);
-
-        sxPos += _pieceWidth;
-        dxPos += _pieceWidthD;
-
+        sxPos += _dimPieceOrigen.width;
+        dxPos += _pieceWidth;
         if (dxPos >= _puzzleWidth) {
             sxPos = 0;
             dxPos = 0;
-            syPos += _pieceHeight;
-            dyPos = _pieceHeightD;
+            dyPos += _pieceHeight;
+            syPos += _dimPieceOrigen.height;
         }
     }
-    
     shufflePuzzle();
 }
 
-
 function shufflePuzzle() {
-    
-    //_pieces = shuffleArray(_pieces);
-
-    //aqui
+    _pieces = shuffleArray(_pieces);
     _stage.clearRect(0, 0, _puzzleWidth, _puzzleHeight);
-    var i;
-    var piece;
     var xPos = 0;
     var yPos = 0;
-    for (i = 0; i < _pieces.length; i++) {
-        piece = _pieces[i];
-/*         piece.xPos = xPos;
-        piece.yPos = yPos; */
-        _stage.drawImage(_img, piece.sx, piece.sy, _pieceWidth,
-            _pieceHeight, piece.dx, piece.dy, _pieceWidthD, _pieceHeightD);
-        _stage.strokeRect(xPos, yPos, _pieceWidthD, _pieceHeightD);
+    for (var i = 0; i < _pieces.length; i++) {
+        var piece = _pieces[i];
+        piece.xPos = xPos;
+        piece.yPos = yPos;
+        _stage.drawImage(_img, piece.sx, piece.sy, _dimPieceOrigen.width, _dimPieceOrigen.height, piece.xPos, piece.yPos, _pieceWidth, _pieceHeight);
+        _stage.strokeRect(piece.dx, piece.dy, _pieceWidth, _pieceHeight);
+        xPos += _pieceWidth;
 
-        xPos += _pieceWidthD;
-        
         if (xPos >= _puzzleWidth) {
             xPos = 0;
-            yPos += _pieceHeightD;
+            yPos += _pieceHeight;
         }
     }
     document.onmousedown = onPuzzleClick;
@@ -268,8 +241,7 @@ function onPuzzleClick(e) {
     if (e.layerX || e.layerX == 0) {
         _mouse.x = e.layerX - _canvas.offsetLeft;
         _mouse.y = e.layerY - _canvas.offsetTop;
-    }
-    else if (e.offsetX || e.offsetX == 0) {
+    } else if (e.offsetX || e.offsetX == 0) {
         _mouse.x = e.offsetX - _canvas.offsetLeft;
         _mouse.y = e.offsetY - _canvas.offsetTop;
     }
@@ -278,7 +250,7 @@ function onPuzzleClick(e) {
         _stage.clearRect(_currentPiece.xPos, _currentPiece.yPos, _pieceWidth, _pieceHeight);
         _stage.save();
         _stage.globalAlpha = .4;
-        _stage.drawImage(_img, _currentPiece.sx, _currentPiece.sy, _pieceWidth, _pieceHeight, _mouse.x - (_pieceWidth / 2), _mouse.y - (_pieceHeight / 2), _pieceWidth, _pieceHeight);
+        _stage.drawImage(_img, _currentPiece.sx, _currentPiece.sy, _dimPieceOrigen.width, _dimPieceOrigen.height, _mouse.x - (_pieceWidth / 2), _mouse.y - (_pieceHeight / 2), _pieceWidth, _pieceHeight);
         _stage.restore();
         document.onmousemove = updatePuzzle;
         document.onmouseup = pieceDropped;
@@ -291,8 +263,7 @@ function checkPieceClicked() {
     for (i = 0; i < _pieces.length; i++) {
         piece = _pieces[i];
         if (_mouse.x < piece.xPos || _mouse.x > (piece.xPos + _pieceWidth) || _mouse.y < piece.yPos || _mouse.y > (piece.yPos + _pieceHeight)) {
-        }
-        else {
+        } else {
             return piece;
         }
     }
@@ -301,11 +272,10 @@ function checkPieceClicked() {
 
 function updatePuzzle(e) {
     _currentDropPiece = null;
-    if (e.layerX || e.layerX == 0) {
+    if (e.layerX || e.layerX === 0) {
         _mouse.x = e.layerX - _canvas.offsetLeft;
         _mouse.y = e.layerY - _canvas.offsetTop;
-    }
-    else if (e.offsetX || e.offsetX == 0) {
+    } else if (e.offsetX || e.offsetX === 0) {
         _mouse.x = e.offsetX - _canvas.offsetLeft;
         _mouse.y = e.offsetY - _canvas.offsetTop;
     }
@@ -314,16 +284,15 @@ function updatePuzzle(e) {
     var piece;
     for (i = 0; i < _pieces.length; i++) {
         piece = _pieces[i];
-        if (piece == _currentPiece) {
+        if (piece === _currentPiece) {
             continue;
         }
-        _stage.drawImage(_img, piece.sx, piece.sy, _pieceWidth, _pieceHeight, piece.xPos, piece.yPos, _pieceWidth, _pieceHeight);
+        _stage.drawImage(_img, piece.sx, piece.sy, _dimPieceOrigen.width, _dimPieceOrigen.height, piece.xPos, piece.yPos, _pieceWidth, _pieceHeight);
         _stage.strokeRect(piece.xPos, piece.yPos, _pieceWidth, _pieceHeight);
         if (_currentDropPiece == null) {
             if (_mouse.x < piece.xPos || _mouse.x > (piece.xPos + _pieceWidth) || _mouse.y < piece.yPos || _mouse.y > (piece.yPos + _pieceHeight)) {
                 //NOT OVER
-            }
-            else {
+            } else {
                 _currentDropPiece = piece;
                 _stage.save();
                 _stage.globalAlpha = .4;
@@ -335,7 +304,7 @@ function updatePuzzle(e) {
     }
     _stage.save();
     _stage.globalAlpha = .6;
-    _stage.drawImage(_img, _currentPiece.sx, _currentPiece.sy, _pieceWidth, _pieceHeight, _mouse.x - (_pieceWidth / 2), _mouse.y - (_pieceHeight / 2), _pieceWidth, _pieceHeight);
+    _stage.drawImage(_img, _currentPiece.sx, _currentPiece.sy, _dimPieceOrigen.width, _dimPieceOrigen.height, _mouse.x - (_pieceWidth / 2), _mouse.y - (_pieceHeight / 2), _pieceWidth, _pieceHeight);
     _stage.restore();
     _stage.strokeRect(_mouse.x - (_pieceWidth / 2), _mouse.y - (_pieceHeight / 2), _pieceWidth, _pieceHeight);
 }
@@ -344,7 +313,7 @@ function pieceDropped(e) {
     document.onmousemove = null;
     document.onmouseup = null;
     if (_currentDropPiece != null) {
-        var tmp = { xPos: _currentPiece.xPos, yPos: _currentPiece.yPos };
+        var tmp = {xPos: _currentPiece.xPos, yPos: _currentPiece.yPos};
         _currentPiece.xPos = _currentDropPiece.xPos;
         _currentPiece.yPos = _currentDropPiece.yPos;
         _currentDropPiece.xPos = tmp.xPos;
@@ -360,9 +329,10 @@ function resetPuzzleAndCheckWin() {
     var piece;
     for (i = 0; i < _pieces.length; i++) {
         piece = _pieces[i];
-        _stage.drawImage(_img, piece.sx, piece.sy, _pieceWidth, _pieceHeight, piece.xPos, piece.yPos, _pieceWidth, _pieceHeight);
+        _stage.drawImage(_img, piece.sx, piece.sy, _dimPieceOrigen.width, _dimPieceOrigen.height, piece.xPos, piece.yPos, _pieceWidth, _pieceHeight);
         _stage.strokeRect(piece.xPos, piece.yPos, _pieceWidth, _pieceHeight);
-        if (piece.xPos != piece.sx || piece.yPos != piece.sy) {
+        if (piece.xPos !== piece.dx || piece.yPos !== piece.dy) {
+            console.log(piece);
             gameWin = false;
         }
     }
@@ -378,7 +348,7 @@ function gameOver() {
     displayModal();
     stopTime();
     AddEstadisticas();
-   // initPuzzle();
+    // initPuzzle();
 }
 
 
@@ -388,36 +358,36 @@ function AddEstadisticas() {
     const stats = document.querySelector(".modal-content");
     // Crear tres párrafos diferentes
     for (let i = 1; i <= 3; i++) {
-      // Crear un nuevo párrafo
-      const statsElement = document.createElement("p");
-      // Añadir una clase al nuevo párrafo
-      statsElement.classList.add("stats");
-      // Añade la nueva etiqueta <p> creada al contenido del modal
-      stats.appendChild(statsElement);
+        // Crear un nuevo párrafo
+        const statsElement = document.createElement("p");
+        // Añadir una clase al nuevo párrafo
+        statsElement.classList.add("stats");
+        // Añade la nueva etiqueta <p> creada al contenido del modal
+        stats.appendChild(statsElement);
     }
     // Seleccione todas las etiquetas p con la clase de estadísticas y actualice el contenido
     let p = stats.querySelectorAll("p.stats");
-        // Establecer el nuevo <p> para tener el contenido de las estadísticas (tiempo, movimientos)
-      
-      p[0].innerHTML = "Tiempo en completar: " + minutes + " Minutos y " + seconds + " Segundos";
-      p[1].innerHTML = "Movimientos: " + movimientos;
-  }
+    // Establecer el nuevo <p> para tener el contenido de las estadísticas (tiempo, movimientos)
+
+    p[0].innerHTML = "Tiempo en completar: " + minutes + " Minutos y " + seconds + " Segundos";
+    p[1].innerHTML = "Movimientos: " + movimientos;
+}
 
 function displayModal() {
 // Accede al elemento modal <span> (x) que cierra el modal
-const modalClose = document.getElementsByClassName("close")[0];
+    const modalClose = document.getElementsByClassName("close")[0];
     // Cuando se gana el juego se establece el bloqueo modal para mostrarlo
-    modal.style.display= "block";
+    modal.style.display = "block";
 
     // Cuando el usuario hace clic en <span> (x), cierra el modal
-    modalClose.onclick = function() {
-    modal.style.display = "none";
+    modalClose.onclick = function () {
+        modal.style.display = "none";
     };
 // Cuando el usuario haga clic en cualquier lugar fuera del modal, ciérrelo
-    window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
     };
 }
 
