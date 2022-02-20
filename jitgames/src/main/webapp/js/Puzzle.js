@@ -13,7 +13,7 @@ const encodeQueryString = (params = {}) => {
 };
 
 async function getdata() {
-    const response = await getJuego(79);
+    const response = await getJuego(77);
     if (!response.status.error) {
         console.log(GlobalImageLocation + response.data.image);
         init(GlobalImageLocation+response.data.detalles[0].image, response.data.level);
@@ -56,8 +56,13 @@ var _puzzleWidth;
 var _puzzleHeight;
 var _pieceWidth;
 var _pieceHeight;
+var _pieceWidthD;
+var _pieceHeightD;
+
 var _currentPiece;
 var _currentDropPiece;
+var dimenrealWidth;
+var dimenrealHeight;
 
 var _mouse;
 var _con;
@@ -108,17 +113,23 @@ function init(img,lvl) {
     _stage = _canvas.getContext('2d');
     hcv = parseInt(getComputedStyle(_con).getPropertyValue('height'));
     wcv =parseInt( getComputedStyle(_con).getPropertyValue('width'));
+
+    PUZZLE_DIFFICULTY = lvl;
+    _img.addEventListener('load', onImage, false);
+    _img.src = img;
+
+    dimenrealWidth = _img.width;
+    dimenrealHeight = _img.height;
+
     _img.height=hcv;
     _img.width=wcv;
     //console.log(_img.height+ " - " + _img.width);
     
-    PUZZLE_DIFFICULTY = lvl + 1;
     
-    _img.addEventListener('load', onImage, false);
-    _img.src = img;
+
+    
 
     idim.src = img;
-    console.log(idim)
     console.log(idim.height + " - " + idim.width);
   
 }
@@ -127,17 +138,26 @@ function init(img,lvl) {
 function onImage(e) {
     console.log('onimage')
     console.log(_img.height+ " - " + _img.width);
-    _pieceWidth = Math.floor(_img.width / PUZZLE_DIFFICULTY)
-    _pieceHeight = Math.floor(_img.height / PUZZLE_DIFFICULTY)
-    _puzzleWidth = _pieceWidth * PUZZLE_DIFFICULTY;
-    _puzzleHeight = _pieceHeight * PUZZLE_DIFFICULTY;
+
+    _pieceWidth = Math.floor(dimenrealWidth / PUZZLE_DIFFICULTY);
+    _pieceHeight = Math.floor(dimenrealHeight / PUZZLE_DIFFICULTY);
+
+    _pieceWidthD = Math.floor(_img.width / PUZZLE_DIFFICULTY);
+    _pieceHeightD = Math.floor(_img.height / PUZZLE_DIFFICULTY)
+
+
+    _puzzleWidth = _pieceWidthD * PUZZLE_DIFFICULTY;
+    _puzzleHeight = _pieceHeightD * PUZZLE_DIFFICULTY;
+
+
+
     setCanvas();
     initPuzzle();
 }
 
 function setCanvas() {
      _canvas.width = _puzzleWidth;
-     _canvas.height = _puzzleHeight ; 
+     _canvas.height = _puzzleHeight; 
    // _canvas.style.border = "1px solid black";
 }
 
@@ -181,27 +201,39 @@ function createTitle(msg) {
 function buildPieces() {
     var i;
     var piece;
-    var xPos = 0;
-    var yPos = 0;
+    var sxPos = 0;
+    var syPos = 0;
+    var dxPos = 0;
+    var dyPos = 0;
+
     for (i = 0; i < PUZZLE_DIFFICULTY * PUZZLE_DIFFICULTY; i++) {
         piece = {};
-        piece.sx = xPos;
-        piece.sy = yPos;
+        piece.sx = sxPos;
+        piece.dx = dxPos;
+        piece.sy = syPos;
+        piece.dy = dyPos;
+
         _pieces.push(piece);
-        xPos += _pieceWidth;
-        if (xPos >= _puzzleWidth) {
-            xPos = 0;
-            yPos += _pieceHeight;
+
+        sxPos += _pieceWidth;
+        dxPos += _pieceWidthD;
+
+        if (dxPos >= _puzzleWidth) {
+            sxPos = 0;
+            dxPos = 0;
+            syPos += _pieceHeight;
+            dyPos = _pieceHeightD;
         }
     }
-    console.log(_pieces);
+    
     shufflePuzzle();
 }
 
 
 function shufflePuzzle() {
-    console.log(_stage, _img);
+    
     //_pieces = shuffleArray(_pieces);
+
     //aqui
     _stage.clearRect(0, 0, _puzzleWidth, _puzzleHeight);
     var i;
@@ -210,15 +242,17 @@ function shufflePuzzle() {
     var yPos = 0;
     for (i = 0; i < _pieces.length; i++) {
         piece = _pieces[i];
-        piece.xPos = xPos;
-        piece.yPos = yPos;
-        console.log(_img, piece.sx, piece.sy, _pieceWidth, _pieceHeight, xPos, yPos, _pieceWidth, _pieceHeight);
-        _stage.drawImage(_img, piece.sx, piece.sy, _pieceWidth, _pieceHeight, xPos, yPos, _pieceWidth, _pieceHeight);
-        _stage.strokeRect(xPos, yPos, _pieceWidth, _pieceHeight);
-        xPos += _pieceWidth;
+/*         piece.xPos = xPos;
+        piece.yPos = yPos; */
+        _stage.drawImage(_img, piece.sx, piece.sy, _pieceWidth,
+            _pieceHeight, piece.dx, piece.dy, _pieceWidthD, _pieceHeightD);
+        _stage.strokeRect(xPos, yPos, _pieceWidthD, _pieceHeightD);
+
+        xPos += _pieceWidthD;
+        
         if (xPos >= _puzzleWidth) {
             xPos = 0;
-            yPos += _pieceHeight;
+            yPos += _pieceHeightD;
         }
     }
     document.onmousedown = onPuzzleClick;
@@ -389,4 +423,3 @@ const modalClose = document.getElementsByClassName("close")[0];
 
 
 getdata();
-
