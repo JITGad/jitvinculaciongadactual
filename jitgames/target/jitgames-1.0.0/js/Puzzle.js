@@ -35,7 +35,7 @@ function getJuego(gameid = 0) {
 // JUEGO
 
 const modal = document.getElementById("modal");
-
+const idim = document.getElementById("imgcanva");
 const timeCounter = document.querySelector(".timer");
 let time;
 let minutes = 0;
@@ -111,6 +111,8 @@ function init(img,lvl) {
     _img = new Image();
     _img.addEventListener('load', onImage, false);
     _img.src = img;
+
+    idim.src = img;
     
     _img.height=hcv;
     _img.width=wcv;

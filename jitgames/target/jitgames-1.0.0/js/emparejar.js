@@ -87,9 +87,6 @@ function process() {
         seconds = 0;
         minutes = 0;
         timeCounter.innerHTML = "<i class='fa fa-hourglass-start'></i>" + " Timer: 00:00";
-    
-        
-        
       }
 
     function initiateGame() {
