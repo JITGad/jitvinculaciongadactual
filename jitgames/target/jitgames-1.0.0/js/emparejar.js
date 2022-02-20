@@ -182,7 +182,7 @@ function process() {
     function drop(event) {
         event.preventDefault();
 
-        console.log("llegaste al drop");
+       // console.log("llegaste al drop");
 
         if (timeStart === false) {
             timeStart = true; 
@@ -193,18 +193,18 @@ function process() {
        // timer();
        // transfiere texto que en este caso es el html del color
         const draggableElementBrand = event.dataTransfer.getData("text");
-        console.log(draggableElementBrand);
+      //  console.log(draggableElementBrand);
         const droppableElementBrand = event.target.getAttribute("data-brand");
         const isCorrectMatching = draggableElementBrand === droppableElementBrand;
-        console.log(droppableElementBrand);
-        console.log(isCorrectMatching);
+      //  console.log(droppableElementBrand);
+      //  console.log(isCorrectMatching);
         total++;
         if (isCorrectMatching) {
             const draggableElement = document.getElementById(draggableElementBrand);
             event.target.classList.add("dropped");
              draggableElement.classList.add("dragged");
            /* draggableElement.setAttribute("draggable", "false"); */
-           console.log(draggableElementBrand);
+        //   console.log(draggableElementBrand);
            
            event.target.innerHTML = `<div style="background-color:${draggableElementBrand}; width:100px; height:100px;"></div>`;
            // event.target.innerHTML = `<img src="${draggableElementBrand}" style="width:100px;"></img>`;
@@ -216,8 +216,8 @@ function process() {
             totalSpan.textContent = total;
             scoreSection.style.opacity = 1;
         }, 200);
-        console.log(Math.min(totalMatchingPairs, totalDraggableItems));
-        console.log(correct);
+      //  console.log(Math.min(totalMatchingPairs, totalDraggableItems));
+      //  console.log(correct);
         if (correct === Math.min(totalMatchingPairs, totalDraggableItems)) { // Game Over!!
             playAgainBtn.style.display = "block";
             winGame();
