@@ -41,7 +41,7 @@ export default {
     },
     level: {
       type: Number,
-      default: 0,
+      default: 1,
     },
   },
   setup(props, context) {
