@@ -14,7 +14,6 @@
               :titulo="model.name"
             />
           </div>
-          {{minutes}}-{{seconds}}-{{puntaje}}-{{movimientos}}
           <div class="row pt-4">
             <rompecabezas
               v-if="model.shortname == 'rompecabezas'"
