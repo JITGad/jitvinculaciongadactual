@@ -60,15 +60,24 @@ var _dimImageOrigen = {width: 0, height: 0};
 var _dimPieceOrigen = {width: 0, height: 0};
 var _currentPiece;
 var _currentDropPiece;
+<<<<<<< Updated upstream
 var dimenrealWidth;
 var dimenrealHeight;
+=======
+var _dimImageOrigen = {width: 0, height: 0};
+var _dimPieceOrigen = {width: 0, height: 0};
+>>>>>>> Stashed changes
 
 var _mouse;
 var _con;
 var _canvas;
+<<<<<<< Updated upstream
 var _stage;
 var hcv;
 var wcv;
+=======
+var _stage ;
+>>>>>>> Stashed changes
 
 function timer() {
     // Actualizar el recuento cada 1 segundo
@@ -107,6 +116,7 @@ function movesCounter() {
 
 function init(img, lvl) {
     _img = new Image();
+<<<<<<< Updated upstream
 
     _con = document.getElementById('containercan');
     _canvas = document.getElementById('canvas');
@@ -117,6 +127,18 @@ function init(img, lvl) {
     _img.src = img;
     idim.src = img;
 
+=======
+    
+    _con=document.getElementById('containercan');
+    _canvas = document.getElementById('canvas');
+    _stage = _canvas.getContext('2d');
+    
+    PUZZLE_DIFFICULTY = lvl + 1;
+    
+    _img.src = img;
+    idim.src = img;
+    
+>>>>>>> Stashed changes
     _img.addEventListener('load', onImage, false);
 }
 
@@ -127,6 +149,7 @@ function onImage(e) {
 
     _dimPieceOrigen.width = Math.floor(_dimImageOrigen.width / PUZZLE_DIFFICULTY);
     _dimPieceOrigen.height = Math.floor(_dimImageOrigen.height / PUZZLE_DIFFICULTY);
+<<<<<<< Updated upstream
 
     _img.height = parseInt(getComputedStyle(_con).getPropertyValue('height'));
     _img.width = parseInt(getComputedStyle(_con).getPropertyValue('width'));
@@ -137,15 +160,32 @@ function onImage(e) {
     _puzzleWidth = _pieceWidth * PUZZLE_DIFFICULTY;
     _puzzleHeight = _pieceHeight * PUZZLE_DIFFICULTY;
 
+=======
+    
+    _img.height=parseInt(getComputedStyle(_con).getPropertyValue('height'));
+    _img.width=parseInt( getComputedStyle(_con).getPropertyValue('width'));
+    
+    _pieceWidth = Math.floor(_img.width / PUZZLE_DIFFICULTY);
+    _pieceHeight = Math.floor(_img.height / PUZZLE_DIFFICULTY);
+    
+    _puzzleWidth = _pieceWidth * PUZZLE_DIFFICULTY;
+    _puzzleHeight = _pieceHeight * PUZZLE_DIFFICULTY;
+    
+>>>>>>> Stashed changes
     setCanvas();
     initPuzzle();
 }
 
 
 function setCanvas() {
+<<<<<<< Updated upstream
     _canvas.width = _puzzleWidth;
     _canvas.height = _puzzleHeight;
     // _canvas.style.border = "1px solid black";
+=======
+     _canvas.width = _puzzleWidth;
+     _canvas.height = _puzzleHeight ; 
+>>>>>>> Stashed changes
 }
 
 function initPuzzle() {
@@ -159,8 +199,12 @@ function initPuzzle() {
     if (timeStart === false) {
         timeStart = true;
         timer();
+<<<<<<< Updated upstream
     }
     // createTitle("Click to Start Puzzle");
+=======
+      }
+>>>>>>> Stashed changes
     buildPieces();
 }
 
@@ -217,7 +261,11 @@ function shufflePuzzle() {
         _stage.drawImage(_img, piece.sx, piece.sy, _dimPieceOrigen.width, _dimPieceOrigen.height, piece.xPos, piece.yPos, _pieceWidth, _pieceHeight);
         _stage.strokeRect(piece.dx, piece.dy, _pieceWidth, _pieceHeight);
         xPos += _pieceWidth;
+<<<<<<< Updated upstream
 
+=======
+        
+>>>>>>> Stashed changes
         if (xPos >= _puzzleWidth) {
             xPos = 0;
             yPos += _pieceHeight;
@@ -233,16 +281,21 @@ function shuffleArray(o) {
 
 function onPuzzleClick(e) {
     movesCounter();
-    if (e.layerX || e.layerX == 0) {
+    if (e.layerX || e.layerX === 0) {
         _mouse.x = e.layerX - _canvas.offsetLeft;
         _mouse.y = e.layerY - _canvas.offsetTop;
+<<<<<<< Updated upstream
     } else if (e.offsetX || e.offsetX == 0) {
+=======
+    }
+    else if (e.offsetX || e.offsetX === 0) {
+>>>>>>> Stashed changes
         _mouse.x = e.offsetX - _canvas.offsetLeft;
         _mouse.y = e.offsetY - _canvas.offsetTop;
     }
     _currentPiece = checkPieceClicked();
-    if (_currentPiece != null) {
-        _stage.clearRect(_currentPiece.xPos, _currentPiece.yPos, _pieceWidth, _pieceHeight);
+    if (_currentPiece !== null) {
+        _stage.clearRect(_currentPiece.dx, _currentPiece.dy, _pieceWidth, _pieceHeight);
         _stage.save();
         _stage.globalAlpha = .4;
         _stage.drawImage(_img, _currentPiece.sx, _currentPiece.sy, _dimPieceOrigen.width, _dimPieceOrigen.height, _mouse.x - (_pieceWidth / 2), _mouse.y - (_pieceHeight / 2), _pieceWidth, _pieceHeight);
@@ -257,8 +310,14 @@ function checkPieceClicked() {
     var piece;
     for (i = 0; i < _pieces.length; i++) {
         piece = _pieces[i];
+<<<<<<< Updated upstream
         if (_mouse.x < piece.xPos || _mouse.x > (piece.xPos + _pieceWidth) || _mouse.y < piece.yPos || _mouse.y > (piece.yPos + _pieceHeight)) {
         } else {
+=======
+        if (_mouse.x < piece.dx || _mouse.x > (piece.dx + _pieceWidth) || _mouse.y < piece.dy || _mouse.y > (piece.dy + _pieceHeight)) {
+        }
+        else {
+>>>>>>> Stashed changes
             return piece;
         }
     }
@@ -270,7 +329,12 @@ function updatePuzzle(e) {
     if (e.layerX || e.layerX === 0) {
         _mouse.x = e.layerX - _canvas.offsetLeft;
         _mouse.y = e.layerY - _canvas.offsetTop;
+<<<<<<< Updated upstream
     } else if (e.offsetX || e.offsetX === 0) {
+=======
+    }
+    else if (e.offsetX || e.offsetX === 0) {
+>>>>>>> Stashed changes
         _mouse.x = e.offsetX - _canvas.offsetLeft;
         _mouse.y = e.offsetY - _canvas.offsetTop;
     }
@@ -282,17 +346,24 @@ function updatePuzzle(e) {
         if (piece === _currentPiece) {
             continue;
         }
+<<<<<<< Updated upstream
         _stage.drawImage(_img, piece.sx, piece.sy, _dimPieceOrigen.width, _dimPieceOrigen.height, piece.xPos, piece.yPos, _pieceWidth, _pieceHeight);
         _stage.strokeRect(piece.xPos, piece.yPos, _pieceWidth, _pieceHeight);
         if (_currentDropPiece == null) {
             if (_mouse.x < piece.xPos || _mouse.x > (piece.xPos + _pieceWidth) || _mouse.y < piece.yPos || _mouse.y > (piece.yPos + _pieceHeight)) {
+=======
+        _stage.drawImage(_img, piece.sx, piece.sy, _dimPieceOrigen.width, _dimPieceOrigen.height, piece.dx, piece.dy, _pieceWidth, _pieceHeight);
+        _stage.strokeRect(piece.dx, piece.dy, _pieceWidth, _pieceHeight);
+        if (_currentDropPiece === null) {
+            if (_mouse.x < piece.dx || _mouse.x > (piece.dx + _pieceWidth) || _mouse.y < piece.dy || _mouse.y > (piece.dy + _pieceHeight)) {
+>>>>>>> Stashed changes
                 //NOT OVER
             } else {
                 _currentDropPiece = piece;
                 _stage.save();
                 _stage.globalAlpha = .4;
                 _stage.fillStyle = PUZZLE_HOVER_TINT;
-                _stage.fillRect(_currentDropPiece.xPos, _currentDropPiece.yPos, _pieceWidth, _pieceHeight);
+                _stage.fillRect(_currentDropPiece.dx, _currentDropPiece.dy, _pieceWidth, _pieceHeight);
                 _stage.restore();
             }
         }
@@ -307,12 +378,21 @@ function updatePuzzle(e) {
 function pieceDropped(e) {
     document.onmousemove = null;
     document.onmouseup = null;
+<<<<<<< Updated upstream
     if (_currentDropPiece != null) {
         var tmp = {xPos: _currentPiece.xPos, yPos: _currentPiece.yPos};
         _currentPiece.xPos = _currentDropPiece.xPos;
         _currentPiece.yPos = _currentDropPiece.yPos;
         _currentDropPiece.xPos = tmp.xPos;
         _currentDropPiece.yPos = tmp.yPos;
+=======
+    if (_currentDropPiece !== null) {
+        var tmp = { dx: _currentPiece.dx, dy: _currentPiece.dy };
+        _currentPiece.dx = _currentDropPiece.dx;
+        _currentPiece.dy = _currentDropPiece.dy;
+        _currentDropPiece.dx = tmp.dx;
+        _currentDropPiece.dy = tmp.dy;
+>>>>>>> Stashed changes
     }
     resetPuzzleAndCheckWin();
 }
@@ -324,10 +404,16 @@ function resetPuzzleAndCheckWin() {
     var piece;
     for (i = 0; i < _pieces.length; i++) {
         piece = _pieces[i];
+<<<<<<< Updated upstream
         _stage.drawImage(_img, piece.sx, piece.sy, _dimPieceOrigen.width, _dimPieceOrigen.height, piece.xPos, piece.yPos, _pieceWidth, _pieceHeight);
         _stage.strokeRect(piece.xPos, piece.yPos, _pieceWidth, _pieceHeight);
         if (piece.xPos !== piece.dx || piece.yPos !== piece.dy) {
             console.log(piece);
+=======
+        _stage.drawImage(_img, piece.sx, piece.sy, _dimPieceOrigen.width, _dimPieceOrigen.height, piece.dx, piece.dy, _pieceWidth, _pieceHeight);
+        _stage.strokeRect(piece.dx, piece.dy, _pieceWidth, _pieceHeight);
+        if (piece.xPost !== piece.dx || piece.yPost !== piece.dy) {
+>>>>>>> Stashed changes
             gameWin = false;
         }
     }
@@ -379,10 +465,17 @@ function displayModal() {
         modal.style.display = "none";
     };
 // Cuando el usuario haga clic en cualquier lugar fuera del modal, ciérrelo
+<<<<<<< Updated upstream
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
         }
+=======
+    window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+>>>>>>> Stashed changes
     };
 }
 
