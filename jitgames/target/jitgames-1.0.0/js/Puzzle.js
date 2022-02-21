@@ -44,7 +44,6 @@ let seconds = 0;
 let timeStart = false;
 let movimientos = 0;
 const reset = document.querySelector(".reset-btn");
-const playAgainBtn = document.querySelector(".play-again-btn");
 const movesCount = document.querySelector(".moves-counter");
 var PUZZLE_DIFFICULTY = 0;
 const PUZZLE_HOVER_TINT = '#009900';
@@ -165,12 +164,8 @@ function initPuzzle() {
     buildPieces();
 }
 
-playAgainBtn.addEventListener('click', function () {
-    modal.style.display = "none";
-    initPuzzle();
-});
-
 reset.addEventListener('click', function () {
+    resetEverything();
     initPuzzle();
 });
 
