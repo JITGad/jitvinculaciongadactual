@@ -19,10 +19,15 @@ async function getdata() {
         console.log(response.data.detalles);
          // setLoading(false);
         for (i in response.data.detalles)
-            brands.push({ iconName: GlobalImageLocation + response.data.detalles[i].image,
+        if(deckCards.length <= lvl)
+            {
+              brands.push({ iconName: GlobalImageLocation + response.data.detalles[i].image,
                 brandName: response.data.detalles[i].color, 
-                color: response.data.detalles[i].html }); 
-        console.log(brands);
+                color: response.data.detalles[i].html}); 
+            }else{
+                break;
+            }
+       //  console.log(brands);    
         process();
     } else {
         alert("ERROR");
