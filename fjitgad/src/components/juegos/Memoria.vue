@@ -193,7 +193,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .deck {
   background: linear-gradient(to bottom, #5cf, #33ffd1);
   border-radius: 1.5em;

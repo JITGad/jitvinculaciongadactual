@@ -61,7 +61,7 @@ export default {
       _canvas = document.getElementById("canvas");
       _stage = _canvas.getContext("2d");
 
-      PUZZLE_DIFFICULTY = props.level;
+      PUZZLE_DIFFICULTY = props.level + 1;
 
       _img.src = img;
       idim.src = img;
@@ -346,7 +346,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #imgcanva {
   width: 500px;
   height: 500px;

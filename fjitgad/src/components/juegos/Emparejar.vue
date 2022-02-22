@@ -209,7 +209,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .draggable-items {
   display: flex;
   justify-content: center;
