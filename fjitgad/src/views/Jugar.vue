@@ -24,6 +24,29 @@
               @movesCounter="movesCounter"
               @displayModal="displayModal"
               @stopTime="stopTime"
+              @resetEverything="resetEverything"
+            />
+            <memoria
+              v-if="model.shortname == 'memoria'"
+              :model="model"
+              :level="Nivel"
+              :timeStart="timeStart"
+              @startTime="timer"
+              @movesCounter="movesCounter"
+              @displayModal="displayModal"
+              @stopTime="stopTime"
+              @resetEverything="resetEverything"
+            />
+            <emparejar
+              v-if="model.shortname == 'emparejar'"
+              :model="model"
+              :level="Nivel"
+              :timeStart="timeStart"
+              @startTime="timer"
+              @movesCounter="movesCounter"
+              @displayModal="displayModal"
+              @stopTime="stopTime"
+              @resetEverything="resetEverything"
             />
           </div>
         </div>
@@ -82,6 +105,8 @@ import { onMounted, ref, reactive, nextTick } from "vue";
 import JuegosService from "../api/JuegosService";
 import { message_error } from "../util/Messages.js";
 import Rompecabezas from "../components/juegos/Rompecabezas.vue";
+import Emparejar from "../components/juegos/Emparejar.vue";
+import Memoria from "../components/juegos/Memoria.vue";
 import * as bootstrap from "bootstrap";
 
 export default {
@@ -89,6 +114,8 @@ export default {
   components: {
     InformacionJuego,
     Rompecabezas,
+    Emparejar,
+    Memoria,
   },
   setup(props, context) {
     document.body.style.backgroundColor = "#f8f9fa";
