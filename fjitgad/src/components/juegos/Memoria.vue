@@ -4,7 +4,7 @@
 
 <script>
 import { onMounted, ref, reactive, nextTick } from "vue";
-import { setPathFile, shuffle } from "../util/Utilities";
+import { setPathFile, shuffle } from "../../util/Utilities.js";
 
 export default {
   name: "Memoria",
@@ -37,7 +37,7 @@ export default {
     const deckCards = [];
     var deck;
     onMounted(async () => {
-      for (i in props.model.detalles)
+      for (let i in props.model.detalles)
         deckCards.push(setPathFile(props.model.detalles[i].image));
       await startGame();
     });
@@ -161,7 +161,7 @@ export default {
         if (evt.target.nodeName === "LI") {
           // Empezar el temporizador tras el primer clic de una card
           // Ejecuta la función timer()
-          if (timeStart === false) {
+          if (props.timeStart === false) {
             context.emit("startTime");
           }
           // Llamar a la función flipCard()

@@ -189,3 +189,16 @@ export   function fromBinary(binary) {
     }
     return array;
 }
+
+// Auxiliary functions
+export function generateRandomItemsArray(n, originalArray) {
+    let res = [];
+    let clonedArray = [...originalArray];
+    if (n > clonedArray.length) n = clonedArray.length;
+    for (let i = 1; i <= n; i++) {
+      const randomIndex = Math.floor(Math.random() * clonedArray.length);
+      res.push(clonedArray[randomIndex]);
+      clonedArray.splice(randomIndex, 1);
+    }
+    return res;
+  }

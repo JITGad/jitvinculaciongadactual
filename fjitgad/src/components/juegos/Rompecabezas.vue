@@ -23,7 +23,13 @@ export default {
         type: Boolean
     }
   },
-  emits: ["startTime", "movesCounter", "displayModal", "stopTime"],
+  emits: [
+    "startTime",
+    "movesCounter",
+    "displayModal",
+    "stopTime",
+    "resetEverything",
+  ],
   setup(props, context) {
     var _img;
     var _pieces;
