@@ -1,30 +1,47 @@
 <template>
-  <ul ref="Deck" class="deck"></ul>
+  <ul class="deck"></ul>
 </template>
 
 <script>
-import { useRoute } from "vue-router";
-import InformacionJuego from "../components/InformacionJuego.vue";
 import { onMounted, ref, reactive, nextTick } from "vue";
-import JuegosService from "../api/JuegosService";
-import { message_error } from "../util/Messages.js";
 import { setPathFile, shuffle } from "../util/Utilities";
 
 export default {
-  name: "Jugar",
-  components: {
-    InformacionJuego,
+  name: "Memoria",
+  props: {
+    model: {
+      type: Object,
+      required: true,
+    },
+    level: {
+      type: Number,
+      required: true,
+    },
+    timeStart: {
+      type: Boolean,
+    },
+    movimientos: {
+      type: Number,
+    },
   },
+  emits: [
+    "startTime",
+    "movesCounter",
+    "displayModal",
+    "stopTime",
+    "resetEverything",
+  ],
   setup(props, context) {
     let opened = [];
     let matched = [];
     const deckCards = [];
-    const Deck = ref(null);
-    const Routes = ref([]);
-    const Loading = ref(true);
+    var deck;
     onMounted(async () => {
+      for (i in props.model.detalles)
+        deckCards.push(setPathFile(props.model.detalles[i].image));
       await startGame();
     });
+
     function removeCard() {
       // Mientras deck <ul> tenga un nodo hijo, elimínalo
       while (deck.hasChildNodes()) {
@@ -32,46 +49,8 @@ export default {
       }
     }
 
-    function timer() {
-      // Actualizar el recuento cada 1 segundo
-      time = setInterval(function () {
-        seconds++;
-        if (seconds === 60) {
-          minutes++;
-          seconds = 0;
-        }
-        // Actualizar el temporizador en HTML con el tiempo que tarda el usuario en jugar.
-        timeCounter.innerHTML =
-          "<i class='fa fa-hourglass-start'></i>" +
-          " Timer: " +
-          minutes +
-          " Mins " +
-          seconds +
-          " Secs";
-      }, 1000);
-    }
-
-    function stopTime() {
-      clearInterval(time);
-    }
-
     function resetEverything() {
-      // Detener el tiempo, restablecer los minutos y los segundos actualizar la hora interna HTML
-      //console.log(deckCards);
-      stopTime();
-      timeStart = false;
-      seconds = 0;
-      minutes = 0;
-      timeCounter.innerHTML =
-        "<i class='fa fa-hourglass-start'></i>" + " Timer: 00:00";
-      // Restablecer el recuento de estrellas y volver a añadir la clase para mostrar las estrellas
-      star[1].firstElementChild.classList.add("fa-star");
-      star[2].firstElementChild.classList.add("fa-star");
-      starCount = 3;
-      // Restablecer el recuento de movimientos y restablecer su HTML interno
-      moves = 0;
-      movesCount.innerHTML = 0;
-      // Borra las dos matrices que contienen las cards abiertas y emparejadas
+      context.emit("resetEverything");
       matched = [];
       opened = [];
       // limpiar la baraja (deck)
@@ -80,20 +59,13 @@ export default {
       startGame();
     }
 
-    function movesCounter() {
-      // Actualizar el html del contador de movimientos
-      movesCount.innerHTML++;
-      // Lleva la cuenta del número de movimientos de cada par comprobado
-      moves++;
-    }
-
     function starRating() {
-      if (moves === 14) {
+      if (props.movimientos === 14) {
         // El primer elemento hijo es el <i> dentro del <li>
         star[2].firstElementChild.classList.remove("fa-star");
         starCount--;
       }
-      if (moves === 18) {
+      if (props.movimientos === 18) {
         star[1].firstElementChild.classList.remove("fa-star");
         starCount--;
       }
@@ -133,7 +105,7 @@ export default {
         opened = [];
       }, 600);
       // Llama a movesCounter para incrementar en uno
-      movesCounter();
+      context.emit("movesCounter");
       starRating();
     }
 
@@ -151,65 +123,20 @@ export default {
         opened = [];
       }, 700);
       // Llama a movesCounter para incrementar en uno
-      movesCounter();
+      context.emit("movesCounter");
       starRating();
-    }
-
-    function AddStats() {
-      // Acceder al div de contenido modal
-      const stats = document.querySelector(".modal-content");
-      // Crear tres párrafos diferentes
-      for (let i = 1; i <= 3; i++) {
-        // Crear un nuevo párrafo
-        const statsElement = document.createElement("p");
-        // Añadir una clase al nuevo párrafo
-        statsElement.classList.add("stats");
-        // Añade la nueva etiqueta <p> creada al contenido del modal
-        stats.appendChild(statsElement);
-      }
-      // Seleccione todas las etiquetas p con la clase de estadísticas y actualice el contenido
-      let p = stats.querySelectorAll("p.stats");
-      // Establecer el nuevo <p> para tener el contenido de las estadísticas (tiempo, movimientos y calificación de estrellas)
-
-      p[0].innerHTML =
-        "Tiempo en completar: " +
-        minutes +
-        " Minutos y " +
-        seconds +
-        " Segundos";
-      p[1].innerHTML = "Movimientos realizados: " + moves;
-      p[2].innerHTML =
-        "Su clasificación por estrellas es:  " + starCount + " de 3";
-    }
-
-    function displayModal() {
-      // Accede al elemento modal <span> (x) que cierra el modal
-      const modalClose = document.getElementsByClassName("close")[0];
-      // Cuando se gana el juego se establece el bloqueo modal para mostrarlo
-      modal.style.display = "block";
-
-      // Cuando el usuario hace clic en <span> (x), cierra el modal
-      modalClose.onclick = function () {
-        modal.style.display = "none";
-      };
-      // Cuando el usuario haga clic en cualquier lugar fuera del modal, ciérrelo
-      window.onclick = function (event) {
-        if (event.target == modal) {
-          modal.style.display = "none";
-        }
-      };
     }
 
     function winGame() {
       if (matched.length === deckCards.length) {
-        stopTime();
-        AddStats();
-        displayModal();
+        context.emit("stopTime");
+        context.emit("displayModal");
       }
     }
 
     async function startGame() {
       await nextTick();
+      deck = document.querySelector(".deck");
       const shuffledDeck = shuffle(deckCards);
       // Iterar sobre deck (baraja de cartas)
       for (let i = 0; i < shuffledDeck.length; i++) {
@@ -228,15 +155,14 @@ export default {
         // Añadir una etiqueta alt a la imagen
         addImage.setAttribute("alt", "image of vault boy from fallout");
         // Actualiza el nuevo <li> a deck <ul>
-        Deck.value.appendChild(liTag);
+        deck.appendChild(liTag);
       }
-      Deck.value.addEventListener("click", function (evt) {
+      deck.addEventListener("click", function (evt) {
         if (evt.target.nodeName === "LI") {
           // Empezar el temporizador tras el primer clic de una card
           // Ejecuta la función timer()
           if (timeStart === false) {
-            timeStart = true;
-            timer();
+            context.emit("startTime");
           }
           // Llamar a la función flipCard()
           flipCard();
@@ -263,13 +189,6 @@ export default {
         }
       });
     }
-
-    return {
-      Routes,
-      Loading,
-      model,
-      Deck,
-    };
   },
 };
 </script>
@@ -309,8 +228,8 @@ img {
   visibility: hidden;
 }
 
-.deck>li {
-    list-style: none;
+.deck > li {
+  list-style: none;
 }
 
 .deck .card-puzzle.flip-puzzle {

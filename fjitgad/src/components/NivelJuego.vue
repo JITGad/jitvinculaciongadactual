@@ -9,7 +9,7 @@
     >
       <div class="card-body">
         <div class="col text-center">
-          <img :src="MyImage" class="img-fluid" width="100" height="100" />
+          <img :src="GetRamdomImage" class="img-fluid" width="100" height="100" />
         </div>
         <hr
           style="width: 100%; height: 2px; color: gray; background-color: gray"
@@ -46,7 +46,6 @@ export default {
   },
   setup(props, context) {
     const Router = useRouter();
-    const MyImage = computed(() => setPathFile(props.image));
     function Jugar() {
       Router.push({
         name: "JugarJuego",
@@ -55,12 +54,11 @@ export default {
     }
 
     const GetRamdomImage = computed(() => {
-      return Juego.detalles[(props.level + 1) % Juego.detalles.length].image;
+      return setPathFile(props.game.detalles[(props.level + 1) % props.game.detalles.length].image);
     });
 
     return {
       Jugar,
-      MyImage,
       GetRamdomImage,
     };
   },

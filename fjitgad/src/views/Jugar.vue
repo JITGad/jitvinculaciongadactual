@@ -45,8 +45,11 @@
             </div>
             <div class="modal-body">
               <p>Has ganado el juego completando el rompecabeza</p>
-              <p>Tiempo en completar: {{minutes}} Minutos y {{seconds}} Segundos</p>
-              <p>Movimientos {{movimientos}}</p>
+              <p>
+                Tiempo en completar: {{ minutes }} Minutos y
+                {{ seconds }} Segundos
+              </p>
+              <p>Movimientos {{ movimientos }}</p>
               <img
                 class="modal-img"
                 src="../assets/image/ganaste.png"
@@ -154,6 +157,15 @@ export default {
       ModalBootstrap.show();
     }
 
+    function resetEverything() {
+      // Detener el tiempo, restablecer los minutos y los segundos actualizar la hora interna HTML
+      stopTime();
+      timeStart.value = false;
+      seconds.value = 0;
+      minutes.value = 0;
+      movimientos.value = 0;
+    }
+
     return {
       Routes,
       Loading,
@@ -169,6 +181,7 @@ export default {
       movesCounter,
       displayModal,
       ModalVictoria,
+      resetEverything,
     };
   },
 };
