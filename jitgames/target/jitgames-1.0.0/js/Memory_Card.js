@@ -1,6 +1,7 @@
 const fm = new FetchMaster();
 const deckCards = [];
 var urlApi = "webresources/game";
+var lvl = 0;
 
 const encodeQueryString = (params = {}) => {
     const keys = Object.keys(params);
@@ -15,12 +16,21 @@ const encodeQueryString = (params = {}) => {
 
 
 async function getdata() {
-    const response = await getJuego(80);
+    const response = await getJuego(79);
     if (!response.status.error) {
         console.log(response.data);
-
+        lvl = response.data.level;
+       // console.log(lvl);
         for (i in response.data.detalles)
-            deckCards.push(GlobalImageLocation + response.data.detalles[i].image);
+            if(deckCards.length <= lvl)
+            {
+                deckCards.push(GlobalImageLocation + response.data.detalles[i].image); 
+               /*  console.log(deckCards.length);
+                console.log(lvl); */
+            }else{
+                break;
+            }
+            
         console.log(deckCards)
     } else {
         alert("ERROR");

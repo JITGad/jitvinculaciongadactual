@@ -112,7 +112,7 @@ function init(img, lvl) {
     _canvas = document.getElementById('canvas');
     _stage = _canvas.getContext('2d');
 
-    PUZZLE_DIFFICULTY = lvl + 1;
+    PUZZLE_DIFFICULTY = 3;
 
     _img.src = img;
     idim.src = img;

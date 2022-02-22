@@ -2,6 +2,7 @@ const fm = new FetchMaster();
 var urlApi = "webresources/game";
 
 
+
 const encodeQueryString = (params = {}) => {
     const keys = Object.keys(params);
     return keys.length
@@ -112,7 +113,7 @@ function init(img, lvl) {
     _canvas = document.getElementById('canvas');
     _stage = _canvas.getContext('2d');
 
-    PUZZLE_DIFFICULTY = lvl + 1;
+    PUZZLE_DIFFICULTY = 3;
 
     _img.src = img;
     idim.src = img;
