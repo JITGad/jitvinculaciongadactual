@@ -85,6 +85,20 @@ public class Activitiestyperesource {
         }
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
+    
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Path("/getruta")
+//    public Response getruta() {
+//        ResponseData ResponseData = new ResponseData("Ocurrió un error", false);
+//        if (Configuration.DEBUG) {
+//            System.out.println("Ingresando a getruta ");
+//        }
+//        ResponseData.setMessage("Información encontrada");
+//        ResponseData.setData(request.getServletContext().getRealPath("/"));
+//        ResponseData.setFlag(true);
+//        return Response.ok(Methods.objectToJsonString(ResponseData)).build();
+//    }
 
     // recibe token - administración
     @GET

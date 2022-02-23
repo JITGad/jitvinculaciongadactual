@@ -2,6 +2,7 @@ const fm = new FetchMaster();
 var urlApi = "webresources/game";
 
 
+
 const encodeQueryString = (params = {}) => {
     const keys = Object.keys(params);
     return keys.length
@@ -105,7 +106,7 @@ function movesCounter() {
 }
 
 
-function init(img, lvl) {
+function init(img) {
     _img = new Image();
 
     _con = document.getElementById('containercan');
