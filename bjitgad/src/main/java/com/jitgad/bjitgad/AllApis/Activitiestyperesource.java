@@ -85,7 +85,7 @@ public class Activitiestyperesource {
         }
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
-    
+
 //    @GET
 //    @Produces(MediaType.APPLICATION_JSON)
 //    @Path("/getruta")
@@ -99,7 +99,6 @@ public class Activitiestyperesource {
 //        ResponseData.setFlag(true);
 //        return Response.ok(Methods.objectToJsonString(ResponseData)).build();
 //    }
-
     // recibe token - administración
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -119,10 +118,12 @@ public class Activitiestyperesource {
                 ResponseValidateToken validateToken = AuC.VToken(Authorization);
                 if (validateToken.isStatus()) {
                     ArrayList<ActivitiestypeModel> data = atC.selectActivitiestypepage(page);
+                    responseCountingPage = atC.CountingPageActivitiesType();
                     responseDataPage.setMessage("Información encontrada");
-                    responseDataPage.setCountingpage(atC.CountingPageActivitiesType());
+                    responseDataPage.setCountingpage(responseCountingPage);
                     responseDataPage.setData(data);
                     responseDataPage.setFlag(true);
+                    responseDataPage.setTotalPages(Math.round((responseCountingPage / 10) + 1));
                     return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
                 }
                 responseDataPage.setMessage(validateToken.getMessage());
@@ -196,6 +197,48 @@ public class Activitiestyperesource {
 
             }
             responseData.setMessage("Tokén vacio");
+
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+
+                responseData.setMessage(e.getMessage());
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
+        }
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
+    }
+
+    @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    @Path("/getactivitiesbyidsk")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getactivitiesbyidsk(@QueryParam("activityid") int activityid) {
+        ResponseData responseData = new ResponseData("Ocurrio un error", true);
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando a getactivitiesbyidsk ");
+        }
+        try {
+
+            JsonObject data = Methods.stringToJSON(atC.selectactivitiesbyid(activityid));
+
+            if (data.size() > 0) {
+
+                responseData.setMessage("Información encontrada");
+                responseData.setData(data);
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+            }
+            responseData.setMessage("Información no encontrada");
 
             return Response.ok(Methods.objectToJsonString(responseData)).build();
 
