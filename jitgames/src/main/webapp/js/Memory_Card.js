@@ -13,13 +13,11 @@ const encodeQueryString = (params = {}) => {
             : "";
 };
 
-
-
 async function getdata() {
     const response = await getJuego(79);
     if (!response.status.error) {
         console.log(response.data);
-        lvl = response.data.level;
+        //lvl = response.data.level;
        // console.log(lvl);
         for (i in response.data.detalles)
             if(deckCards.length <= lvl)

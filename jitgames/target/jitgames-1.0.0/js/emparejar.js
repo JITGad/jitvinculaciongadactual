@@ -1,6 +1,7 @@
 const fm = new FetchMaster();
 const brands = [];
 var urlApi = "webresources/game";
+var lvl = 3;
 
 
 const encodeQueryString = (params = {}) => {
@@ -18,8 +19,9 @@ async function getdata() {
     if (!response.status.error) {
         console.log(response.data.detalles);
          // setLoading(false);
+       // lvl = response.data.level;
         for (i in response.data.detalles)
-        if(deckCards.length <= lvl)
+        if(brands.length <= lvl)
             {
               brands.push({ iconName: GlobalImageLocation + response.data.detalles[i].image,
                 brandName: response.data.detalles[i].color, 

@@ -106,7 +106,7 @@ function movesCounter() {
 }
 
 
-function init(img, lvl) {
+function init(img) {
     _img = new Image();
 
     _con = document.getElementById('containercan');
