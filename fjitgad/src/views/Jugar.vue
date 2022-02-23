@@ -53,11 +53,19 @@
         </div>
         <div class="row pt-4">
           <div class="btn-group" role="group">
-            <button type="button" class="btn btn-outline-primary">
+            <button
+              @click="BeforeAction"
+              type="button"
+              class="btn btn-outline-primary"
+            >
               <i class="fas fa-arrow-left"></i>
               Anterior
             </button>
-            <button @click="displayModalInstrucciones" type="button" class="btn btn-outline-primary">
+            <button
+              @click="displayModalInstrucciones"
+              type="button"
+              class="btn btn-outline-primary"
+            >
               Instrucciones
               <i class="fas fa-align-justify"></i>
             </button>
@@ -65,7 +73,11 @@
               Reiniciar
               <i class="fas fa-play"></i>
             </button>
-            <button type="button" class="btn btn-outline-primary">
+            <button
+              @click="AfterAction"
+              type="button"
+              class="btn btn-outline-primary"
+            >
               Siguiente
               <i class="fas fa-arrow-right"></i>
             </button>
@@ -117,6 +129,44 @@
       </div>
     </section>
     <section>
+      <div class="modal fade" ref="ModalJuegoTerminado">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Juego terminado
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <img
+                class="modal-img"
+                src="../assets/image/ganaste.png"
+                style="width: 100%; height: 100%"
+              />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Regresar a menu
+              </button>
+              <button type="button" class="btn btn-primary">
+                ¿Volver a jugar?
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
       <div class="modal" ref="ModalInstrucciones" tabindex="-1">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
@@ -141,7 +191,10 @@
                 type="audio"
                 v-model="TipoJuego.audio_instructions"
               />
-              <my-prev-file type="video" v-model="TipoJuego.video_instructions" />
+              <my-prev-file
+                type="video"
+                v-model="TipoJuego.video_instructions"
+              />
             </div>
             <div class="modal-footer">
               <button
@@ -160,9 +213,9 @@
 </template>
 
 <script>
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import InformacionJuego from "../components/InformacionJuego.vue";
-import { onMounted, ref, reactive, nextTick } from "vue";
+import { onMounted, ref, reactive, nextTick, watch } from "vue";
 import JuegosService from "../api/JuegosService";
 import { message_error } from "../util/Messages.js";
 import Rompecabezas from "../components/juegos/Rompecabezas.vue";
@@ -188,11 +241,14 @@ export default {
     let timeStart = ref(false);
     let movimientos = ref(0);
     let puntaje = ref(0);
+    const ModalJuegoTerminado = ref(null);
     const ModalVictoria = ref(null);
     const ModalInstrucciones = ref(null);
     let ModalBootstrapVictoria;
     let ModalBootstrapInstrucciones;
+    let ModalBootstrapJuegoTerminado;
     const route = useRoute();
+    const Router = useRouter();
     const JuegoId = route.params["id"];
     const Nivel = ref(parseInt(route.params["nivel"]));
     const InitialStateJuego = {
@@ -221,6 +277,12 @@ export default {
     const Loading = ref(true);
     const TipoJuego = reactive({ ...InitialStateTipoJuego });
     const Juego = reactive({ ...InitialStateJuego });
+    watch(
+      () => route.params.nivel,
+      (nivel, prevNivel) => {
+        Nivel.value = parseInt(nivel);
+      }
+    )
     onMounted(async () => {
       const responseJuego = await JuegosService.getJuego(JuegoId);
       if (!responseJuego.status.error) {
@@ -245,7 +307,12 @@ export default {
       }
       await nextTick();
       ModalBootstrapVictoria = new bootstrap.Modal(ModalVictoria.value);
-      ModalBootstrapInstrucciones = new bootstrap.Modal(ModalInstrucciones.value);
+      ModalBootstrapInstrucciones = new bootstrap.Modal(
+        ModalInstrucciones.value
+      );
+      ModalBootstrapJuegoTerminado = new bootstrap.Modal(
+        ModalJuegoTerminado.value
+      );
     });
     function movesCounter() {
       movimientos.value++;
@@ -272,6 +339,31 @@ export default {
       ModalBootstrapInstrucciones.show();
     }
 
+    function AfterAction() {
+      //despues
+      if (Nivel.value >= Juego.level) {
+        ModalBootstrapJuegoTerminado.show();
+        return;
+      }
+
+      Router.push({
+        name: "JugarJuego",
+        params: { id: JuegoId, nivel: Nivel.value + 1 },
+      });
+    }
+
+    function BeforeAction() {
+      if (Nivel.value <= 1) {
+        Router.push({ name: "NivelesJuego", params: { id: JuegoId } });
+        return;
+      }
+
+      Router.push({
+        name: "JugarJuego",
+        params: { id: JuegoId, nivel: Nivel.value - 1 },
+      });
+    }
+
     function resetEverything() {
       // Detener el tiempo, restablecer los minutos y los segundos actualizar la hora interna HTML
       stopTime();
@@ -282,6 +374,8 @@ export default {
     }
 
     return {
+      AfterAction,
+      BeforeAction,
       Routes,
       Loading,
       Juego,
@@ -299,6 +393,7 @@ export default {
       displayModalInstrucciones,
       ModalVictoria,
       ModalInstrucciones,
+      ModalJuegoTerminado,
       resetEverything,
     };
   },

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { onMounted, ref, reactive, nextTick } from "vue";
+import { onMounted, ref, reactive, nextTick, watch } from "vue";
 import { setPathFile, shuffle } from "../../util/Utilities.js";
 
 export default {
@@ -36,6 +36,15 @@ export default {
     let matched = [];
     const deckCards = [];
     var deck;
+
+    watch(
+      () => props.level,
+      (nivel, prevNivel) => {
+        console.log("ss")
+        startGame();
+      }
+    )
+
     onMounted(async () => {
       for (let i in props.model.detalles)
         deckCards.push(setPathFile(props.model.detalles[i].image));

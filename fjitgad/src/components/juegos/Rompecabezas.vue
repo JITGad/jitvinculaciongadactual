@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { nextTick, onMounted } from "vue";
+import { nextTick, onMounted, watch } from "vue";
 import { setPathFile } from "../../util/Utilities";
 export default {
   name: "Rompecabezas",
@@ -20,8 +20,8 @@ export default {
       required: true,
     },
     timeStart: {
-        type: Boolean
-    }
+      type: Boolean,
+    },
   },
   emits: [
     "startTime",
@@ -48,11 +48,22 @@ export default {
     var _canvas;
     var _stage;
     var PUZZLE_DIFFICULTY = 0;
-    const PUZZLE_HOVER_TINT = '#009900';
+    const PUZZLE_HOVER_TINT = "#009900";
     var idim;
+
+    watch(
+      () => props.level,
+      (nivel, prevNivel) => {
+        InitGame();
+      }
+    );
 
     onMounted(async () => {
       await nextTick();
+      InitGame();
+    });
+
+    function InitGame() {
       const img = setPathFile(props.model.detalles[0].image);
       idim = document.getElementById("imgcanva");
       _img = new Image();
@@ -67,7 +78,7 @@ export default {
       idim.src = img;
 
       _img.addEventListener("load", onImage, false);
-    });
+    }
 
     function onImage(e) {
       _dimImageOrigen.width = _img.width;
@@ -159,9 +170,9 @@ export default {
 
     function onPuzzleClick(e) {
       context.emit("movesCounter");
-        _mouse.x = e.layerX || e.offsetX || e.clientX;
-        _mouse.y = e.layerY || e.offsetY || e.clientY;
-      
+      _mouse.x = e.layerX || e.offsetX || e.clientX;
+      _mouse.y = e.layerY || e.offsetY || e.clientY;
+
       _currentPiece = checkPieceClicked();
       if (_currentPiece != null) {
         _stage.clearRect(
@@ -210,7 +221,7 @@ export default {
     function updatePuzzle(e) {
       _currentDropPiece = null;
       _mouse.x = e.layerX || e.offsetX || e.clientX;
-        _mouse.y = e.layerY || e.offsetY || e.clientY;
+      _mouse.y = e.layerY || e.offsetY || e.clientY;
       _stage.clearRect(0, 0, _puzzleWidth, _puzzleHeight);
       var i;
       var piece;
@@ -338,7 +349,7 @@ export default {
       _stage.drawImage(_img, 0, 0, _puzzleWidth, _puzzleHeight);
 
       if (props.timeStart === false) {
-          context.emit("startTime");
+        context.emit("startTime");
       }
       buildPieces();
     }

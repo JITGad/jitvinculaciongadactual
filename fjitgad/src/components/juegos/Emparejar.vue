@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import { nextTick, onMounted } from "vue";
+import { nextTick, onMounted,watch } from "vue";
 import { generateRandomItemsArray, setPathFile } from "../../util/Utilities.js";
 export default {
   name: "Emparejar",
@@ -33,6 +33,15 @@ export default {
   ],
   setup(props, context) {
     const brands = [];
+
+watch(
+      () => props.level,
+      (nivel, prevNivel) => {
+        console.log("ss")
+        process();
+      }
+    )
+
     onMounted(async () => {
       brands.clear();
       props.model.detalles.forEach((element) => {
