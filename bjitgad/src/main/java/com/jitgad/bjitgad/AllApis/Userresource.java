@@ -74,12 +74,14 @@ public class Userresource {
                         responseDataPage.setMessage("Información encontrada");
                         responseDataPage.setCountingpage(responseCountingPage);
                         responseDataPage.setData(data);
+                        responseDataPage.setTotalPages(Math.round((responseCountingPage / 10) + 1));
                         return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
                     }
 
                     responseDataPage.setMessage("Información no encontrada");
                     responseDataPage.setCountingpage(responseCountingPage);
                     responseDataPage.setData(data);
+                    responseDataPage.setTotalPages(Math.round((responseCountingPage / 10) + 1));
                     return Response.ok(Methods.objectToJsonString(responseDataPage)).build();
                 }
 

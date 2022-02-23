@@ -14,7 +14,7 @@ public class ResponseDataPage {
     
     public Object data;
     
-    public int totalpages = (countingpage / 10) + 1;
+    public int totalpages;
 
     public ResponseDataPage() {
     }

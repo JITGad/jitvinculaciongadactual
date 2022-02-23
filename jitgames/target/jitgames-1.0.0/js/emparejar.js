@@ -2,6 +2,7 @@ const fm = new FetchMaster();
 const brands = [];
 var urlApi = "webresources/game";
 var lvl = 3;
+var dragableactual;
 
 
 const encodeQueryString = (params = {}) => {
@@ -23,9 +24,12 @@ async function getdata() {
         for (i in response.data.detalles)
         if(brands.length <= lvl)
             {
-              brands.push({ iconName: GlobalImageLocation + response.data.detalles[i].image,
+              brands.push({ id: i,
+                idcolortype: response.data.detalles[i].idcolortype,
+                iconName: GlobalImageLocation + response.data.detalles[i].image,
                 brandName: response.data.detalles[i].color, 
                 color: response.data.detalles[i].html}); 
+
             }else{
                 break;
             }
@@ -37,6 +41,19 @@ async function getdata() {
 
 }
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function rellenararray(){
+  console.log(getRandomInt(0,brands.length));
+  console.log(brands.length);
+    while(brands.length < lvl){
+      var rnd = getRandomInt(0,brands.length);
+      brands.push(brands[rnd]);
+    }
+}
+
 function getJuego(gameid = 0) {
     return new Promise((resolve) => {
       fm.get(`${urlApi}/getGamebyid${encodeQueryString({'idgame': gameid })}`,
@@ -45,6 +62,8 @@ function getJuego(gameid = 0) {
   }
 
 function process() {
+
+    rellenararray();
 
     let correct = 0;
     let total = 0;
@@ -109,10 +128,9 @@ function process() {
 
         for (let i = 0; i < randomDraggableBrands.length; i++) {
             draggableItems.insertAdjacentHTML("beforeend", `
-            <div class="draggable" draggable="true" style="background-color:${randomDraggableBrands[i].color}; width:100px; height:100px;font-size: 20px;" id="${randomDraggableBrands[i].color}">${randomDraggableBrands[i].brandName}</div>`);
+            <div class="draggable" draggable="true" style="background-color:${randomDraggableBrands[i].color}; width:100px; height:100px;font-size: 20px;" data-id="${randomDraggableBrands[i].idcolortype}">${randomDraggableBrands[i].brandName}</div>`);
         }
-
-
+        
         /*  // Create "matching-pairs" and append to DOM
          for (let i = 0; i < alphabeticallySortedRandomDroppableBrands.length; i++) {
             matchingPairs.insertAdjacentHTML("beforeend", `
@@ -123,13 +141,12 @@ function process() {
           `);
         } */
 
-
         // Create "matching-pairs" and append to DOM
         for (let i = 0; i < alphabeticallySortedRandomDroppableBrands.length; i++) {
             matchingPairs.insertAdjacentHTML("beforeend", `
             <div class="matching-pair">
               <span class="label"><img draggable="false" src="${alphabeticallySortedRandomDroppableBrands[i].iconName}" style="color: ${randomDraggableBrands[i].color}; width:100px; "></img></span>
-              <span class="droppable"data-brand="${alphabeticallySortedRandomDroppableBrands[i].color}"></span>
+              <span class="droppable" data-brand="${alphabeticallySortedRandomDroppableBrands[i].idcolortype}" data-color="${alphabeticallySortedRandomDroppableBrands[i].color}" data-img="${alphabeticallySortedRandomDroppableBrands[i].iconName}"></span>
             </div>
           `);
         }
@@ -157,10 +174,8 @@ function process() {
     //Events fired on the drag target
 
     function dragStart(event) {
-        // transfiere texto que en este caso es el html del color (ID)
-        event.dataTransfer.setData("text", event.target.id); // or "text/plain"
-       // console.log("que será estoxd");
-        
+        // transfiere texto que en este caso (ID)
+        dragableactual = event.target;
     }
 
     //Events fired on the drop target
@@ -174,7 +189,6 @@ function process() {
 
     function dragOver(event) {
         if (event.target.classList && event.target.classList.contains("droppable") && !event.target.classList.contains("dropped")) {
-          //  console.log("arrastrando");
             event.preventDefault();
             
         }
@@ -189,33 +203,37 @@ function process() {
     function drop(event) {
         event.preventDefault();
 
-       // console.log("llegaste al drop");
-
         if (timeStart === false) {
             timeStart = true; 
             timer();
           }
 
         event.target.classList.remove("droppable-hover");
-       // timer();
-       // transfiere texto que en este caso es el html del color
         const draggableElementBrand = event.dataTransfer.getData("text");
-      //  console.log(draggableElementBrand);
         const droppableElementBrand = event.target.getAttribute("data-brand");
-        const isCorrectMatching = draggableElementBrand === droppableElementBrand;
-      //  console.log(droppableElementBrand);
-      //  console.log(isCorrectMatching);
+        const droppableElementColor = event.target.getAttribute("data-color");
+        const droppableElementImg = event.target.getAttribute("data-img");
+        
+        let droppableactual;
+
+        if(dragableactual != null){
+          droppableactual = dragableactual.getAttribute("data-id");
+        }
+
+        const isCorrectMatching = droppableactual === droppableElementBrand;
         total++;
+
+/*         console.log(droppableactual + " , " + isCorrectMatching);
+        console.log(dragableactual); */
+
         if (isCorrectMatching) {
-            const draggableElement = document.getElementById(draggableElementBrand);
-            event.target.classList.add("dropped");
-             draggableElement.classList.add("dragged");
-           /* draggableElement.setAttribute("draggable", "false"); */
-        //   console.log(draggableElementBrand);
+           event.target.classList.add("dropped");
+           dragableactual.classList.add("dragged");
+           dragableactual.setAttribute("draggable", "false");
            
-           event.target.innerHTML = `<div style="background-color:${draggableElementBrand}; width:100px; height:100px;"></div>`;
-           // event.target.innerHTML = `<img src="${draggableElementBrand}" style="width:100px;"></img>`;
-            correct++;
+          event.target.innerHTML = `<div style="background-color:${droppableElementColor}; width:100px; height:100px;"></div>`;
+          correct++;
+          dragableactual = null;
         }
         scoreSection.style.opacity = 0;
         setTimeout(() => {
@@ -223,8 +241,6 @@ function process() {
             totalSpan.textContent = total;
             scoreSection.style.opacity = 1;
         }, 200);
-      //  console.log(Math.min(totalMatchingPairs, totalDraggableItems));
-      //  console.log(correct);
         if (correct === Math.min(totalMatchingPairs, totalDraggableItems)) { // Game Over!!
             playAgainBtn.style.display = "block";
             winGame();
