@@ -38,12 +38,14 @@ export default {
     var deck;
 
     watch(
-      () => props.level,
-      (nivel, prevNivel) => {
-        console.log("ss")
+      () => [props.level, props.timeStart],
+      ([nivel, prevNivel], [timestart, timestarprev]) => {
+        if (timestart != timestarprev) {
+          if (!timestart) return;
+        }
         startGame();
       }
-    )
+    );
 
     onMounted(async () => {
       for (let i in props.model.detalles)

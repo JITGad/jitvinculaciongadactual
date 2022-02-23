@@ -29,6 +29,7 @@ export default {
     "displayModal",
     "stopTime",
     "resetEverything",
+    "movValid",
   ],
   setup(props, context) {
     var _img;
@@ -52,8 +53,11 @@ export default {
     var idim;
 
     watch(
-      () => props.level,
-      (nivel, prevNivel) => {
+      () => [props.level, props.timeStart],
+      ([nivel, prevNivel], [timestart, timestarprev]) => {
+        if (timestart != timestarprev) {
+          if (!timestart) return;
+        }
         InitGame();
       }
     );
@@ -155,6 +159,10 @@ export default {
           xPos = 0;
           yPos += _pieceHeight;
         }
+      }
+      for (var i = 0; i < _pieces.length; i++) {
+        var piece = _pieces[i];
+        _stage.strokeRect(piece.dx, piece.dy, _pieceWidth, _pieceHeight);
       }
       document.onmousedown = onPuzzleClick;
     }
@@ -290,12 +298,22 @@ export default {
     function pieceDropped(e) {
       document.onmousemove = null;
       document.onmouseup = null;
+      let movValid = false;
       if (_currentDropPiece != null) {
         var tmp = { xPos: _currentPiece.xPos, yPos: _currentPiece.yPos };
         _currentPiece.xPos = _currentDropPiece.xPos;
         _currentPiece.yPos = _currentDropPiece.yPos;
         _currentDropPiece.xPos = tmp.xPos;
         _currentDropPiece.yPos = tmp.yPos;
+        if (
+          _currentPiece.xPos === _currentPiece.dx &&
+          _currentPiece.yPos === _currentPiece.dy
+        ) {
+          movValid = true;
+        }
+      }
+      if (_currentPiece != null) {
+        context.emit("movValid", movValid);
       }
       resetPuzzleAndCheckWin();
     }
@@ -338,7 +356,6 @@ export default {
     function setCanvas() {
       _canvas.width = _puzzleWidth;
       _canvas.height = _puzzleHeight;
-      // _canvas.style.border = "1px solid black";
     }
     function initPuzzle() {
       _pieces = [];

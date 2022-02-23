@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import { nextTick, onMounted,watch } from "vue";
+import { nextTick, onMounted, watch } from "vue";
 import { generateRandomItemsArray, setPathFile } from "../../util/Utilities.js";
 export default {
   name: "Emparejar",
@@ -34,13 +34,15 @@ export default {
   setup(props, context) {
     const brands = [];
 
-watch(
-      () => props.level,
-      (nivel, prevNivel) => {
-        console.log("ss")
+    watch(
+      () => [props.level, props.timeStart],
+      ([nivel, prevNivel], [timestart, timestarprev]) => {
+        if (timestart != timestarprev) {
+          if (!timestart) return;
+        }
         process();
       }
-    )
+    );
 
     onMounted(async () => {
       brands.clear();

@@ -26,6 +26,7 @@
               @displayModal="displayModalVictoria"
               @stopTime="stopTime"
               @resetEverything="resetEverything"
+              @movValid="NuevoPuntaje"
             />
             <memoria
               v-if="Juego.shortname == 'memoria'"
@@ -37,6 +38,7 @@
               @displayModal="displayModalVictoria"
               @stopTime="stopTime"
               @resetEverything="resetEverything"
+              @movValid="NuevoPuntaje"
             />
             <emparejar
               v-if="Juego.shortname == 'emparejar'"
@@ -48,6 +50,7 @@
               @displayModal="displayModalVictoria"
               @stopTime="stopTime"
               @resetEverything="resetEverything"
+              @movValid="NuevoPuntaje"
             />
           </div>
         </div>
@@ -69,7 +72,11 @@
               Instrucciones
               <i class="fas fa-align-justify"></i>
             </button>
-            <button type="button" class="btn btn-outline-primary">
+            <button
+              @click="resetEverything"
+              type="button"
+              class="btn btn-outline-primary"
+            >
               Reiniciar
               <i class="fas fa-play"></i>
             </button>
@@ -282,7 +289,7 @@ export default {
       (nivel, prevNivel) => {
         Nivel.value = parseInt(nivel);
       }
-    )
+    );
     onMounted(async () => {
       const responseJuego = await JuegosService.getJuego(JuegoId);
       if (!responseJuego.status.error) {
@@ -373,6 +380,11 @@ export default {
       movimientos.value = 0;
     }
 
+    function NuevoPuntaje(MovValid) {
+      console.log(MovValid);
+      puntaje.value = MovValid ? puntaje.value + 1 : puntaje.value - 1;
+    }
+
     return {
       AfterAction,
       BeforeAction,
@@ -395,6 +407,7 @@ export default {
       ModalInstrucciones,
       ModalJuegoTerminado,
       resetEverything,
+      NuevoPuntaje,
     };
   },
 };
