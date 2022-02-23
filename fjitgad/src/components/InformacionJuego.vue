@@ -22,18 +22,11 @@
       </div>
       <div class="card col-6 text-white bg-info p-2 m-2" id="ctrpuntaje">
         <div id="ctrbarra">
-          <i
-            v-for="n in puntaje > 5 ? 5 : puntaje < 1 ? 1 : puntaje"
-            :key="n"
-            class="far fa-star"
-            aria-hidden="true"
-            >&nbsp;</i
-          >
+          <template v-for="n in CantidadEstrellas" :key="n">
+            <i class="far fa-star" aria-hidden="true">&nbsp;</i>
+          </template>
           <span>Puntaje:&nbsp;</span>
-          <span id="puntaje">{{
-            puntaje > 5 ? 5 : puntaje < 0 ? 0 : puntaje
-          }}</span>
-          {{puntaje}}
+          <span id="puntaje">{{ CantidadEstrellas }}</span>
         </div>
       </div>
     </div>
@@ -41,6 +34,7 @@
 </template>
 
 <script>
+import { computed } from "vue";
 export default {
   name: "InformacionJuego",
   props: {
@@ -64,6 +58,13 @@ export default {
       type: Number,
     },
   },
-  setup(props, context) {},
+  setup(props, context) {
+    const CantidadEstrellas = computed(() =>
+      props.puntaje > 5 ? 5 : props.puntaje < 1 ? 1 : props.puntaje
+    );
+    return {
+      CantidadEstrellas,
+    };
+  },
 };
 </script>
