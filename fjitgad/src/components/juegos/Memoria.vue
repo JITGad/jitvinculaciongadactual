@@ -146,6 +146,7 @@ export default {
     async function startGame() {
       await nextTick();
       deck = document.querySelector(".deck");
+      deck.innerHTML = "";
       const shuffledDeck = shuffle(deckCards);
       // Iterar sobre deck (baraja de cartas)
       for (let i = 0; i < shuffledDeck.length; i++) {
