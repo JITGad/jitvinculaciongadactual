@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { onMounted, ref, reactive, nextTick } from "vue";
+import { onMounted, ref, reactive, nextTick, watch } from "vue";
 import { setPathFile, shuffle } from "../../util/Utilities.js";
 
 export default {
@@ -36,6 +36,17 @@ export default {
     let matched = [];
     const deckCards = [];
     var deck;
+
+    watch(
+      () => [props.level, props.timeStart],
+      ([nivel, prevNivel], [timestart, timestarprev]) => {
+        if (timestart != timestarprev) {
+          if (!timestart) return;
+        }
+        startGame();
+      }
+    );
+
     onMounted(async () => {
       for (let i in props.model.detalles)
         deckCards.push(setPathFile(props.model.detalles[i].image));
@@ -137,6 +148,7 @@ export default {
     async function startGame() {
       await nextTick();
       deck = document.querySelector(".deck");
+      deck.innerHTML = "";
       const shuffledDeck = shuffle(deckCards);
       // Iterar sobre deck (baraja de cartas)
       for (let i = 0; i < shuffledDeck.length; i++) {

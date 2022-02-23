@@ -69,7 +69,7 @@ export default {
       });
       if (props.idactivitiestype > 0) {
         setLoading(true);
-        const response = await ActividadesService.getActividad(props.idactivitiestype);
+        const response = await ActividadesService.getActividadAdministrador(props.idactivitiestype);
         if (!response.status.error) {
           Object.assign(model, response.data);
           setLoading(false);

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="row" style="text-align: center; justify-content: center">
-      {{ titulo }}
+      {{ titulo }} - Nivel {{nivel}}
     </h1>
     <div class="row " style="text-align: center; justify-content: center">
       
@@ -51,7 +51,10 @@ export default {
     },
     puntaje: {
       type: Number
-    }
+    },
+    nivel: {
+      type: Number
+    },
   },
   setup(props, context) {},
 };

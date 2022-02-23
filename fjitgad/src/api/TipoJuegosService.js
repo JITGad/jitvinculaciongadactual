@@ -6,9 +6,16 @@ class TipoJuegosService {
 
     #urlApi = "webresources/gametype"
 
-    getTipoJuego(idtipo = 0) {
+    getTipoJuegoAdminstrador(idtipo = 0) {
         return new Promise((resolve) => {
             FetchMaster.get(`${this.#urlApi}/getgametypebyid${encodeQueryString({ 'idgametype': idtipo })}`,
+                (data) => resolve(data), true);
+        });
+    }
+
+    getTipoJuego(idtipo = 0) {
+        return new Promise((resolve) => {
+            FetchMaster.get(`${this.#urlApi}/getgametypebyidsk${encodeQueryString({ 'idgametype': idtipo })}`,
                 (data) => resolve(data), true);
         });
     }
