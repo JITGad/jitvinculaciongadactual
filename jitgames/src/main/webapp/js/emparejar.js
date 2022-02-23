@@ -150,8 +150,6 @@ function process() {
             </div>
           `);
         }
-
-
         draggableElements = document.querySelectorAll(".draggable");
         droppableElements = document.querySelectorAll(".droppable");
 

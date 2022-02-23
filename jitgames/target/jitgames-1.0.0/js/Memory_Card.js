@@ -1,7 +1,7 @@
 const fm = new FetchMaster();
 const deckCards = [];
 var urlApi = "webresources/game";
-var lvl = 0;
+var lvl = 4;
 
 const encodeQueryString = (params = {}) => {
     const keys = Object.keys(params);
@@ -15,31 +15,50 @@ const encodeQueryString = (params = {}) => {
 
 async function getdata() {
     const response = await getJuego(79);
+    var deckc= [];
     if (!response.status.error) {
         console.log(response.data);
-        //lvl = response.data.level;
-       // console.log(lvl);
+        response.data.detalles = shuffle(response.data.detalles)
+       //rellenararray();
+       //deckCards = rellenararray(response.data.detalles);
+
         for (i in response.data.detalles)
-            if(deckCards.length <= lvl)
             {
-                deckCards.push(GlobalImageLocation + response.data.detalles[i].image); 
-               /*  console.log(deckCards.length);
-                console.log(lvl); */
-            }else{
-                break;
+              deckc.push(GlobalImageLocation + response.data.detalles[i].image); 
             }
-            
+             
+        
+        while(deckCards.length <= lvl){
+            console.log("hola");
+            var rnd = getRandomInt(0,deckc.length);
+            deckCards.push(deckc[rnd]);
+            deckCards.push(deckc[rnd]);
+        }     
+        console.log(deckc)
         console.log(deckCards)
     } else {
         alert("ERROR");
     }
 
-    for (i in deckCards)
-        deckCards.push(deckCards[i])
+    /* for (i in deckCards)
+        deckCards.push(deckCards[i]) */
 
 }
 
 
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+  
+  function rellenararray(){
+    console.log(getRandomInt(0,deckCards.length));
+    console.log(deckCards.length);
+      while(deckCards.length < lvl){
+        var rnd = getRandomInt(0,deckCards.length);
+        deckCards.push(deckCards[rnd]);
+        deckCards.push(deckCards[rnd]);
+      }
+  }
 
 function getJuego(gameid = 0) {
     return new Promise((resolve) => {
