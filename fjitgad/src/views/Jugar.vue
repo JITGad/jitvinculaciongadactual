@@ -11,41 +11,41 @@
               :movimientos="movimientos"
               :puntaje="puntaje"
               :segundos="seconds"
-              :titulo="model.name"
+              :titulo="Juego.name"
               :nivel="Nivel"
             />
           </div>
           <div class="row pt-4">
             <rompecabezas
-              v-if="model.shortname == 'rompecabezas'"
-              :model="model"
+              v-if="Juego.shortname == 'rompecabezas'"
+              :model="Juego"
               :level="Nivel"
               :timeStart="timeStart"
               @startTime="timer"
               @movesCounter="movesCounter"
-              @displayModal="displayModal"
+              @displayModal="displayModalVictoria"
               @stopTime="stopTime"
               @resetEverything="resetEverything"
             />
             <memoria
-              v-if="model.shortname == 'memoria'"
-              :model="model"
+              v-if="Juego.shortname == 'memoria'"
+              :model="Juego"
               :level="Nivel"
               :timeStart="timeStart"
               @startTime="timer"
               @movesCounter="movesCounter"
-              @displayModal="displayModal"
+              @displayModal="displayModalVictoria"
               @stopTime="stopTime"
               @resetEverything="resetEverything"
             />
             <emparejar
-              v-if="model.shortname == 'emparejar'"
-              :model="model"
+              v-if="Juego.shortname == 'emparejar'"
+              :model="Juego"
               :level="Nivel"
               :timeStart="timeStart"
               @startTime="timer"
               @movesCounter="movesCounter"
-              @displayModal="displayModal"
+              @displayModal="displayModalVictoria"
               @stopTime="stopTime"
               @resetEverything="resetEverything"
             />
@@ -57,7 +57,7 @@
               <i class="fas fa-arrow-left"></i>
               Anterior
             </button>
-            <button type="button" class="btn btn-outline-primary">
+            <button @click="displayModalInstrucciones" type="button" class="btn btn-outline-primary">
               Instrucciones
               <i class="fas fa-align-justify"></i>
             </button>
@@ -116,6 +116,46 @@
         </div>
       </div>
     </section>
+    <section>
+      <div class="modal" ref="ModalInstrucciones" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Instrucciones</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <textarea
+                class="form-control"
+                rows="3"
+                readonly
+                v-model="TipoJuego.text_instructions"
+              >
+              </textarea>
+              <my-prev-file
+                type="audio"
+                v-model="TipoJuego.audio_instructions"
+              />
+              <my-prev-file type="video" v-model="TipoJuego.video_instructions" />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main-layout-juego>
 </template>
 
@@ -129,6 +169,7 @@ import Rompecabezas from "../components/juegos/Rompecabezas.vue";
 import Emparejar from "../components/juegos/Emparejar.vue";
 import Memoria from "../components/juegos/Memoria.vue";
 import * as bootstrap from "bootstrap";
+import TipoJuegosService from "../api/TipoJuegosService.js";
 
 export default {
   name: "Jugar",
@@ -148,11 +189,13 @@ export default {
     let movimientos = ref(0);
     let puntaje = ref(0);
     const ModalVictoria = ref(null);
-    let ModalBootstrap;
+    const ModalInstrucciones = ref(null);
+    let ModalBootstrapVictoria;
+    let ModalBootstrapInstrucciones;
     const route = useRoute();
     const JuegoId = route.params["id"];
     const Nivel = ref(parseInt(route.params["nivel"]));
-    const InitialState = {
+    const InitialStateJuego = {
       idgame: 0,
       idactivitiestype: 0,
       idgametype: 0,
@@ -164,25 +207,45 @@ export default {
       image: null,
       detalles: [],
     };
+    const InitialStateTipoJuego = {
+      idgametype: 0,
+      name: "",
+      shortname: "",
+      image: null,
+      audio_instructions: null,
+      text_instructions: "",
+      video_instructions: null,
+      state: true,
+    };
     const Routes = ref([]);
     const Loading = ref(true);
-    const model = reactive({ ...InitialState });
+    const TipoJuego = reactive({ ...InitialStateTipoJuego });
+    const Juego = reactive({ ...InitialStateJuego });
     onMounted(async () => {
-      const response = await JuegosService.getJuego(JuegoId);
-      if (!response.status.error) {
-        Object.assign(model, response.data);
+      const responseJuego = await JuegosService.getJuego(JuegoId);
+      if (!responseJuego.status.error) {
+        Object.assign(Juego, responseJuego.data);
         Loading.value = false;
         Routes.value = [
           "Actividad",
-          model.nameactivities,
-          model.namegametype,
-          model.name,
+          Juego.nameactivities,
+          Juego.namegametype,
+          Juego.name,
         ];
+        const responseTipoJuego = await TipoJuegosService.getTipoJuego(
+          Juego.idgametype
+        );
+        if (!responseTipoJuego.status.error) {
+          Object.assign(TipoJuego, responseTipoJuego.data);
+        } else {
+          message_error(responseTipoJuego.status.message);
+        }
       } else {
-        message_error(response.status.message);
+        message_error(responseJuego.status.message);
       }
       await nextTick();
-      ModalBootstrap = new bootstrap.Modal(ModalVictoria.value);
+      ModalBootstrapVictoria = new bootstrap.Modal(ModalVictoria.value);
+      ModalBootstrapInstrucciones = new bootstrap.Modal(ModalInstrucciones.value);
     });
     function movesCounter() {
       movimientos.value++;
@@ -201,8 +264,12 @@ export default {
     function stopTime() {
       clearInterval(time);
     }
-    function displayModal() {
-      ModalBootstrap.show();
+    function displayModalVictoria() {
+      ModalBootstrapVictoria.show();
+    }
+
+    function displayModalInstrucciones() {
+      ModalBootstrapInstrucciones.show();
     }
 
     function resetEverything() {
@@ -217,7 +284,8 @@ export default {
     return {
       Routes,
       Loading,
-      model,
+      Juego,
+      TipoJuego,
       Nivel,
       minutes,
       seconds,
@@ -227,8 +295,10 @@ export default {
       timer,
       stopTime,
       movesCounter,
-      displayModal,
+      displayModalVictoria,
+      displayModalInstrucciones,
       ModalVictoria,
+      ModalInstrucciones,
       resetEverything,
     };
   },

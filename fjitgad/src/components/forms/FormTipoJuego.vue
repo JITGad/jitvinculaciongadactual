@@ -100,7 +100,7 @@ export default {
       });
       if (props.idgametype > 0) {
         setLoading(true);
-        const response = await TipoJuegosService.getTipoJuego(props.idgametype);
+        const response = await TipoJuegosService.getTipoJuegoAdminstrador(props.idgametype);
         if (!response.status.error) {
           Object.assign(model, response.data);
           setLoading(false);
