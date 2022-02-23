@@ -107,12 +107,12 @@
               ></button>
             </div>
             <div class="modal-body">
-              <p>Has ganado el juego completando el rompecabeza</p>
-              <p>
+              <p style="text-align: center">Has ganado el juego</p>
+              <p style="text-align: center">
                 Tiempo en completar: {{ minutes }} Minutos y
                 {{ seconds }} Segundos
               </p>
-              <p>Movimientos {{ movimientos }}</p>
+              <p style="text-align: center">Movimientos {{ movimientos }}</p>
               <img
                 class="modal-img"
                 src="../assets/image/ganaste.png"
@@ -127,8 +127,13 @@
               >
                 Cerrar
               </button>
-              <button type="button" class="btn btn-primary">
-                ¿Volver a jugar?
+              <button
+                @click="AfterAction"
+                data-bs-dismiss="modal"
+                type="button"
+                class="btn btn-primary"
+              >
+                Siguiente nivel
               </button>
             </div>
           </div>
@@ -165,7 +170,12 @@
               >
                 Regresar a menu
               </button>
-              <button type="button" class="btn btn-primary">
+              <button
+                @click="VolverAJugar"
+                data-bs-dismiss="modal"
+                type="button"
+                class="btn btn-primary"
+              >
                 ¿Volver a jugar?
               </button>
             </div>
@@ -247,7 +257,7 @@ export default {
     let seconds = ref(0);
     let timeStart = ref(false);
     let movimientos = ref(0);
-    let puntaje = ref(0);
+    let puntaje = ref(5);
     const ModalJuegoTerminado = ref(null);
     const ModalVictoria = ref(null);
     const ModalInstrucciones = ref(null);
@@ -287,6 +297,7 @@ export default {
     watch(
       () => route.params.nivel,
       (nivel, prevNivel) => {
+        resetEverything();
         Nivel.value = parseInt(nivel);
       }
     );
@@ -361,7 +372,7 @@ export default {
 
     function BeforeAction() {
       if (Nivel.value <= 1) {
-        Router.push({ name: "NivelesJuego", params: { id: JuegoId } });
+        VolverAJugar();
         return;
       }
 
@@ -371,6 +382,10 @@ export default {
       });
     }
 
+    function VolverAJugar() {
+      Router.push({ name: "NivelesJuego", params: { id: JuegoId } });
+    }
+
     function resetEverything() {
       // Detener el tiempo, restablecer los minutos y los segundos actualizar la hora interna HTML
       stopTime();
@@ -378,10 +393,10 @@ export default {
       seconds.value = 0;
       minutes.value = 0;
       movimientos.value = 0;
+      puntaje.value = 5;
     }
 
     function NuevoPuntaje(MovValid) {
-      console.log(MovValid);
       puntaje.value = MovValid ? puntaje.value + 1 : puntaje.value - 1;
     }
 
@@ -408,6 +423,7 @@ export default {
       ModalJuegoTerminado,
       resetEverything,
       NuevoPuntaje,
+      VolverAJugar,
     };
   },
 };
