@@ -348,8 +348,8 @@ export default {
 
 <style scoped>
 #imgcanva {
-  width: 500px;
-  height: 500px;
+  width: 499px;
+  height: 499px;
   border: 1px solid black;
   margin: 1rem;
 }
@@ -358,5 +358,6 @@ export default {
   height: 500px;
   border: 1px solid black;
   margin: 1rem;
+  padding: 0;
 }
 </style>
