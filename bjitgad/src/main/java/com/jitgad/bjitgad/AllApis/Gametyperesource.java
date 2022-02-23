@@ -182,7 +182,50 @@ public class Gametyperesource {
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
 
-    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/getgametypebyidsk")
+    public Response getgametypebyidsk(@QueryParam("idgametype") int idgametype) {
+
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando getgametypebyidsk...");
+        }
+
+        ResponseData responseData = new ResponseData("Ocurrio un error", true);
+
+        try {
+
+            JsonObject data = Methods.stringToJSON(gtC.selectGametypebyid(idgametype));
+
+            if (data.size() > 0) {
+
+                responseData.setMessage("Información encontrada");
+                responseData.setData(data);
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+            }
+            responseData.setMessage("Información no encontrada");
+
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+
+                responseData.setMessage(e.getMessage());
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
+        }
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getgametypecv")
@@ -246,9 +289,10 @@ public class Gametyperesource {
         }
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
-    
-     /**
+
+    /**
      * Retrieves representation of an instance of ini.CRUD
+     *
      * @param idactivitiestype
      * @return an instance of java.lang.String
      */
@@ -256,21 +300,21 @@ public class Gametyperesource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/getgametypewithgames")
     public Response getgametypewithgames(@QueryParam("idactivitiestype") int idactivitiestype) {
-        
+
         if (Configuration.DEBUG) {
             System.out.println("Ingresando getgametypewithgames...");
         }
-        
+
         ResponseData responseData = new ResponseData("Ocurrio un error", true);
 
         try {
-            
+
             ArrayList<GametypeModel> data = gtC.selectGametypewithgames(idactivitiestype);
 
             if (data.size() > 0) {
 
                 responseData.setMessage("Información encontrada");
-                
+
                 responseData.setData(data);
 
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
@@ -295,9 +339,7 @@ public class Gametyperesource {
         }
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
-    
-    
-    
+
     @Produces(MediaType.APPLICATION_JSON)
     @POST
     @Path("/Postgametype")
@@ -371,7 +413,7 @@ public class Gametyperesource {
         }
 
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-        
+
         gametypeModel
                 = (GametypeModel) Methods.StringJsonToObject(data, GametypeModel.class);
 
@@ -432,7 +474,7 @@ public class Gametyperesource {
         }
 
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-        
+
         gametypeModel
                 = (GametypeModel) Methods.StringJsonToObject(data, GametypeModel.class);
 

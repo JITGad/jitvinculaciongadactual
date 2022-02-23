@@ -2,7 +2,7 @@
 const fm = new FetchMaster();
 const story = [];
 var urlApi = "webresources/game";
-
+var lvl = 3;
 
 const encodeQueryString = (params = {}) => {
     const keys = Object.keys(params);
@@ -21,14 +21,14 @@ async function getdata() {
         // setLoading(false);
         lvl = response.data.level;
         for (i in response.data.detalles)
-            if (story.length <= lvl) {
-                story.push({
-                    image: GlobalImageLocation + response.data.detalles[i].image,
-                    paragraph: response.data.detalles[i].paragraph
-                });
-            } else {
-                break;
-            }
+            /*    if (story.length <= lvl) { */
+            story.push({
+                image: GlobalImageLocation + response.data.detalles[i].image,
+                paragraph: response.data.detalles[i].paragraph
+            });
+        /* } else {
+            break;
+        } */
         // console.log(story);
         init();
     } else {
@@ -61,7 +61,7 @@ function init() {
         // Añadir <img> a <li>
         liTag.appendChild(addParagraph);
         liTag.appendChild(addImage);
-        addParagraph.innerHTML= story[i].paragraph;
+        addParagraph.innerHTML = story[i].paragraph;
         addImage.setAttribute("data-active", "false");
         addImage.setAttribute("src", story[i].image);
         console.log(story[i].image);
@@ -69,7 +69,7 @@ function init() {
         addImage.setAttribute("alt", "--");
         // Actualiza el nuevo <li> a dataslides <ul>
         dataslides.appendChild(liTag);
-        
+
     }
     cargar();
 }
@@ -79,7 +79,7 @@ function cargar() {
     /* const slideone = dataslides.querySelector(".slide").firstChild;
     slideone.src = story[0].image;
     console.log(slideone); */
-   // console.log(image);
+    // console.log(image);
 
     buttons.forEach(button => {
         button.addEventListener("click", () => {
@@ -91,7 +91,7 @@ function cargar() {
 
             const activeSlide = slides.querySelector("[data-active]")
             let newIndex = [...slides.children].indexOf(activeSlide) + offset
-           /*  console.log(newIndex); */
+            /*  console.log(newIndex); */
             if (newIndex < 0) newIndex = slides.children.length - 1;
             if (newIndex >= slides.children.length) newIndex = 0;
             slides.children[newIndex].dataset.active = true

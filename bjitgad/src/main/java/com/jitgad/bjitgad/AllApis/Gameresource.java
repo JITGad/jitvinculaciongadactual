@@ -32,7 +32,7 @@ import java.util.ArrayList;
 @Path("game")
 
 public class Gameresource {
-    
+
     @Context
     private HttpServletRequest request;
     private final GameController gC;
@@ -217,9 +217,10 @@ public class Gameresource {
 
     /**
      * juegos por ID
+     *
      * @param headers
      * @param idgame
-     * @return 
+     * @return
      */
     @Produces(MediaType.APPLICATION_JSON)
     @GET
@@ -288,6 +289,51 @@ public class Gameresource {
     }
 
     @Produces(MediaType.APPLICATION_JSON)
+    @GET
+    @Path("/getGamebyidsk")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getGamebyidsk(@QueryParam("idgame") int idgame) {
+
+        if (Configuration.DEBUG) {
+            System.out.println("Ingresando getGamebyidsk...");
+        }
+
+        ResponseData responseData = new ResponseData("Ocurrio un error", true);
+
+        try {
+
+            JsonObject data = Methods.stringToJSON(gC.selectGamebyid(idgame));
+
+            if (data.size() > 0) {
+
+                responseData.setMessage("Información encontrada");
+                responseData.setData(data);
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+            }
+            responseData.setMessage("Información no encontrada");
+
+            return Response.ok(Methods.objectToJsonString(responseData)).build();
+
+        } catch (Exception e) {
+            responseData.setFlag(false);
+
+            if (Configuration.DEBUG) {
+
+                responseData.setMessage(e.getMessage());
+
+                return Response.ok(Methods.objectToJsonString(responseData)).build();
+            }
+
+            responseData.setMessage("Ha ocurrido un error en el servidor, vuelva a intentarlo mas tarde");
+
+            System.err.println(e.getMessage());
+        }
+        return Response.ok(Methods.objectToJsonString(responseData)).build();
+    }
+
+    @Produces(MediaType.APPLICATION_JSON)
     @POST
     @Path("/postGame")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -320,7 +366,6 @@ public class Gameresource {
 
                         responseData = gC.InsertGameC(gameModel,
                                 request.getServletContext().getRealPath("/"));
-                        
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
@@ -365,7 +410,7 @@ public class Gameresource {
 
         JsonObject Jso = Methods.stringToJSON(data);
         try {
-                if (Jso.size() > 0) {
+            if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
                 Authorization = Authorization == null ? "" : Authorization;
@@ -415,7 +460,6 @@ public class Gameresource {
     @DELETE
     @Path("/deleteGame")
     public Response DeleteGame(@Context HttpHeaders headers, String data) {
-        
 
         if (Configuration.DEBUG) {
             System.out.println("Ingresando DeleteGame...");
@@ -450,9 +494,9 @@ public class Gameresource {
                         }
                         responseData.setMessage(validateToken.getMessage());
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
-                    } 
-                     responseData.setMessage("Usuario sin privilegios para realizar esta actividad");
-                     return Response.ok(Methods.objectToJsonString(responseData)).build();
+                    }
+                    responseData.setMessage("Usuario sin privilegios para realizar esta actividad");
+                    return Response.ok(Methods.objectToJsonString(responseData)).build();
                 }
                 responseData.setMessage("Tokén vacio");
                 return Response.ok(Methods.objectToJsonString(responseData)).build();
