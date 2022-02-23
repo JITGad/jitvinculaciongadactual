@@ -6,9 +6,16 @@ class ActividadesService {
 
   #urlApi = "webresources/activitiestype"
 
-  getActividad(activityid = 0) {
+  getActividadAdministrador(activityid = 0) {
     return new Promise((resolve) => {
       FetchMaster.get(`${this.#urlApi}/getactivitiesbyid${encodeQueryString({ 'activityid': activityid })}`,
+        (data) => resolve(data), true);
+    });
+  }
+
+  getActividad(activityid = 0) {
+    return new Promise((resolve) => {
+      FetchMaster.get(`${this.#urlApi}/getactivitiesbyidsk${encodeQueryString({ 'activityid': activityid })}`,
         (data) => resolve(data), true);
     });
   }
