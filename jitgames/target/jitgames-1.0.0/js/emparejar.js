@@ -18,6 +18,7 @@ async function getdata() {
     if (!response.status.error) {
         console.log(response.data.detalles);
          // setLoading(false);
+        lvl = response.data.level;
         for (i in response.data.detalles)
         if(deckCards.length <= lvl)
             {
