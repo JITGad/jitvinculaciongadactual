@@ -12,6 +12,7 @@
               :puntaje="puntaje"
               :segundos="seconds"
               :titulo="model.name"
+              :nivel="Nivel"
             />
           </div>
           <div class="row pt-4">
@@ -48,6 +49,26 @@
               @stopTime="stopTime"
               @resetEverything="resetEverything"
             />
+          </div>
+        </div>
+        <div class="row pt-4">
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-primary">
+              <i class="fas fa-arrow-left"></i>
+              Anterior
+            </button>
+            <button type="button" class="btn btn-outline-primary">
+              Instrucciones
+              <i class="fas fa-align-justify"></i>
+            </button>
+            <button type="button" class="btn btn-outline-primary">
+              Reiniciar
+              <i class="fas fa-play"></i>
+            </button>
+            <button type="button" class="btn btn-outline-primary">
+              Siguiente
+              <i class="fas fa-arrow-right"></i>
+            </button>
           </div>
         </div>
       </div>

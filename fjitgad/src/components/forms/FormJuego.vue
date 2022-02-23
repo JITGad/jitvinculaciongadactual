@@ -116,7 +116,7 @@ export default {
       });
       if (props.idgame > 0) {
         setLoading(true);
-        const response = await JuegosService.getJuego(props.idgame);
+        const response = await JuegosService.getJuegoAdministrador(props.idgame);
         if (!response.status.error) {
           Object.assign(model, response.data);
           setLoading(false);

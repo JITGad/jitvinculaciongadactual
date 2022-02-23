@@ -1,5 +1,5 @@
 <template>
-  <div id="containercan">
+  <div class="ps-0" id="containercan">
     <canvas id="canvas" width="170" height="170"></canvas>
   </div>
   <img alt="" id="imgcanva" />

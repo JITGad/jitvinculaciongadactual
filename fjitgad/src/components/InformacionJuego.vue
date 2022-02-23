@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="row" style="text-align: center; justify-content: center">
-      {{ titulo }}
+      {{ titulo }} - Nivel {{nivel}}
     </h1>
     <div class="row" style="text-align: center; justify-content: center">
       <div class="card col-6 text-white bg-info p-2" id="ctrtiempo">
@@ -50,7 +50,10 @@ export default {
     },
     puntaje: {
       type: Number
-    }
+    },
+    nivel: {
+      type: Number
+    },
   },
   setup(props, context) {},
 };
