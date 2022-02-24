@@ -133,8 +133,8 @@ export function formatDateInput(date = new Date()) {
     return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 }
 
-export function isBase64(str = ""){
-    if (str === null || str ==='' || str.trim() ===''){ return false; }
+export function isBase64(str = "") {
+    if (str === null || str === '' || str.trim() === '') { return false; }
     try {
         const extension = str.split(',')[0];
         if (extension == null || extension.length == 0) {
@@ -150,35 +150,35 @@ export function isBase64(str = ""){
 
 export function setPathFile(_value) {
     if (_value == null || _value.length == 0) {
-      return "";
+        return "";
     }
     if (isBase64(_value)) {
-      return _value;
+        return _value;
     }
 
     return `${process.env.VUE_APP_BASE_URL}${_value}`;
-  }
+}
 
 // Convertir cadena Unicode a cadena donde cada
 // elemento 16-bit ocupe solo un byte
 export function toBinary(string) {
     const codeUnits = new Uint16Array(string.length);
     for (let i = 0; i < codeUnits.length; i++) {
-      codeUnits[i] = string.charCodeAt(i);
+        codeUnits[i] = string.charCodeAt(i);
     }
     return String.fromCharCode(...new Uint8Array(codeUnits.buffer));
-  }
-  
-  // Recodificar cadena original
-export   function fromBinary(binary) {
+}
+
+// Recodificar cadena original
+export function fromBinary(binary) {
     const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < bytes.length; i++) {
-      bytes[i] = binary.charCodeAt(i);
+        bytes[i] = binary.charCodeAt(i);
     }
     return String.fromCharCode(...new Uint16Array(bytes.buffer));
-  }
+}
 
-  export function shuffle(array) {
+export function shuffle(array) {
     let currentIndex = array.length;
     while (currentIndex !== 0) {
         let randomIndex = Math.floor(Math.random() * currentIndex);
@@ -196,9 +196,13 @@ export function generateRandomItemsArray(n, originalArray) {
     let clonedArray = [...originalArray];
     if (n > clonedArray.length) n = clonedArray.length;
     for (let i = 1; i <= n; i++) {
-      const randomIndex = Math.floor(Math.random() * clonedArray.length);
-      res.push(clonedArray[randomIndex]);
-      clonedArray.splice(randomIndex, 1);
+        const randomIndex = Math.floor(Math.random() * clonedArray.length);
+        res.push(clonedArray[randomIndex]);
+        clonedArray.splice(randomIndex, 1);
     }
     return res;
-  }
+}
+
+export function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}

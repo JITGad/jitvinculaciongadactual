@@ -20,6 +20,7 @@
           <span id="movimiento">{{ movimientos }}</span>
         </div>
       </div>
+      {{ CantidadEstrellas }}
       <div class="card col-6 text-white bg-info p-2 m-2" id="ctrpuntaje">
         <div id="ctrbarra">
           <template v-for="n in CantidadEstrellas" :key="n">
@@ -34,7 +35,7 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 export default {
   name: "InformacionJuego",
   props: {
@@ -62,6 +63,17 @@ export default {
     const CantidadEstrellas = computed(() =>
       props.puntaje > 5 ? 5 : props.puntaje < 1 ? 1 : props.puntaje
     );
+
+    watch(
+      () => props.puntaje,
+      (puntaje, puntajeprev) => {
+        if (timestart != timestarprev) {
+          if (!timestart) return;
+        }
+        InitGame();
+      }
+    );
+
     return {
       CantidadEstrellas,
     };
