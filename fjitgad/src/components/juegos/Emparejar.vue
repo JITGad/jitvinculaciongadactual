@@ -107,11 +107,6 @@ export default {
                 randomDraggableBrands
               )
             : randomDraggableBrands;
-        const alphabeticallySortedRandomDroppableBrands = [
-          ...randomDroppableBrands,
-        ].sort((a, b) =>
-          a.brandName.toLowerCase().localeCompare(b.brandName.toLowerCase())
-        );
 
         for (let i = 0; i < randomDraggableBrands.length; i++) {
           draggableItems.insertAdjacentHTML(
@@ -123,15 +118,15 @@ export default {
 
         for (
           let i = 0;
-          i < alphabeticallySortedRandomDroppableBrands.length;
+          i < randomDroppableBrands.length;
           i++
         ) {
           matchingPairs.insertAdjacentHTML(
             "beforeend",
             `
             <div class="matching-pair">
-              <span class="label"><img draggable="false" src="${alphabeticallySortedRandomDroppableBrands[i].iconName}" style="color: ${randomDraggableBrands[i].color}; width:100px; height: 100%;"></img></span>
-              <span class="droppable" data-brand="${alphabeticallySortedRandomDroppableBrands[i].idcolortype}" data-color="${alphabeticallySortedRandomDroppableBrands[i].color}" data-img="${alphabeticallySortedRandomDroppableBrands[i].iconName}"></span>
+              <span class="label"><img draggable="false" src="${randomDroppableBrands[i].iconName}" style="color: ${randomDroppableBrands[i].color}; width:100px; height: 100%;"></img></span>
+              <span class="droppable" data-brand="${randomDroppableBrands[i].idcolortype}" data-color="${randomDroppableBrands[i].color}" data-img="${randomDroppableBrands[i].iconName}"></span>
             </div>
           `
           );

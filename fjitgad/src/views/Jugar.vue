@@ -60,7 +60,7 @@
               :movimientos="movimientos"
               @startTime="timer"
               @movesCounter="movesCounter"
-              @displayModal="displayModalJuegoTerminado"
+              @displayModal="displayModalVictoria"
               @stopTime="stopTime"
               @resetEverything="resetEverything"
               @movValid="NuevoPuntaje"
@@ -367,6 +367,7 @@ export default {
       clearInterval(time);
     }
     async function displayModalVictoria() {
+      stopTime();
       ModalBootstrapVictoria.show();
       const Response = await EstadisticasService.postEstadisticas({
         idgame: JuegoId,
