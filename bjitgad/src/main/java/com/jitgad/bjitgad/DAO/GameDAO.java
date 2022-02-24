@@ -59,12 +59,6 @@ public class GameDAO {
                 + "order by game.idgame asc limit 10 offset " + (page * 10 - 10);
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
 
-//        for (int i = 0; i < datos.size(); i++) {
-//            sentence = "select * from tblgameimage where idgame =" + datos.get(i).getIdgame();
-//            GameModel JuegoActual = datos.get(i);
-//            JuegoActual.setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
-//            datos.set(i, JuegoActual);
-//        }
         return datos;
     }
 
