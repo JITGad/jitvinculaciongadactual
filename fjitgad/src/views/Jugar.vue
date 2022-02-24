@@ -164,6 +164,7 @@
             </div>
             <div class="modal-footer">
               <button
+                @click="RegresarMenu"
                 type="button"
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
@@ -386,6 +387,10 @@ export default {
       Router.push({ name: "NivelesJuego", params: { id: JuegoId } });
     }
 
+    function RegresarMenu() {
+      Router.push("/");
+    }
+
     function resetEverything() {
       // Detener el tiempo, restablecer los minutos y los segundos actualizar la hora interna HTML
       stopTime();
@@ -424,6 +429,7 @@ export default {
       resetEverything,
       NuevoPuntaje,
       VolverAJugar,
+      RegresarMenu,
     };
   },
 };
