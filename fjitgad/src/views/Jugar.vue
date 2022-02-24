@@ -231,16 +231,17 @@
 </template>
 
 <script>
+import * as bootstrap from "bootstrap";
 import { useRoute, useRouter } from "vue-router";
-import InformacionJuego from "../components/InformacionJuego.vue";
 import { onMounted, ref, reactive, nextTick, watch } from "vue";
-import JuegosService from "../api/JuegosService";
 import { message_error } from "../util/Messages.js";
+import InformacionJuego from "../components/InformacionJuego.vue";
+import JuegosService from "../api/JuegosService";
+import TipoJuegosService from "../api/TipoJuegosService.js";
+import EstadisticasService from "../api/EstadisticasService.js";
 import Rompecabezas from "../components/juegos/Rompecabezas.vue";
 import Emparejar from "../components/juegos/Emparejar.vue";
 import Memoria from "../components/juegos/Memoria.vue";
-import * as bootstrap from "bootstrap";
-import TipoJuegosService from "../api/TipoJuegosService.js";
 
 export default {
   name: "Jugar",
@@ -350,8 +351,19 @@ export default {
     function stopTime() {
       clearInterval(time);
     }
-    function displayModalVictoria() {
+    async function displayModalVictoria() {
       ModalBootstrapVictoria.show();
+      const Response = await EstadisticasService.postEstadisticas({
+        idgame: JuegoId,
+        movements: movimientos.value,
+        minutes: minutes.value,
+        seconds: seconds.value,
+        score: puntaje.value,
+        stars: puntaje.value > 5 ? 5 : puntaje.value < 1 ? 1 : puntaje.value,
+        lvl: Nivel.value,
+        state: true,
+      });
+
     }
 
     function displayModalInstrucciones() {
