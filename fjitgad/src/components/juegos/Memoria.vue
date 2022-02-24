@@ -30,6 +30,7 @@ export default {
     "displayModal",
     "stopTime",
     "resetEverything",
+    "movValid",
   ],
   setup(props, context) {
     let opened = [];
