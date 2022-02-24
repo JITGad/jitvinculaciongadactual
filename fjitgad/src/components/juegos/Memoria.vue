@@ -4,7 +4,7 @@
 
 <script>
 import { onMounted, ref, reactive, nextTick, watch } from "vue";
-import { setPathFile, shuffle } from "../../util/Utilities.js";
+import { setPathFile, shuffle, getRandomInt } from "../../util/Utilities.js";
 
 export default {
   name: "Memoria",
@@ -49,27 +49,8 @@ export default {
     );
 
     onMounted(async () => {
-      for (let i in props.model.detalles)
-        deckCards.push(setPathFile(props.model.detalles[i].image));
       await startGame();
     });
-
-    function removeCard() {
-      // Mientras deck <ul> tenga un nodo hijo, elimínalo
-      while (deck.hasChildNodes()) {
-        deck.removeChild(deck.firstChild);
-      }
-    }
-
-    function resetEverything() {
-      context.emit("resetEverything");
-      matched = [];
-      opened = [];
-      // limpiar la baraja (deck)
-      removeCard();
-      // Crear una nueva baraja (deck)
-      startGame();
-    }
 
     function starRating() {
       if (props.movimientos === 14) {
@@ -93,11 +74,11 @@ export default {
       if (opened.length === 2 && opened[0].src === opened[1].src) {
         // Si coincide, llame a match()
         match();
-        // console.log("¡Es una coincidencia!");
+        context.emit("movValid", true);
       } else if (opened.length === 2 && opened[0].src != opened[1].src) {
         // Si no hay coincidencia, llame a noMatch()
         noMatch();
-        // console.log("no Match!");
+        context.emit("movValid", false);
       }
     }
 
@@ -105,8 +86,8 @@ export default {
       /* Accede a las dos cards en array abierto y añade la 
      clase de match al padre de las imágenes: la etiqueta <li>.*/
       setTimeout(function () {
-        opened[0].parentElement.classList.add("match");
-        opened[1].parentElement.classList.add("match");
+        opened[0].parentElement.classList.add("match-memoria");
+        opened[1].parentElement.classList.add("match-memoria");
         // añade las cards emparejadas a la array emparejada
         matched.push(...opened);
         // Permitir más clics del ratón en las tarjetas
@@ -127,8 +108,8 @@ export default {
      imágenes <li>*/
       setTimeout(function () {
         // Eliminar el giro de clase en el elemento padre de las imágenes
-        opened[0].parentElement.classList.remove("flip");
-        opened[1].parentElement.classList.remove("flip");
+        opened[0].parentElement.classList.remove("flip-memoria");
+        opened[1].parentElement.classList.remove("flip-memoria");
         // Permitir más clics del ratón en las cards
         document.body.style.pointerEvents = "auto";
         // Retirar las tarjetas de la array abierta
@@ -148,15 +129,27 @@ export default {
 
     async function startGame() {
       await nextTick();
+      deckCards.clear();
+      var brandsShorted = shuffle(props.model.detalles);
+
+      while (deckCards.length <= props.level * 2) {
+        var rnd = getRandomInt(0, brandsShorted.length);
+        var newcard = setPathFile(brandsShorted[rnd].image);
+        deckCards.push(newcard);
+        deckCards.push(newcard);
+      }
+
       deck = document.querySelector(".deck");
       deck.innerHTML = "";
+      matched = [];
+      opened = [];
       const shuffledDeck = shuffle(deckCards);
       // Iterar sobre deck (baraja de cartas)
       for (let i = 0; i < shuffledDeck.length; i++) {
         // Crear las etiquetas <li>.
         const liTag = document.createElement("LI");
         // Dar <li> clase de card
-        liTag.classList.add("card-puzzle");
+        liTag.classList.add("card-memoria", "mb-4");
         // Crear las etiquetas <img>.
         const addImage = document.createElement("IMG");
         // Añadir <img> a <li>
@@ -166,7 +159,9 @@ export default {
         //  addImage.setAttribute("src", "img/" + shuffledDeck[i]);
         addImage.setAttribute("src", shuffledDeck[i]);
         // Añadir una etiqueta alt a la imagen
-        addImage.setAttribute("alt", "image of vault boy from fallout");
+        addImage.setAttribute("alt", "...");
+        addImage.style.width = "100%";
+        addImage.style.height = "100%";
         // Actualiza el nuevo <li> a deck <ul>
         deck.appendChild(liTag);
       }
@@ -184,7 +179,7 @@ export default {
         //Voltear la card y mostrar las card img
         function flipCard() {
           // Cuando se hace clic en <li> se añade la clase .flip para mostrar img
-          evt.target.classList.add("flip");
+          evt.target.classList.add("flip-memoria");
           // Llamar a la función addToOpened()
           addToOpened();
         }
@@ -206,7 +201,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .deck {
   background: linear-gradient(to bottom, #5cf, #33ffd1);
   border-radius: 1.5em;
@@ -214,38 +209,36 @@ export default {
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
-  height: 35em;
+  height: 100%;
   margin-bottom: 6em;
   padding: 0.5em;
   width: 35em;
 }
 
 .deck,
-.card-puzzle {
+.card-memoria {
   box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
 }
 
-.card-puzzle {
+.card-memoria {
   background: #fc4;
   border-radius: 0.5em;
   height: 7em;
   width: 7em;
-}
-
-img {
-  user-select: none;
-  width: 6em;
+      cursor: pointer;
 }
 
 .deck img {
+  user-select: none;
+  width: 6em;
   visibility: hidden;
 }
 
-.deck > li {
+.deck  li {
   list-style: none;
 }
 
-.deck .card-puzzle.flip-puzzle {
+.deck .card-memoria.flip-memoria {
   background: #fff;
   cursor: default;
   transform: rotateY(180deg);
@@ -253,39 +246,34 @@ img {
   pointer-events: none;
 }
 
-.flip-puzzle img {
+.flip-memoria img {
   background: #fff;
   visibility: visible;
 }
 
-.deck .card-puzzle.match-puzzle {
+.deck .card-memoria.match-memoria {
   background: #39d;
   visibility: visible;
   cursor: default;
   animation: pulse 1s;
 }
 
-.match-puzzle img {
+.match-memoria img {
   background: #39d;
 }
 @media screen and (min-width: 550px) {
   .deck {
-    height: 50em;
     padding: 2em;
     width: 50em;
   }
 
-  .card-puzzle {
+  .card-memoria {
     height: 10em;
     width: 10em;
   }
 
   .deck img {
     width: 9em;
-  }
-
-  .modal-content h2 {
-    font-size: 4em;
   }
 
   .play-again-btn {
@@ -296,47 +284,17 @@ img {
         Escritorio - responsive
         ------------------------------------*/
 @media screen and (min-width: 800px) {
-  h1 {
-    font-size: 6em;
-  }
-
-  p {
-    font-size: 2.3em;
-  }
-
   .deck {
-    height: 70em;
     width: 70em;
   }
 
-  .card-puzzle {
+  .card-memoria {
     height: 15em;
     width: 15em;
   }
 
   .deck img {
     width: 13em;
-  }
-
-  .reset-btn {
-    font-size: 0.8em;
-  }
-
-  .footer {
-    font-size: 1.2em;
-  }
-
-  .modal-content h2 {
-    font-size: 5em;
-  }
-
-  /* Imagen modal*/
-  .modal-img {
-    width: 30em;
-  }
-
-  .play-again-btn {
-    font-size: 2em;
   }
 }
 </style>

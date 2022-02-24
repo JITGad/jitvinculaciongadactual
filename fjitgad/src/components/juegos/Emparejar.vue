@@ -117,7 +117,7 @@ export default {
           draggableItems.insertAdjacentHTML(
             "beforeend",
             `
-            <div class="draggable" draggable="true" style="background-color:${randomDraggableBrands[i].color}; width:100px; height:100px;font-size: 20px;" data-id="${randomDraggableBrands[i].idcolortype}">${randomDraggableBrands[i].brandName}</div>`
+            <div class="draggable" draggable="true" style="background-color:${randomDraggableBrands[i].color}; width:100px; height:100px;font-size: 20px;" data-id="${randomDraggableBrands[i].idcolortype}"><span class="badge rounded-pill bg-light text-dark">${randomDraggableBrands[i].brandName}</span></div>`
           );
         }
 
@@ -130,7 +130,7 @@ export default {
             "beforeend",
             `
             <div class="matching-pair">
-              <span class="label"><img draggable="false" src="${alphabeticallySortedRandomDroppableBrands[i].iconName}" style="color: ${randomDraggableBrands[i].color}; width:100px; "></img></span>
+              <span class="label"><img draggable="false" src="${alphabeticallySortedRandomDroppableBrands[i].iconName}" style="color: ${randomDraggableBrands[i].color}; width:100px; height: 100%;"></img></span>
               <span class="droppable" data-brand="${alphabeticallySortedRandomDroppableBrands[i].idcolortype}" data-color="${alphabeticallySortedRandomDroppableBrands[i].color}" data-img="${alphabeticallySortedRandomDroppableBrands[i].iconName}"></span>
             </div>
           `

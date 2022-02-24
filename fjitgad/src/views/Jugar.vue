@@ -17,7 +17,7 @@
           </div>
           <div class="row pt-4">
             <rompecabezas
-              v-if="Juego.shortname == 'rompecabezas'"
+              v-if="TipoJuego.shortname == 'rompecabezas'"
               :model="Juego"
               :level="Nivel"
               :timeStart="timeStart"
@@ -29,7 +29,7 @@
               @movValid="NuevoPuntaje"
             />
             <memoria
-              v-if="Juego.shortname == 'memoria'"
+              v-if="TipoJuego.shortname == 'memoria'"
               :model="Juego"
               :level="Nivel"
               :timeStart="timeStart"
@@ -41,13 +41,26 @@
               @movValid="NuevoPuntaje"
             />
             <emparejar
-              v-if="Juego.shortname == 'emparejar'"
+              v-if="TipoJuego.shortname == 'emparejar'"
               :model="Juego"
               :level="Nivel"
               :timeStart="timeStart"
               @startTime="timer"
               @movesCounter="movesCounter"
               @displayModal="displayModalVictoria"
+              @stopTime="stopTime"
+              @resetEverything="resetEverything"
+              @movValid="NuevoPuntaje"
+            />
+            <cuento
+              v-if="TipoJuego.shortname == 'cuento'"
+              :model="Juego"
+              :level="Nivel"
+              :timeStart="timeStart"
+              :movimientos="movimientos"
+              @startTime="timer"
+              @movesCounter="movesCounter"
+              @displayModal="displayModalJuegoTerminado"
               @stopTime="stopTime"
               @resetEverything="resetEverything"
               @movValid="NuevoPuntaje"
@@ -242,6 +255,7 @@ import EstadisticasService from "../api/EstadisticasService.js";
 import Rompecabezas from "../components/juegos/Rompecabezas.vue";
 import Emparejar from "../components/juegos/Emparejar.vue";
 import Memoria from "../components/juegos/Memoria.vue";
+import Cuento from "../components/juegos/Cuentos.vue";
 
 export default {
   name: "Jugar",
@@ -250,6 +264,7 @@ export default {
     Rompecabezas,
     Emparejar,
     Memoria,
+    Cuento,
   },
   setup(props, context) {
     document.body.style.backgroundColor = "#f8f9fa";
@@ -363,15 +378,24 @@ export default {
         lvl: Nivel.value,
         state: true,
       });
-
     }
 
     function displayModalInstrucciones() {
       ModalBootstrapInstrucciones.show();
     }
 
+function displayModalJuegoTerminado() {
+      ModalBootstrapJuegoTerminado.show();
+    }
+
+
     function AfterAction() {
       //despues
+      if (TipoJuego.shortname == "cuento") {
+        movimientos.value = movimientos.value + 1;
+        return;
+      }
+
       if (Nivel.value >= Juego.level) {
         ModalBootstrapJuegoTerminado.show();
         return;
@@ -384,6 +408,11 @@ export default {
     }
 
     function BeforeAction() {
+      if (TipoJuego.shortname == "cuento") {
+        movimientos.value = movimientos.value - 1;
+        return;
+      }
+
       if (Nivel.value <= 1) {
         VolverAJugar();
         return;
@@ -435,6 +464,7 @@ export default {
       movesCounter,
       displayModalVictoria,
       displayModalInstrucciones,
+      displayModalJuegoTerminado,
       ModalVictoria,
       ModalInstrucciones,
       ModalJuegoTerminado,
