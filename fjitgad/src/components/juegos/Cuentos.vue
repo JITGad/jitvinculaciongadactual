@@ -115,6 +115,7 @@ export default {
       imgbox.appendChild(addImage);
       paragraphbox.textContent = story[0].paragraph;
       slider_img = document.querySelector(".slider-img");
+      context.emit("startTime");
     }
 
     function win() {
@@ -125,9 +126,6 @@ export default {
 </script>
 
 <style>
-.slider {
-}
-
 .container-slider {
   display: flex;
   justify-content: center;
