@@ -34,6 +34,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.jitgad.bjitgad.AllApis.Gametyperesource.class);
         resources.add(com.jitgad.bjitgad.AllApis.Itemsquestionsresource.class);
         resources.add(com.jitgad.bjitgad.AllApis.Questionsresource.class);
-        resources.add(com.jitgad.bjitgad.AllApis.Userresource.class);        
+        resources.add(com.jitgad.bjitgad.AllApis.Userresource.class);       
+        resources.add(com.jitgad.bjitgad.AllApis.Statisticsgameresource.class); 
     } 
 }
