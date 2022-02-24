@@ -62,16 +62,24 @@ public class GameimageController {
     }
     
     private GameimageModel UpdateFilesGameImage(GameimageModel request, String realpath) throws IOException{
+        
     request.setImage(request.getImage() == null ? "" : request.getImage());
         
         request.setVideo_parag(request.getVideo_parag() == null ? "" : request.getVideo_parag());
 
         request.setAudio_parag(request.getAudio_parag() == null ? "" : request.getAudio_parag());
         
+        request.setImagefigure(request.getImagefigure() == null ? "" : request.getImagefigure());
+        
        
         ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "gameimage", un.nunique(), realpath);
         if (CreateFile.isState()) {
             request.setImage(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
+        } 
+        
+        CreateFile = fc.createfile(request.getImagefigure(), "gameimage", un.nunique(), realpath);
+        if (CreateFile.isState()) {
+            request.setImagefigure(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
         } 
         
         CreateFile = fc.createfile(request.getVideo_parag(), "gameimage", un.nunique(), realpath);

@@ -18,11 +18,12 @@ public class GameimageModel {
     private String creationdate;
     private String updatedate;
     private boolean state;
+    private String imagefigure;
 
     public GameimageModel() {
     }
 
-    public GameimageModel(int idgameimage, int idgame, int idcolortype, String color, String html, String image, String paragraph, String audio_parag, String video_parag, String creationdate, String updatedate, boolean state) {
+    public GameimageModel(int idgameimage, int idgame, int idcolortype, String color, String html, String image, String paragraph, String audio_parag, String video_parag, String creationdate, String updatedate, boolean state, String imagefigure) {
         this.idgameimage = idgameimage;
         this.idgame = idgame;
         this.idcolortype = idcolortype;
@@ -35,6 +36,7 @@ public class GameimageModel {
         this.creationdate = creationdate;
         this.updatedate = updatedate;
         this.state = state;
+        this.imagefigure = imagefigure;
     }
     
 
@@ -133,5 +135,15 @@ public class GameimageModel {
     public void setState(boolean state) {
         this.state = state;
     }
+
+    public String getImagefigure() {
+        return imagefigure;
+    }
+
+    public void setImagefigure(String imagefigure) {
+        this.imagefigure = imagefigure != null ? imagefigure.replace("\\", "/") : imagefigure;;
+    }
+    
+    
 
 }

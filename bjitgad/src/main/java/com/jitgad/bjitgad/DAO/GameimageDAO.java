@@ -24,10 +24,9 @@ public class GameimageDAO {
         String json = con.getRecordsInJson(sentence);
         return json;
     }
-    
 
     public ArrayList<GameimageModel> selectGameimageid() throws Exception {
-        sentence  = "select idgameimage from tblgameimage";
+        sentence = "select idgameimage from tblgameimage";
         ArrayList<GameimageModel> datos = con.getObjectDB(sentence, GameimageModel.class, 1);
         return datos;
     }
@@ -50,13 +49,14 @@ public class GameimageDAO {
                 + "<creationdate>" + giM.getCreationdate() + "</creationdate>"
                 + "<updatedate>" + giM.getUpdatedate() + "</updatedate>"
                 + "<state>" + giM.getState() + "</state>"
+                + "<imagefigure>" + giM.getImagefigure() + "</imagefigure>"
                 + "</gameimage>");
 
         String sentency = "Select * from insertgameimage('" + structure + "')";
         // System.out.println(structure);
         return con.modifyBD(sentency);
     }
-    
+
     public String insertGameimagef(GameimageModel giM) throws Exception {
         String structure = String.format(
                 "<gameimage>"
@@ -69,6 +69,7 @@ public class GameimageDAO {
                 + "<creationdate>" + giM.getCreationdate() + "</creationdate>"
                 + "<updatedate>" + giM.getUpdatedate() + "</updatedate>"
                 + "<state>" + giM.getState() + "</state>"
+                + "<imagefigure>" + giM.getImagefigure() + "</imagefigure>"
                 + "</gameimage>");
 
         String sentency = "Select * from insertgameimage('" + structure + "')";
