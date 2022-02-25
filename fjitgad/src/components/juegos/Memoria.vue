@@ -70,6 +70,7 @@ export default {
         // Desactivar cualquier otro clic del ratón en otras cards
         document.body.style.pointerEvents = "none";
       }
+      console.log(opened);
       // Compara las dos imágenes src
       if (opened.length === 2 && opened[0].src === opened[1].src) {
         // Si coincide, llame a match()
@@ -153,7 +154,6 @@ export default {
         // Crear las etiquetas <img>.
         const addImage = document.createElement("IMG");
         // Añadir <img> a <li>
-        liTag.appendChild(addImage);
         // Establecer la ruta img src con el mazo deck
         // en caso de que sea local, se descomenta la linea de abajo y se comenta la que le sigue
         //  addImage.setAttribute("src", "img/" + shuffledDeck[i]);
@@ -163,39 +163,37 @@ export default {
         addImage.style.width = "100%";
         addImage.style.height = "100%";
         // Actualiza el nuevo <li> a deck <ul>
-        deck.appendChild(liTag);
-      }
-      deck.addEventListener("click", function (evt) {
-        if (evt.target.nodeName === "LI") {
-          // Empezar el temporizador tras el primer clic de una card
-          // Ejecuta la función timer()
+        liTag.appendChild(addImage);
+        liTag.addEventListener("click", function (evt) {
           if (props.timeStart === false) {
             context.emit("startTime");
           }
           // Llamar a la función flipCard()
-          flipCard();
-        }
+          flipCard(evt);
+        });
+        deck.appendChild(liTag);
+      }
 
-        //Voltear la card y mostrar las card img
-        function flipCard() {
-          // Cuando se hace clic en <li> se añade la clase .flip para mostrar img
-          evt.target.classList.add("flip-memoria");
-          // Llamar a la función addToOpened()
-          addToOpened();
-        }
+      //Voltear la card y mostrar las card img
+      function flipCard(evt) {
+        // Cuando se hace clic en <li> se añade la clase .flip para mostrar img
+        evt.target.classList.add("flip-memoria");
+        console.log(evt);
+        // Llamar a la función addToOpened()
+        addToOpened(evt);
+      }
 
-        //Añade las cards al array vacio de cards abiertas
-        function addToOpened() {
-          /* Si el array abierto tiene cero o un img más empuja otro img en 
+      //Añade las cards al array vacio de cards abiertas
+      function addToOpened(evt) {
+        /* Si el array abierto tiene cero o un img más empuja otro img en 
          el array para que podamos comparar estos dos para ser emparejados */
-          if (opened.length === 0 || opened.length === 1) {
-            // Empujar ese img a la matriz abierta
-            opened.push(evt.target.firstElementChild);
-          }
-          // Llamar a la función compareTwo()
-          compareTwo();
+        if (opened.length === 0 || opened.length === 1) {
+          // Empujar ese img a la matriz abierta
+          opened.push(evt.target.firstElementChild);
         }
-      });
+        // Llamar a la función compareTwo()
+        compareTwo();
+      }
     }
   },
 };
@@ -225,7 +223,7 @@ export default {
   border-radius: 0.5em;
   height: 7em;
   width: 7em;
-      cursor: pointer;
+  cursor: pointer;
 }
 
 .deck img {
@@ -234,7 +232,7 @@ export default {
   visibility: hidden;
 }
 
-.deck  li {
+.deck li {
   list-style: none;
 }
 
