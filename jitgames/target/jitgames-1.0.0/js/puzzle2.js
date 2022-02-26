@@ -15,11 +15,8 @@ const encodeQueryString = (params = {}) => {
 async function getdata() {
     const response = await getJuego(79);
     if (!response.status.error) {
-        //console.log(GlobalImageLocation + response.data.image);
-            console.log(GlobalImageLocation + response.data.detalles[0].image);
-            main(GlobalImageLocation + response.data.detalles[0].image);
-            //main(GlobalImageLocation + response.data.detalles[0].image);
-        /*  init(GlobalImageLocation + response.data.detalles[0].image, response.data.level); */
+        console.log(GlobalImageLocation + response.data.detalles[0].image);
+        main(GlobalImageLocation + response.data.detalles[0].image);
     } else {
         alert("ERROR");
     }
@@ -33,14 +30,31 @@ function getJuego(gameid = 0) {
     });
 }
 
+
+
 //datos
-var PUZZLE_DIFFICULTY = 0;
+
+const modal = document.getElementById("modal");
+const timeCounter = document.querySelector(".timer");
+const reset = document.querySelector(".reset-btn");
+const movesCount = document.querySelector(".moves-counter");
+const playAgainBtn = document.querySelector(".play-again-btn");
+
+let time;
+let minutes = 0;
+let seconds = 0;
+let timeStart = false;
+let movimientos = 0;
+
+
+var PUZZLE_DIFFICULTY = 3;
 let VIDEO = null;
 let CANVAS = null;
 let CONTEXT = null;
 let SCALER = 0.6;
 let SIZE;
 let PIECES = [];
+let PIECESESTABELCIDAS = [];
 var _puzzleWidth;
 var _puzzleHeight;
 var _pieceWidth;
@@ -48,42 +62,48 @@ var _pieceHeight;
 let SELECTED_PIECE = null;
 var _img;
 
+
+function timer() {
+    // Actualizar el recuento cada 1 segundo
+    time = setInterval(function () {
+        seconds++;
+        if (seconds === 60) {
+            minutes++;
+            seconds = 0;
+        }
+        // Actualizar el temporizador en HTML con el tiempo que tarda el usuario en jugar.
+        timeCounter.innerHTML = "<i class='fa fa-hourglass-start'></i>" + " Timer: " + minutes + " Mins " + seconds + " Secs";
+    }, 1000);
+}
+
+function stopTime() {
+    clearInterval(time);
+}
+
+function resetEverything() {
+    // Detener el tiempo, restablecer los minutos y los segundos actualizar la hora interna HTML
+    stopTime();
+    timeStart = false;
+    seconds = 0;
+    minutes = 0;
+    timeCounter.innerHTML = "<i class='fa fa-hourglass-start'></i>" + " Timer: 00:00";
+    movesCount.innerHTML = 0;
+}
+
 function main(img) {
     _img = new Image();
     _img.src = img;
-    console.log(_img);
     CANVAS = document.getElementById("myCanvas");
     CONTEXT = CANVAS.getContext("2d");
     CANVAS.style.border = "1px solid black";
     _img.addEventListener('load', onImage, false);
-
-    
-    /* let promise = navigator.mediaDevices.getUserMedia({ video: true });
-
-    promise.then(function (signal) {
-        VIDEO = document.createElement("video");
-        VIDEO.srcObject = signal;
-        VIDEO.play();
-        VIMAGE = VIDEO;
-        VIDEO.onloadeddata = function () {
-            handleResize();
-            initializePieces(SIZE.rows, SIZE.columns);
-            updateCanvas();
-        }
-    }).catch(function (err) {
-        alert("Camera error:" + err);
-    }); */
 }
 
 function onImage() {
 
-    SIZE = { x: 0, y: 0, width: 0, height: 0, rows: 3, columns: 3 };
+    SIZE = { x: 0, y: 0, width: 0, height: 0, rows: PUZZLE_DIFFICULTY, columns: PUZZLE_DIFFICULTY };
 
-    _pieceWidth = Math.floor(_img.width / PUZZLE_DIFFICULTY);
-    _pieceHeight = Math.floor(_img.height / PUZZLE_DIFFICULTY);
-
-    _puzzleWidth = _pieceWidth * PUZZLE_DIFFICULTY;
-    _puzzleHeight = _pieceHeight * PUZZLE_DIFFICULTY;
+    //console.log(SIZE);
 
     addEventListeners();
     handleResize();
@@ -146,14 +166,12 @@ function onMouseMove(evt) {
 
 function onMouseUp() {
 
-    if(SELECTED_PIECE != null){
+    if (SELECTED_PIECE != null) {
         if (SELECTED_PIECE.isClose()) {
             SELECTED_PIECE.snap();
         }
         SELECTED_PIECE = null;
     }
-    
-   
 }
 
 function getPressendPiece(loc) {
@@ -167,41 +185,39 @@ function getPressendPiece(loc) {
 }
 
 function handleResize() {
-    /* CANVAS.width = window.innerWidth;
-    CANVAS.height = window.innerWidth; */
     CANVAS.width = 800;
-    CANVAS.height = 500;
+    CANVAS.height = 600;
 
     let resizer = SCALER *
         Math.min(
-            /* window.innerWidth / VIDEO.videoWidth,
-            window.innerHeight / VIDEO.videoHeight */
-            800 / _img.width,
-            500 / _img.height
+            CANVAS.width / _img.width,
+            CANVAS.height / _img.height
         );
-    /*  SIZE.width = resizer * VIDEO.videoWidth;
-     SIZE.height = resizer * VIDEO.videoHeight;
-     SIZE.x = window.innerHeight / 2 - SIZE.width / 2;
-     SIZE.y = window.innerHeight / 2 - SIZE.height / 2; */
     SIZE.width = resizer * _img.width;
     SIZE.height = resizer * _img.height;
-    SIZE.x = 800 / 2 - SIZE.width / 2;
-    SIZE.y = 500 / 2 - SIZE.height / 2;
+    SIZE.x = CANVAS.width / 2 - SIZE.width / 2;
+    SIZE.y =  CANVAS.height / 2 - SIZE.height / 2;
 }
 
 function updateCanvas() {
     CONTEXT.clearRect(0, 0, CANVAS.width, CANVAS.height);
-
+    
     CONTEXT.globalAlpha = 0.5;
-    /* CONTEXT.drawImage(VIDEO, */
     CONTEXT.drawImage(_img,
         SIZE.x, SIZE.y,
         SIZE.width, SIZE.height);
+
+    CONTEXT.strokeRect(SIZE.x, SIZE.y, SIZE.width, SIZE.height);    
+
+
     CONTEXT.globalAlpha = 1;
 
     for (let i = 0; i < PIECES.length; i++) {
         PIECES[i].draw(CONTEXT);
+
+        //CONTEXT.strokeRect(SIZE.x, SIZE.y, SIZE.width, SIZE.height); 
     }
+
     window.requestAnimationFrame(updateCanvas);
 }
 
@@ -211,6 +227,12 @@ function initializePieces(rows, cols) {
     SIZE.columns = cols;
 
     PIECES = [];
+
+    if (timeStart === false) {
+        timeStart = true;
+        timer();
+    }
+
     for (let i = 0; i < SIZE.rows; i++) {
         for (let j = 0; j < SIZE.columns; j++) {
             PIECES.push(new Piece(i, j));
@@ -218,15 +240,25 @@ function initializePieces(rows, cols) {
     }
 }
 
+function locg(i){
+    let loc = {
+        x: Math.random() * (CANVAS.width - PIECES[i].width),
+        y: Math.random() * (CANVAS.height - PIECES[i].height)
+    }
+    return loc;
+}
+
 // random
 function randomizePieces() {
     for (let i = 0; i < PIECES.length; i++) {
-        let loc = {
-            x: Math.random() * (CANVAS.width - PIECES[i].width),
-            y: Math.random() * (CANVAS.height - PIECES[i].height)
-        }
-        PIECES[i].x = 550 + PIECES[i].width;
-        PIECES[i].y = loc.y;
+        let loc = locg(i);
+
+       while(!(loc.x + PIECES[i].width  <= SIZE.x || loc.x >= SIZE.x + SIZE.width) &&
+       !(loc.y + PIECES[i].height  <= SIZE.y || loc.y >= SIZE.y + SIZE.height)){
+            loc = locg(i);
+       }
+       PIECES[i].x = loc.x;
+       PIECES[i].y = loc.y;  
     }
 }
 
@@ -245,15 +277,6 @@ class Piece {
     draw(context) {
         context.beginPath();
 
-        /*  context.drawImage(VIDEO,
-             this.colIndex*VIDEO.videoWidth/SIZE.columns,
-             this.rowIndex*VIDEO.videoHeight/SIZE.rows,
-             VIDEO.videoWidth/SIZE.columns,
-             VIDEO.videoHeight/SIZE.rows,
-             this.x,
-             this.y,
-             this.width,
-             this.height); */
         context.drawImage(_img,
             this.colIndex * _img.width / SIZE.columns,
             this.rowIndex * _img.height / SIZE.rows,
@@ -264,13 +287,21 @@ class Piece {
             this.width,
             this.height);
 
-
         context.rect(this.x, this.y, this.width, this.height);
+        
         context.stroke();
+        
+        context.strokeRect(this.xCorrect, this.yCorrect, this.width, this.height);    
+
     }
     isClose() {
         if (distance({ x: this.x, y: this.y },
-            { x: this.xCorrect, y: this.yCorrect }) < this.width / 3) {
+            { x: this.xCorrect, y: this.yCorrect }) < this.width / PUZZLE_DIFFICULTY) {
+                  
+            PIECESESTABELCIDAS.push(SELECTED_PIECE);
+             if(checkwin(PIECES,PIECESESTABELCIDAS)){
+                gameOver();
+            }     
             return true;
         }
         return false;
@@ -287,6 +318,64 @@ function distance(p1, p2) {
         (p1.y - p2.y) * (p1.y - p2.y));
 }
 
+function checkwin(arr1,arr2) {
+    if ((Array.isArray(arr1) && Array.isArray(arr2)) === false) return false;
+    return JSON.stringify([...new Set(arr1.flat().sort())]) === JSON.stringify([...new Set(arr2.flat().sort())]);
+}  
+
+function gameOver() {
+    displayModal();
+    stopTime();
+    AddEstadisticas();
+}
+
+function AddEstadisticas() {
+    // Acceder al div de contenido modal
+    const stats = document.querySelector(".modal-content");
+    // Crear tres párrafos diferentes
+    for (let i = 1; i <= 3; i++) {
+        // Crear un nuevo párrafo
+        const statsElement = document.createElement("p");
+        // Añadir una clase al nuevo párrafo
+        statsElement.classList.add("stats");
+        // Añade la nueva etiqueta <p> creada al contenido del modal
+        stats.appendChild(statsElement);
+    }
+    // Seleccione todas las etiquetas p con la clase de estadísticas y actualice el contenido
+    let p = stats.querySelectorAll("p.stats");
+    // Establecer el nuevo <p> para tener el contenido de las estadísticas (tiempo, movimientos)
+
+    p[0].innerHTML = "Tiempo en completar: " + minutes + " Minutos y " + seconds + " Segundos";
+    p[1].innerHTML = "Movimientos: " + movimientos;
+}
+
+function displayModal() {
+    // Accede al elemento modal <span> (x) que cierra el modal
+        const modalClose = document.getElementsByClassName("close")[0];
+        // Cuando se gana el juego se establece el bloqueo modal para mostrarlo
+        modal.style.display = "block";
+    
+        // Cuando el usuario hace clic en <span> (x), cierra el modal
+        modalClose.onclick = function () {
+            modal.style.display = "none";
+        };
+    // Cuando el usuario haga clic en cualquier lugar fuera del modal, ciérrelo
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+    }
+
+reset.addEventListener('click', function () {
+    resetEverything();
+    onImage();
+});
+
+playAgainBtn.addEventListener('click',function() {
+    modal.style.display = "none";
+    onImage();
+  });
 
 
 getdata();
