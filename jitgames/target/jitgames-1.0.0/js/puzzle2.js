@@ -39,7 +39,7 @@ const timeCounter = document.querySelector(".timer");
 const reset = document.querySelector(".reset-btn");
 const movesCount = document.querySelector(".moves-counter");
 const playAgainBtn = document.querySelector(".play-again-btn");
-
+const PUZZLE_HOVER_TINT = '#009900';
 let time;
 let minutes = 0;
 let seconds = 0;
@@ -161,6 +161,22 @@ function onMouseMove(evt) {
         }
         SELECTED_PIECE.x = evt.x - SELECTED_PIECE.offset.x;
         SELECTED_PIECE.y = evt.y - SELECTED_PIECE.offset.y;
+
+        SELECTED_PIECE = getPressendPiece(evt);
+            
+            if(SELECTED_PIECE != null){
+                if (SELECTED_PIECE.isClosePosi()) {
+                   // SELECTED_PIECE.snap();
+                   console.log(SELECTED_PIECE);
+                   //console.log(SIZE.width + " - " + SIZE.height);
+                   CONTEXT.globalAlpha = 0.4;
+                   CONTEXT.fillStyle = PUZZLE_HOVER_TINT;
+                   CONTEXT.fillRect(SELECTED_PIECE.xCorrect, SELECTED_PIECE.yCorrect, SIZE.width, SIZE.height);
+                   CONTEXT.restore();
+                   CONTEXT.save();
+                }
+               
+            }
     }
 }
 
@@ -306,6 +322,16 @@ class Piece {
         }
         return false;
     }
+
+    isClosePosi(){
+        if (distance({ x: this.x, y: this.y },
+            { x: this.xCorrect, y: this.yCorrect }) < this.width / PUZZLE_DIFFICULTY) {       
+                
+            return true;
+        }
+        return false;
+    }
+
     snap() {
         this.x = this.xCorrect;
         this.y = this.yCorrect;
