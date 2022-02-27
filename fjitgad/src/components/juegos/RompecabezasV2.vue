@@ -1,6 +1,6 @@
 <template>
   <div class="ps-0 containermain" id="containercan2">
-    <canvas id="myCanvas" width="170" height="170"></canvas>
+    <canvas id="myCanvas2" width="170" height="170"></canvas>
   </div>
 </template>
 
@@ -46,7 +46,7 @@ export default {
     onMounted(async () => {
       await nextTick();
       CONTAINER = document.getElementById("containercan2");
-      CANVAS = document.getElementById("myCanvas");
+      CANVAS = document.getElementById("myCanvas2");
       CONTEXT = CANVAS.getContext("2d");
       CANVAS.style.border = "1px solid black";
       InitGame();
@@ -85,19 +85,11 @@ export default {
         columns: PUZZLE_DIFFICULTY,
       };
 
-
       addEventListeners();
       handleResize();
       initializePieces(SIZE.rows, SIZE.columns);
       updateCanvas();
       randomizePieces();
-      CONTEXT.save();
-      CONTEXT.clearRect(20, 20, 500, 500);
-      CONTEXT.globalAlpha = 0.4;
-      CONTEXT.fillStyle = PUZZLE_HOVER_TINT;
-      CONTEXT.fillRect(20, 20, 500, 500);
-      CONTEXT.restore();
-      CONTEXT.save();
     }
 
     function addEventListeners() {
@@ -108,6 +100,7 @@ export default {
       CANVAS.addEventListener("touchstart", onTouchStart);
       CANVAS.addEventListener("touchmove", onTouchMove);
       CANVAS.addEventListener("touchend", onTouchEnd);
+
       window.addEventListener("resize", resizeWindow);
     }
 
@@ -129,34 +122,32 @@ export default {
           evt.touches[0].pageY ||
           0,
       };
-      onMouseDown(loc);
+      onPieceDown(loc);
     }
 
     function onTouchMove(evt) {
-      let loc = {
-        x:
-          evt.touches[0].clientX ||
-          evt.touches[0].screenX ||
-          evt.touches[0].pageX ||
-          0,
-        y:
-          evt.touches[0].clientY ||
-          evt.touches[0].screenY ||
-          evt.touches[0].pageY ||
-          0,
-      };
-      onMouseMove(loc);
+      if (SELECTED_PIECE != null) {
+        const loc = {
+          x:
+            evt.touches[0].clientX ||
+            evt.touches[0].screenX ||
+            evt.touches[0].pageX ||
+            0,
+          y:
+            evt.touches[0].clientY ||
+            evt.touches[0].screenY ||
+            evt.touches[0].pageY ||
+            0,
+        };
+        onPieceMove(loc);
+      }
     }
 
     function onTouchEnd() {
       onMouseUp();
     }
 
-    function onMouseDown(evt) {
-      const loc = {
-        x: evt.layerX || evt.offsetX || evt.clientX || 0,
-        y: evt.layerY || evt.offsetY || evt.clientY || 0,
-      };
+    function onPieceDown(loc) {
       SELECTED_PIECE = getPressendPiece(loc);
       if (SELECTED_PIECE != null) {
         SELECTED_PIECE.offset = {
@@ -166,19 +157,43 @@ export default {
       }
     }
 
+    function onMouseDown(evt) {
+      const loc = {
+        x: evt.layerX || evt.offsetX || evt.clientX || 0,
+        y: evt.layerY || evt.offsetY || evt.clientY || 0,
+      };
+      onPieceDown(loc);
+    }
+
+    function onPieceMove(loc) {
+      const index = PIECES.indexOf(SELECTED_PIECE);
+      if (index > -1) {
+        PIECES.splice(index, 1);
+        PIECES.push(SELECTED_PIECE);
+      }
+      SELECTED_PIECE.x = loc.x - SELECTED_PIECE.offset.x;
+      SELECTED_PIECE.y = loc.y - SELECTED_PIECE.offset.y;
+      if (SELECTED_PIECE.isClosePosi()) {
+        CONTEXT.globalAlpha = 0.4;
+        CONTEXT.fillStyle = PUZZLE_HOVER_TINT;
+        CONTEXT.fillRect(
+          SELECTED_PIECE.xCorrect,
+          SELECTED_PIECE.yCorrect,
+          SELECTED_PIECE.width,
+          SELECTED_PIECE.height
+        );
+        CONTEXT.save();
+      }
+    }
+
     function onMouseMove(evt) {
       if (SELECTED_PIECE != null) {
-        const index = PIECES.indexOf(SELECTED_PIECE);
-        if (index > -1) {
-          PIECES.splice(index, 1);
-          PIECES.push(SELECTED_PIECE);
-        }
+          console.log(evt);
         const loc = {
           x: evt.layerX || evt.offsetX || evt.clientX || 0,
           y: evt.layerY || evt.offsetY || evt.clientY || 0,
         };
-        SELECTED_PIECE.x = loc.x - SELECTED_PIECE.offset.x;
-        SELECTED_PIECE.y = loc.y - SELECTED_PIECE.offset.y;
+        onPieceMove(loc);
       }
     }
 
@@ -335,6 +350,18 @@ export default {
           if (checkwin(PIECES, PIECESESTABELCIDAS)) {
             gameOver();
           }
+          return true;
+        }
+        return false;
+      }
+      isClosePosi() {
+        if (
+          distance(
+            { x: this.x, y: this.y },
+            { x: this.xCorrect, y: this.yCorrect }
+          ) <
+          this.width / PUZZLE_DIFFICULTY
+        ) {
           return true;
         }
         return false;
