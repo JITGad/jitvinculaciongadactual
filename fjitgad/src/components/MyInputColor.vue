@@ -27,10 +27,6 @@
 <script>
 import * as Validate from "../util/ValidationTypes.js";
 import {
-  myClassContainerInputType,
-  myClassInputType,
-} from "../util/Utilities.js";
-import {
   onBeforeUnmount,
   onMounted,
   inject,

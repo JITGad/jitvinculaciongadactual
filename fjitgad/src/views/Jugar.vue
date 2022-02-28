@@ -112,7 +112,7 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Enhorabuena</h5>
+              <h5 class="modal-title" id="exampleModalLabel">{{MensajesVictoria}}</h5>
               <button
                 type="button"
                 class="btn-close"
@@ -121,7 +121,7 @@
               ></button>
             </div>
             <div class="modal-body">
-              <p style="text-align: center">Has ganado el juego</p>
+              <p style="text-align: center">{{MensajesVictoria}}</p>
               <p style="text-align: center">
                 Tiempo en completar: {{ minutes }} Minutos y
                 {{ seconds }} Segundos
@@ -170,6 +170,7 @@
               ></button>
             </div>
             <div class="modal-body">
+              <p style="text-align: center">{{MensajesVictoria}}</p>
               <img
                 class="modal-img"
                 :src="ImagenesVictoria"
@@ -294,6 +295,7 @@ export default {
     const Nivel = ref(parseInt(route.params["nivel"]));
     const MensajesVictoria = ref("");
     let mensajes = [
+      "Enhorabuena, has ganado el juego",
       "Lo estás haciendo muy bien.",
       "Sigue así felicidades",
       "En hora buena vas ganando",
@@ -306,11 +308,11 @@ export default {
     ];
     const ImagenesVictoria = ref("");
     const imagenes = [
-      "../assets/image/ganaste0.png",
-      "../assets/image/ganaste1.png",
-      "../assets/image/ganaste2.png",
-      "../assets/image/ganaste3.png",
-      "../assets/image/ganaste4.png",
+      require("../assets/image/ganaste0.png"),
+      require("../assets/image/ganaste1.png"),
+      require("../assets/image/ganaste2.png"),
+      require("../assets/image/ganaste3.png"),
+      require("../assets/image/ganaste4.png"),
     ];
     const InitialStateJuego = {
       idgame: 0,
