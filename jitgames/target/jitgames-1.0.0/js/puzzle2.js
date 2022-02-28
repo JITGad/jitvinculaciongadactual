@@ -175,7 +175,6 @@ function onMouseMove(evt) {
                    CONTEXT.restore();
                    CONTEXT.save();
                 }
-               
             }
     }
 }
