@@ -84,15 +84,13 @@ public class GameDAO {
 
         GameModel JuegoSeleccionado = datos.get(0);
 
-        if (JuegoSeleccionado.getShortname().equals("emparejar")) {
-            sentence = "select tblgameimage.idgameimage, tblgameimage.idgame, tblgameimage.idcolortype,tblcolortype.name as color, tblcolortype.html, tblgameimage.image,\n"
-                    + "tblgameimage.paragraph, tblgameimage.audio_parag, tblgameimage.video_parag, tblgameimage.creationdate, tblgameimage.updatedate, tblgameimage.state\n"
-                    + "from tblgameimage inner join tblcolortype on tblcolortype.idcolortype = tblgameimage.idcolortype where idgame =" + JuegoSeleccionado.getIdgame() + "order by tblgameimage.idgameimage asc";
-            JuegoSeleccionado.setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
-            return Methods.objectToJsonString(JuegoSeleccionado);
-        }
-        
-        sentence = "select * from tblgameimage where idgame =" + JuegoSeleccionado.getIdgame();
+        sentence = "select tblgameimage.idgameimage, tblgameimage.idgame, tblgameimage.idcolortype,tblcolortype.name as color, tblcolortype.html, tblgameimage.image,\n"
+                + "tblgameimage.paragraph, tblgameimage.audio_parag, tblgameimage.video_parag, tblgameimage.creationdate, tblgameimage.updatedate, tblgameimage.state,tblgameimage.imagefigure\n"
+                + "from tblgameimage inner join tblcolortype on tblcolortype.idcolortype = tblgameimage.idcolortype where idgame="+JuegoSeleccionado.getIdgame()+"\n"
+                + "union\n"
+                + "select tblgameimage.idgameimage, tblgameimage.idgame, tblgameimage.idcolortype,null as color, null as html, tblgameimage.image,\n"
+                + "tblgameimage.paragraph, tblgameimage.audio_parag, tblgameimage.video_parag, tblgameimage.creationdate, tblgameimage.updatedate, tblgameimage.state,tblgameimage.imagefigure\n"
+                + "from tblgameimage where idgame =" + JuegoSeleccionado.getIdgame() + " and tblgameimage.idcolortype = 0";
         JuegoSeleccionado.setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
 
         return Methods.objectToJsonString(JuegoSeleccionado);

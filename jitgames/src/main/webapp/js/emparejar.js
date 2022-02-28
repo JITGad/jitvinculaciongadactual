@@ -17,28 +17,35 @@ const encodeQueryString = (params = {}) => {
 };
 
 async function getdata() {
-    const response = await getJuego(52);
+    const response = await getJuego(105);
     if (!response.status.error) {
-        console.log(response.data.detalles);
+        //console.log(response.data.detalles);
          // setLoading(false);
        // lvl = response.data.level;
         for (i in response.data.detalles)
         if(brands.length <= lvl)
             {
-              brands.push({ id: i,
-                idcolortype: response.data.detalles[i].idcolortype,
-                iconName: GlobalImageLocation + response.data.detalles[i].image,
-                brandName: response.data.detalles[i].color, 
-                color: response.data.detalles[i].html}); 
-
-              if(response.data.detalles[i].idcolortype===0){
+              if(response.data.detalles[i].idcolortype>0){
                 juegocolores = true;
+                brands.push({ id: i,
+                  idcolortype: response.data.detalles[i].idcolortype,
+                  iconName: GlobalImageLocation + response.data.detalles[i].image,
+                  brandName: response.data.detalles[i].color, 
+                  color: response.data.detalles[i].html}); 
+              }else{
+                juegocolores = false;
+                brands.push({ id: i,
+                  idcolortype: response.data.detalles[i].idcolortype,
+                  iconName: GlobalImageLocation + response.data.detalles[i].image,
+                  brandName: response.data.detalles[i].color, 
+                  iconName2: GlobalImageLocation + response.data.detalles[i].imagefigure, 
+                  color: response.data.detalles[i].html});  
               }
 
             }else{
                 break;
             }
-       //  console.log(brands);  
+         console.log(brands);  
        rellenararray();  
        process();
     } else {
@@ -52,8 +59,8 @@ function getRandomInt(min, max) {
 }
 
 function rellenararray(){
-  console.log(getRandomInt(0,brands.length));
-  console.log(brands.length);
+ // console.log(getRandomInt(0,brands.length));
+ // console.log(brands.length);
     while(brands.length < lvl){
       var rnd = getRandomInt(0,brands.length);
       brands.push(brands[rnd]);
@@ -90,12 +97,10 @@ function process() {
     let draggableElements;
     let droppableElements;
 
-    if(!juegocolores){
+    if(juegocolores){
       initiateGamecolor();
-      console.log("Juego de colores");
     }else{
-      initiateGame();
-      console.log("Juego img");
+      initiateGameimg();
     }
     
 
@@ -129,7 +134,7 @@ function process() {
     function initiateGamecolor() {
         const randomDraggableBrands = generateRandomItemsArray(totalDraggableItems, brands);
         const randomDroppableBrands = totalMatchingPairs < totalDraggableItems ? generateRandomItemsArray(totalMatchingPairs, randomDraggableBrands) : randomDraggableBrands;
-        const alphabeticallySortedRandomDroppableBrands = [...randomDroppableBrands].sort((a, b) => a.brandName.toLowerCase().localeCompare(b.brandName.toLowerCase()));
+        const alphabeticallySortedRandomDroppableBrands = [...randomDroppableBrands].sort((a, b) => a.iconName.toLowerCase().localeCompare(b.iconName.toLowerCase()));
 
 
         for (let i = 0; i < randomDraggableBrands.length; i++) {
@@ -164,16 +169,17 @@ function process() {
         });
     }
 
-    function initiateGame() {
+    function initiateGameimg() {
       const randomDraggableBrands = generateRandomItemsArray(totalDraggableItems, brands);
       const randomDroppableBrands = totalMatchingPairs < totalDraggableItems ? generateRandomItemsArray(totalMatchingPairs, randomDraggableBrands) : randomDraggableBrands;
-      const alphabeticallySortedRandomDroppableBrands = [...randomDroppableBrands].sort((a, b) => a.brandName.toLowerCase().localeCompare(b.brandName.toLowerCase()));
+      const alphabeticallySortedRandomDroppableBrands = [...randomDroppableBrands].sort((a, b) => a.iconName.toLowerCase().localeCompare(b.iconName.toLowerCase()));
+
 
 
       // Create "draggable-items" and append to DOM
       for (let i = 0; i < randomDraggableBrands.length; i++) {
           draggableItems.insertAdjacentHTML("beforeend", `
-          <img src="${randomDraggableBrands[i].iconName}" class="draggable" draggable="true" style="color: ${randomDraggableBrands[i].color}; width:100px" data-id="${randomDraggableBrands[i].iconName}"></img>`);
+          <img src="${randomDraggableBrands[i].iconName2}" class="draggable" draggable="true" width:100px" data-id="${randomDraggableBrands[i].iconName2}"></img>`);
       }
 
      
@@ -182,8 +188,8 @@ function process() {
        for (let i = 0; i < alphabeticallySortedRandomDroppableBrands.length; i++) {
           matchingPairs.insertAdjacentHTML("beforeend", `
           <div class="matching-pair">
-            <span class="label">${alphabeticallySortedRandomDroppableBrands[i].brandName}</span>
-            <span class="droppable" data-brand="${alphabeticallySortedRandomDroppableBrands[i].iconName}"></span>
+          <img src="${randomDraggableBrands[i].iconName}""></img>
+            <span class="droppable" data-brand="${alphabeticallySortedRandomDroppableBrands[i].iconName2}"></span>
           </div>
         `);
       }
@@ -361,7 +367,11 @@ function process() {
             while (draggableItems.firstChild) draggableItems.removeChild(draggableItems.firstChild);
             while (matchingPairs.firstChild) matchingPairs.removeChild(matchingPairs.firstChild);
             resetEverything();
-            initiateGame();
+            if(juegocolores){
+              initiateGamecolor();
+            }else{
+              initiateGameimg();
+            }
             correctSpan.textContent = correct;
             totalSpan.textContent = total;
             draggableItems.style.opacity = 1;
