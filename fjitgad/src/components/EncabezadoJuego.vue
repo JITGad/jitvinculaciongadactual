@@ -4,9 +4,7 @@
       <i class="fa fa-home" aria-hidden="true">&nbsp;</i>
     </button>
     <template v-for="(value, index) in routes" :key="index">
-      <span class="h4 m-0" style="font-family: Times New Roman, Times, serif">
-        {{ value }}
-      </span>
+      <router-link class="h4 m-0" style="font-family: Times New Roman, Times, serif" :to="value.route">{{value.label}}</router-link>
       <template v-if="index < routes.length"> / </template>
     </template>
     <hr

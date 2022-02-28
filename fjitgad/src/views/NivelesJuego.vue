@@ -18,6 +18,7 @@ import { ref, onMounted, reactive } from "vue";
 import { message_error } from "../util/Messages.js";
 import JuegosService from "../api/JuegosService.js";
 import NivelJuego from "../components/NivelJuego.vue";
+import Route from "../util/Route.js";
 
 export default {
   name: "NivelesJuego",
@@ -41,13 +42,21 @@ export default {
     const Loading = ref(true);
     const Juego = reactive({ ...InitialState });
     const IdJuego = route.params["id"];
-    const RoutesJuego = ref(["Actividad"]);
+    const RoutesJuego = ref([new Route("/", "Actividad")]);
     onMounted(async () => {
       Loading.value = true;
       const response = await JuegosService.getJuego(IdJuego);
       if (!response.status.error) {
         Object.assign(Juego, response.data);
-        RoutesJuego.value = ["Actividad", Juego.nameactivities, Juego.namegametype];
+        RoutesJuego.value.push(
+          new Route(
+            `/juegos-por-actividad/${Juego.idactivitiestype}`,
+            Juego.nameactivities
+          )
+        );
+        RoutesJuego.value.push(
+          new Route(`/niveles-Juego/${IdJuego}`, `Niveles juego ${Juego.name}`)
+        );
         Loading.value = false;
       } else {
         message_error(response.status.message);

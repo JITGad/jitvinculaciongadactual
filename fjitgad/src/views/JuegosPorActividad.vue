@@ -32,6 +32,7 @@ import { message_error } from "../util/Messages.js";
 import JuegoTipoJuegoActividad from "../components/JuegoTipoJuegoActividad.vue";
 import TipoJuegoActividad from "../components/TipoJuegoActividad.vue";
 import ActividadesService from "../api/ActividadesService.js";
+import Route from "../util/Route.js";
 export default {
   name: "JuegosPorActividad",
   components: {
@@ -50,7 +51,7 @@ export default {
     const Loading = ref(true);
     const ActividadId = route.params["id"];
     const Actividad = reactive({ ...InitialState });
-    const RoutesEncabezadoJuego = ref(["Actividad"]);
+    const RoutesEncabezadoJuego = ref([new Route("/", "Actividad")]);
     onMounted(async () => {
       Loading.value = true;
       const ActividadResponse = await ActividadesService.getActividad(
@@ -58,7 +59,12 @@ export default {
       );
       if (!ActividadResponse.status.error) {
         Object.assign(Actividad, ActividadResponse.data);
-        RoutesEncabezadoJuego.value = ["Actividad", Actividad.name];
+        RoutesEncabezadoJuego.value.push(
+          new Route(
+            `/juegos-por-actividad/${Actividad.idactivitiestype}`,
+            Actividad.name
+          )
+        );
         const response = await TipoJuegosService.getTipoJuegoPorActividad(
           ActividadId
         );

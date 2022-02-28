@@ -108,7 +108,7 @@
     <!-- Modal -->
     <section class="win-game-modal">
       <div class="modal fade" ref="ModalVictoria">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">Enhorabuena</h5>
@@ -155,7 +155,7 @@
     </section>
     <section>
       <div class="modal fade" ref="ModalJuegoTerminado">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">
@@ -256,6 +256,7 @@ import RompecabezasV2 from "../components/juegos/RompecabezasV2.vue";
 import Emparejar from "../components/juegos/Emparejar.vue";
 import Memoria from "../components/juegos/Memoria.vue";
 import Cuento from "../components/juegos/Cuentos.vue";
+import Route from "../util/Route.js";
 
 export default {
   name: "Jugar",
@@ -307,7 +308,7 @@ export default {
       video_instructions: null,
       state: true,
     };
-    const Routes = ref([]);
+    const Routes = ref([new Route("/", "Actividad")]);
     const Loading = ref(true);
     const TipoJuego = reactive({ ...InitialStateTipoJuego });
     const Juego = reactive({ ...InitialStateJuego });
@@ -316,6 +317,7 @@ export default {
       (nivel, prevNivel) => {
         resetEverything();
         Nivel.value = parseInt(nivel);
+        Routes.value[2].route = `/jugar/${JuegoId}/${Nivel.value}`;
       }
     );
     onMounted(async () => {
@@ -323,12 +325,15 @@ export default {
       if (!responseJuego.status.error) {
         Object.assign(Juego, responseJuego.data);
         Loading.value = false;
-        Routes.value = [
-          "Actividad",
-          Juego.nameactivities,
-          Juego.namegametype,
-          Juego.name,
-        ];
+        Routes.value.push(
+          new Route(
+            `/juegos-por-actividad/${Juego.idactivitiestype}`,
+            Juego.nameactivities
+          )
+        );
+        Routes.value.push(
+          new Route(`/jugar/${JuegoId}/${Nivel.value}`, `Juego ${Juego.name}`)
+        );
         const responseTipoJuego = await TipoJuegosService.getTipoJuego(
           Juego.idgametype
         );
@@ -385,10 +390,9 @@ export default {
       ModalBootstrapInstrucciones.show();
     }
 
-function displayModalJuegoTerminado() {
+    function displayModalJuegoTerminado() {
       ModalBootstrapJuegoTerminado.show();
     }
-
 
     function AfterAction() {
       //despues

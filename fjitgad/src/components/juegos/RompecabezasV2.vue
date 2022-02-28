@@ -101,7 +101,7 @@ export default {
       CANVAS.addEventListener("touchmove", onTouchMove);
       CANVAS.addEventListener("touchend", onTouchEnd);
 
-      window.addEventListener("resize", resizeWindow);
+      //window.addEventListener("resize", resizeWindow);
     }
 
     function resizeWindow(evt) {
@@ -188,7 +188,6 @@ export default {
 
     function onMouseMove(evt) {
       if (SELECTED_PIECE != null) {
-          console.log(evt);
         const loc = {
           x: evt.layerX || evt.offsetX || evt.clientX || 0,
           y: evt.layerY || evt.offsetY || evt.clientY || 0,

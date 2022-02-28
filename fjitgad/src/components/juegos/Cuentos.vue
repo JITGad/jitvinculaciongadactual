@@ -1,8 +1,21 @@
 <template>
-  <div class="slider">
-    <div class="container-slider">
-      <div class="img-box"></div>
-      <p class="paragraph-box h1"></p>
+  <div class="container">
+    <p id="parrafo_cuento" class="row h1"></p>
+    <div class="row">
+      <div class="col-6">
+        <img id="imagen_cuento" alt="..." style="width: 100%; height: 100%" />
+      </div>
+      <div class="col-6">
+        <video id="video_cuento" style="width: 100%" controls="controls" autoplay>
+          <source src="" type="video/*" />
+          Your browser does not support HTML5 video.
+        </video>
+      </div>
+    </div>
+    <div class="row">
+      <audio id="audio_cuento" style="width: 100%" controls="controls" autoplay>
+        <source src="" type="audio/*" />
+      </audio>
     </div>
   </div>
 </template>
@@ -38,11 +51,11 @@ export default {
   ],
   setup(props, context) {
     const story = [];
-    var i = 0;
-    var cont = 0;
-    var slider_img;
-    let paragraphbox;
-    let imgbox;
+    var parrafoActual = 0;
+    var audio_cuento;
+    var video_cuento;
+    let parrafo_cuento;
+    let imagen_cuento;
 
     watch(
       () => props.movimientos,
@@ -66,56 +79,45 @@ export default {
         story.push({
           image: setPathFile(iterator.image),
           paragraph: iterator.paragraph,
+          audio: setPathFile(iterator.audio_parag),
+          video: setPathFile(iterator.video_parag),
         });
       }
+      imagen_cuento = document.getElementById("imagen_cuento");
+      audio_cuento = document.getElementById("audio_cuento");
+      parrafo_cuento = document.getElementById("parrafo_cuento");
+      video_cuento = document.getElementById("video_cuento");
       init();
     });
 
     function prev() {
-      if (cont === story.length) {
-        return win();
-      } else {
-        cont--;
-        if (i <= 0) i = story.length;
-        i--;
-        return setImg(), paragraph();
+      if (parrafoActual > 0) {
+        parrafoActual--;
+        setParagraph(story[parrafoActual]);
       }
     }
 
     function next() {
-      if (cont === story.length) {
+      if (parrafoActual + 1 === story.length) {
         return win();
-      } else {
-        cont++;
-        if (i >= story.length - 1) i = -1;
-        i++;
-        return setImg(), paragraph();
       }
+      parrafoActual++;
+      setParagraph(story[parrafoActual]);
     }
 
-    function setImg() {
-      if (story[i] === story[0]) {
-        i++;
-      }
-      return slider_img.setAttribute("src", story[i].image);
-    }
-
-    function paragraph() {
-      return (paragraphbox.textContent = story[i].paragraph);
-    }
     function init() {
-      i = 0;
-      cont = 0;
-      imgbox = document.querySelector(".img-box");
-      imgbox.innerHTML = "";
-      paragraphbox = document.querySelector(".paragraph-box");
-      const addImage = document.createElement("IMG");
-      addImage.classList.add("slider-img");
-      addImage.setAttribute("src", story[0].image);
-      imgbox.appendChild(addImage);
-      paragraphbox.textContent = story[0].paragraph;
-      slider_img = document.querySelector(".slider-img");
+      parrafoActual = 0;
+
+      setParagraph(story[parrafoActual]);
+
       context.emit("startTime");
+    }
+
+    function setParagraph(paragraph) {
+      imagen_cuento.setAttribute("src", paragraph.image);
+      audio_cuento.setAttribute("src", paragraph.audio);
+      video_cuento.setAttribute("src", paragraph.video);
+      parrafo_cuento.textContent = paragraph.paragraph;
     }
 
     function win() {
@@ -124,20 +126,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.container-slider {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  margin-top: 0.5em;
-}
-.paragraph-box {
-  margin-left: 2em;
-}
-
-.img-box img {
-  width: 100%;
-}
-</style>
