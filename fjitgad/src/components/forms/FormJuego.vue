@@ -156,7 +156,7 @@ export default {
     function nuevoItemDetalle() {
       switch (TipoJuegoSelected.value) {
         case "emparejar":
-          model.detalles.push(DetalleJuegoObject.Emparejar(0, ""));
+          model.detalles.push(DetalleJuegoObject.Emparejar(0, "", ""));
           break;
         case "rompecabezas":
           model.detalles.push(DetalleJuegoObject.Rompecabezas(""));

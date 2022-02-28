@@ -2,11 +2,12 @@
   <table class="table table-success table-striped">
     <thead>
       <tr>
-        <th scope="col">Imagen</th>
+        <th scope="col">Imagen referencia</th>
         <th v-if="type == 'cuento'" scope="col">Parrafo</th>
         <th v-if="type == 'cuento'" scope="col">Audio Parrafo</th>
         <th v-if="type == 'cuento'" scope="col">Video Parrafo</th>
-        <th v-if="type == 'emparejar'" scope="col">Color</th>
+        <th v-if="type == 'emparejar'" scope="col">Color a emparejar</th>
+        <th v-if="type == 'emparejar'" scope="col">Imagen a emparejar</th>
         <th scope="col">Eliminar</th>
       </tr>
     </thead>
@@ -26,6 +27,13 @@
             :labelshow="false"
             type="int"
             :data="Colores"
+          />
+        </td>
+        <td v-if="type == 'emparejar'">
+          <my-input-file
+            v-model="object.imagefigure"
+            type="image"
+            :labelshow="false"
           />
         </td>
         <td v-if="type == 'cuento'">

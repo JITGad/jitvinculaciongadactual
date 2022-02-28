@@ -25,7 +25,7 @@
         style="color: black"
         to="/logout"
       >
-        Cerrar session
+        Cerrar sesión
       </router-link>
       <router-link
         v-if="!isLogin"
@@ -33,7 +33,7 @@
         style="color: black"
         to="/login"
       >
-        Iniciar session
+        Iniciar sesión
       </router-link>
     </div>
   </nav>

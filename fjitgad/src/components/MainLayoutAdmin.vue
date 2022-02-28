@@ -9,7 +9,7 @@
         <div class="ms-auto" style="display: flex">
           <span class="navbar-text">{{ usuario }}</span>
           <router-link class="nav-link" style="color: black" to="/logout">
-            Cerrar<span style="text-transform: lowercase"> session</span>
+            Cerrar<span style="text-transform: lowercase"> sesión</span>
           </router-link>
         </div>
       </header>

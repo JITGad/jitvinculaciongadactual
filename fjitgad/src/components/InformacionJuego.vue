@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="row" style="text-align: center; justify-content: center">
-      {{ titulo }} - Nivel {{ nivel }}
+      {{ titulo }} - {{tipo == 'cuento' ? 'Pagina' : 'Nivel'}} {{ tipo == 'cuento' ? movimientos + 1 : nivel }}
     </h1>
     <div class="row" style="text-align: center; justify-content: center">
       <div class="card col text-white bg-info p-2 m-2" id="ctrtiempo">
@@ -37,6 +37,10 @@ export default {
   name: "InformacionJuego",
   props: {
     titulo: {
+      type: String,
+      required: true,
+    },
+    tipo: {
       type: String,
       required: true,
     },

@@ -13,6 +13,7 @@
               :segundos="seconds"
               :titulo="Juego.name"
               :nivel="Nivel"
+              :tipo="TipoJuego.shortname"
             />
           </div>
           <div class="row pt-4">
@@ -108,7 +109,7 @@
     <!-- Modal -->
     <section class="win-game-modal">
       <div class="modal fade" ref="ModalVictoria">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">Enhorabuena</h5>
@@ -128,7 +129,7 @@
               <p style="text-align: center">Movimientos {{ movimientos }}</p>
               <img
                 class="modal-img"
-                src="../assets/image/ganaste.png"
+                :src="ImagenesVictoria"
                 style="width: 100%; height: 100%"
               />
             </div>
@@ -155,7 +156,7 @@
     </section>
     <section>
       <div class="modal fade" ref="ModalJuegoTerminado">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">
@@ -171,7 +172,7 @@
             <div class="modal-body">
               <img
                 class="modal-img"
-                src="../assets/image/ganaste.png"
+                :src="ImagenesVictoria"
                 style="width: 100%; height: 100%"
               />
             </div>
@@ -199,7 +200,11 @@
     </section>
     <section>
       <div class="modal" ref="ModalInstrucciones" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div
+          class="
+            modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable
+          "
+        >
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">Instrucciones</h5>
@@ -248,6 +253,7 @@ import * as bootstrap from "bootstrap";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted, ref, reactive, nextTick, watch } from "vue";
 import { message_error } from "../util/Messages.js";
+import { getRandomInt } from "../util/Utilities.js";
 import InformacionJuego from "../components/InformacionJuego.vue";
 import JuegosService from "../api/JuegosService";
 import TipoJuegosService from "../api/TipoJuegosService.js";
@@ -286,6 +292,26 @@ export default {
     const Router = useRouter();
     const JuegoId = route.params["id"];
     const Nivel = ref(parseInt(route.params["nivel"]));
+    const MensajesVictoria = ref("");
+    let mensajes = [
+      "Lo estás haciendo muy bien.",
+      "Sigue así felicidades",
+      "En hora buena vas ganando",
+      "Te felicito por tu esfuerzo",
+      "Felicidades por lograr ganar",
+      "Lo hiciste excelente",
+      "Felicidades por tu progreso",
+      "Felicidades as dado un gran paso",
+      "Felicidades lograste pasar el nivel",
+    ];
+    const ImagenesVictoria = ref("");
+    const imagenes = [
+      "../assets/image/ganaste0.png",
+      "../assets/image/ganaste1.png",
+      "../assets/image/ganaste2.png",
+      "../assets/image/ganaste3.png",
+      "../assets/image/ganaste4.png",
+    ];
     const InitialStateJuego = {
       idgame: 0,
       idactivitiestype: 0,
@@ -373,6 +399,8 @@ export default {
     }
     async function displayModalVictoria() {
       stopTime();
+      MensajesVictoria.value = mensajes[getRandomInt(0, mensajes.length)];
+      ImagenesVictoria.value = imagenes[getRandomInt(0, imagenes.length)];
       ModalBootstrapVictoria.show();
       const Response = await EstadisticasService.postEstadisticas({
         idgame: JuegoId,
@@ -391,6 +419,7 @@ export default {
     }
 
     function displayModalJuegoTerminado() {
+      ImagenesVictoria.value = imagenes[getRandomInt(0, imagenes.length)];
       ModalBootstrapJuegoTerminado.show();
     }
 
@@ -477,6 +506,8 @@ export default {
       NuevoPuntaje,
       VolverAJugar,
       RegresarMenu,
+      MensajesVictoria,
+      ImagenesVictoria,
     };
   },
 };
