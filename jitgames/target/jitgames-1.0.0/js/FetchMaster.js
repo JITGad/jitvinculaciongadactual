@@ -31,7 +31,7 @@ class FetchMaster {
 //        let user = JSON.parse(localStorage.getItem('user'));
 //
 //        if (user && user.user_token) {
-            return 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQ1ODYyNzY1LCJleHAiOjE2NDY3MjY3NjUsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIn0.bxRxBJYzsQaBegY41ucxbAB0grW_cCCAwUp8wTCCHAI';
+            return 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjQ2MDExOTI0LCJleHAiOjE2NDY4NzU5MjQsImVtYWlsIjoiam9yZ2UtbW9saW5hMTJAaG90bWFpbC5jb20iLCJyb2wiOiJBZG1pbmlzdHJhZG9yIn0.wBZxscXWLSUoLUn0VeGelesbJp-s5dgma2d6BRrgPa4';
 //        } else {
 //            return '';
 //        }

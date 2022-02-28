@@ -42,7 +42,7 @@ public class GameimageController {
         request = UpdateFilesGameImage(request, realpath);
         
         request.setCreationdate("NOW()");
-        request.setUpdatedate("NOW()");
+        request.setUpdatedate("NOW()");  
         
         return giD.insertGameimagef(request);
     }
@@ -53,7 +53,7 @@ public class GameimageController {
         request = UpdateFilesGameImage(request, realpath);
         
         request.setUpdatedate("NOW()");
-
+        
         return giD.updateGameimagef(request);
     }
 
