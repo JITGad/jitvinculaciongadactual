@@ -112,7 +112,9 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">{{MensajesVictoria}}</h5>
+              <h5 class="modal-title" id="exampleModalLabel">
+                {{ MensajesVictoria }}
+              </h5>
               <button
                 type="button"
                 class="btn-close"
@@ -121,7 +123,7 @@
               ></button>
             </div>
             <div class="modal-body">
-              <p style="text-align: center">{{MensajesVictoria}}</p>
+              <p style="text-align: center">{{ MensajesVictoria }}</p>
               <p style="text-align: center">
                 Tiempo en completar: {{ minutes }} Minutos y
                 {{ seconds }} Segundos
@@ -170,7 +172,7 @@
               ></button>
             </div>
             <div class="modal-body">
-              <p style="text-align: center">{{MensajesVictoria}}</p>
+              <p style="text-align: center">{{ MensajesVictoria }}</p>
               <img
                 class="modal-img"
                 :src="ImagenesVictoria"
@@ -254,7 +256,11 @@ import * as bootstrap from "bootstrap";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted, ref, reactive, nextTick, watch } from "vue";
 import { message_error } from "../util/Messages.js";
-import { getRandomInt, idiomaVozDisponible, reproducirTextoAVoz } from "../util/Utilities.js";
+import {
+  getRandomInt,
+  idiomaVozDisponible,
+  reproducirTextoAVoz,
+} from "../util/Utilities.js";
 import InformacionJuego from "../components/InformacionJuego.vue";
 import JuegosService from "../api/JuegosService";
 import TipoJuegosService from "../api/TipoJuegosService.js";
@@ -341,7 +347,9 @@ export default {
     const Loading = ref(true);
     const TipoJuego = reactive({ ...InitialStateTipoJuego });
     const Juego = reactive({ ...InitialStateJuego });
-    const SonidoAcierto = new Audio(require("../assets/coloca la pieza de forma correcta.mp3"));
+    const SonidoAcierto = new Audio(
+      require("../assets/coloca la pieza de forma correcta.mp3")
+    );
     const SonidoError = new Audio(require("../assets/error.mp3"));
     const GanadorJuego = new Audio(require("../assets/ganador.mp3"));
     watch(
@@ -439,6 +447,8 @@ export default {
       }
 
       if (Nivel.value >= Juego.level) {
+        MensajesVictoria.value = mensajes[getRandomInt(0, mensajes.length)];
+        ImagenesVictoria.value = imagenes[getRandomInt(0, imagenes.length)];
         ModalBootstrapJuegoTerminado.show();
         return;
       }
@@ -486,11 +496,11 @@ export default {
 
     function NuevoPuntaje(MovValid) {
       if (MovValid) {
-        SonidoAcierto.play()
-       puntaje.value = puntaje.value + 1; 
-      } else{
+        SonidoAcierto.play();
+        puntaje.value = puntaje.value + 1;
+      } else {
         SonidoError.play();
-        puntaje.value = puntaje.value - 1; 
+        puntaje.value = puntaje.value - 1;
       }
     }
 

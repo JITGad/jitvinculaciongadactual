@@ -110,7 +110,6 @@ export default {
           totalMatchingPairs,
           randomDraggableBrands
         );
-
         for (const element of randomDraggableBrands) {
           let _draggableElement = "";
           if (element.idcolortype > 0) {
@@ -126,13 +125,15 @@ export default {
         }
 
         for (const element of randomDroppableBrands) {
-          matchingPairs.insertAdjacentHTML(
-            "beforeend",
-            `<div class="matching-pair ms-2 me-2">
+          if (element.idcolortype > 0 || element.iconName2.length > 0) {
+            matchingPairs.insertAdjacentHTML(
+              "beforeend",
+              `<div class="matching-pair ms-2 me-2">
               <img class="mb-2" draggable="false" alt="..." src="${element.iconName}" style="width: 7rem;height: 7rem;"></img>
               <span class="droppable" data-brand="${element.iddetail}"></span>
             </div>`
-          );
+            );
+          }
         }
 
         draggableElements = document.querySelectorAll(".draggable");
