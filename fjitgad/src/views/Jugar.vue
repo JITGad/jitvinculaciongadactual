@@ -416,6 +416,7 @@ export default {
       MensajesVictoria.value = mensajes[getRandomInt(0, mensajes.length)];
       ImagenesVictoria.value = imagenes[getRandomInt(0, imagenes.length)];
       ModalBootstrapVictoria.show();
+      GanadorJuego.volume = 0.2;
       GanadorJuego.play();
       reproducirTextoAVoz(MensajesVictoria.value, IdiomaVoz);
       const Response = await EstadisticasService.postEstadisticas({
