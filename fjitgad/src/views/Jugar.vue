@@ -254,7 +254,7 @@ import * as bootstrap from "bootstrap";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted, ref, reactive, nextTick, watch } from "vue";
 import { message_error } from "../util/Messages.js";
-import { getRandomInt } from "../util/Utilities.js";
+import { getRandomInt, idiomaVozDisponible, reproducirTextoAVoz } from "../util/Utilities.js";
 import InformacionJuego from "../components/InformacionJuego.vue";
 import JuegosService from "../api/JuegosService";
 import TipoJuegosService from "../api/TipoJuegosService.js";
@@ -294,17 +294,18 @@ export default {
     const JuegoId = route.params["id"];
     const Nivel = ref(parseInt(route.params["nivel"]));
     const MensajesVictoria = ref("");
+    const IdiomaVoz = idiomaVozDisponible();
     let mensajes = [
       "Enhorabuena, has ganado el juego",
       "Lo estás haciendo muy bien.",
       "Sigue así felicidades",
       "En hora buena vas ganando",
       "Te felicito por tu esfuerzo",
-      "Felicidades por lograr ganar",
+      "!Felicidades¡ por lograr ganar",
       "Lo hiciste excelente",
       "Felicidades por tu progreso",
-      "Felicidades as dado un gran paso",
-      "Felicidades lograste pasar el nivel",
+      "!Felicidades¡ as dado un gran paso",
+      "!Felicidades¡ lograste pasar el nivel",
     ];
     const ImagenesVictoria = ref("");
     const imagenes = [
@@ -340,6 +341,9 @@ export default {
     const Loading = ref(true);
     const TipoJuego = reactive({ ...InitialStateTipoJuego });
     const Juego = reactive({ ...InitialStateJuego });
+    const SonidoAcierto = new Audio(require("../assets/coloca la pieza de forma correcta.mp3"));
+    const SonidoError = new Audio(require("../assets/error.mp3"));
+    const GanadorJuego = new Audio(require("../assets/ganador.mp3"));
     watch(
       () => route.params.nivel,
       (nivel, prevNivel) => {
@@ -404,6 +408,8 @@ export default {
       MensajesVictoria.value = mensajes[getRandomInt(0, mensajes.length)];
       ImagenesVictoria.value = imagenes[getRandomInt(0, imagenes.length)];
       ModalBootstrapVictoria.show();
+      await GanadorJuego.play();
+      reproducirTextoAVoz(MensajesVictoria.value, IdiomaVoz);
       const Response = await EstadisticasService.postEstadisticas({
         idgame: JuegoId,
         movements: movimientos.value,
@@ -479,7 +485,13 @@ export default {
     }
 
     function NuevoPuntaje(MovValid) {
-      puntaje.value = MovValid ? puntaje.value + 1 : puntaje.value - 1;
+      if (MovValid) {
+        SonidoAcierto.play()
+       puntaje.value = puntaje.value + 1; 
+      } else{
+        SonidoError.play();
+        puntaje.value = puntaje.value - 1; 
+      }
     }
 
     return {

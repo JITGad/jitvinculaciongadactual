@@ -206,3 +206,21 @@ export function generateRandomItemsArray(n, originalArray) {
 export function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
+
+export function idiomaVozDisponible() {
+    const IDIOMAS_PREFERIDOS = ["es-MX", "es-US", "es-ES", "es_US", "es_ES"];
+    const vocesDisponibles = speechSynthesis.getVoices();
+    let posibleIndice = vocesDisponibles.findIndex(voz => IDIOMAS_PREFERIDOS.includes(voz.lang));
+    if (posibleIndice === -1) posibleIndice = 0;
+    return vocesDisponibles[posibleIndice];
+}
+
+export function reproducirTextoAVoz(textoAEscuchar = "", idioma) {
+    let mensaje = new SpeechSynthesisUtterance();
+    mensaje.voice = idioma;
+    mensaje.volume = 1;
+    mensaje.rate = 0.8;
+    mensaje.text = textoAEscuchar;
+    mensaje.pitch = 1;
+    speechSynthesis.speak(mensaje);
+}
