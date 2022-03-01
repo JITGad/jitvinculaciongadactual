@@ -1,6 +1,12 @@
 <template>
-  <section class="draggable-items"></section>
-  <section class="matching-pairs"></section>
+<div class="card">
+<section class="matching-pairs card-body row"></section>
+</div>
+  
+  <div class="card">
+<section class="draggable-items card-body"></section>
+  </div>
+  
 </template>
 
 <script>
@@ -62,8 +68,10 @@ export default {
       for (const element of brandsShorted) {
         if (brands.length <= props.level) {
           brands.push({
+            iddetail: element.idgameimage,
             idcolortype: element.idcolortype,
             iconName: setPathFile(element.image),
+            iconName2: setPathFile(element.imagefigure),
             brandName: element.color,
             color: element.html,
           });
@@ -100,35 +108,32 @@ export default {
           totalDraggableItems,
           brands
         );
-        const randomDroppableBrands =
-          totalMatchingPairs < totalDraggableItems
-            ? generateRandomItemsArray(
-                totalMatchingPairs,
-                randomDraggableBrands
-              )
-            : randomDraggableBrands;
+        const randomDroppableBrands = generateRandomItemsArray(
+          totalMatchingPairs,
+          randomDraggableBrands
+        );
 
-        for (let i = 0; i < randomDraggableBrands.length; i++) {
-          draggableItems.insertAdjacentHTML(
-            "beforeend",
-            `
-            <div class="draggable" draggable="true" style="background-color:${randomDraggableBrands[i].color}; width:100px; height:100px;font-size: 20px;" data-id="${randomDraggableBrands[i].idcolortype}"><span class="badge rounded-pill bg-light text-dark">${randomDraggableBrands[i].brandName}</span></div>`
-          );
+        for (const element of randomDraggableBrands) {
+          let _draggableElement = "";
+          if (element.idcolortype > 0) {
+            _draggableElement = `<div class="draggable" draggable="true" style="background-color:${element.color}; width:100px; height:100px;font-size: 20px;" 
+                                  data-id="${element.iddetail}" data-color="${element.color}">
+                                    <span class="badge rounded-pill bg-light text-dark">${element.brandName}</span>
+                                </div>`;
+          } else if (element.iconName2.length > 0) {
+            _draggableElement = `<img src="${element.iconName2}" class="draggable" draggable="true" width:100px; height:100px;" 
+                                  data-id="${element.iddetail}" data-image="${element.iconName2}"></img>`;
+          }
+          draggableItems.insertAdjacentHTML("beforeend", _draggableElement);
         }
 
-        for (
-          let i = 0;
-          i < randomDroppableBrands.length;
-          i++
-        ) {
+        for (const element of randomDroppableBrands) {
           matchingPairs.insertAdjacentHTML(
             "beforeend",
-            `
-            <div class="matching-pair">
-              <span class="label"><img draggable="false" src="${randomDroppableBrands[i].iconName}" style="color: ${randomDroppableBrands[i].color}; width:100px; height: 100%;"></img></span>
-              <span class="droppable" data-brand="${randomDroppableBrands[i].idcolortype}" data-color="${randomDroppableBrands[i].color}" data-img="${randomDroppableBrands[i].iconName}"></span>
-            </div>
-          `
+            `<div class="matching-pair ms-2 me-2">
+              <img class="mb-2" draggable="false" alt="..." src="${element.iconName}" style="width: 7rem;height: 7rem;"></img>
+              <span class="droppable" data-brand="${element.iddetail}"></span>
+            </div>`
           );
         }
 
@@ -192,13 +197,16 @@ export default {
         event.preventDefault();
 
         event.target.classList.remove("droppable-hover");
-        const droppableElementBrand = event.target.getAttribute("data-brand");
-        const droppableElementColor = event.target.getAttribute("data-color");
 
+        const droppableElementBrand = event.target.getAttribute("data-brand");
+        let droppableElementColor;
+        let droppableElementImg;
         let droppableactual;
 
         if (dragableactual != null) {
           droppableactual = dragableactual.getAttribute("data-id");
+          droppableElementColor = dragableactual.getAttribute("data-color");
+          droppableElementImg = dragableactual.getAttribute("data-image");
         }
 
         const isCorrectMatching = droppableactual === droppableElementBrand;
@@ -206,8 +214,11 @@ export default {
           event.target.classList.add("dropped");
           dragableactual.classList.add("dragged");
           dragableactual.setAttribute("draggable", "false");
-
-          event.target.innerHTML = `<div style="background-color:${droppableElementColor}; width:100px; height:100px;"></div>`;
+          if (droppableElementColor) {
+            event.target.innerHTML = `<div style="background-color:${droppableElementColor}; width:100px; height:100px;"></div>`;
+          } else if (droppableElementImg) {
+            event.target.innerHTML = `<img src="${droppableElementImg}" style="width:100px; height:100px;"></img>`;
+          }
           correct++;
           dragableactual = null;
         }
@@ -232,12 +243,11 @@ export default {
 .draggable-items {
   display: flex;
   justify-content: center;
-  margin: 1rem 1rem 1.5rem 1rem;
   transition: opacity 0.5s;
 }
 .draggable {
-  height: 5rem;
-  width: 5rem;
+  height: 7rem;
+  width: 7rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -252,16 +262,13 @@ export default {
 }
 .matching-pairs {
   transition: opacity 0.5s;
+  justify-content: center;
 }
 .matching-pair {
-  height: 6rem;
-  width: 22rem;
-  margin: 1rem auto;
-  display: flex;
-  justify-content: space-between;
+  width: 7rem;
+  height: 14rem;
 }
 .matching-pair span {
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -273,7 +280,8 @@ export default {
   font-size: 2rem;
 }
 .droppable {
-  width: 6rem;
+  width: 7rem;
+  height: 7rem;
   font-size: 4rem;
   background-color: #fff;
   border: 3px dashed #111;
