@@ -1,12 +1,10 @@
 <template>
-<div class="card">
-<section class="matching-pairs card-body row"></section>
-</div>
-  
   <div class="card">
-<section class="draggable-items card-body"></section>
+    <section class="matching-pairs card-body row"></section>
   </div>
-  
+  <div class="card">
+    <section class="draggable-items card-body"></section>
+  </div>
 </template>
 
 <script>

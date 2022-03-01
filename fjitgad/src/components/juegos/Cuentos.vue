@@ -1,15 +1,24 @@
 <template>
   <div class="container">
-    <p id="parrafo_cuento" class="row h1"></p>
+    
     <div class="row">
       <div class="col-6">
-        <img id="imagen_cuento" alt="..." style="width: 100%; height: 100%" />
+        <p id="parrafo_cuento" class="h1" style="color: black;"></p>
+        
       </div>
       <div class="col-6">
-        <video id="video_cuento" style="width: 100%" controls="controls" autoplay>
+        <div class="row"><img id="imagen_cuento" alt="..." style="width: 100%; height: 100%" /></div>
+        <div class="row">
+          <video
+          id="video_cuento"
+          style="width: 100%"
+          controls="controls"
+          autoplay
+        >
           <source src="" type="video/*" />
           Your browser does not support HTML5 video.
         </video>
+        </div>
       </div>
     </div>
     <div class="row">
