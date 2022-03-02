@@ -3,7 +3,7 @@
     
     <div class="row">
       <div class="col-6">
-        <p id="parrafo_cuento" class="h1" style="color: black;"></p>
+        <p id="parrafo_cuento" class="h1" style="color: black; white-space: pre-line;"></p>
         
       </div>
       <div class="col-6">
