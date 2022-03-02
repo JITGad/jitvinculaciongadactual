@@ -23,6 +23,7 @@ async function getdata() {
         for (i in response.data.detalles)
             /*    if (story.length <= lvl) { */
             story.push({
+                id: i,
                 image: GlobalImageLocation + response.data.detalles[i].image,
                 paragraph: response.data.detalles[i].paragraph
             });
@@ -57,8 +58,17 @@ var i = 0, cont = 0;
 
 var slider_img;
 
+function OrdenarArrayID( arr ) {
+    var tmp = [ ];
+  
+    arr.forEach( function( val ) { tmp[val.id] = val; } );
+  
+    return tmp;
+}
+
 function init() {
     // const Historyimg = shuffle(story.image);
+    OrdenarArrayID(story);
     const addImage = document.createElement("IMG");
     addImage.classList.add('slider-img');
     addImage.setAttribute("src", story[0].image);
@@ -123,6 +133,8 @@ playAgainBtn.addEventListener('click',function() {
 
 function win(){
     setTimeout(displayModal(), 500);
+    OrdenarArrayID(story);
+    console.log(story);
 }
 
 

@@ -12,7 +12,7 @@ public class Configuration {
     public static String DATABASEURL = "jdbc:postgresql://ec2-34-195-69-118.compute-1.amazonaws.com:5432/dfc5nss9nj0c2e";
     public static String JWTKEY = "12345GFEDCBA$.$123Barcelona";
     public static String IPDOMINIOSERVIDOR= "http://192.241.152.203:8080/bjitgad/";
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     
     
     /**
