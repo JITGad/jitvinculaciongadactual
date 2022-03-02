@@ -86,7 +86,7 @@ public class GameDAO {
 
         sentence = "select tblgameimage.idgameimage, tblgameimage.idgame, tblgameimage.idcolortype,tblcolortype.name as color, tblcolortype.html, tblgameimage.image,\n"
                 + "tblgameimage.paragraph, tblgameimage.audio_parag, tblgameimage.video_parag, tblgameimage.creationdate, tblgameimage.updatedate, tblgameimage.state,tblgameimage.imagefigure\n"
-                + "from tblgameimage inner join tblcolortype on tblcolortype.idcolortype = tblgameimage.idcolortype where idgame="+JuegoSeleccionado.getIdgame()+"\n"
+                + "from tblgameimage inner join tblcolortype on tblcolortype.idcolortype = tblgameimage.idcolortype where idgame=" + JuegoSeleccionado.getIdgame() + "\n"
                 + "union\n"
                 + "select tblgameimage.idgameimage, tblgameimage.idgame, tblgameimage.idcolortype,null as color, null as html, tblgameimage.image,\n"
                 + "tblgameimage.paragraph, tblgameimage.audio_parag, tblgameimage.video_parag, tblgameimage.creationdate, tblgameimage.updatedate, tblgameimage.state,tblgameimage.imagefigure\n"
@@ -114,7 +114,6 @@ public class GameDAO {
     }
 
     public boolean insertGame(GameModel gameModel, String realpath) throws SQLException, Exception {
-        System.out.println("");
         String structure = String.format(
                 "<game>"
                 + "<idactivitiestype>" + gameModel.getIdactivitiestype() + "</idactivitiestype>"
@@ -147,14 +146,11 @@ public class GameDAO {
             conex.commit();
             return true;
         } catch (SQLException exc) {
-            // System.out.println("Error ModifyBD:" + exc.getMessage());
             conex.rollback();
             throw exc;
-
         } finally {
             con.releaseConnection(conex);
         }
-        //  return con.modifyBD(sentency);
     }
 
     public boolean updateGame(GameModel gameModel, String realpath)
@@ -185,41 +181,41 @@ public class GameDAO {
                 for (int i = 0; i < dataid.size(); i++) {
 
                     GameimageModel gimx = dataid.get(i);
-                    GameimageModel gim = gameModel.getDetalles().stream().
-                            filter(gameim -> gimx.getIdgameimage()
-                            == gameim.getIdgameimage()).findAny().orElse(null);
+                    GameimageModel gim = gameModel.getDetalles().stream()
+                            .filter(gameim -> gimx.getIdgameimage() == gameim.getIdgameimage())
+                            .findAny()
+                            .orElse(null);
 
                     if (gim == null) {
                         String dgic = giC.DeleteGameimageC(gimx);
-                        System.out.println(dgic);
-
                         st.execute(dgic);
                     }
                 }
 
-                for (GameimageModel object : gameModel.getDetalles()) {
+                for (int i = 0; i < gameModel.getDetalles().size(); i++) {
+                    GameimageModel object = gameModel.getDetalles().get(i);
+                    GameimageModel gim = dataid.stream()
+                            .filter(gameim -> object.getIdgameimage() == gameim.getIdgameimage())
+                            .findAny()
+                            .orElse(null);
 
-                    GameimageModel gim = dataid.stream().
-                            filter(gameim -> object.getIdgameimage()
-                            == gameim.getIdgameimage()).findAny().orElse(null);
+                    object.setIdgame(gameModel.getIdgame());
 
                     if (gim == null) {
-                        object.setIdgame(gameModel.getIdgame());
-                        st.execute(giC.InsertGameimageCF(object, realpath));
+                        String dataInsert = giC.InsertGameimageCF(object, realpath);
+                        st.execute(dataInsert);
                         continue;
                     }
 
-                    st.execute(giC.UpdateGameimageC(object, realpath));
+                    String dataUpdate = giC.UpdateGameimageC(object, realpath);
+                    st.execute(dataUpdate);
                 }
-
             }
             conex.commit();
             return true;
         } catch (SQLException exc) {
-            // System.out.println("Error ModifyBD:" + exc.getMessage());
             conex.rollback();
             throw exc;
-
         } finally {
             con.releaseConnection(conex);
         }

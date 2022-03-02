@@ -53,7 +53,6 @@ public class GameimageDAO {
                 + "</gameimage>");
 
         String sentency = "Select * from insertgameimage('" + structure + "')";
-        // System.out.println(structure);
         return con.modifyBD(sentency);
     }
 
@@ -73,12 +72,10 @@ public class GameimageDAO {
                 + "</gameimage>");
 
         String sentency = "Select * from insertgameimage('" + structure + "')";
-        // System.out.println(structure);
         return sentency;
     }
 
     public String updateGameimagef(GameimageModel giM) throws Exception {
-        System.out.println("");
         String structure = String.format(
                 "<gameimage>"
                 + "<idgameimage>" + giM.getIdgameimage() + "</idgameimage>"
@@ -90,10 +87,10 @@ public class GameimageDAO {
                 + "<video_parag>" + giM.getVideo_parag() + "</video_parag>"
                 + "<updatedate>" + giM.getUpdatedate() + "</updatedate>"
                 + "<state>" + giM.getState() + "</state>"
+                + "<imagefigure>" + giM.getImagefigure() + "</imagefigure>"
                 + "</gameimage>");
 
         String sentency = "Select * from updategameimage('" + structure + "')";
-        // System.out.println(structure);
         return sentency;
     }
 
@@ -104,7 +101,6 @@ public class GameimageDAO {
                 + "</gameimage>");
 
         String sentency = "Select * from deletegameimage('" + structure + "')";
-        System.out.println(structure);
         return sentency;
     }
 

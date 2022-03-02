@@ -17,8 +17,8 @@ public class GameimageModel {
     private String video_parag;
     private String creationdate;
     private String updatedate;
-    private boolean state;
     private String imagefigure;
+    private boolean state;
 
     public GameimageModel() {
     }
@@ -134,16 +134,13 @@ public class GameimageModel {
 
     public void setState(boolean state) {
         this.state = state;
-    }
+    } 
 
     public String getImagefigure() {
         return imagefigure;
     }
 
     public void setImagefigure(String imagefigure) {
-        this.imagefigure = imagefigure != null ? imagefigure.replace("\\", "/") : imagefigure;;
+        this.imagefigure = imagefigure != null ? imagefigure.replace("\\", "/") : imagefigure;
     }
-    
-    
-
 }
