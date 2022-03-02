@@ -70,7 +70,6 @@ export default {
         // Desactivar cualquier otro clic del ratón en otras cards
         document.body.style.pointerEvents = "none";
       }
-      console.log(opened);
       // Compara las dos imágenes src
       if (opened.length === 2 && opened[0].src === opened[1].src) {
         // Si coincide, llame a match()
@@ -111,10 +110,19 @@ export default {
         // Eliminar el giro de clase en el elemento padre de las imágenes
         opened[0].parentElement.classList.remove("flip-memoria");
         opened[1].parentElement.classList.remove("flip-memoria");
+
+        opened[0].parentElement.classList.add("no-match-memoria");
+        opened[1].parentElement.classList.add("no-match-memoria");
+
+        setTimeout(() => {
+          opened[0].parentElement.classList.remove("no-match-memoria");
+          opened[1].parentElement.classList.remove("no-match-memoria");
+          opened = [];
+        }, 300);
+
         // Permitir más clics del ratón en las cards
         document.body.style.pointerEvents = "auto";
         // Retirar las tarjetas de la array abierta
-        opened = [];
       }, 700);
       // Llama a movesCounter para incrementar en uno
       context.emit("movesCounter");
@@ -162,6 +170,7 @@ export default {
         addImage.setAttribute("alt", "...");
         addImage.style.width = "100%";
         addImage.style.height = "100%";
+        addImage.style.transform = "rotateY(180deg)";
         // Actualiza el nuevo <li> a deck <ul>
         liTag.appendChild(addImage);
         liTag.addEventListener("click", function (evt) {
@@ -178,7 +187,6 @@ export default {
       function flipCard(evt) {
         // Cuando se hace clic en <li> se añade la clase .flip para mostrar img
         evt.target.classList.add("flip-memoria");
-        console.log(evt);
         // Llamar a la función addToOpened()
         addToOpened(evt);
       }
@@ -249,11 +257,23 @@ export default {
   visibility: visible;
 }
 
+
+
 .deck .card-memoria.match-memoria {
   background: #39d;
   visibility: visible;
   cursor: default;
   animation: pulse 1s;
+}
+
+.deck .card-memoria.no-match-memoria {
+  transform: rotateY(360deg);
+  transition: transform 0.3s linear;
+}
+
+.no-match-memoria img {
+  background: #fff;
+  visibility: visible;
 }
 
 .match-memoria img {
