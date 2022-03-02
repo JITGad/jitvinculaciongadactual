@@ -122,18 +122,25 @@
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">
-              <p style="text-align: center">{{ MensajesVictoria }}</p>
-              <p style="text-align: center">
-                Tiempo en completar: {{ minutes }} Minutos y
-                {{ seconds }} Segundos
-              </p>
-              <p style="text-align: center">Movimientos {{ movimientos }}</p>
-              <img
-                class="modal-img"
-                :src="ImagenesVictoria"
-                style="width: 100%; height: 100%"
-              />
+            <div
+              class="modal-body"
+              :style="{
+                'background-image': 'url(' + ImagenesVictoria + ')',
+                'background-position': 'center',
+                'background-size': '100% 100%',
+                'background-repeat': 'no-repeat',
+                'text-align': 'center',
+                'height': '60vh',
+              }"
+            >
+              <span class="badge bg-light text-dark" style="font-size: 1.1em;"
+                >Tiempo en completar: {{ minutes }} Minutos y
+                {{ seconds }} Segundos</span
+              >
+              <br><br>
+              <span class="badge bg-light text-dark" style="font-size: 1.1em;"
+                >Movimientos {{ movimientos }}</span
+              >
             </div>
             <div class="modal-footer">
               <button
@@ -171,13 +178,14 @@
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">
-              <p style="text-align: center">{{ MensajesVictoria }}</p>
-              <img
-                class="modal-img"
-                :src="ImagenesVictoria"
-                style="width: 100%; height: 100%"
-              />
+            <div class="modal-body" :style="{
+                'background-image': 'url(' + ImagenesVictoria + ')',
+                'background-position': 'center',
+                'background-size': '100% 100%',
+                'background-repeat': 'no-repeat',
+                'text-align': 'center',
+                'height': '60vh',
+              }">
             </div>
             <div class="modal-footer">
               <button
@@ -313,7 +321,6 @@ export default {
       "!Felicidades¡ as dado un gran paso",
       "!Felicidades¡ lograste pasar el nivel",
     ];
-    const ImagenesVictoria = ref("");
     const imagenes = [
       require("../assets/image/ganaste0.png"),
       require("../assets/image/ganaste1.png"),
@@ -321,6 +328,8 @@ export default {
       require("../assets/image/ganaste3.png"),
       require("../assets/image/ganaste4.png"),
     ];
+
+    const ImagenesVictoria = ref(getImagenVictoria());
     const InitialStateJuego = {
       idgame: 0,
       idactivitiestype: 0,
@@ -394,6 +403,9 @@ export default {
         ModalJuegoTerminado.value
       );
     });
+    function getImagenVictoria() {
+      return `'${imagenes[getRandomInt(0, imagenes.length)]}'`;
+    }
     function movesCounter() {
       movimientos.value++;
     }
@@ -414,7 +426,7 @@ export default {
     async function displayModalVictoria() {
       stopTime();
       MensajesVictoria.value = mensajes[getRandomInt(0, mensajes.length)];
-      ImagenesVictoria.value = imagenes[getRandomInt(0, imagenes.length)];
+      ImagenesVictoria.value = getImagenVictoria();
       ModalBootstrapVictoria.show();
       GanadorJuego.volume = 0.2;
       GanadorJuego.play();
@@ -436,7 +448,7 @@ export default {
     }
 
     function displayModalJuegoTerminado() {
-      ImagenesVictoria.value = imagenes[getRandomInt(0, imagenes.length)];
+      ImagenesVictoria.value = getImagenVictoria();
       ModalBootstrapJuegoTerminado.show();
     }
 
@@ -449,7 +461,7 @@ export default {
 
       if (Nivel.value >= Juego.level) {
         MensajesVictoria.value = mensajes[getRandomInt(0, mensajes.length)];
-        ImagenesVictoria.value = imagenes[getRandomInt(0, imagenes.length)];
+        ImagenesVictoria.value = getImagenVictoria();
         ModalBootstrapJuegoTerminado.show();
         return;
       }

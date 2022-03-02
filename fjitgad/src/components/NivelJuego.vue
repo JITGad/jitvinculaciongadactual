@@ -54,7 +54,7 @@ export default {
     }
 
     const GetRamdomImage = computed(() => {
-      return setPathFile(props.game.detalles[(props.level + 1) % props.game.detalles.length].image);
+      return setPathFile(props.game.image);
     });
 
     return {
