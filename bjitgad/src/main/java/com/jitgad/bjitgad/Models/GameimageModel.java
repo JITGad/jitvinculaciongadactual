@@ -19,11 +19,12 @@ public class GameimageModel {
     private String updatedate;
     private String imagefigure;
     private boolean state;
+    private int secuence;
 
     public GameimageModel() {
     }
 
-    public GameimageModel(int idgameimage, int idgame, int idcolortype, String color, String html, String image, String paragraph, String audio_parag, String video_parag, String creationdate, String updatedate, boolean state, String imagefigure) {
+    public GameimageModel(int idgameimage, int idgame, int idcolortype, String color, String html, String image, String paragraph, String audio_parag, String video_parag, String creationdate, String updatedate, String imagefigure, boolean state, int secuence) {
         this.idgameimage = idgameimage;
         this.idgame = idgame;
         this.idcolortype = idcolortype;
@@ -35,10 +36,10 @@ public class GameimageModel {
         this.video_parag = video_parag;
         this.creationdate = creationdate;
         this.updatedate = updatedate;
-        this.state = state;
         this.imagefigure = imagefigure;
+        this.state = state;
+        this.secuence = secuence;
     }
-    
 
     public int getIdgameimage() {
         return idgameimage;
@@ -143,4 +144,13 @@ public class GameimageModel {
     public void setImagefigure(String imagefigure) {
         this.imagefigure = imagefigure != null ? imagefigure.replace("\\", "/") : imagefigure;
     }
+
+    public int getSecuence() {
+        return secuence;
+    }
+
+    public void setSecuence(int secuence) {
+        this.secuence = secuence;
+    }
+    
 }

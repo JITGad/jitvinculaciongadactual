@@ -6,34 +6,33 @@ var lvl = 4;
 const encodeQueryString = (params = {}) => {
     const keys = Object.keys(params);
     return keys.length
-            ? "?" + keys
+        ? "?" + keys
             .map(key => encodeURIComponent(key)
-                        + "=" + encodeURIComponent(params[key]))
+                + "=" + encodeURIComponent(params[key]))
             .join("&")
-            : "";
+        : "";
 };
 
 async function getdata() {
     const response = await getJuego(79);
-    var deckc= [];
+    var deckc = [];
     if (!response.status.error) {
         console.log(response.data);
         response.data.detalles = shuffle(response.data.detalles)
-       //rellenararray();
-       //deckCards = rellenararray(response.data.detalles);
+        //rellenararray();
+        //deckCards = rellenararray(response.data.detalles);
 
-        for (i in response.data.detalles)
-            {
-              deckc.push(GlobalImageLocation + response.data.detalles[i].image); 
-            }
-             
-        
-        while(deckCards.length <= lvl){
+        for (i in response.data.detalles) {
+            deckc.push(GlobalImageLocation + response.data.detalles[i].image);
+        }
+
+
+        while (deckCards.length <= lvl) {
             console.log("hola");
-            var rnd = getRandomInt(0,deckc.length);
+            var rnd = getRandomInt(0, deckc.length);
             deckCards.push(deckc[rnd]);
             deckCards.push(deckc[rnd]);
-        }     
+        }
         console.log(deckc)
         console.log(deckCards)
     } else {
@@ -48,22 +47,22 @@ async function getdata() {
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
-  }
-  
-  function rellenararray(){
-    console.log(getRandomInt(0,deckCards.length));
+}
+
+function rellenararray() {
+    console.log(getRandomInt(0, deckCards.length));
     console.log(deckCards.length);
-      while(deckCards.length < lvl){
-        var rnd = getRandomInt(0,deckCards.length);
+    while (deckCards.length < lvl) {
+        var rnd = getRandomInt(0, deckCards.length);
         deckCards.push(deckCards[rnd]);
         deckCards.push(deckCards[rnd]);
-      }
-  }
+    }
+}
 
 function getJuego(gameid = 0) {
     return new Promise((resolve) => {
-        fm.get(`${urlApi}/getGamebyid${encodeQueryString({'idgame': gameid})}`,
-                (data) => resolve(data), true);
+        fm.get(`${urlApi}/getGamebyid${encodeQueryString({ 'idgame': gameid })}`,
+            (data) => resolve(data), true);
     });
 }
 
@@ -221,7 +220,9 @@ function compareTwo() {
 function match() {
     /* Accede a las dos cards en array abierto y añade la 
      clase de match al padre de las imágenes: la etiqueta <li>.*/
+
     setTimeout(function () {
+
         opened[0].parentElement.classList.add("match");
         opened[1].parentElement.classList.add("match");
         // añade las cards emparejadas a la array emparejada
