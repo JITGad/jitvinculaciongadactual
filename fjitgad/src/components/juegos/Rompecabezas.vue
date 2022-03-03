@@ -178,8 +178,8 @@ export default {
 
     function onPuzzleClick(e) {
       context.emit("movesCounter");
-      _mouse.x = e.layerX || e.offsetX || e.clientX;
-      _mouse.y = e.layerY || e.offsetY || e.clientY;
+      _mouse.x = e.offsetX || e.layerX || e.clientX;
+      _mouse.y = e.offsetY || e.layerY || e.clientY;
 
       _currentPiece = checkPieceClicked();
       if (_currentPiece != null) {
@@ -228,8 +228,8 @@ export default {
 
     function updatePuzzle(e) {
       _currentDropPiece = null;
-      _mouse.x = e.layerX || e.offsetX || e.clientX;
-      _mouse.y = e.layerY || e.offsetY || e.clientY;
+      _mouse.x = e.offsetX || e.layerX || e.clientX;
+      _mouse.y = e.offsetY || e.layerY || e.clientY;
       _stage.clearRect(0, 0, _puzzleWidth, _puzzleHeight);
       var i;
       var piece;

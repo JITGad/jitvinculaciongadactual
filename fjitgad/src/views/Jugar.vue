@@ -130,15 +130,15 @@
                 'background-size': '100% 100%',
                 'background-repeat': 'no-repeat',
                 'text-align': 'center',
-                'height': '60vh',
+                height: '60vh',
               }"
             >
-              <span class="badge bg-light text-dark" style="font-size: 1.1em;"
+              <span class="badge bg-light text-dark" style="font-size: 1.1em"
                 >Tiempo en completar: {{ minutes }} Minutos y
                 {{ seconds }} Segundos</span
               >
-              <br><br>
-              <span class="badge bg-light text-dark" style="font-size: 1.1em;"
+              <br /><br />
+              <span class="badge bg-light text-dark" style="font-size: 1.1em"
                 >Movimientos {{ movimientos }}</span
               >
             </div>
@@ -178,15 +178,17 @@
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body" :style="{
+            <div
+              class="modal-body"
+              :style="{
                 'background-image': 'url(' + ImagenesVictoria + ')',
                 'background-position': 'center',
                 'background-size': '100% 100%',
                 'background-repeat': 'no-repeat',
                 'text-align': 'center',
-                'height': '60vh',
-              }">
-            </div>
+                height: '60vh',
+              }"
+            ></div>
             <div class="modal-footer">
               <button
                 @click="RegresarMenu"
@@ -194,7 +196,7 @@
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
-                Regresar a menu
+                Regresar a menú
               </button>
               <button
                 @click="VolverAJugar"
@@ -237,6 +239,7 @@
               <my-prev-file
                 type="audio"
                 v-model="TipoJuego.audio_instructions"
+                :download="false"
               />
               <my-prev-file
                 type="video"
@@ -297,6 +300,7 @@ export default {
     let timeStart = ref(false);
     let movimientos = ref(0);
     let puntaje = ref(5);
+    const JuegoGanado = ref(false);
     const ModalJuegoTerminado = ref(null);
     const ModalVictoria = ref(null);
     const ModalInstrucciones = ref(null);
@@ -310,16 +314,14 @@ export default {
     const MensajesVictoria = ref("");
     const IdiomaVoz = idiomaVozDisponible();
     let mensajes = [
-      "Enhorabuena, has ganado el juego",
-      "Lo estás haciendo muy bien.",
-      "Sigue así felicidades",
+      "Felicidades lo has hecho muy bien",
       "En hora buena vas ganando",
       "Te felicito por tu esfuerzo",
-      "!Felicidades¡ por lograr ganar",
+      "Felicidades por lograr ganar",
       "Lo hiciste excelente",
       "Felicidades por tu progreso",
-      "!Felicidades¡ as dado un gran paso",
-      "!Felicidades¡ lograste pasar el nivel",
+      "Felicidades has dado un gran paso",
+      "Felicidades lo estas logrando",
     ];
     const imagenes = [
       require("../assets/image/ganaste0.png"),
@@ -411,6 +413,7 @@ export default {
     }
     function timer() {
       // Actualizar el recuento cada 1 segundo
+      JuegoGanado.value = false;
       timeStart.value = true;
       time = setInterval(function () {
         seconds.value++;
@@ -424,6 +427,7 @@ export default {
       clearInterval(time);
     }
     async function displayModalVictoria() {
+      JuegoGanado.value = true;
       stopTime();
       MensajesVictoria.value = mensajes[getRandomInt(0, mensajes.length)];
       ImagenesVictoria.value = getImagenVictoria();
@@ -459,17 +463,19 @@ export default {
         return;
       }
 
-      if (Nivel.value >= Juego.level) {
+      if (Nivel.value >= Juego.level && JuegoGanado.value) {
         MensajesVictoria.value = mensajes[getRandomInt(0, mensajes.length)];
         ImagenesVictoria.value = getImagenVictoria();
         ModalBootstrapJuegoTerminado.show();
         return;
       }
 
-      Router.push({
-        name: "JugarJuego",
-        params: { id: JuegoId, nivel: Nivel.value + 1 },
-      });
+      if (JuegoGanado.value) {
+        Router.push({
+          name: "JugarJuego",
+          params: { id: JuegoId, nivel: Nivel.value + 1 },
+        });
+      }
     }
 
     function BeforeAction() {
