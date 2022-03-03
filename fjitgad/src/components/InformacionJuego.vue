@@ -8,9 +8,11 @@
         <div id="ctrbarra">
           <i class="fas fa-clock" aria-hidden="true">&nbsp;</i>
           Tiempo:&nbsp;
-          <span id="minutos" class="minutos">{{ minutos }}</span>
+          <span id="minutos" class="horas">{{ String(parseInt(minutos/60)).length===1 ? `0${parseInt(minutos/60)}` : parseInt(minutos/60) }}</span>
           <span id="dospuntos">:</span>
-          <span id="segundos" class="segundos">{{ segundos }}</span>
+          <span id="minutos" class="minutos">{{ String(minutos % 60).length===1 ? `0${minutos % 60}` : minutos % 60 }}</span>
+          <span id="dospuntos">:</span>
+          <span id="segundos" class="segundos">{{ String(segundos).length===1 ? `0${segundos}` : segundos }}</span>
         </div>
       </div>
       <div class="card col text-white bg-info p-2 m-2" id="ctrmovimiento">

@@ -196,7 +196,7 @@
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
-                Regresar a menu
+                Regresar a menú
               </button>
               <button
                 @click="VolverAJugar"
@@ -239,6 +239,7 @@
               <my-prev-file
                 type="audio"
                 v-model="TipoJuego.audio_instructions"
+                :download="false"
               />
               <my-prev-file
                 type="video"

@@ -1,6 +1,7 @@
 <template>
   <img v-if="type == 'image'" ref="filePrev" class="responsive-image" />
-  <audio style="width: 100%;" v-if="type == 'audio'" ref="filePrev" controls="controls">
+  <audio  style="width: 100%;" v-if="type == 'audio'" ref="filePrev" controls="controls"
+  :controlsList="download ? '': 'nodownload'">
     <source src="" type="audio/*" />
   </audio>
   <video v-if="type == 'video'" style="width: 100%;" ref="filePrev" controls="controls">
@@ -25,6 +26,10 @@ export default {
       type: String,
       required: true,
     },
+    download: {
+      type: Boolean,
+      default: true
+    }
   },
   setup(props, context) {
     const filePrev = ref(null);
