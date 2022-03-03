@@ -93,6 +93,10 @@ public class GameDAO {
                 + "from tblgameimage where idgame =" + JuegoSeleccionado.getIdgame() + " and tblgameimage.idcolortype = 0";
         JuegoSeleccionado.setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
 
+        for (int i = 0; i < JuegoSeleccionado.getDetalles().size(); i++) {
+            JuegoSeleccionado.getDetalles().get(i).setSecuence(i);
+        }
+
         return Methods.objectToJsonString(JuegoSeleccionado);
     }
 
