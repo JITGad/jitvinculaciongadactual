@@ -106,18 +106,19 @@ export default {
       /* Después de 700 milisegundos las dos cards abiertas 
      tendrán la clase de volteo eliminada del elemento padre de las 
      imágenes <li>*/
+      const opencart1 = opened[0];
+      const opencart2 = opened[1];
       setTimeout(function () {
         // Eliminar el giro de clase en el elemento padre de las imágenes
-        opened[0].parentElement.classList.remove("flip-memoria");
-        opened[1].parentElement.classList.remove("flip-memoria");
+        opencart1.parentElement.classList.remove("flip-memoria");
+        opencart2.parentElement.classList.remove("flip-memoria");
 
-        opened[0].parentElement.classList.add("no-match-memoria");
-        opened[1].parentElement.classList.add("no-match-memoria");
+        opencart1.parentElement.classList.add("no-match-memoria");
+        opencart2.parentElement.classList.add("no-match-memoria");
 
         setTimeout(() => {
-          opened[0].parentElement.classList.remove("no-match-memoria");
-          opened[1].parentElement.classList.remove("no-match-memoria");
-          opened = [];
+          opencart1.parentElement.classList.remove("no-match-memoria");
+          opencart2.parentElement.classList.remove("no-match-memoria");
         }, 300);
 
         // Permitir más clics del ratón en las cards
@@ -125,6 +126,7 @@ export default {
         // Retirar las tarjetas de la array abierta
       }, 700);
       // Llama a movesCounter para incrementar en uno
+      opened = [];
       context.emit("movesCounter");
       starRating();
     }
@@ -147,7 +149,9 @@ export default {
         deckCards.push(newcard);
         deckCards.push(newcard);
       }
-
+      if (props.timeStart === false) {
+        context.emit("startTime");
+      }
       deck = document.querySelector(".deck");
       deck.innerHTML = "";
       matched = [];
@@ -174,10 +178,6 @@ export default {
         // Actualiza el nuevo <li> a deck <ul>
         liTag.appendChild(addImage);
         liTag.addEventListener("click", function (evt) {
-          if (props.timeStart === false) {
-            context.emit("startTime");
-          }
-          // Llamar a la función flipCard()
           flipCard(evt);
         });
         deck.appendChild(liTag);
@@ -256,8 +256,6 @@ export default {
   background: #fff;
   visibility: visible;
 }
-
-
 
 .deck .card-memoria.match-memoria {
   background: #39d;

@@ -110,37 +110,31 @@ export default {
     }
 
     function onTouchStart(evt) {
-      let loc = {
-        x:
-          evt.touches[0].clientX ||
-          evt.touches[0].screenX ||
-          evt.touches[0].pageX ||
-          0,
-        y:
-          evt.touches[0].clientY ||
-          evt.touches[0].screenY ||
-          evt.touches[0].pageY ||
-          0,
-      };
+      const loc = getLocTouch(evt);
       onPieceDown(loc);
     }
 
     function onTouchMove(evt) {
       if (SELECTED_PIECE != null) {
-        const loc = {
-          x:
-            evt.touches[0].clientX ||
-            evt.touches[0].screenX ||
-            evt.touches[0].pageX ||
-            0,
-          y:
-            evt.touches[0].clientY ||
-            evt.touches[0].screenY ||
-            evt.touches[0].pageY ||
-            0,
-        };
+        const loc = getLocTouch(evt);
         onPieceMove(loc);
       }
+    }
+
+    function getLocTouch(evt) {
+      var rect = evt.target.getBoundingClientRect();
+      return {
+        x:
+          (evt.touches[0].pageX ||
+            evt.touches[0].clientX ||
+            evt.touches[0].screenX ||
+            0) - rect.left,
+        y:
+          (evt.touches[0].clientY ||
+            evt.touches[0].screenY ||
+            evt.touches[0].pageY ||
+            0) - rect.top,
+      };
     }
 
     function onTouchEnd() {
@@ -159,8 +153,8 @@ export default {
 
     function onMouseDown(evt) {
       const loc = {
-        x: evt.layerX || evt.offsetX || evt.clientX || 0,
-        y: evt.layerY || evt.offsetY || evt.clientY || 0,
+        x: evt.offsetX || evt.layerX || evt.clientX || 0,
+        y: evt.offsetY || evt.layerY || evt.clientY || 0,
       };
       onPieceDown(loc);
     }
@@ -189,8 +183,8 @@ export default {
     function onMouseMove(evt) {
       if (SELECTED_PIECE != null) {
         const loc = {
-          x: evt.layerX || evt.offsetX || evt.clientX || 0,
-          y: evt.layerY || evt.offsetY || evt.clientY || 0,
+          x: evt.offsetX || evt.layerX || evt.clientX || 0,
+          y: evt.offsetY || evt.layerY || evt.clientY || 0,
         };
         onPieceMove(loc);
       }
@@ -396,6 +390,6 @@ export default {
 .containermain {
   display: flex;
   width: 100%;
-  height: 90vh;
+  height: 70vh;
 }
 </style>
