@@ -306,6 +306,12 @@ export default {
       require("../assets/image/ganaste2.png"),
       require("../assets/image/ganaste3.png"),
       require("../assets/image/ganaste4.png"),
+      require("../assets/image/ganaste5.png"),
+      require("../assets/image/ganaste6.png"),
+      require("../assets/image/ganaste7.png"),
+      require("../assets/image/ganaste8.png"),
+      require("../assets/image/ganaste9.png"),
+      require("../assets/image/ganaste10.png"),
     ];
 
     const ImagenesVictoria = ref(getImagenVictoria());
