@@ -337,11 +337,11 @@ public class Gameresource {
         }
 
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-
-        gameModel = (GameModel) Methods.StringJsonToObject(data, GameModel.class);
-
-        JsonObject Jso = Methods.stringToJSON(data);
         try {
+            gameModel = (GameModel) Methods.StringJsonToObject(data, GameModel.class);
+
+            JsonObject Jso = Methods.stringToJSON(data);
+
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
@@ -399,10 +399,10 @@ public class Gameresource {
 
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
-        gameModel = (GameModel) Methods.StringJsonToObject(data, GameModel.class);
-
-        JsonObject Jso = Methods.stringToJSON(data);
         try {
+            gameModel = (GameModel) Methods.StringJsonToObject(data, GameModel.class);
+
+            JsonObject Jso = Methods.stringToJSON(data);
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
@@ -460,10 +460,10 @@ public class Gameresource {
 
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
-        gameModel = (GameModel) Methods.StringJsonToObject(data, GameModel.class);
-
-        JsonObject Jso = Methods.stringToJSON(data);
         try {
+            gameModel = (GameModel) Methods.StringJsonToObject(data, GameModel.class);
+
+            JsonObject Jso = Methods.stringToJSON(data);
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");

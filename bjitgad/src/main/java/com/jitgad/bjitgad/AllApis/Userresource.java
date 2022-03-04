@@ -182,8 +182,9 @@ public class Userresource {
 
     public Response logIn(String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-        UserRequestModel userRequest = (UserRequestModel) Methods.StringJsonToObject(data, UserRequestModel.class);
+
         try {
+            UserRequestModel userRequest = (UserRequestModel) Methods.StringJsonToObject(data, UserRequestModel.class);
             responseData = userC.LogIn(userRequest);
             responseData.setData(userC.BuildToken((UserTokenRModel) responseData.getData(), userRequest));
 
@@ -215,11 +216,11 @@ public class Userresource {
 
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
-        userModel = (UserModel) Methods.StringJsonToObject(data, UserModel.class);
-
-        JsonObject Jso = Methods.stringToJSON(data);
-
         try {
+            userModel = (UserModel) Methods.StringJsonToObject(data, UserModel.class);
+
+            JsonObject Jso = Methods.stringToJSON(data);
+
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
@@ -236,7 +237,7 @@ public class Userresource {
                     if (ValidateToken.isStatus()) {
 
                         responseData = userC.UserRegistration(userModel,
-                        request.getServletContext().getRealPath("/"));
+                                request.getServletContext().getRealPath("/"));
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
@@ -277,11 +278,11 @@ public class Userresource {
 
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
-        userModel = (UserModel) Methods.StringJsonToObject(data, UserModel.class);
-
-        JsonObject Jso = Methods.stringToJSON(data);
-
         try {
+            userModel = (UserModel) Methods.StringJsonToObject(data, UserModel.class);
+
+            JsonObject Jso = Methods.stringToJSON(data);
+
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
@@ -298,7 +299,7 @@ public class Userresource {
                     if (ValidateToken.isStatus()) {
 
                         responseData = userC.PutUser(userModel,
-                        request.getServletContext().getRealPath("/"));
+                                request.getServletContext().getRealPath("/"));
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
@@ -339,11 +340,12 @@ public class Userresource {
 
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
-        userModel = (UserModel) Methods.StringJsonToObject(data, UserModel.class);
-
-        JsonObject Jso = Methods.stringToJSON(data);
-
         try {
+
+            userModel = (UserModel) Methods.StringJsonToObject(data, UserModel.class);
+
+            JsonObject Jso = Methods.stringToJSON(data);
+
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");

@@ -330,11 +330,12 @@ public class Activitiestyperesource {
         if (Configuration.DEBUG) {
             System.out.println("Ingresando a PostActivitiesType ");
         }
-        activitiestypeModel
-                = (ActivitiestypeModel) Methods.StringJsonToObject(data, ActivitiestypeModel.class);
 
-        JsonObject Jso = Methods.stringToJSON(data);
         try {
+            activitiestypeModel
+                    = (ActivitiestypeModel) Methods.StringJsonToObject(data, ActivitiestypeModel.class);
+
+            JsonObject Jso = Methods.stringToJSON(data);
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
@@ -385,12 +386,12 @@ public class Activitiestyperesource {
         if (Configuration.DEBUG) {
             System.out.println("Ingresando a PutActivitiesType ");
         }
-        activitiestypeModel
-                = (ActivitiestypeModel) Methods.StringJsonToObject(data, ActivitiestypeModel.class);
 
-        JsonObject Jso = Methods.stringToJSON(data);
         try {
+            activitiestypeModel
+                    = (ActivitiestypeModel) Methods.StringJsonToObject(data, ActivitiestypeModel.class);
 
+            JsonObject Jso = Methods.stringToJSON(data);
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
@@ -441,12 +442,12 @@ public class Activitiestyperesource {
         if (Configuration.DEBUG) {
             System.out.println("Ingresando a DeleteActivitiesType ");
         }
-        activitiestypeModel
-                = (ActivitiestypeModel) Methods.StringJsonToObject(data, ActivitiestypeModel.class);
 
-        JsonObject Jso = Methods.stringToJSON(data);
         try {
+            activitiestypeModel
+                    = (ActivitiestypeModel) Methods.StringJsonToObject(data, ActivitiestypeModel.class);
 
+            JsonObject Jso = Methods.stringToJSON(data);
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");

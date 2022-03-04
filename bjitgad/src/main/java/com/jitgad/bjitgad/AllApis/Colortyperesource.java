@@ -166,7 +166,7 @@ public class Colortyperesource {
     @Path("/getcolortypecv")
     public Response getcolortypecv(@Context HttpHeaders headers) {
         ResponseData responseData = new ResponseData("Ocurrio un error", true);
-if (Configuration.DEBUG) {
+        if (Configuration.DEBUG) {
             System.out.println("Ingresando a getcolortypecv ");
         }
         try {
@@ -226,16 +226,15 @@ if (Configuration.DEBUG) {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response PostColortype(@Context HttpHeaders headers, String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-if (Configuration.DEBUG) {
+        if (Configuration.DEBUG) {
             System.out.println("Ingresando a postColortype ");
         }
-        colortypeModel
-                = (ColortypeModel) Methods.StringJsonToObject(data, ColortypeModel.class);
-
-        JsonObject Jso = Methods.stringToJSON(data);
 
         try {
+            colortypeModel
+                    = (ColortypeModel) Methods.StringJsonToObject(data, ColortypeModel.class);
 
+            JsonObject Jso = Methods.stringToJSON(data);
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
@@ -282,16 +281,14 @@ if (Configuration.DEBUG) {
     @Path("/putColortype")
     public Response PutColortype(@Context HttpHeaders headers, String data) {
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
-if (Configuration.DEBUG) {
+        if (Configuration.DEBUG) {
             System.out.println("Ingresando a putColortype ");
         }
-        colortypeModel
-                = (ColortypeModel) Methods.StringJsonToObject(data, ColortypeModel.class);
-
-        JsonObject Jso = Methods.stringToJSON(data);
-
         try {
+            colortypeModel
+                    = (ColortypeModel) Methods.StringJsonToObject(data, ColortypeModel.class);
 
+            JsonObject Jso = Methods.stringToJSON(data);
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
@@ -341,13 +338,11 @@ if (Configuration.DEBUG) {
         if (Configuration.DEBUG) {
             System.out.println("Ingresando a deleteColortype ");
         }
-        colortypeModel
-                = (ColortypeModel) Methods.StringJsonToObject(data, ColortypeModel.class);
-
-        JsonObject Jso = Methods.stringToJSON(data);
-
         try {
+            colortypeModel
+                    = (ColortypeModel) Methods.StringJsonToObject(data, ColortypeModel.class);
 
+            JsonObject Jso = Methods.stringToJSON(data);
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");

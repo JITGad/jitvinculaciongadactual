@@ -354,11 +354,12 @@ public class Gametyperesource {
 
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
-        gametypeModel
-                = (GametypeModel) Methods.StringJsonToObject(data, GametypeModel.class);
-
-        JsonObject Jso = Methods.stringToJSON(data);
         try {
+            gametypeModel
+                    = (GametypeModel) Methods.StringJsonToObject(data, GametypeModel.class);
+
+            JsonObject Jso = Methods.stringToJSON(data);
+
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
@@ -416,11 +417,12 @@ public class Gametyperesource {
 
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
-        gametypeModel
-                = (GametypeModel) Methods.StringJsonToObject(data, GametypeModel.class);
-
-        JsonObject Jso = Methods.stringToJSON(data);
         try {
+            gametypeModel
+                    = (GametypeModel) Methods.StringJsonToObject(data, GametypeModel.class);
+
+            JsonObject Jso = Methods.stringToJSON(data);
+
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
@@ -477,11 +479,12 @@ public class Gametyperesource {
 
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
-        gametypeModel
-                = (GametypeModel) Methods.StringJsonToObject(data, GametypeModel.class);
-
-        JsonObject Jso = Methods.stringToJSON(data);
         try {
+            gametypeModel
+                    = (GametypeModel) Methods.StringJsonToObject(data, GametypeModel.class);
+
+            JsonObject Jso = Methods.stringToJSON(data);
+
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");

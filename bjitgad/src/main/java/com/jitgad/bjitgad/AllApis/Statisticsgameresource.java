@@ -6,16 +6,12 @@ import com.jitgad.bjitgad.Controller.StatisticsgameController;
 import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.StatisticsgameModel;
-import jakarta.servlet.http.HttpServletRequest;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import com.jitgad.bjitgad.Utilities.ResponseDataPage;
 import com.jitgad.bjitgad.Utilities.ResponseValidateToken;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
@@ -32,8 +28,6 @@ import java.util.ArrayList;
 @Path("statisticsgame")
 public class Statisticsgameresource {
     
-    @Context
-    private HttpServletRequest request;
     private final StatisticsgameController sgC;
     private final AuthorizationController AuC;
     private StatisticsgameModel statisticsgameModel;
@@ -123,10 +117,12 @@ public class Statisticsgameresource {
 
         ResponseData responseData = new ResponseData("Ocurrio un error", false);
 
-        statisticsgameModel = (StatisticsgameModel) Methods.StringJsonToObject(data, StatisticsgameModel.class);
+        
+        try {
+            statisticsgameModel = (StatisticsgameModel) Methods.StringJsonToObject(data, StatisticsgameModel.class);
 
         JsonObject Jso = Methods.stringToJSON(data);
-        try {
+        
             if (Jso.size() > 0) {
                 //TOKENS
                 String Authorization = headers.getHeaderString("Authorization");
