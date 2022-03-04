@@ -4,7 +4,7 @@
       <div class="col-7">
         <p
           id="parrafo_cuento"
-          class="h1"
+          class="fs-2"
           style="color: black; white-space: pre-line"
         ></p>
       </div>
