@@ -368,7 +368,9 @@ export default {
       (nivel, prevNivel) => {
         resetEverything();
         Nivel.value = parseInt(nivel);
-        Routes.value[2].route = `/jugar/${JuegoId}/${Nivel.value}`;
+        Routes.value[
+          Routes.value.length - 1
+        ].route = `/jugar/${JuegoId}/${Nivel.value}`;
       }
     );
     onMounted(async () => {
@@ -382,8 +384,15 @@ export default {
             Juego.nameactivities
           )
         );
+
+        if (Juego.level > 1) {
+          Routes.value.push(
+            new Route(`/niveles-Juego/${JuegoId}`, `Niveles ${Juego.name}`)
+          );
+        }
+
         Routes.value.push(
-          new Route(`/jugar/${JuegoId}/${Nivel.value}`, `Juego ${Juego.name}`)
+          new Route(`/jugar/${JuegoId}/${Nivel.value}`, `${Juego.name}`)
         );
         const responseTipoJuego = await TipoJuegosService.getTipoJuego(
           Juego.idgametype

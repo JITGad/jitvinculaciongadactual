@@ -55,7 +55,7 @@ export default {
           )
         );
         RoutesJuego.value.push(
-          new Route(`/niveles-Juego/${IdJuego}`, `Niveles juego ${Juego.name}`)
+          new Route(`/niveles-Juego/${IdJuego}`, `Niveles ${Juego.name}`)
         );
         Loading.value = false;
       } else {
