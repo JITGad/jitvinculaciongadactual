@@ -143,12 +143,23 @@ export default {
       deckCards.clear();
       var brandsShorted = shuffle(props.model.detalles);
 
+      for (let index = 0; index < brandsShorted.length; index++) {
+        const element = brandsShorted[index];
+        const newcard = setPathFile(element.image);
+        deckCards.push(newcard);
+        deckCards.push(newcard);
+        if (deckCards.length >= props.level * 2) {
+          break;
+        }
+      }
+
       while (deckCards.length <= props.level * 2) {
-        var rnd = getRandomInt(0, brandsShorted.length);
-        var newcard = setPathFile(brandsShorted[rnd].image);
+        const rnd = getRandomInt(0, brandsShorted.length);
+        const newcard = setPathFile(brandsShorted[rnd].image);
         deckCards.push(newcard);
         deckCards.push(newcard);
       }
+      
       if (props.timeStart === false) {
         context.emit("startTime");
       }
