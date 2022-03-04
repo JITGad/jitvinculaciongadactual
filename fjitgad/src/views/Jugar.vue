@@ -116,10 +116,9 @@
                 {{ MensajesVictoria }}
               </h5>
               <span class="badge bg-light text-dark" style="font-size: 1.1em"
-                >Tiempo: {{ minutes }} minutos y
-                {{ seconds }} segundos</span
+                >Tiempo: {{ minutes }} minutos y {{ seconds }} segundos</span
               >
-              <br /><br />
+              <br />
               <span class="badge bg-light text-dark" style="font-size: 1.1em"
                 >Movimientos: {{ movimientos }}</span
               >
@@ -196,11 +195,7 @@
     </section>
     <section>
       <div class="modal" ref="ModalInstrucciones" tabindex="-1">
-        <div
-          class="
-            modal-dialog modal-lg modal-dialog-centered
-          "
-        >
+        <div class="modal-dialog modal-lg modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-body">
               <h5 class="modal-title text-center">Instrucciones</h5>
@@ -297,13 +292,12 @@ export default {
     const MensajesVictoria = ref("");
     const IdiomaVoz = idiomaVozDisponible();
     let mensajes = [
-      "Felicidades lo has hecho muy bien",
+      "Felicidades lo has hecho bien",
       "En hora buena vas ganando",
       "Te felicito por tu esfuerzo",
       "Felicidades por lograr ganar",
       "Lo hiciste excelente",
       "Felicidades por tu progreso",
-      "Felicidades has dado un gran paso",
       "Felicidades lo estas logrando",
     ];
     const imagenes = [
