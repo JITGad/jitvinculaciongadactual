@@ -2,17 +2,24 @@
   <div class="container">
     <div class="row">
       <div class="col-7">
+        <p
+          id="parrafo_cuento"
+          class="h1"
+          style="color: black; white-space: pre-line"
+        ></p>
+      </div>
+      <div class="col-5">
         <div class="row">
-          <p
-            id="parrafo_cuento"
-            class="h1"
-            style="color: black; white-space: pre-line"
-          ></p>
+          <img
+            id="imagen_cuento"
+            alt="..."
+            style="width: 100%; max-height: 100%"
+          />
         </div>
         <div class="row">
           <video
             id="video_cuento"
-            style="width: 100%"
+            style="width: 50%"
             controls="controls"
             autoplay
           >
@@ -20,9 +27,6 @@
             Your browser does not support HTML5 video.
           </video>
         </div>
-      </div>
-      <div class="col-5">
-        <img id="imagen_cuento" alt="..." style="width: 100%; max-height: 100%" />
       </div>
     </div>
     <div class="row">
@@ -134,25 +138,25 @@ export default {
 
     function setParagraph(paragraph) {
       if (paragraph.image && paragraph.image.length > 0) {
-        imagen_cuento.setAttribute("src", paragraph.image);  
+        imagen_cuento.setAttribute("src", paragraph.image);
         imagen_cuento.style.display = "block";
-      } else{
+      } else {
         imagen_cuento.setAttribute("src", "");
         imagen_cuento.style.display = "none";
       }
 
       if (paragraph.audio && paragraph.audio.length > 0) {
-        audio_cuento.setAttribute("src", paragraph.audio);  
+        audio_cuento.setAttribute("src", paragraph.audio);
         audio_cuento.style.display = "block";
-      } else{
+      } else {
         audio_cuento.setAttribute("src", "");
         audio_cuento.style.display = "none";
       }
 
       if (paragraph.video && paragraph.video.length > 0) {
-        video_cuento.setAttribute("src", paragraph.video);  
+        video_cuento.setAttribute("src", paragraph.video);
         video_cuento.style.display = "block";
-      } else{
+      } else {
         video_cuento.setAttribute("src", "");
         video_cuento.style.display = "none";
       }
