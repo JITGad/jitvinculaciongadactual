@@ -109,38 +109,30 @@
     <!-- Modal -->
     <section class="win-game-modal">
       <div class="modal fade" ref="ModalVictoria">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">
+            <div class="modal-body text-center">
+              <h5 class="modal-title h2">
                 {{ MensajesVictoria }}
               </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div
-              class="modal-body"
-              :style="{
-                'background-image': 'url(' + ImagenesVictoria + ')',
-                'background-position': 'center',
-                'background-size': '100% 100%',
-                'background-repeat': 'no-repeat',
-                'text-align': 'center',
-                height: '60vh',
-              }"
-            >
               <span class="badge bg-light text-dark" style="font-size: 1.1em"
-                >Tiempo en completar: {{ minutes }} Minutos y
-                {{ seconds }} Segundos</span
+                >Tiempo: {{ minutes }} minutos y
+                {{ seconds }} segundos</span
               >
               <br /><br />
               <span class="badge bg-light text-dark" style="font-size: 1.1em"
-                >Movimientos {{ movimientos }}</span
+                >Movimientos: {{ movimientos }}</span
               >
+              <div
+                :style="{
+                  'background-image': 'url(' + ImagenesVictoria + ')',
+                  'background-position': 'center',
+                  'background-size': '100% 100%',
+                  'background-repeat': 'no-repeat',
+                  'text-align': 'center',
+                  height: '60vh',
+                }"
+              ></div>
             </div>
             <div class="modal-footer">
               <button
@@ -165,30 +157,21 @@
     </section>
     <section>
       <div class="modal fade" ref="ModalJuegoTerminado">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">
-                Juego terminado
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
+            <div class="modal-body">
+              <h5 class="modal-title text-center">Juego terminado</h5>
+              <div
+                :style="{
+                  'background-image': 'url(' + ImagenesVictoria + ')',
+                  'background-position': 'center',
+                  'background-size': '100% 100%',
+                  'background-repeat': 'no-repeat',
+                  'text-align': 'center',
+                  height: '60vh',
+                }"
+              ></div>
             </div>
-            <div
-              class="modal-body"
-              :style="{
-                'background-image': 'url(' + ImagenesVictoria + ')',
-                'background-position': 'center',
-                'background-size': '100% 100%',
-                'background-repeat': 'no-repeat',
-                'text-align': 'center',
-                height: '60vh',
-              }"
-            ></div>
             <div class="modal-footer">
               <button
                 @click="RegresarMenu"
@@ -215,20 +198,12 @@
       <div class="modal" ref="ModalInstrucciones" tabindex="-1">
         <div
           class="
-            modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable
+            modal-dialog modal-lg modal-dialog-centered
           "
         >
           <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Instrucciones</h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
             <div class="modal-body">
+              <h5 class="modal-title text-center">Instrucciones</h5>
               <textarea
                 class="form-control"
                 rows="3"
@@ -237,13 +212,19 @@
               >
               </textarea>
               <my-prev-file
-              v-if="TipoJuego.audio_instructions && TipoJuego.audio_instructions.length > 0"
+                v-if="
+                  TipoJuego.audio_instructions &&
+                  TipoJuego.audio_instructions.length > 0
+                "
                 type="audio"
                 v-model="TipoJuego.audio_instructions"
                 :download="false"
               />
               <my-prev-file
-              v-if="TipoJuego.video_instructions && TipoJuego.video_instructions.length > 0"
+                v-if="
+                  TipoJuego.video_instructions &&
+                  TipoJuego.video_instructions.length > 0
+                "
                 type="video"
                 v-model="TipoJuego.video_instructions"
               />

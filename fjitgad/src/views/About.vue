@@ -18,11 +18,6 @@
           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             <div class="col">
               <div class="card shadow-sm h-100">
-                <img
-                  src="../assets/image/jose.jpeg"
-                  class="card-img-top"
-                  alt="..."
-                />
                 <div class="card-body">
                   <p class="card-title">Garcia Lopez Jose Gerardo</p>
                 </div>
@@ -33,6 +28,7 @@
                     target="_blank"
                     ><i class="fab fa-facebook"></i>facebook</a
                   >
+                  <br>
                   <a
                     class="px-2 text-truncate"
                     href="https://mail.google.com/"
@@ -40,6 +36,7 @@
                     ><i class="fas fa-envelope"></i>
                     jgarcia24121996@gmail.com</a
                   >
+                  <br>
                   <a
                     class="px-2 text-truncate"
                     href="https://www.whatsapp.com/?lang=es"
@@ -51,11 +48,6 @@
             </div>
             <div class="col">
               <div class="card shadow-sm h-100">
-                <img
-                  src="../assets/image/aura2.jpg"
-                  class="card-img-top"
-                  alt="..."
-                />
                 <div class="card-body">
                   <p class="card-text">Aura Oliva Taquez Suares</p>
                 </div>
@@ -66,12 +58,14 @@
                     target="_blank"
                     ><i class="fab fa-facebook"></i>facebook</a
                   >
+                  <br>
                   <a
                     class="px-2 text-truncate"
                     href="https://outlook.live.com/"
                     target="_blank"
                     ><i class="fas fa-envelope"></i>auri291@hotmail.com</a
                   >
+                  <br>
                   <a
                     class="px-2 text-truncate"
                     href="https://www.whatsapp.com/?lang=es"
@@ -83,11 +77,6 @@
             </div>
             <div class="col">
               <div class="card shadow-sm h-100">
-                <img
-                  src="../assets/image/molina.jpeg"
-                  class="card-img-top"
-                  alt="..."
-                />
                 <div class="card-body">
                   <p class="card-text">Jorge Farouk Molina Noboa</p>
                 </div>
@@ -98,6 +87,7 @@
                     target="_blank"
                     ><i class="fab fa-facebook"></i>facebook</a
                   >
+                  <br>
                   <a
                     class="px-2 text-truncate"
                     href="https://outlook.live.com/"
@@ -105,6 +95,7 @@
                     ><i class="fas fa-envelope"></i
                     >jorge-molina12@hotmail.com</a
                   >
+                  <br>
                   <a
                     class="px-2 text-truncate"
                     href="https://www.whatsapp.com/?lang=es"
