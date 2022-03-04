@@ -237,11 +237,13 @@
               >
               </textarea>
               <my-prev-file
+              v-if="TipoJuego.audio_instructions && TipoJuego.audio_instructions.length > 0"
                 type="audio"
                 v-model="TipoJuego.audio_instructions"
                 :download="false"
               />
               <my-prev-file
+              v-if="TipoJuego.video_instructions && TipoJuego.video_instructions.length > 0"
                 type="video"
                 v-model="TipoJuego.video_instructions"
               />
