@@ -95,7 +95,7 @@ public class GameDAO {
         sentence = "select gi.idgameimage, gi.idgame, gi.idcolortype,ct.name as color, ct.html, gi.image,gi.paragraph, \n"
                 + " gi.audio_parag, gi.video_parag, gi.creationdate, gi.updatedate, gi.state, gi.imagefigure, gi.secuence \n"
                 + " from tblgameimage gi left join tblcolortype ct on gi.idcolortype=ct.idcolortype \n"
-                + " where gi.idgame=" + JuegoSeleccionado.getIdgame() + "order by gi.secuence asc";
+                + " where gi.idgame=" + JuegoSeleccionado.getIdgame() + " order by gi.secuence asc";
 
         JuegoSeleccionado.setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
 
