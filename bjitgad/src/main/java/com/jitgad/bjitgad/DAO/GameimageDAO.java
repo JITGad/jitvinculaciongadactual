@@ -50,6 +50,7 @@ public class GameimageDAO {
                 + "<updatedate>" + giM.getUpdatedate() + "</updatedate>"
                 + "<state>" + giM.getState() + "</state>"
                 + "<imagefigure>" + giM.getImagefigure() + "</imagefigure>"
+                + "<secuence>" + giM.getImagefigure() + "</secuence>"
                 + "</gameimage>");
 
         String sentency = "Select * from insertgameimage('" + structure + "')";
@@ -69,6 +70,7 @@ public class GameimageDAO {
                 + "<updatedate>" + giM.getUpdatedate() + "</updatedate>"
                 + "<state>" + giM.getState() + "</state>"
                 + "<imagefigure>" + giM.getImagefigure() + "</imagefigure>"
+                + "<secuence>" + giM.getImagefigure() + "</secuence>"
                 + "</gameimage>");
 
         String sentency = "Select * from insertgameimage('" + structure + "')";
@@ -88,6 +90,7 @@ public class GameimageDAO {
                 + "<updatedate>" + giM.getUpdatedate() + "</updatedate>"
                 + "<state>" + giM.getState() + "</state>"
                 + "<imagefigure>" + giM.getImagefigure() + "</imagefigure>"
+                + "<secuence>" + giM.getImagefigure() + "</secuence>"
                 + "</gameimage>");
 
         String sentency = "Select * from updategameimage('" + structure + "')";

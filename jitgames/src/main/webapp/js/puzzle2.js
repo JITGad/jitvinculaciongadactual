@@ -95,20 +95,21 @@ function main(img) {
     _img.src = img;
     CANVAS = document.getElementById("myCanvas");
     CONTEXT = CANVAS.getContext("2d");
+    
+    _puzzleWidth = CANVAS.width;
+    _puzzleHeight = CANVAS.height;
+
     CANVAS.style.border = "1px solid black";
     _img.addEventListener('load', onImage, false);
 }
 
 function dimen(dificulty) {
-    console.log("dimensionar");
     var fil = dificulty;
     var col = dificulty;
     var band = false;
     //2,4,6,8,10
     if (dificulty > 2) {
-        //  console.log("si es mayor a 2");
         while (!band) {
-            //  console.log("Cantidad: " + (fil * col));
             if (dificulty % 2 === 0) {
                 if (((fil * col) % 2) === 0) {
                     console.log("multiplo de 2");
@@ -120,19 +121,16 @@ function dimen(dificulty) {
                         if (((fil * col) % 2) === 0){
                             band = true; 
                         }
-                        //   console.log("fila restar: "+ fil);
                     } else {
                         col--;
                         if (((fil * col) % 2) === 0){
                             band = true; 
                         }
-                        //   console.log("columna restar: "+ col);
                     }
                     console.log("Dimensiones fila: " + fil + " - columna: " + col) 
                 }
             } else {
                 dificulty++;
-                console.log(dificulty);
             }
         }
     }
@@ -280,13 +278,14 @@ function updateCanvas() {
 
     window.requestAnimationFrame(updateCanvas);
 }
-
+var PIECESME = [];
 // iniciar todo
 function initializePieces(rows, cols) {
     SIZE.rows = rows;
     SIZE.columns = cols;
 
     PIECES = [];
+    
 
     if (timeStart === false) {
         timeStart = true;
@@ -295,10 +294,37 @@ function initializePieces(rows, cols) {
 
     for (let i = 0; i < SIZE.rows; i++) {
         for (let j = 0; j < SIZE.columns; j++) {
+            PIECESME.push();
             PIECES.push(new Piece(i, j));
+
         }
     }
 }
+
+/* function buildPieces() {
+    var xPos = 0;
+    var yPos = 0;
+
+    for (var i = 0; i < PUZZLE_DIFFICULTY * PUZZLE_DIFFICULTY; i++) {
+        var piece = {};
+        piece.x = xPos;
+        piece.y = yPos;
+        piece.with = SIZE.width;
+        piece.height = SIZE.height;
+        PIECESME.push(piece);
+
+        xPos += _dimPieceOrigen.width;
+        yPos += _pieceWidth;
+
+        if (xPos >= _puzzleWidth) {
+            sxPos = 0;
+            dxPos = 0;
+            dyPos += _pieceHeight;
+            syPos += _dimPieceOrigen.height;
+        }
+    }
+    shufflePuzzle();
+} */
 
 function locg(i) {
     let loc = {

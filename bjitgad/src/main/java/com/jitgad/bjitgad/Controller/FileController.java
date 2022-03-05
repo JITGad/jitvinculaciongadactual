@@ -28,10 +28,12 @@ public class FileController {
         UFile uf = new UFile();
         Path rutaPadre = Paths.get(realpath).getParent();
         String RutaRelativa = String.join(File.separator, new String[]{"jit", "static"});
+        
         Path RutaBaseGuardar = Paths.get(String.join(File.separator, new String[]{rutaPadre.toAbsolutePath().toString(), RutaRelativa}));
         if (Files.notExists(RutaBaseGuardar)) {
             Files.createDirectories(RutaBaseGuardar);
         }
+        
         String[] strings = base64String.split(",");
         ExtensionFile extension = getExtension(strings[0]);
         ValidateFormat format = validateformat(extension.getExtension(), RutaBaseGuardar, RutaRelativa, type);
