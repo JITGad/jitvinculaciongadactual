@@ -141,11 +141,12 @@ public class GameDAO {
 
                 int id = datagameModel.get(0).getIdgame();
 
-                for (GameimageModel object : gameModel.getDetalles()) {
+                for (int i = 0; i < gameModel.getDetalles().size(); i++) {
+                    GameimageModel object = gameModel.getDetalles().get(i);
                     object.setIdgame(id);
+                    object.setSecuence(i);
                     st.execute(giC.InsertGameimageCF(object, realpath));
                 }
-
             }
             conex.commit();
             return true;
@@ -185,7 +186,9 @@ public class GameDAO {
                 for (int i = 0; i < dataid.size(); i++) {
 
                     GameimageModel gimx = dataid.get(i);
-                    GameimageModel gim = gameModel.getDetalles().stream()
+                    GameimageModel gim = gameModel
+                            .getDetalles()
+                            .stream()
                             .filter(gameim -> gimx.getIdgameimage() == gameim.getIdgameimage())
                             .findAny()
                             .orElse(null);
@@ -198,12 +201,14 @@ public class GameDAO {
 
                 for (int i = 0; i < gameModel.getDetalles().size(); i++) {
                     GameimageModel object = gameModel.getDetalles().get(i);
-                    GameimageModel gim = dataid.stream()
+                    GameimageModel gim = dataid
+                            .stream()
                             .filter(gameim -> object.getIdgameimage() == gameim.getIdgameimage())
                             .findAny()
                             .orElse(null);
 
                     object.setIdgame(gameModel.getIdgame());
+                    object.setSecuence(i);
 
                     if (gim == null) {
                         String dataInsert = giC.InsertGameimageCF(object, realpath);

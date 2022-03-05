@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { nextTick, onMounted } from "vue";
 export default {
   name: "MyButtonToggleMenu",
   setup(props, context) {
@@ -16,7 +17,10 @@ export default {
         $(".dashboard").toggleClass("dashboard-compact");
       }
     };
-
+    onMounted(async () => {
+      await nextTick();
+      ToggleMenu();
+    });
     return {
       ToggleMenu,
     };

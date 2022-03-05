@@ -43,7 +43,6 @@
       .footer {
               display: flex;
               align-self: flex-end;
-        width: 100%;
         text-align: center;
         justify-content: center;
       }

@@ -20,16 +20,12 @@
         text="Usuarios"
       />
     </my-autorization>
+    <my-router-link to="/list/colors" icon="fas fa-palette" text="Colores" />
     <my-router-link
-        to="/list/colors"
-        icon="fas fa-palette"
-        text="Colores"
-      />
-    <my-router-link
-        to="/list/tipo-juegos"
-        icon="fas fa-layer-group"
-        text="Tipos de juegos"
-      />
+      to="/list/tipo-juegos"
+      icon="fas fa-layer-group"
+      text="Tipos de juegos"
+    />
     <my-router-link
       to="/list/actividades"
       icon="fas fa-border-none"
@@ -48,3 +44,17 @@ export default {
   name: "Sidebar",
 };
 </script>
+
+<style>
+@media (min-width: 990px) {
+  .dashboard.dashboard-admin .footer {
+    transition: margin-left 0.3s ease-in-out;
+    margin-left: 238px;
+  }
+
+  .dashboard.dashboard-admin.dashboard-compact .footer {
+    transition: margin-left 0.3s ease-in-out;
+    margin-left: 0px;
+  }
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">
+  <div class="dashboard dashboard-admin">
     <div class="dashboard-nav">
       <Sidebar />
     </div>
