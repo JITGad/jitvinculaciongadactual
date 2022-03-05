@@ -26,6 +26,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(com.jitgad.bjitgad.Resources.CustomExceptionMapper.class);
         resources.add(com.jitgad.bjitgad.AllApis.Activitiestyperesource.class);
         resources.add(com.jitgad.bjitgad.AllApis.Colortyperesource.class);
         resources.add(com.jitgad.bjitgad.AllApis.Detailsimageresource.class);
