@@ -108,7 +108,7 @@ class FetchMaster {
 
     #sendFetch(url = '', parameters = {}, callback, type = this.#GET,
         encode = FetchMaster.JSONENCODE, authorize = false, paginacion = false) {
-        const myHeaders = {'Content-Type': 'application/json'};
+        const myHeaders = {};
         const options = {
             method: type,
             headers: myHeaders,
@@ -126,14 +126,21 @@ class FetchMaster {
         }
 
         if (type === this.#POST || type === this.#PUT || type === this.#DELETE) {
-            if (encode == FetchMaster.JSONENCODE) {
+            
+            if (encode == this.JSONENCODE) {
+                console.log("1");
+                myHeaders['Content-Type'] = 'application/json';
                 options['body'] = JSON.stringify(parameters);
-            } else if (encode == FetchMaster.FORMDATAENCODE) {
+            } else if (encode == this.FORMDATAENCODE) {
+                console.log("2");
+                //myHeaders['Content-Disposition'] = 'form-data';
                 myHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
-                options['body'] = parameters;
+                var formData = new FormData();
+                formData.append("data", JSON.stringify(parameters));
+                options['body'] = formData;
             }
         }
-
+console.log(options, encode);
         fetch(this.#baseUrl + url, options)
             .then(response => response.json())
             .then(data => {
