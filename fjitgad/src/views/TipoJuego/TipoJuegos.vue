@@ -11,9 +11,6 @@
         <th scope="col">Video de instrucciones</th>
         <th scope="col">Estado</th>
         <th scope="col">Editar</th>
-        <my-autorization roles="Administrador">
-          <th scope="col">Eliminar</th>
-        </my-autorization>
       </tr>
     </thead>
     <tbody>
@@ -47,15 +44,6 @@
             @click="EditarTipoJuego"
           />
         </td>
-        <my-autorization roles="Administrador">
-          <td align="center">
-            <my-link-table
-              :object="tipojuego"
-              icon="fas fa-trash"
-              @click="EliminarTipoJuego"
-            />
-          </td>
-        </my-autorization>
       </tr>
     </tbody>
   </table>
@@ -90,7 +78,7 @@ export default {
         FetchData,
         uid: instance.uid,
         title: "Mis Tipos de juegos",
-        url_nuevo: "/create/tipojuego",
+        url_nuevo: "",
       });
       await FetchData();
     });

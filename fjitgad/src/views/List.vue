@@ -4,7 +4,7 @@
       <h3>{{ Title }}</h3>
     </div>
     <div style="margin: 0px 0px 10px 0px" class="form-group">
-      <router-link class="btn btn-primary" :to="UrlNuevo" autofocus>
+      <router-link v-if="UrlNuevo.length > 0" class="btn btn-primary" :to="UrlNuevo" autofocus>
         <i class="fas fa-plus"></i> Agregar Nuevo
       </router-link>
     </div>
