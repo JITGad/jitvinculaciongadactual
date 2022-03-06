@@ -23,14 +23,13 @@
           :accept="AcceptTypeInput"
         />
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button
+          <my-button
             class="btn btn-secondary"
+            label="Subir Archivo"
             v-if="FileNoUploaded"
-            type="button"
+            :loading="loading"
             @click="SendFile"
-          >
-            Subir Archivo
-          </button>
+          />
         </div>
       </div>
       <div class="col-4">
@@ -160,7 +159,6 @@ export default {
     async function changeFiles(event) {
       FileNoUploaded.value = true;
       loading.value = true;
-
       const archivos = event.target.files;
       if (!archivos || !archivos.length) {
         filePrev.value = "";
@@ -188,6 +186,7 @@ export default {
     }
 
     async function SendFile() {
+      loading.value = true;
       var formData = new FormData();
       if (fileInput.value.files.length <= 0) {
         message_info("Debe subir un archivo primero");
@@ -200,6 +199,7 @@ export default {
       } else {
         message_error(Response.status.message);
       }
+      loading.value = false;
     }
 
     return {
