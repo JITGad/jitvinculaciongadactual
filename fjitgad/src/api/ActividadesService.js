@@ -49,14 +49,15 @@ class ActividadesService {
 
   postActividad(actividad) {
     return new Promise((resolve) => {
-      FetchMaster.post(`${this.#urlApi}/postActivitiesType`, actividad, (data) => resolve(data), undefined, true);
+      FetchMaster.post(`${this.#urlApi}/postActivitiesType`, actividad, 
+                      (data) => resolve(data), FetchMaster.JSONENCODE, true);
     });
   }
 
   putActividad(actividad) {
     return new Promise((resolve) => {
       FetchMaster.put(`${this.#urlApi}/PutActivitiesType`,
-        actividad, (data) => resolve(data), undefined, true);
+        actividad, (data) => resolve(data), FetchMaster.JSONENCODE, true);
     });
   }
 

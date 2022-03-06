@@ -28,15 +28,14 @@ class JuegosService {
 
   postJuego(Juego) {
     return new Promise((resolve) => {
-      FetchMaster.post(`${this.#urlApi}/postGameEncoded`, Juego, (data) => resolve(data),
-        FetchMaster.FORMDATAENCODE, true);
+      FetchMaster.post(`${this.#urlApi}/postGame`, Juego, (data) => resolve(data), FetchMaster.JSONENCODE, true);
     });
   }
 
   putJuego(Juego) {
     return new Promise((resolve) => {
-      FetchMaster.put(`${this.#urlApi}/putGameEncoded`,
-        Juego, (data) => resolve(data), FetchMaster.FORMDATAENCODE, true);
+      FetchMaster.put(`${this.#urlApi}/putGame`,
+        Juego, (data) => resolve(data), FetchMaster.JSONENCODE, true);
     });
   }
 

@@ -36,14 +36,15 @@ class ColoresService {
 
   postColor(Color) {
     return new Promise((resolve) => {
-      FetchMaster.post(`${this.#urlApi}/postColortype`, Color, (data) => resolve(data), undefined, true);
+      FetchMaster.post(`${this.#urlApi}/postColortype`, Color, 
+                      (data) => resolve(data), FetchMaster.JSONENCODE, true);
     });
   }
 
   putColor(Color) {
     return new Promise((resolve) => {
       FetchMaster.put(`${this.#urlApi}/putColortype`,
-        Color, (data) => resolve(data), undefined, true);
+        Color, (data) => resolve(data), FetchMaster.JSONENCODE, true);
     });
   }
 

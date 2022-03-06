@@ -20,14 +20,15 @@ class AuthService {
 
     postUsuario(usuario) {
         return new Promise((resolve) => {
-            FetchMaster.post(`${this.#urlApi}/PostUserRegistration`, usuario, (data) => resolve(data), undefined, true);
+            FetchMaster.post(`${this.#urlApi}/PostUserRegistration`, usuario, (data) => resolve(data), 
+                            FetchMaster.JSONENCODE, true);
         });
     }
 
     putUsuario(Usuario) {
         return new Promise((resolve) => {
             FetchMaster.put(`${this.#urlApi}/putuser`,
-                Usuario, (data) => resolve(data), undefined, true);
+                Usuario, (data) => resolve(data), FetchMaster.JSONENCODE, true);
         });
     }
 

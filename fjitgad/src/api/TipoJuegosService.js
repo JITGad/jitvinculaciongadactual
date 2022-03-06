@@ -51,14 +51,14 @@ class TipoJuegosService {
     postTipoJuego(TipoJuego) {
         return new Promise((resolve) => {
             FetchMaster.post(`${this.#urlApi}/Postgametype`, TipoJuego, (data) => resolve(data),
-                undefined, true);
+            FetchMaster.JSONENCODE, true);
         });
     }
 
     putTipoJuego(TipoJuego) {
         return new Promise((resolve) => {
             FetchMaster.put(`${this.#urlApi}/Putgametype`,
-                TipoJuego, (data) => resolve(data), undefined, true);
+                TipoJuego, (data) => resolve(data), FetchMaster.JSONENCODE, true);
         });
     }
 

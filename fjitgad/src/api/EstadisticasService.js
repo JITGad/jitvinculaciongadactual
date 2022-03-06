@@ -13,7 +13,8 @@ class EstadisticasService {
 
     postEstadisticas(Estadisticas) {
         return new Promise((resolve) => {
-            FetchMaster.post(`${this.#urlApi}/postStatisticsgame`, Estadisticas, (data) => resolve(data), undefined, false);
+            FetchMaster.post(`${this.#urlApi}/postStatisticsgame`, Estadisticas, 
+                            (data) => resolve(data), FetchMaster.JSONENCODE, false);
         });
     }
 }

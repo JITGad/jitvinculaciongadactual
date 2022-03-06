@@ -20,7 +20,7 @@ class FetchMaster {
             undefined,
             (response) => callback(response),
             undefined,
-            undefined,
+            this.JSONENCODE,
             authorize,
             paginacion
         );
@@ -107,7 +107,7 @@ class FetchMaster {
     }
 
     #sendFetch(url = '', parameters = {}, callback, type = this.#GET,
-        encode = FetchMaster.JSONENCODE, authorize = false, paginacion = false) {
+        encode = this.JSONENCODE, authorize = false, paginacion = false) {
         const myHeaders = {};
         const options = {
             method: type,
@@ -124,23 +124,22 @@ class FetchMaster {
             }
 
         }
-
+        if (encode == this.JSONENCODE) {
+            myHeaders['Content-Type'] = 'application/json';
+        } else if (encode == this.FORMDATAENCODE) {
+            myHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
+        }
         if (type === this.#POST || type === this.#PUT || type === this.#DELETE) {
-            
             if (encode == this.JSONENCODE) {
-                console.log("1");
-                myHeaders['Content-Type'] = 'application/json';
                 options['body'] = JSON.stringify(parameters);
             } else if (encode == this.FORMDATAENCODE) {
-                console.log("2");
                 //myHeaders['Content-Disposition'] = 'form-data';
-                myHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
                 var formData = new FormData();
                 formData.append("data", JSON.stringify(parameters));
                 options['body'] = formData;
             }
         }
-console.log(options, encode);
+        console.log(options, encode);
         fetch(this.#baseUrl + url, options)
             .then(response => response.json())
             .then(data => {
@@ -165,13 +164,14 @@ console.log(options, encode);
     }
 
     #ajaxJSON(url = '', parameters = {}, callback, type = this.#GET,
-        encode = FetchMaster.JSONENCODE, authorize = false, paginacion = false) {
+        encode = this.JSONENCODE, authorize = false, paginacion = false) {
 
         //this.#sendAjax(url,parameters,callback,type,encode,authorize,paginacion);
+        
         this.#sendFetch(url, parameters, callback, type, encode, authorize, paginacion);
     }
 
-    post(url = '', parameters = {}, callback, encode = FetchMaster.JSONENCODE, authorize = true) {
+    post(url = '', parameters = {}, callback, encode = this.JSONENCODE, authorize = true) {
         this.#ajaxJSON(url,
             parameters,
             (response) => callback(response),
@@ -182,7 +182,7 @@ console.log(options, encode);
         );
     }
 
-    put(url = '', parameters = {}, callback, encode = FetchMaster.JSONENCODE, authorize = true) {
+    put(url = '', parameters = {}, callback, encode = this.JSONENCODE, authorize = true) {
         this.#ajaxJSON(url,
             parameters,
             (response) => callback(response),
@@ -198,7 +198,7 @@ console.log(options, encode);
             parameters,
             (response) => callback(response),
             this.#DELETE,
-            undefined,
+            this.JSONENCODE,
             authorize,
             undefined
         );
