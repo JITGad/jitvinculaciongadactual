@@ -33,9 +33,16 @@
             30
         </session-timeout>
     </session-config>
-    <multipart-config>   
-        <max-file-size>68142301000</max-file-size>
-        <max-request-size>76509275000</max-request-size>
-        <file-size-threshold>0</file-size-threshold>
-    </multipart-config>
+    <servlet>
+        <servlet-name>com.jitgad.bjitgad.Resources.ApplicationConfig</servlet-name>
+        <multipart-config>
+            <max-file-size>350000000000000000</max-file-size> <!--in bytes-->
+            <max-request-size>2180188410000000000</max-request-size> <!--in bytes-->
+            <file-size-threshold>0</file-size-threshold> <!--in bytes-->
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>com.jitgad.bjitgad.Resources.ApplicationConfig</servlet-name>
+        <url-pattern>/webresources/*</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -35,7 +35,7 @@ class JuegosService {
   putJuego(Juego) {
     return new Promise((resolve) => {
       FetchMaster.put(`${this.#urlApi}/putGame`,
-        Juego, (data) => resolve(data), FetchMaster.JSONENCODE, true);
+        Juego, (data) => resolve(data), FetchMaster.FORMDATAENCODE, true);
     });
   }
 

@@ -1,5 +1,6 @@
 package com.jitgad.bjitgad.Resources;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import java.util.Set;
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
@@ -9,8 +10,8 @@ import jakarta.ws.rs.core.Application;
  * @author jorge
  */
 
-@ApplicationPath("webresources")
-
+@ApplicationScoped
+@ApplicationPath("/webresources")
 public class ApplicationConfig extends Application {
 
     @Override
@@ -27,6 +28,7 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(com.jitgad.bjitgad.Resources.CustomExceptionMapper.class);
+        resources.add(com.jitgad.bjitgad.AllApis.FileUploadResource.class);
         resources.add(com.jitgad.bjitgad.AllApis.Activitiestyperesource.class);
         resources.add(com.jitgad.bjitgad.AllApis.Colortyperesource.class);
         resources.add(com.jitgad.bjitgad.AllApis.Detailsimageresource.class);
@@ -37,5 +39,6 @@ public class ApplicationConfig extends Application {
         resources.add(com.jitgad.bjitgad.AllApis.Questionsresource.class);
         resources.add(com.jitgad.bjitgad.AllApis.Userresource.class);       
         resources.add(com.jitgad.bjitgad.AllApis.Statisticsgameresource.class); 
+        
     } 
 }

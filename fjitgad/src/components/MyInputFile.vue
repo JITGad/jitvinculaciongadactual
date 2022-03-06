@@ -22,6 +22,16 @@
           ref="fileInput"
           :accept="AcceptTypeInput"
         />
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button
+            class="btn btn-secondary"
+            v-if="FileNoUploaded"
+            type="button"
+            @click="SendFile"
+          >
+            Subir Archivo
+          </button>
+        </div>
       </div>
       <div class="col-4">
         <my-prev-file :type="type" v-model="filePrev" />
@@ -34,8 +44,9 @@
   </div>
 </template>
 <script>
+import FileUpload from "../api/FileUpload.js";
 import * as Validate from "../util/ValidationTypes.js";
-import { readFilesToBase64 } from "../util/Utilities.js";
+import { isBase64, readFilesToBase64 } from "../util/Utilities.js";
 import { acceptTypeInputFile } from "../util/Utilities.js";
 import {
   onBeforeUnmount,
@@ -47,6 +58,7 @@ import {
   computed,
   watch,
 } from "vue";
+import { message_error, message_info } from "../util/Messages.js";
 
 export default {
   name: "MyInputFile",
@@ -59,7 +71,7 @@ export default {
     },
     label: {
       type: String,
-      default: ""
+      default: "",
     },
     labelshow: {
       type: Boolean,
@@ -79,6 +91,7 @@ export default {
     },
   },
   setup(props, context) {
+    const FileNoUploaded = ref(false);
     const form = inject("my-form");
     const instance = getCurrentInstance();
     const filePrev = ref(null);
@@ -109,14 +122,28 @@ export default {
           return;
         }
         filePrev.value = value;
+        validate();
       }
     );
     const executevalidation = function (_value) {
+      if (isBase64(_value)) {
+        error.state = true;
+        error.message = "Archivo aun no ha sido enviado al servidor";
+        return;
+      }
+
       if (loading.value) {
         error.state = true;
         error.message = "Procesando archivo";
         return;
       }
+
+      if (FileNoUploaded.value) {
+        error.state = true;
+        error.message = "Debe subir el archivo";
+        return;
+      }
+
       error.state = false;
       error.message = "";
       if (_value != undefined && _value != null && _value.length > 0) {
@@ -127,11 +154,13 @@ export default {
       error.message = _error_msg;
       return !error.state;
     };
-    const blurEventHandler = function (e) {
-      executevalidation(e.target.files);
+    const blurEventHandler = async function (e) {
+      validate();
     };
     async function changeFiles(event) {
+      FileNoUploaded.value = true;
       loading.value = true;
+
       const archivos = event.target.files;
       if (!archivos || !archivos.length) {
         filePrev.value = "";
@@ -157,6 +186,22 @@ export default {
     function validate() {
       return executevalidation(props.modelValue);
     }
+
+    async function SendFile() {
+      var formData = new FormData();
+      if (fileInput.value.files.length <= 0) {
+        message_info("Debe subir un archivo primero");
+      }
+      formData.append("file", fileInput.value.files[0]);
+      const Response = await FileUpload.UploadFile(formData);
+      if (!Response.status.error) {
+        context.emit("update:modelValue", Response.data);
+        FileNoUploaded.value = false;
+      } else {
+        message_error(Response.status.message);
+      }
+    }
+
     return {
       changeFiles,
       classInput,
@@ -166,6 +211,8 @@ export default {
       loading,
       fileInput,
       AcceptTypeInput,
+      SendFile,
+      FileNoUploaded,
     };
   },
 };

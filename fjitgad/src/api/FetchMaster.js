@@ -127,16 +127,16 @@ class FetchMaster {
         if (encode == this.JSONENCODE) {
             myHeaders['Content-Type'] = 'application/json';
         } else if (encode == this.FORMDATAENCODE) {
-            myHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
+            //myHeaders['Content-Type'] = 'multipart/form-data';
         }
         if (type === this.#POST || type === this.#PUT || type === this.#DELETE) {
             if (encode == this.JSONENCODE) {
                 options['body'] = JSON.stringify(parameters);
             } else if (encode == this.FORMDATAENCODE) {
                 //myHeaders['Content-Disposition'] = 'form-data';
-                var formData = new FormData();
-                formData.append("data", JSON.stringify(parameters));
-                options['body'] = formData;
+                //var formData = new FormData();
+                //formData.append("data", JSON.stringify(parameters));
+                options['body'] = parameters;
             }
         }
         console.log(options, encode);

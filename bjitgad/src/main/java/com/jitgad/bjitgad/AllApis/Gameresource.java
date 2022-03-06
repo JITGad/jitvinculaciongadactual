@@ -10,6 +10,7 @@ import com.jitgad.bjitgad.Models.GameModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import com.jitgad.bjitgad.Utilities.ResponseDataPage;
 import com.jitgad.bjitgad.Utilities.ResponseValidateToken;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -515,7 +516,7 @@ public class Gameresource {
     @Produces(MediaType.APPLICATION_JSON)
     @PUT
     @Path("/putGameEncoded")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response PutGameEncoded(@Context HttpHeaders headers, Form form) {
         if (Configuration.DEBUG) {
             System.out.println("Ingresando putGame...");
