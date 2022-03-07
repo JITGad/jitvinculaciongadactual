@@ -191,6 +191,9 @@ export default {
         liTag.addEventListener("click", function (evt) {
           flipCard(evt);
         });
+        liTag.addEventListener("touchstart", function (evt) {
+          flipCard(evt);
+        });
         deck.appendChild(liTag);
       }
 

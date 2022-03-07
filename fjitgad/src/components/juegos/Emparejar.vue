@@ -141,6 +141,9 @@ export default {
 
         draggableElements.forEach((elem) => {
           elem.addEventListener("dragstart", dragStart);
+          elem.addEventListener("touchstart", dragStart);
+          elem.addEventListener("touchmove", touchMovetHandler);
+          
         });
 
         droppableElements.forEach((elem) => {
@@ -148,12 +151,19 @@ export default {
           elem.addEventListener("dragover", dragOver);
           elem.addEventListener("dragleave", dragLeave);
           elem.addEventListener("drop", drop);
+          elem.addEventListener("touchend", drop);
         });
 
         if (props.timeStart === false) {
           context.emit("startTime");
         }
       }
+
+function touchMovetHandler(evt) {
+  var touchLocation = evt.targetTouches[0];
+  evt.target.style.left = touchLocation.pageX + 'px';
+  evt.target.style.top = touchLocation.pageY + 'px';
+}
 
       // Drag and Drop Functions
       //Events fired on the drag target
