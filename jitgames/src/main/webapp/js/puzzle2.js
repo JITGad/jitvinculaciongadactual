@@ -47,7 +47,7 @@ let timeStart = false;
 let movimientos = 0;
 
 
-var PUZZLE_DIFFICULTY = 5;
+var PUZZLE_DIFFICULTY = 7;
 let VIDEO = null;
 let CANVAS = null;
 let CONTEXT = null;
@@ -95,7 +95,7 @@ function main(img) {
     _img.src = img;
     CANVAS = document.getElementById("myCanvas");
     CONTEXT = CANVAS.getContext("2d");
-    
+
     _puzzleWidth = CANVAS.width;
     _puzzleHeight = CANVAS.height;
 
@@ -110,32 +110,48 @@ function dimen(dificulty) {
     //2,4,6,8,10
     if (dificulty > 2) {
         while (!band) {
-            if (dificulty % 2 === 0) {
-                if (((fil * col) % 2) === 0) {
-                    console.log("multiplo de 2");
-                    band = true;
+            if (((fil * col) % 2) === 0) {
+                console.log("multiplo de 2");
+                var rnd = getRandomInt(0, 2);
+                var filcol;
+                if (dificulty > 4 && dificulty < 9) {
+                    filcol = dificulty - 2;
                 } else {
-                    var rnd = getRandomInt(0, 2);
-                    if (rnd === 0) {
-                        fil--;
-                        if (((fil * col) % 2) === 0){
-                            band = true; 
-                        }
+                    if (dificulty > 9) {
+                        filcol = dificulty - 3;
                     } else {
-                        col--;
-                        if (((fil * col) % 2) === 0){
-                            band = true; 
-                        }
+                        filcol = dificulty - 1;
                     }
-                    console.log("Dimensiones fila: " + fil + " - columna: " + col) 
                 }
+                if (rnd === 0) {
+                    fil = filcol;
+                } else {
+                    col = filcol;
+                }
+                band = true;
             } else {
-                dificulty++;
+                var rnd = getRandomInt(0, 2);
+                var filcol;
+                if (dificulty > 3 && dificulty < 8) {
+                    filcol = dificulty - 2;
+                } else {
+                    if (dificulty > 8) {
+                        filcol = dificulty - 3;
+                    } else {
+                        filcol = dificulty - 1;
+                    }
+                }
+                if (rnd === 0) {
+                    fil = filcol;
+                } else {
+                    col = filcol;
+                }
+                band = true;
+                console.log("Dimensiones fila: " + fil + " - columna: " + col)
             }
         }
     }
     SIZE = { x: 0, y: 0, width: 0, height: 0, rows: fil, columns: col };
-
 }
 
 function getRandomInt(min, max) {
@@ -285,7 +301,7 @@ function initializePieces(rows, cols) {
     SIZE.columns = cols;
 
     PIECES = [];
-    
+
 
     if (timeStart === false) {
         timeStart = true;
