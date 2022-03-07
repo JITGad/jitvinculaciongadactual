@@ -47,7 +47,7 @@ let timeStart = false;
 let movimientos = 0;
 
 
-var PUZZLE_DIFFICULTY = 7;
+var PUZZLE_DIFFICULTY = 2;
 let VIDEO = null;
 let CANVAS = null;
 let CONTEXT = null;

@@ -8,7 +8,7 @@
 import { nextTick, onMounted, watch } from "vue";
 import { setPathFile, getRandomInt } from "../../util/Utilities";
 export default {
-  name: "RompecabezasV3",
+  name: "RompecabezasV4",
   props: {
     model: {
       type: Object,
@@ -38,7 +38,6 @@ export default {
     let SCALER = 0.6;
     let SIZE;
     let PIECES = [];
-    let PIECESDATA = [];
     let PIECESESTABELCIDAS = [];
     let SELECTED_PIECE = null;
     const PUZZLE_HOVER_TINT = "#1f003c";
@@ -77,20 +76,26 @@ export default {
     }
 
     function onImage() {
-      SIZE = {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        rows: PUZZLE_DIFFICULTY,
-        columns: PUZZLE_DIFFICULTY,
-      };
+      dimen(PUZZLE_DIFFICULTY);
 
       addEventListeners();
       handleResize();
       initializePieces(SIZE.rows, SIZE.columns);
       updateCanvas();
       randomizePieces();
+    }
+
+    function dimen(dificulty) {
+      var fil = dificulty;
+      var col = dificulty;
+      for (let index = 2; index < dificulty; index++) {
+        if ((dificulty * dificulty) % 2 === 0) {
+          fil--;
+        } else {
+          col--;
+        }
+      }
+      SIZE = { x: 0, y: 0, width: 0, height: 0, rows: fil, columns: col };
     }
 
     function addEventListeners() {
@@ -255,60 +260,14 @@ export default {
     function initializePieces(rows, cols) {
       SIZE.rows = rows;
       SIZE.columns = cols;
-
       PIECES = [];
-      PIECESDATA = [];
-
       if (props.timeStart === false) {
         context.emit("startTime");
       }
-      var xPos = 0;
-      var yPos = 0;
-      for (var i = 0; i < PUZZLE_DIFFICULTY * PUZZLE_DIFFICULTY; i++) {
-        var _piece = {};
-        _piece.x = xPos;
-        _piece.y = yPos;
-        _piece.width = SIZE.width / SIZE.columns;
-        _piece.height = SIZE.height / SIZE.rows;
-        _piece.combinada = false;
-        PIECESDATA.push(_piece);
-        xPos += _piece.width;
-        if (xPos >= SIZE.width) {
-          xPos = 0;
-          yPos += _piece.width;
+      for (let i = 0; i < SIZE.rows; i++) {
+        for (let j = 0; j < SIZE.columns; j++) {
+          PIECES.push(new Piece(i, j));
         }
-      }
-      for (let index = 0; index < PUZZLE_DIFFICULTY; index++) {
-        try {
-          let indexPiece = getRandomInt(0, PIECESDATA.length);
-          let piece1 = PIECESDATA[indexPiece];
-          let count = 0;
-          while (piece1.combinada === true || count < PIECESDATA.length) {
-            indexPiece = getRandomInt(0, PIECESDATA.length);
-            piece1 = PIECESDATA[indexPiece];
-            count++;
-          }
-          let XorY = getRandomInt(0, 2);
-          let piece2;
-          if (XorY === 0) {
-            //trataremos como x
-            piece2 = PIECESDATA[index + 1];
-            PIECESDATA.splice(index + 1, 1);
-          } else {
-            //trataremos como y
-            piece2 = PIECESDATA[index + PUZZLE_DIFFICULTY];
-            PIECESDATA.splice(index + PUZZLE_DIFFICULTY, 1);
-          }
-          piece1.width = piece1.width + piece2.width;
-          piece1.height = piece1.height + piece2.height;
-          piece1.combinada = true;
-          PIECESDATA[indexPiece] = piece1;
-        } catch (error) {}
-      }
-
-      for (let i = 0; i < PIECESDATA.length; i++) {
-        let piece1 = PIECESDATA[i];
-        PIECES.push(new Piece(piece1.width,piece1.height, piece1.x, piece1.y));
       }
     }
 
@@ -339,33 +298,31 @@ export default {
     }
 
     class Piece {
-      constructor(_width, _heigth, _x, _y) {
-        this.x = _x;
-        this.y = _y;
-        this.width = _width;
-        this.height = _heigth;
+      constructor(rowIndex, colIndex) {
+        this.rowIndex = rowIndex;
+        this.colIndex = colIndex;
+        this.x = SIZE.x + (SIZE.width * this.colIndex) / SIZE.columns;
+        this.y = SIZE.y + (SIZE.height * this.rowIndex) / SIZE.rows;
+        this.width = SIZE.width / SIZE.columns;
+        this.height = SIZE.height / SIZE.rows;
         this.xCorrect = this.x;
         this.yCorrect = this.y;
       }
-
       draw(context) {
         context.beginPath();
         context.drawImage(
           _img,
-          this.x,
-          this.y,
-          this.width,
-          this.height,
+          (this.colIndex * _img.width) / SIZE.columns,
+          (this.rowIndex * _img.height) / SIZE.rows,
+          _img.width / SIZE.columns,
+          _img.height / SIZE.rows,
           this.x,
           this.y,
           this.width,
           this.height
         );
-
         context.rect(this.x, this.y, this.width, this.height);
-
         context.stroke();
-
         context.strokeRect(
           this.xCorrect,
           this.yCorrect,

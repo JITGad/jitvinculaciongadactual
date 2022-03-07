@@ -17,7 +17,7 @@
             />
           </div>
           <div class="row pt-4">
-            <rompecabezas-v-2
+            <rompecabezas-v-4
               v-if="TipoJuego.shortname == 'rompecabezas'"
               :model="Juego"
               :level="Nivel"
@@ -254,7 +254,7 @@ import InformacionJuego from "../components/InformacionJuego.vue";
 import JuegosService from "../api/JuegosService";
 import TipoJuegosService from "../api/TipoJuegosService.js";
 import EstadisticasService from "../api/EstadisticasService.js";
-import RompecabezasV2 from "../components/juegos/RompecabezasV2.vue";
+import RompecabezasV4 from "../components/juegos/RompecabezasV4.vue";
 import Emparejar from "../components/juegos/Emparejar.vue";
 import Memoria from "../components/juegos/Memoria.vue";
 import Cuento from "../components/juegos/Cuentos.vue";
@@ -264,7 +264,7 @@ export default {
   name: "Jugar",
   components: {
     InformacionJuego,
-    RompecabezasV2,
+    RompecabezasV4,
     Emparejar,
     Memoria,
     Cuento,
