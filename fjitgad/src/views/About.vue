@@ -162,6 +162,28 @@
                 </div>
               </div>
             </div>
+            <div class="col">
+              <div class="card shadow-sm h-100">
+                <div class="card-body">
+                  <p class="card-title">Steven David Hurtado Becerra</p>
+                </div>
+                <div class="card-footer">
+                  <a
+                    class="px-2 text-truncate"
+                    href="https://www.facebook.com/stevendavid.hurtadobecerra"
+                    target="_blank"
+                    ><i class="fab fa-facebook"></i>facebook</a
+                  >
+                  <br />
+                  <a
+                    class="px-2 text-truncate"
+                    href="https://mail.google.com/"
+                    target="_blank"
+                    ><i class="fas fa-envelope"></i>steven.hurtado2015@uteq.edu.ec</a
+                  >
+                </div>
+              </div>
+            </div>
           </div>
           <br />
           <h1 class="fw-light text-center">Dirigido por:</h1>
@@ -225,6 +247,13 @@
                 </div>
               </div>
             </div>
+            <div class="col">
+              <div class="card shadow-sm h-100">
+                <div class="card-body">
+                  <p class="card-title">Washington Chiriboga (Decano)</p>
+                </div>
+              </div>
+            </div>
           </div>
           <br />
           <h1 class="fw-light text-center">Con colaboración de:</h1>
@@ -232,7 +261,7 @@
             <div class="col">
               <div class="card shadow-sm h-100">
                 <div class="card-body">
-                  <p class="card-title">Irvin Burbano</p>
+                  <p class="card-title">Irvin Burbano (GADPR La Esperanza)</p>
                 </div>
               </div>
             </div>
@@ -246,7 +275,7 @@
                   <p class="card-title">
                     <a
                       class="px-2 text-truncate"
-                      href="http://fyc.uteq.edu.ec/"
+                      href="http://fyc.uteq.edu.ec:8080/"
                       target="_blank"
                     >
                       fyc.uteq.edu.ec (en proceso)</a
