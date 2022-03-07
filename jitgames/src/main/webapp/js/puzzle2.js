@@ -107,7 +107,6 @@ function dimen(dificulty) {
     var fil = dificulty;
     var col = dificulty;
     var band = false;
-    //2,4,6,8,10
     if (dificulty > 2) {
         while (!band) {
             if (((fil * col) % 2) === 0) {
