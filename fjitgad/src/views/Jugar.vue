@@ -458,6 +458,13 @@ export default {
       if (Nivel.value >= Juego.level && JuegoGanado.value) {
         MensajesVictoria.value = mensajes[getRandomInt(0, mensajes.length)];
         ImagenesVictoria.value = getImagenVictoria();
+        GanadorJuego.volume = 0.2;
+        GanadorJuego.play();
+        reproducirTextoAVoz(
+          "Felicidades, has completado todo el juego",
+          IdiomaVoz
+        );
+        reproducirTextoAVoz("!!Bien hecho¡¡", IdiomaVoz);
         ModalBootstrapJuegoTerminado.show();
         return;
       }
