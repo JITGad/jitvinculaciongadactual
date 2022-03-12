@@ -59,19 +59,13 @@ public class UserController {
         return responseData;
     }
 
-    public ResponseData UserRegistration(UserModel request,
-            String realpath) throws Exception {
+    public ResponseData UserRegistration(UserModel request) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
         request.setImage(request.getImage() == null ? "" : request.getImage());
 
         if (udao.comprobeUniqueEmail(request)) {
-
-            ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "users", request.getNames(), realpath);
-            if (CreateFile.isState()) {
-                request.setImage(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-            }
 
             request.setPassword(encriptPassword(request.getPassword()));
             request.setCreationdate("NOW()");
@@ -90,8 +84,7 @@ public class UserController {
         return responseData;
     }
 
-    public ResponseData PutUser(UserModel request,
-            String realpath) throws Exception {
+    public ResponseData PutUser(UserModel request) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
         boolean passband = false;
@@ -99,11 +92,6 @@ public class UserController {
         request.setImage(request.getImage() == null ? "" : request.getImage());
 
         if (udao.comprobeUniqueEmailUpdate(request)) {
-
-            ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "users", request.getNames(), realpath);
-            if (CreateFile.isState()) {
-                request.setImage(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-            }
 
             if (request.getPassword().isEmpty()) {
                 request.setPassword(encriptPassword(request.getPassword()));

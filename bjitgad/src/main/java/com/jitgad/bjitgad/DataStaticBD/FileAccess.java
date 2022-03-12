@@ -44,21 +44,4 @@ public class FileAccess {
         }
         return true;
     }
-
-//    public boolean SaveImg(String base64, String rutaImagen) throws IOException {
-//        File file = new File(rutaImagen);
-//        return writeOutputStream(base64, file);
-//    }
-//
-//    private boolean writeOutputStream(String value, File outputStream) throws IOException {
-//        String[] partes = value.split(",");
-//        try {
-//            byte[] imgBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(partes[1]);
-//            BufferedImage bufImg = ImageIO.read(new ByteArrayInputStream(imgBytes));
-//            ImageIO.write(bufImg, "png", outputStream);
-//            return true;
-//        } catch (IOException e) {
-//            throw e;
-//        }
-//    }
 }

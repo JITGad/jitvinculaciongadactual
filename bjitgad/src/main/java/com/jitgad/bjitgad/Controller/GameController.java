@@ -3,7 +3,6 @@ package com.jitgad.bjitgad.Controller;
 import com.jitgad.bjitgad.DAO.GameDAO;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Models.GameModel;
-import com.jitgad.bjitgad.Utilities.ResponseCreateFile;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,11 +14,9 @@ import java.util.ArrayList;
 public class GameController {
 
     private final GameDAO gD;
-    private final FileController fc;
 
     public GameController() {
         gD = new GameDAO();
-        fc = new FileController();
     }
  
     public ArrayList<GameModel> selectGame() throws Exception {
@@ -42,17 +39,16 @@ public class GameController {
         return gD.selectgamesbyactivities(activityid);
     }
 
-    public ResponseData InsertGameC(GameModel request, 
-            String realpath) throws Exception {
+    public ResponseData InsertGameC(GameModel request) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
         
-        request = UpdateGameModel(request, realpath);
+        request = UpdateGameModel(request);
         
         request.setCreationdate("NOW()");
         request.setUpdatedate("NOW()");
 
-        if (gD.insertGame(request, realpath)) {
+        if (gD.insertGame(request)) {
 
             responseData.setMessage("Registros insertados correctamente");
             responseData.setFlag(true);
@@ -62,16 +58,15 @@ public class GameController {
         return responseData;
     }
 
-    public ResponseData UpdateGameC(GameModel request, 
-            String realpath) throws Exception  {
+    public ResponseData UpdateGameC(GameModel request) throws Exception  {
         
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
         
-        request = UpdateGameModel(request, realpath);
+        request = UpdateGameModel(request);
 
         request.setUpdatedate("NOW()");
 
-        if (gD.updateGame(request,realpath)) {
+        if (gD.updateGame(request)) {
             
             responseData.setMessage("Registros actualizados correctamente");
             responseData.setFlag(true);
@@ -97,13 +92,9 @@ public class GameController {
     }
     
     
-    private GameModel UpdateGameModel(GameModel request, String realpath) throws IOException{
+    private GameModel UpdateGameModel(GameModel request) throws IOException{
         request.setImage(request.getImage() == null ? "" : request.getImage());
 
-        ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "game", request.getName(), realpath);
-        if (CreateFile.isState()) {
-            request.setImage(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-        }   
         return request;
     }
 }

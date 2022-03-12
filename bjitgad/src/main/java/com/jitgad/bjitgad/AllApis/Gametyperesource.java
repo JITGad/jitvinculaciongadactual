@@ -23,7 +23,6 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -375,8 +374,7 @@ public class Gametyperesource {
 
                     if (validateToken.isStatus()) {
 
-                        responseData = gtC.InsertGametypeC(gametypeModel,
-                                request.getServletContext().getRealPath("/"));
+                        responseData = gtC.InsertGametypeC(gametypeModel);
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
@@ -438,8 +436,7 @@ public class Gametyperesource {
 
                     if (validateToken.isStatus()) {
 
-                        responseData = gtC.UpdateGametypeC(gametypeModel,
-                                request.getServletContext().getRealPath("/"));
+                        responseData = gtC.UpdateGametypeC(gametypeModel);
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }

@@ -11,7 +11,6 @@ import com.jitgad.bjitgad.Models.UserTokenRModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import com.jitgad.bjitgad.Utilities.ResponseDataPage;
 import com.jitgad.bjitgad.Utilities.ResponseValidateToken;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -33,8 +32,6 @@ import java.util.ArrayList;
 @Path("users")
 public class Userresource {
 
-    @Context
-    private HttpServletRequest request;
     private final UserController userC;
     private final AuthorizationController AuC;
     private UserModel userModel;
@@ -236,8 +233,7 @@ public class Userresource {
 
                     if (ValidateToken.isStatus()) {
 
-                        responseData = userC.UserRegistration(userModel,
-                                request.getServletContext().getRealPath("/"));
+                        responseData = userC.UserRegistration(userModel);
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
@@ -298,8 +294,7 @@ public class Userresource {
 
                     if (ValidateToken.isStatus()) {
 
-                        responseData = userC.PutUser(userModel,
-                                request.getServletContext().getRealPath("/"));
+                        responseData = userC.PutUser(userModel);
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }

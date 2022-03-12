@@ -40,7 +40,6 @@ public class FileController {
         if (format.isFormatValid()) {
             if (createfilebase(format.getRutaAbsoluta())) {
                 Path RutaGuardar = Paths.get(String.join(File.separator, new String[]{format.getRutaAbsoluta(), type}));
-                //COMPROBAR SI EXISTEN LAS CARPETAS DE IMAGENES O VIDEOS
                 if (Files.notExists(RutaGuardar)) {  //se comprueba si la ruta existe o no
                     Files.createDirectories(RutaGuardar);
                 }

@@ -2,7 +2,6 @@ package com.jitgad.bjitgad.DAO;
 
 import com.jitgad.bjitgad.DataStaticBD.ConectionPool;
 import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
-import com.jitgad.bjitgad.DataStaticBD.Configuration;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
@@ -30,38 +29,57 @@ public class ActivitiestypeDAO {
 
     public ArrayList<ActivitiestypeModel> selectActivitiestype() throws Exception {
 
-        sentence = "select DISTINCT tblactivitiestype.idactivitiestype, tblactivitiestype.name, tblactivitiestype.image, tblactivitiestype.creationdate, tblactivitiestype.updatedate, tblactivitiestype.state from tblactivitiestype inner join tblgame on tblactivitiestype.idactivitiestype = tblgame.idactivitiestype where tblactivitiestype.state = true order by tblactivitiestype.idactivitiestype";
+        sentence = "select DISTINCT "
+                + "tblactivitiestype.idactivitiestype, "
+                + "tblactivitiestype.name, "
+                + "tblactivitiestype.image, "
+                + "tblactivitiestype.creationdate, "
+                + "tblactivitiestype.updatedate, "
+                + "tblactivitiestype.state "
+                + "from tblactivitiestype "
+                + "inner join tblgame on tblactivitiestype.idactivitiestype = tblgame.idactivitiestype "
+                + "where tblactivitiestype.state = true "
+                + "order by tblactivitiestype.idactivitiestype";
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
         return datos;
     }
 
     public ArrayList<ClaveValorModel> selectactivitiestypeclavevalor() throws Exception {
 
-        sentence = "select idactivitiestype as id, name as name from tblactivitiestype order by idactivitiestype";
+        sentence = "select "
+                + "idactivitiestype as id, "
+                + "name as name "
+                + "from tblactivitiestype "
+                + "order by idactivitiestype";
         ArrayList<ClaveValorModel> datos = con.getObjectDB(sentence, ClaveValorModel.class, 1);
 
         return datos;
     }
 
     public ArrayList<ActivitiestypeModel> selectActivitiestypepage(int page) throws Exception {
-        sentence = "select * from tblactivitiestype order by idactivitiestype asc limit 10 offset " + (page * 10 - 10);
+        sentence = "select * "
+                + "from tblactivitiestype "
+                + "order by idactivitiestype asc limit 10 offset " + (page * 10 - 10);
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
-//        for (int i = 0; i < datos.size(); i++) {
-//            datos.get(i).setImage((Configuration.ipdominioservidor + datos.get(i).getImage()).replace('\\', '/'));
-//        }
         return datos;
     }
 
     public int CountingPageActivitiestype() throws SQLException {
-        sentence = String.format("select idactivitiestype as id,name as tema,image as urlimagen from tblactivitiestype");
+        sentence = String.format("select "
+                + "idactivitiestype as id, "
+                + "name as tema, "
+                + "image as urlimagen "
+                + "from tblactivitiestype");
         return ((con.returnRecord(sentence)).getRowCount());
     }
 
     public String selectactivitiesbyid(int idactivity) throws Exception {
-        sentence = "select * from tblactivitiestype where idactivitiestype =" + idactivity;
+        sentence = "select * "
+                + "from tblactivitiestype "
+                + "where idactivitiestype =" + idactivity;
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
         for (int i = 0; i < datos.size(); i++) {
-            datos.get(i).setImage((Configuration.IPDOMINIOSERVIDOR + datos.get(i).getImage()).replace('\\', '/'));
+            datos.get(i).setImage(datos.get(i).getImage().replace('\\', '/'));
         }
         if (datos.size() > 0) {
             return Methods.objectToJsonString(datos.get(0));
@@ -97,7 +115,6 @@ public class ActivitiestypeDAO {
                 + "</actividadestype>");
 
         String sentency = "Select * from updateActividadestype('" + structure + "')";
-        // System.out.println(structure);
         return con.modifyBD(sentency);
     }
 
@@ -108,7 +125,6 @@ public class ActivitiestypeDAO {
                 + "</actividadestype>");
 
         String sentency = "Select * from deleteActividadestype('" + structure + "')";
-        // System.out.println(structure);
         return con.modifyBD(sentency);
     }
 

@@ -34,8 +34,18 @@ public class GameDAO {
     }
 
     public ArrayList<GameModel> selectGame() throws Exception {
-        sentence = "select game.idgame,game.idactivitiestype,actype.name as nameactivities,game.idgametype,game.name,game.creationdate,game.updatedate,game.state,game.level,game.image\n"
-                + "from tblgame as game inner join tblactivitiestype as actype on actype.idactivitiestype = game.idactivitiestype";
+        sentence = "select "
+                + "game.idgame, "
+                + "game.idactivitiestype, "
+                + "actype.name as nameactivities, "
+                + "game.idgametype,game.name, "
+                + "game.creationdate, "
+                + "game.updatedate, "
+                + "game.state, "
+                + "game.level, "
+                + "game.image \n"
+                + "from tblgame as game "
+                + "inner join tblactivitiestype as actype on actype.idactivitiestype = game.idactivitiestype";
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
         return datos;
     }
@@ -83,25 +93,29 @@ public class GameDAO {
         ArrayList<GameModel> datos = con.getObjectDB(sentence, GameModel.class, 1);
 
         GameModel JuegoSeleccionado = datos.get(0);
-
-//        sentence = "select tblgameimage.idgameimage, tblgameimage.idgame, tblgameimage.idcolortype,tblcolortype.name as color, tblcolortype.html, tblgameimage.image,\n"
-//                + "tblgameimage.paragraph, tblgameimage.audio_parag, tblgameimage.video_parag, tblgameimage.creationdate, tblgameimage.updatedate, tblgameimage.state,tblgameimage.imagefigure\n"
-//                + "from tblgameimage inner join tblcolortype on tblcolortype.idcolortype = tblgameimage.idcolortype where idgame=" + JuegoSeleccionado.getIdgame() + "\n"
-//                + "union\n"
-//                + "select tblgameimage.idgameimage, tblgameimage.idgame, tblgameimage.idcolortype,null as color, null as html, tblgameimage.image,\n"
-//                + "tblgameimage.paragraph, tblgameimage.audio_parag, tblgameimage.video_parag, tblgameimage.creationdate, tblgameimage.updatedate, tblgameimage.state,tblgameimage.imagefigure\n"
-//                + "from tblgameimage where idgame =" + JuegoSeleccionado.getIdgame() + " and tblgameimage.idcolortype = 0";
-
-        sentence = "select gi.idgameimage, gi.idgame, gi.idcolortype,ct.name as color, ct.html, gi.image,gi.paragraph, \n"
-                + " gi.audio_parag, gi.video_parag, gi.creationdate, gi.updatedate, gi.state, gi.imagefigure, gi.secuence \n"
-                + " from tblgameimage gi left join tblcolortype ct on gi.idcolortype=ct.idcolortype \n"
-                + " where gi.idgame=" + JuegoSeleccionado.getIdgame() + " order by gi.secuence asc";
+        
+        sentence = "select "
+                + "gi.idgameimage, "
+                + "gi.idgame, "
+                + "gi.idcolortype, "
+                + "ct.name as color, "
+                + "ct.html, "
+                + "gi.image, "
+                + "gi.paragraph, \n"
+                + "gi.audio_parag, "
+                + "gi.video_parag, "
+                + "gi.creationdate, "
+                + "gi.updatedate, "
+                + "gi.state, "
+                + "gi.imagefigure, "
+                + "gi.secuence \n"
+                + "from tblgameimage gi "
+                + "left join tblcolortype ct on gi.idcolortype=ct.idcolortype \n"
+                + "where gi.idgame=" + JuegoSeleccionado.getIdgame() + " "
+                + "order by gi.secuence asc";
 
         JuegoSeleccionado.setDetalles(con.getObjectDB(sentence, GameimageModel.class, 1));
 
-//        for (int i = 0; i < JuegoSeleccionado.getDetalles().size(); i++) {
-//            JuegoSeleccionado.getDetalles().get(i).setSecuence(i);
-//        }
         return Methods.objectToJsonString(JuegoSeleccionado);
     }
 
@@ -122,7 +136,7 @@ public class GameDAO {
         return datos;
     }
 
-    public boolean insertGame(GameModel gameModel, String realpath) throws SQLException, Exception {
+    public boolean insertGame(GameModel gameModel) throws SQLException, Exception {
         String structure = String.format(
                 "<game>"
                 + "<idactivitiestype>" + gameModel.getIdactivitiestype() + "</idactivitiestype>"
@@ -150,7 +164,7 @@ public class GameDAO {
                     GameimageModel object = gameModel.getDetalles().get(i);
                     object.setIdgame(id);
                     object.setSecuence(i);
-                    st.execute(giC.InsertGameimageCF(object, realpath));
+                    st.execute(giC.InsertGameimageCF(object));
                 }
             }
             conex.commit();
@@ -163,7 +177,7 @@ public class GameDAO {
         }
     }
 
-    public boolean updateGame(GameModel gameModel, String realpath)
+    public boolean updateGame(GameModel gameModel)
             throws SQLException, Exception {
         String structure = String.format(
                 "<game>"
@@ -216,12 +230,12 @@ public class GameDAO {
                     object.setSecuence(i);
 
                     if (gim == null) {
-                        String dataInsert = giC.InsertGameimageCF(object, realpath);
+                        String dataInsert = giC.InsertGameimageCF(object);
                         st.execute(dataInsert);
                         continue;
                     }
 
-                    String dataUpdate = giC.UpdateGameimageC(object, realpath);
+                    String dataUpdate = giC.UpdateGameimageC(object);
                     st.execute(dataUpdate);
                 }
             }

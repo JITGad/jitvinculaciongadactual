@@ -3,7 +3,6 @@ package com.jitgad.bjitgad.Controller;
 import com.jitgad.bjitgad.DAO.GametypeDAO;
 import com.jitgad.bjitgad.Models.ClaveValorGameModel;
 import com.jitgad.bjitgad.Models.GametypeModel;
-import com.jitgad.bjitgad.Utilities.ResponseCreateFile;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,11 +14,9 @@ import java.util.ArrayList;
 public class GametypeController {
 
     private final GametypeDAO gtD;
-    private final FileController fc;
 
     public GametypeController() {
         gtD = new GametypeDAO();
-        fc = new FileController();
     }
 
     public ArrayList<GametypeModel> selectGametypepage(int page) throws Exception{
@@ -44,12 +41,11 @@ public class GametypeController {
         return gtD.selectgametypecv();
     }
 
-    public ResponseData InsertGametypeC(GametypeModel request,
-            String realpath) throws Exception {
+    public ResponseData InsertGametypeC(GametypeModel request) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
-        request = UpdateGameTypeModel(request, realpath);
+        request = UpdateGameTypeModel(request);
        
         request.setShortname(request.getShortname()
                 .trim()
@@ -69,12 +65,11 @@ public class GametypeController {
         return responseData;
     }
 
-    public ResponseData UpdateGametypeC(GametypeModel request,
-            String realpath) throws Exception {
+    public ResponseData UpdateGametypeC(GametypeModel request) throws Exception {
 
         ResponseData responseData = new ResponseData("Ocurrió un error", false);
 
-        request = UpdateGameTypeModel(request, realpath);
+        request = UpdateGameTypeModel(request);
         
         request.setUpdatedate("NOW()");
 
@@ -104,26 +99,13 @@ public class GametypeController {
         return responseData;
     }
     
-    private GametypeModel UpdateGameTypeModel(GametypeModel request, String realpath) throws IOException{
+    private GametypeModel UpdateGameTypeModel(GametypeModel request) throws IOException{
         request.setImage(request.getImage() == null ? "" : request.getImage());
+        
         request.setVideo_instructions(request.getVideo_instructions() == null
                 ? "" : request.getVideo_instructions());
+        
         request.setAudio_instructions(request.getAudio_instructions() == null ? "" : request.getAudio_instructions());
-
-        ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "gametype", request.getName(), realpath);
-        if (CreateFile.isState()) {
-            request.setImage(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-        }
-
-        CreateFile = fc.createfile(request.getVideo_instructions(), "gametype", request.getName(), realpath);
-        if (CreateFile.isState()) {
-            request.setVideo_instructions(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-        }
-
-        CreateFile = fc.createfile(request.getAudio_instructions(), "gametype", request.getName(), realpath);
-        if (CreateFile.isState()) {
-            request.setAudio_instructions(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-        }
         
         return request;
     }

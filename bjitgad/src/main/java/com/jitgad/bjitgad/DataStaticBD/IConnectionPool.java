@@ -2,7 +2,6 @@ package com.jitgad.bjitgad.DataStaticBD;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 import org.apache.tomcat.jdbc.pool.DataSource;
 
 /**

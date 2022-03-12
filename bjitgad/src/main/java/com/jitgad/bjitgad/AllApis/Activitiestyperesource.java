@@ -10,7 +10,6 @@ import com.jitgad.bjitgad.Models.ClaveValorModel;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import com.jitgad.bjitgad.Utilities.ResponseDataPage;
 import com.jitgad.bjitgad.Utilities.ResponseValidateToken;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -32,8 +31,6 @@ import java.util.ArrayList;
 @Path("activitiestype")
 public class Activitiestyperesource {
 
-    @Context
-    private HttpServletRequest request;
     private final ActivitiestypeController atC;
     private final AuthorizationController AuC;
     private ActivitiestypeModel activitiestypeModel;
@@ -85,20 +82,7 @@ public class Activitiestyperesource {
         }
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
-
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @Path("/getruta")
-//    public Response getruta() {
-//        ResponseData ResponseData = new ResponseData("Ocurrió un error", false);
-//        if (Configuration.DEBUG) {
-//            System.out.println("Ingresando a getruta ");
-//        }
-//        ResponseData.setMessage("Información encontrada");
-//        ResponseData.setData(request.getServletContext().getRealPath("/"));
-//        ResponseData.setFlag(true);
-//        return Response.ok(Methods.objectToJsonString(ResponseData)).build();
-//    }
+    
     // recibe token - administración
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -347,8 +331,7 @@ public class Activitiestyperesource {
 
                     if (validateToken.isStatus()) {
 
-                        responseData = atC.InsertActivitiesTypeC(activitiestypeModel,
-                                request.getServletContext().getRealPath("/"));
+                        responseData = atC.InsertActivitiesTypeC(activitiestypeModel);
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
@@ -403,8 +386,7 @@ public class Activitiestyperesource {
 
                     if (validateToken.isStatus()) {
 
-                        responseData = atC.UpdateActivitiesTypeC(activitiestypeModel,
-                                request.getServletContext().getRealPath("/"));
+                        responseData = atC.UpdateActivitiesTypeC(activitiestypeModel);
 
                         return Response.ok(Methods.objectToJsonString(responseData)).build();
                     }
@@ -492,36 +474,4 @@ public class Activitiestyperesource {
         }
         return Response.ok(Methods.objectToJsonString(responseData)).build();
     }
-
-    /*
-     add activities
-     */
-//    @Produces(MediaType.APPLICATION_JSON)
-//    @POST
-//    @Path("/postActivitiesimage")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response postActivitiesimage(String data) {
-//        String responseJson = "{\"status\":\"poken:" + data + "\"}";
-//        System.out.println("Ingresando postActivitiesimage...");
-//        JsonObject Jso = Methods.stringToJSON(data);
-//        String contextx = request.getServletContext().getRealPath("/");
-//        try {
-//            if (Jso.size() > 0) {
-//                String name = Methods.JsonToString(Jso.getAsJsonObject(), "name", "");
-//                String base64 = Methods.JsonToString(Jso.getAsJsonObject(), "base64", "");
-//                FileController fc = new FileController();
-//                Object[] CreateFile = fc.createfile(base64, "Activities", name, contextx);
-//                responseJson = Rapi.Response("Imagen creada con éxito", Boolean.parseBoolean(CreateFile[0].toString()), String.valueOf(CreateFile[1].toString() + "/" + name + "/" + CreateFile[2].toString()));
-//
-//            } else {
-//                responseJson = Rapi.Response("Información no encontrada", false, data);
-//            }
-//        } catch (Exception e) {
-//            responseJson = Rapi.Response(e.getMessage(), false, data);
-//        }
-//        return Response.ok(responseJson)
-//                .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
-//                .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-with")
-//                .build();
-//    }
 }

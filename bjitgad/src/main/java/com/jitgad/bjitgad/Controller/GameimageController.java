@@ -2,8 +2,6 @@ package com.jitgad.bjitgad.Controller;
 
 import com.jitgad.bjitgad.DAO.GameimageDAO;
 import com.jitgad.bjitgad.Models.GameimageModel;
-import com.jitgad.bjitgad.Utilities.ResponseCreateFile;
-import com.jitgad.bjitgad.Utilities.UniqueName;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -14,13 +12,9 @@ import java.util.ArrayList;
 public class GameimageController {
 
     private final GameimageDAO giD;
-    private final FileController fc;
-    private final UniqueName un;
 
     public GameimageController() {
         giD = new GameimageDAO();
-        fc = new FileController();
-        un = new UniqueName();
     }
 
     public String selectGameimage() throws Exception {
@@ -35,10 +29,9 @@ public class GameimageController {
         return giD.last_id();
     }
 
-    public String InsertGameimageCF(GameimageModel request,
-            String realpath) throws Exception {
+    public String InsertGameimageCF(GameimageModel request) throws Exception {
 
-        request = UpdateFilesGameImage(request, realpath);
+        request = UpdateFilesGameImage(request);
 
         request.setCreationdate("NOW()");
         request.setUpdatedate("NOW()");
@@ -46,10 +39,9 @@ public class GameimageController {
         return giD.insertGameimagef(request);
     }
 
-    public String UpdateGameimageC(GameimageModel request,
-            String realpath) throws Exception {
+    public String UpdateGameimageC(GameimageModel request) throws Exception {
 
-        request = UpdateFilesGameImage(request, realpath);
+        request = UpdateFilesGameImage(request);
 
         request.setUpdatedate("NOW()");
 
@@ -60,7 +52,7 @@ public class GameimageController {
         return giD.deleteGameimagef(request);
     }
 
-    private GameimageModel UpdateFilesGameImage(GameimageModel request, String realpath) throws IOException {
+    private GameimageModel UpdateFilesGameImage(GameimageModel request) throws IOException {
 
         request.setImage(request.getImage() == null ? "" : request.getImage());
 
@@ -69,26 +61,6 @@ public class GameimageController {
         request.setAudio_parag(request.getAudio_parag() == null ? "" : request.getAudio_parag());
 
         request.setImagefigure(request.getImagefigure() == null ? "" : request.getImagefigure());
-
-        ResponseCreateFile CreateFile = fc.createfile(request.getImage(), "gameimage", un.nunique(), realpath);
-        if (CreateFile.isState()) {
-            request.setImage(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-        }
-
-        CreateFile = fc.createfile(request.getImagefigure(), "gameimage", un.nunique(), realpath);
-        if (CreateFile.isState()) {
-            request.setImagefigure(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-        }
-
-        CreateFile = fc.createfile(request.getVideo_parag(), "gameimage", un.nunique(), realpath);
-        if (CreateFile.isState()) {
-            request.setVideo_parag(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-        }
-
-        CreateFile = fc.createfile(request.getAudio_parag(), "gameimage", un.nunique(), realpath);
-        if (CreateFile.isState()) {
-            request.setAudio_parag(String.join("/", new String[]{CreateFile.getRutaRelativa(), CreateFile.getNombreArchivo()}));
-        }
 
         return request;
     }
