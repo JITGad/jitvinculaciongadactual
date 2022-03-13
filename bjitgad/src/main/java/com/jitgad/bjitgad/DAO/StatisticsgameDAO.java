@@ -22,7 +22,9 @@ public class StatisticsgameDAO {
     }
 
     public ArrayList<StatisticsgameModel> selectStatisticsgamepage(int page) throws Exception {
-        sentence = "select * from tblstatisticsgame order by idstatisticsgame asc limit 10 offset " + (page * 10 - 10);
+        sentence = "select * "
+                + "from tblstatisticsgame "
+                + "order by idstatisticsgame asc limit 10 offset " + (page * 10 - 10);
         ArrayList<StatisticsgameModel> datos = con.getObjectDB(sentence, StatisticsgameModel.class, 1);
 
         return datos;

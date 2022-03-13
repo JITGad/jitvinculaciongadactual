@@ -11,7 +11,6 @@ import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.UserModel;
 import com.jitgad.bjitgad.Models.UserRequestModel;
 import com.jitgad.bjitgad.Models.UserTokenRModel;
-import com.jitgad.bjitgad.Utilities.ResponseCreateFile;
 import com.jitgad.bjitgad.Utilities.ResponseData;
 import com.jitgad.bjitgad.Utilities.ResponseValidateToken;
 import io.jsonwebtoken.Jwts;
@@ -28,11 +27,9 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class UserController {
 
     private final UserDAO udao;
-    private final FileController fc;
 
     public UserController() {
         udao = new UserDAO();
-        fc = new FileController();
     }
 
     /**

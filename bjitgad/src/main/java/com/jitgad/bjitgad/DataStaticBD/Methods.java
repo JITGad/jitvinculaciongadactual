@@ -51,9 +51,6 @@ public final class Methods {
         return response;
     }
 
-//    public String getJsonResponse(Object val1, Object val2){
-//        
-//    }
     /**
      * This method is for the security application.
      *
@@ -110,7 +107,6 @@ public final class Methods {
     public static JsonElement stringToJSON2(String json) {
         try {
             JsonElement parser = new JsonPrimitive(json);
-            System.out.println(parser.getAsString());
             //JsonObject Jso = new JsonObject();
             //Jso =  (JsonObject) parser.p(json);
             return parser;

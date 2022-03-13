@@ -36,7 +36,6 @@ public class DetailsimageDAO {
                 + "</detailsimag>");
 
         String sentency = "Select * from insertdetailsimag('" + structure + "')";
-        // System.out.println(structure);
         return con.modifyBD(sentency);
     }
 

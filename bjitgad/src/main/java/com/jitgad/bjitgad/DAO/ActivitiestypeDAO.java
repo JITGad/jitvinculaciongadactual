@@ -5,8 +5,6 @@ import com.jitgad.bjitgad.DataStaticBD.ConectionPoolDataSource;
 import com.jitgad.bjitgad.DataStaticBD.Methods;
 import com.jitgad.bjitgad.Models.ActivitiestypeModel;
 import com.jitgad.bjitgad.Models.ClaveValorModel;
-import com.jitgad.bjitgad.Utilities.InetAddressUtil;
-import com.jitgad.bjitgad.Utilities.UFile;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -16,20 +14,15 @@ import java.util.ArrayList;
  */
 public class ActivitiestypeDAO {
 
-    ConectionPool con;
-    String sentence;
-    UFile uf;
-    InetAddressUtil ipreal;
+    private final ConectionPool con;
 
     public ActivitiestypeDAO() {
         con = ConectionPoolDataSource.getConnection();
-        uf = new UFile();
-        ipreal = new InetAddressUtil();
     }
 
     public ArrayList<ActivitiestypeModel> selectActivitiestype() throws Exception {
 
-        sentence = "select DISTINCT "
+        String sentence = "select DISTINCT "
                 + "tblactivitiestype.idactivitiestype, "
                 + "tblactivitiestype.name, "
                 + "tblactivitiestype.image, "
@@ -45,8 +38,7 @@ public class ActivitiestypeDAO {
     }
 
     public ArrayList<ClaveValorModel> selectactivitiestypeclavevalor() throws Exception {
-
-        sentence = "select "
+        String sentence = "select "
                 + "idactivitiestype as id, "
                 + "name as name "
                 + "from tblactivitiestype "
@@ -57,7 +49,7 @@ public class ActivitiestypeDAO {
     }
 
     public ArrayList<ActivitiestypeModel> selectActivitiestypepage(int page) throws Exception {
-        sentence = "select * "
+        String sentence = "select * "
                 + "from tblactivitiestype "
                 + "order by idactivitiestype asc limit 10 offset " + (page * 10 - 10);
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
@@ -65,7 +57,7 @@ public class ActivitiestypeDAO {
     }
 
     public int CountingPageActivitiestype() throws SQLException {
-        sentence = String.format("select "
+        String sentence = String.format("select "
                 + "idactivitiestype as id, "
                 + "name as tema, "
                 + "image as urlimagen "
@@ -74,19 +66,16 @@ public class ActivitiestypeDAO {
     }
 
     public String selectactivitiesbyid(int idactivity) throws Exception {
-        sentence = "select * "
+        String sentence = "select * "
                 + "from tblactivitiestype "
                 + "where idactivitiestype =" + idactivity;
         ArrayList<ActivitiestypeModel> datos = con.getObjectDB(sentence, ActivitiestypeModel.class, 1);
-        for (int i = 0; i < datos.size(); i++) {
-            datos.get(i).setImage(datos.get(i).getImage().replace('\\', '/'));
-        }
+        
         if (datos.size() > 0) {
             return Methods.objectToJsonString(datos.get(0));
         } else {
             return "{}";
         }
-
     }
 
     public boolean insertActividadestype(ActivitiestypeModel activitiestypemodel) throws SQLException {
@@ -100,7 +89,6 @@ public class ActivitiestypeDAO {
                 + "</actividadestype>");
 
         String sentency = "Select * from insertActividadestype('" + structure + "')";
-        // System.out.println(structure);
         return con.modifyBD(sentency);
     }
 

@@ -74,7 +74,6 @@ public class ColortypeDAO {
                 + "</colortype>");
         
         String sentency = "Select * from updatecolortype('" + structure + "')";
-        System.out.println(structure);
         return con.modifyBD(sentency);
     }
     

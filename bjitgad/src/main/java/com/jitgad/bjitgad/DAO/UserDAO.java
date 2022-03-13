@@ -83,17 +83,11 @@ public class UserDAO {
 
     public boolean comprobeUniqueEmail(UserModel usr) throws SQLException {
         String sentency = String.format("select * from tbluser where email='%s';", usr.getEmail());
-        System.out.println(sentency);
-        System.out.println("");
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
 
     public boolean comprobeUniqueEmailUpdate(UserModel usr) throws SQLException {
-        System.out.println(usr.getEmail().trim());
-        System.out.println(usr.getIduser());
         String sentency = String.format("select * from tbluser where email='%s' and iduser != '%s';", usr.getEmail(), usr.getIduser());
-        System.out.println(sentency);
-        System.out.println("");
         return (((con.returnRecord(sentency)).getRowCount() <= 0));
     }
 
@@ -118,7 +112,6 @@ public class UserDAO {
                 + "</user>");
 
         String sentency = "Select * from insertuser('" + structure + "')";
-        System.out.println(structure);
         return con.modifyBD(sentency);
     }
 
