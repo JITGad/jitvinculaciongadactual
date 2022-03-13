@@ -141,23 +141,24 @@ export default {
     async function startGame() {
       await nextTick();
       deckCards.clear();
+      const InitialCards = [];
       var brandsShorted = shuffle(props.model.detalles);
 
-      for (let index = 0; index < brandsShorted.length; index++) {
+      for (let index = 0; index <= props.level ; index++) {
         const element = brandsShorted[index];
         const newcard = setPathFile(element.image);
-        deckCards.push(newcard);
-        deckCards.push(newcard);
-        if (deckCards.length >= props.level * 2) {
-          break;
-        }
+        InitialCards.push(newcard);
       }
 
-      while (deckCards.length <= props.level * 2) {
+      while (InitialCards.length <= props.level) {
         const rnd = getRandomInt(0, brandsShorted.length);
         const newcard = setPathFile(brandsShorted[rnd].image);
-        deckCards.push(newcard);
-        deckCards.push(newcard);
+        InitialCards.push(newcard);
+      }
+
+      for (const card of InitialCards) {
+        deckCards.push(card);
+        deckCards.push(card);
       }
       
       if (props.timeStart === false) {
