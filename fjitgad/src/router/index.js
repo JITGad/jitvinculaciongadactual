@@ -158,6 +158,11 @@ const routes = [
     name: "NivelesJuego",
     component: () => import('../views/NivelesJuego.vue')
   },
+  {
+    path: '/instrucciones',
+    name: "Instrucciones",
+    component: () => import('../views/Instrucciones.vue')
+  },
   // otherwise redirect to home
   { path: "/:catchAll(.*)", redirect: '/' }
 ]

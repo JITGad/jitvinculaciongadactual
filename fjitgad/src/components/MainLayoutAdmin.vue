@@ -6,6 +6,9 @@
     <div class="dashboard-app">
       <header class="dashboard-toolbar">
         <my-button-toggle-menu />
+        <router-link class="nav-link" style="color: black" to="/instrucciones">
+          Instrucciones de uso
+        </router-link>
         <div class="ms-auto" style="display: flex">
           <span class="navbar-text">{{ usuario }}</span>
           <router-link class="nav-link" style="color: black" to="/logout">
@@ -17,7 +20,7 @@
         <slot></slot>
       </div>
     </div>
-    <my-footer/>
+    <my-footer />
   </div>
 </template>
 
@@ -36,7 +39,9 @@ export default {
     document.body.style.background = "";
     const store = useStore();
     const usuario = computed(() => {
-      return store.state.auth.user.names + " " + store.state.auth.user.last_name;
+      return (
+        store.state.auth.user.names + " " + store.state.auth.user.last_name
+      );
     });
     return {
       usuario,
