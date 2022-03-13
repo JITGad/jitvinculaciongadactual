@@ -1,107 +1,109 @@
 <template>
   <main-layout-juego :backgroundBlanc="true">
-    <div class="dashboard-juego">
+    <div class="mx-3 mt-5">
       <my-loading v-if="Loading" />
-      <div v-else class="container" style="margin-top: 10vh">
-        <encabezado-juego :routes="Routes" />
-        <div class="page-current-juego">
-          <div class="row">
-            <informacion-juego
-              :minutos="minutes"
-              :movimientos="movimientos"
-              :puntaje="puntaje"
-              :segundos="seconds"
-              :titulo="Juego.name"
-              :nivel="Nivel"
-              :tipo="TipoJuego.shortname"
-            />
+      <div v-else class="card">
+        <div class="card-body">
+          <encabezado-juego :routes="Routes" />
+          <div class="page-current-juego">
+            <div class="row">
+              <informacion-juego
+                :minutos="minutes"
+                :movimientos="movimientos"
+                :puntaje="puntaje"
+                :segundos="seconds"
+                :titulo="Juego.name"
+                :nivel="Nivel"
+                :tipo="TipoJuego.shortname"
+              />
+            </div>
+            <div class="row pt-4">
+              <rompecabezas-v-4
+                v-if="TipoJuego.shortname == 'rompecabezas'"
+                :model="Juego"
+                :level="Nivel"
+                :timeStart="timeStart"
+                @startTime="timer"
+                @movesCounter="movesCounter"
+                @displayModal="displayModalVictoria"
+                @stopTime="stopTime"
+                @resetEverything="resetEverything"
+                @movValid="NuevoPuntaje"
+              />
+              <memoria
+                v-if="TipoJuego.shortname == 'memoria'"
+                :model="Juego"
+                :level="Nivel"
+                :timeStart="timeStart"
+                @startTime="timer"
+                @movesCounter="movesCounter"
+                @displayModal="displayModalVictoria"
+                @stopTime="stopTime"
+                @resetEverything="resetEverything"
+                @movValid="NuevoPuntaje"
+              />
+              <emparejar
+                v-if="TipoJuego.shortname == 'emparejar'"
+                :model="Juego"
+                :level="Nivel"
+                :timeStart="timeStart"
+                @startTime="timer"
+                @movesCounter="movesCounter"
+                @displayModal="displayModalVictoria"
+                @stopTime="stopTime"
+                @resetEverything="resetEverything"
+                @movValid="NuevoPuntaje"
+              />
+              <cuento
+                v-if="TipoJuego.shortname == 'cuento'"
+                :model="Juego"
+                :level="Nivel"
+                :timeStart="timeStart"
+                :movimientos="movimientos"
+                @startTime="timer"
+                @movesCounter="movesCounter"
+                @displayModal="displayModalVictoria"
+                @stopTime="stopTime"
+                @resetEverything="resetEverything"
+                @movValid="NuevoPuntaje"
+              />
+            </div>
           </div>
           <div class="row pt-4">
-            <rompecabezas-v-4
-              v-if="TipoJuego.shortname == 'rompecabezas'"
-              :model="Juego"
-              :level="Nivel"
-              :timeStart="timeStart"
-              @startTime="timer"
-              @movesCounter="movesCounter"
-              @displayModal="displayModalVictoria"
-              @stopTime="stopTime"
-              @resetEverything="resetEverything"
-              @movValid="NuevoPuntaje"
-            />
-            <memoria
-              v-if="TipoJuego.shortname == 'memoria'"
-              :model="Juego"
-              :level="Nivel"
-              :timeStart="timeStart"
-              @startTime="timer"
-              @movesCounter="movesCounter"
-              @displayModal="displayModalVictoria"
-              @stopTime="stopTime"
-              @resetEverything="resetEverything"
-              @movValid="NuevoPuntaje"
-            />
-            <emparejar
-              v-if="TipoJuego.shortname == 'emparejar'"
-              :model="Juego"
-              :level="Nivel"
-              :timeStart="timeStart"
-              @startTime="timer"
-              @movesCounter="movesCounter"
-              @displayModal="displayModalVictoria"
-              @stopTime="stopTime"
-              @resetEverything="resetEverything"
-              @movValid="NuevoPuntaje"
-            />
-            <cuento
-              v-if="TipoJuego.shortname == 'cuento'"
-              :model="Juego"
-              :level="Nivel"
-              :timeStart="timeStart"
-              :movimientos="movimientos"
-              @startTime="timer"
-              @movesCounter="movesCounter"
-              @displayModal="displayModalVictoria"
-              @stopTime="stopTime"
-              @resetEverything="resetEverything"
-              @movValid="NuevoPuntaje"
-            />
-          </div>
-        </div>
-        <div class="row pt-4">
-          <div class="btn-group" role="group">
-            <button
-              @click="BeforeAction"
-              type="button"
-              class="btn btn-outline-primary"
-            >
-              <i class="fas fa-arrow-left"></i>
-              Anterior
-            </button>
-            <button
-              @click="displayModalInstrucciones"
-              type="button"
-              class="btn btn-outline-primary"
-            >
-              Instrucciones
-              <i class="fas fa-align-justify"></i>
-            </button>
-            <button
-              @click="resetEverything"
-              type="button"
-              class="btn btn-outline-primary"
-            >
-              Reiniciar
-              <i class="fas fa-play"></i>
-            </button>
-            <button
-              @click="AfterAction"
-              type="button"
-              class="btn btn-outline-primary"
-            >
-              Siguiente
-              <i class="fas fa-arrow-right"></i>
-            </button>
+            <div class="btn-group" role="group">
+              <button
+                @click="BeforeAction"
+                type="button"
+                class="btn btn-outline-primary"
+              >
+                <i class="fas fa-arrow-left"></i>
+                Anterior
+              </button>
+              <button
+                @click="displayModalInstrucciones"
+                type="button"
+                class="btn btn-outline-primary"
+              >
+                Instrucciones
+                <i class="fas fa-align-justify"></i>
+              </button>
+              <button
+                @click="resetEverything"
+                type="button"
+                class="btn btn-outline-primary"
+              >
+                Reiniciar
+                <i class="fas fa-play"></i>
+              </button>
+              <button
+                @click="AfterAction"
+                type="button"
+                class="btn btn-outline-primary"
+              >
+                Siguiente
+                <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>

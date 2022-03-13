@@ -233,7 +233,7 @@ export default {
   height: 100%;
   margin-bottom: 6em;
   padding: 0.5em;
-  width: 35em;
+  width: 100%;
 }
 
 .deck,
@@ -295,7 +295,6 @@ export default {
 @media screen and (min-width: 550px) {
   .deck {
     padding: 2em;
-    width: 50em;
   }
 
   .card-memoria {
@@ -315,9 +314,6 @@ export default {
         Escritorio - responsive
         ------------------------------------*/
 @media screen and (min-width: 800px) {
-  .deck {
-    width: 70em;
-  }
 
   .card-memoria {
     height: 15em;
