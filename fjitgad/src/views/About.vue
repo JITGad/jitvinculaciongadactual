@@ -261,6 +261,13 @@
             <div class="col">
               <div class="card shadow-sm h-100">
                 <div class="card-body">
+                  <p class="card-title">Evelina Sevillano (GADPR La Esperanza)</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card shadow-sm h-100">
+                <div class="card-body">
                   <p class="card-title">Irvin Burbano (GADPR La Esperanza)</p>
                 </div>
               </div>
@@ -278,7 +285,7 @@
                       href="http://fyc.uteq.edu.ec:8080/"
                       target="_blank"
                     >
-                      fyc.uteq.edu.ec (en proceso)</a
+                      fyc.uteq.edu.ec</a
                     >
                   </p>
                 </div>
