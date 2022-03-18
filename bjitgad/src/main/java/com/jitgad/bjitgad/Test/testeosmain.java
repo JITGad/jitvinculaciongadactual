@@ -24,9 +24,8 @@ public class testeosmain {
         ConectionPoolDataSource.getConnection().testConection();
 //        UniqueName un = new UniqueName();
 //        System.out.println(un.nunique());
-         GameDAO gd = new GameDAO();
-         System.out.println(gd.CountingPageGame());
-         
+//         GameDAO gd = new GameDAO();
+//         System.out.println(gd.CountingPageGame());
     }
 
     public static void prueba1() {
