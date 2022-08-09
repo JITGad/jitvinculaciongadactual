@@ -79,7 +79,7 @@
                 <div class="card-footer">
                   <a
                     class="px-2 text-truncate"
-                    href="https://www.facebook.com/jorgefarut.molinanoboa"
+                    href="https://www.facebook.com/faroukmn97/"
                     target="_blank"
                     ><i class="fab fa-facebook"></i>facebook</a
                   >

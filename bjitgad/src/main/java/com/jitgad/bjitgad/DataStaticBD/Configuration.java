@@ -9,15 +9,16 @@ public class Configuration {
 //    public static String DATABASENAME = "jit";
 //    public static String DATABASEUSER = "@dminvincul@cion2022";
 //    public static String DATABASEPASSWORD = "P@ssw0rd@admin2022";
-//    public static String DATABASEURL = "jdbc:postgresql://10.1.1.89:5432/jit";
-    public static String DATABASENAME = "jit";
+ //   public static String DATABASEURL = "jdbc:postgresql://10.1.1.89:5432/jit";
+//    public static String DATABASENAME = "jit";
     public static String DATABASEUSER = "jit";
     public static String DATABASEPASSWORD = "jit_p@ssword";
-    public static String DATABASEURL = "jdbc:postgresql://10.1.1.89:5432/jit";
+    public static String DATABASEURL = "jdbc:postgresql://fyc.uteq.edu.ec:5432/jit";
     
     public static String JWTKEY = "12345GFEDCBA$.$123Barcelona";
     //public static String IPDOMINIOSERVIDOR= "http://192.241.152.203:8080/bjitgad/";
-    public static String IPDOMINIOSERVIDOR= "http://fyc.uteq.edu.ec:8080/bjitgad/";
+    //public static String IPDOMINIOSERVIDOR= "http://fyc.uteq.edu.ec:8080/bjitgad/";
+    public static String IPDOMINIOSERVIDOR= "https://fyc.uteq.edu.ec:/bjitgad/";
     public static boolean DEBUG = false;
     
     
