@@ -332,7 +332,7 @@ public class ConectionPool implements IConnectionPool {
         p.setMaxActive(100);
         p.setInitialSize(Configuration.INITIAL_POOL_SIZE);
         p.setMaxWait(10000);
-        p.setRemoveAbandonedTimeout(60);
+        p.setRemoveAbandonedTimeout(30000);
         p.setMinEvictableIdleTimeMillis(30000);
         p.setMinIdle(10);
         p.setLogAbandoned(true);
